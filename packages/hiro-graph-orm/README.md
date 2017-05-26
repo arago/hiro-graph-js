@@ -7,7 +7,7 @@ Define a schema, create a connection to HIRO Graph, and have a natural way to ha
 If you only want the Vertex Object for the frontend, only import the one file:
 
 ```javascript
-import Vertex from "hiro-graph-orm/lib/vertex"
+import Vertex from "hiro-graph-orm/lib/vertex";
 ```
 
 ## Quick Start

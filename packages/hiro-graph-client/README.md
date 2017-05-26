@@ -38,7 +38,7 @@ HIRO Graph exposes many plugins via `/_*` endpoints (as HTTP) and only the most 
 ```
 const options = conn.http.defaultOptions();
 options.method = "POST";
-options.body = '{"some":"data"}';
+options.body = '{ "some": "data" }';
 const url = "/_some/uri";
 conn.http.fetch(url, options).then(res => {
     //...

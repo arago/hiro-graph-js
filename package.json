@@ -9,7 +9,6 @@
   },
   "scripts": {
     "publish": "lerna publish",
-    "precommit": "lint-staged",
     "format": "prettier --tab-width=4 --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'"
   },
   "lint-staged": {
