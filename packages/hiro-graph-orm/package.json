@@ -19,7 +19,7 @@
   "bin": "lib/bin/validate-schema-against-ontology.js",
   "license": "MIT",
   "dependencies": {
-    "hiro-graph-client": "^1.0.0",
+    "hiro-graph-client": "*",
     "js-yaml": "^3.6.1",
     "lodash.isplainobject": "^4.0.4"
   },
