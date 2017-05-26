@@ -31,7 +31,8 @@
       "es2015"
     ],
     "plugins": [
-      "transform-runtime"
+      "transform-runtime",
+      "transform-object-rest-spread"
     ],
     "sourceMaps": true,
     "env": {
