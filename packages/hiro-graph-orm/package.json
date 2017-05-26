@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-orm",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "OGIT ontology to sane application mappings",
   "repository": "arago/hiro-graph-js",
   "main": "lib/index.js",
@@ -20,10 +20,8 @@
   "license": "MIT",
   "dependencies": {
     "js-yaml": "^3.6.1",
-    "lodash.isplainobject": "^4.0.4"
-  },
-  "peerDepenencies": {
-    "hiro-graph-client": "hiro-graph-client"
+    "lodash.isplainobject": "^4.0.4",
+    "hiro-graph-client": "^1.0.0"
   },
   "devDependencies": {
     "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
