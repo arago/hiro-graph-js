@@ -1,0 +1,43 @@
+{
+  "name": "hiro-graph-implicit-oauth",
+  "version": "0.0.1-0",
+  "description": "Customisable Implicit Oauth",
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+    "prepublish": "npm run build",
+    "start": "node webpack-dev-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brendan Moore <bmoore@arago.co>",
+  "license": "MIT",
+  "devDependencies": {
+    "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
+    "babel": "^6.5.2",
+    "babel-cli": "^6.10.1",
+    "babel-eslint": "^6.0.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-arago-react": "github:arago/babel-preset-arago-react",
+    "eslint": "^2.12.0",
+    "openurl": "^1.1.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "querystring": "^0.2.0"
+  },
+    "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ],
+    "sourceMaps": true,
+    "env": {
+      "production": {
+        "sourceMaps": false
+      }
+    }
+  }
+}
