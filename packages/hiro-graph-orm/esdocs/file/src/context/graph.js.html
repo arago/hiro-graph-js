@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <base data-ice="baseUrl" href="../../../">
+    <title data-ice="title">src/context/graph.js | API Document</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+    <script src="script/prettify/prettify.js"></script>
+
+
+    <script src="script/manual.js"></script>
+</head>
+
+<body class="layout-container" data-ice="rootContainer">
+
+    <header>
+        <a href="./">Home</a>
+        <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+        <a href="identifiers.html">Reference</a>
+        <a href="source.html">Source</a>
+
+
+        <div class="search-box">
+            <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+            </span>
+            <ul class="search-result"></ul>
+        </div>
+    </header>
+
+    <nav class="navigation" data-ice="nav">
+        <div>
+            <ul>
+
+                <li data-ice="doc">
+                    <div data-ice="dirPath" class="nav-dir-path">codec</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createBool">createBool</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEnum">createEnum</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createCodec">createCodec</a></span></span>
+                </li>
+                <li data-ice="doc">
+                    <div data-ice="dirPath" class="nav-dir-path">context</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/context_entity.doc.js~Context$Entity.html">Context$Entity</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/index.js~Context.html">Context</a></span></span>
+                </li>
+                <li data-ice="doc">
+                    <div data-ice="dirPath" class="nav-dir-path">gremlin</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-queryBuilder">queryBuilder</a></span></span>
+                </li>
+                <li data-ice="doc">
+                    <div data-ice="dirPath" class="nav-dir-path">lucene</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseLucene">parseLucene</a></span></span>
+                </li>
+                <li data-ice="doc">
+                    <div data-ice="dirPath" class="nav-dir-path">schema</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema/index.js~Schema.html">Schema</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEntity">createEntity</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validate">validate</a></span></span>
+                </li>
+                <li data-ice="doc">
+                    <div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GremlinBranch">GremlinBranch</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-OneOrMoreVertices">OneOrMoreVertices</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/arago/js-graphit-client/blob/master/src/connection.js">Connection</a></span></span>
+                </li>
+                <li data-ice="doc">
+                    <div data-ice="dirPath" class="nav-dir-path">vertex</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/graph.js~GraphVertex.html">GraphVertex</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/index.js~Vertex.html">Vertex</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createVertex">createVertex</a></span></span>
+                </li>
+                <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isVertex">isVertex</a></span></span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content" data-ice="content">
+        <h1 data-ice="title">src/context/graph.js</h1>
+        <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ *  The Graph interaction methods.
+ *
+ *  These wrap the base methods, the gremlin relation queries,
+ *  the context and entity definitions to produce Vertex objects
+ *  from queries.
+ */
+import { notFound, badRequest } from &quot;hiro-graph-client/lib/errors&quot;;
+import { decodeResults, filter, mapIfArray } from &quot;../utils&quot;;
+import parseLucene from &quot;../lucene&quot;;
+import { createVertex, isVertex } from &quot;../vertex/graph&quot;;
+
+//this is not in utils, so utils doesn&apos;t need to import GraphVertex
+const createVertices = ctx =&gt; mapIfArray(data =&gt; createVertex(data, ctx));
+
+//this is a pipeline of a few functions.
+//first decode results, then filter empties, then turn to vertexes.
+//the ctx._schema.get() with no arg is the internal entity, used
+//when we don&apos;t know the type in advance
+/**
+ * @ignore
+ */
+export const vertexize = (ctx, entity = ctx._schema.get()) =&gt; input =&gt; {
+    return Promise.resolve(input)
+        .then(decodeResults(ctx, entity))
+        .then(filter(Boolean))
+        .then(createVertices(ctx));
+};
+
+//this is for results that expect a single result.
+const returnOneOrThrow = result =&gt; {
+    if (!result || result.length === 0) {
+        throw notFound(&quot;single vertex not found&quot;);
+    }
+    return Array.isArray(result) ? result[0] : result;
+};
+
+/**
+ * @ignore
+ */
+export function find(ctx, entity, query, options = {}) {
+    const { querystring, placeholders } = parseLucene(query, entity);
+    const luceneOptions = Object.assign({}, options, placeholders);
+    return ctx._connection.lucene(querystring, luceneOptions)
+        .then(vertexize(ctx, entity));
+}
+
+/**
+ * @ignore
+ */
+export function findOne(ctx, entity, query, options = {}) {
+    return find(ctx, entity, query, options)
+        .then(returnOneOrThrow);
+}
+
+//this function return the response from the callback
+// in which ever case.
+const noop = () =&gt; {};
+const cacheCheck = (entity, cache, id, { isCached = noop, isCachedButWrongType = noop, notCached = noop }) =&gt; {
+    const cached = cache.get(id);
+    console.log(&quot;check cache&quot;, id, cached);
+    //the second check is in case errors or something else get in the cache
+    if (!cached || !isVertex(cached)) {
+        return notCached(id);
+    }
+    if (entity &amp;&amp; !entity.internal &amp;&amp; entity.name !== cached.type()) {
+        return isCachedButWrongType(cached);
+    }
+    return isCached(cached);
+};
+
+//get Me is a little different as we have no ID to start with,
+//but we will get an &quot;ogit/Person&quot; node.
+/**
+ * @ignore
+ */
+export function fetchMe(ctx) {
+    const entity = ctx.getEntity(&quot;ogit/Person&quot;);
+    return ctx._connection.me()
+        .then(vertexize(ctx, entity))
+        .then(returnOneOrThrow);
+}
+
+//find by ID can do multiple things.
+//first it can be given either one or many ids.
+//also if entity is null, we should use the IDs query.
+/**
+ * @ignore
+ */
+export function findById(ctx, entity, query, options = {}) {
+    if (Array.isArray(query)) {
+        //do an ids query.
+        const cached = [];
+        let toFetch;
+        if (!options.refetch) {
+            const callbacks = {
+                isCached: vertex =&gt; {
+                    cached.push(vertex);
+                    return false; //
+                },
+                isCachedButWrongType: () =&gt; false,
+                notCached: id =&gt; id
+            };
+            toFetch = query
+                .map(id =&gt; cacheCheck(entity, ctx._cache, id, callbacks))
+                .filter(Boolean);
+        } else {
+            toFetch = query;
+        }
+        const fetched = (toFetch.length === 0)
+            ? Promise.resolve([])
+            : ctx._connection.ids(toFetch, options).then(vertexize(ctx, entity));
+
+        return fetched
+            .then(vertices =&gt; cached.concat(vertices));
+    }
+    //check cache first.
+    if (!options.refetch) {
+        const cached = cacheCheck(entity, ctx._cache, query, {
+            isCached: vertex =&gt; vertex,
+            isCachedButWrongType: () =&gt; false,
+            notCached: () =&gt; false
+        });
+        if (cached) {
+            return Promise.resolve(cached);
+        }
+    }
+    return findOne(ctx, entity, { _id: query }, options);
+}
+
+/**
+ * @ignore
+ */
+export function search(ctx, entity, query, filters = {}, options = {}) {
+    return find(ctx, entity, Object.assign({ $search: query }, filters), options);
+}
+
+/**
+ * @ignore
+ */
+export function create(ctx, entity, data, options = {}) {
+    if (options.addCreatedOn &amp;&amp; !data.created_on) {
+        data.created_on = Date.now();
+    }
+    const dbData = entity.encode(data);
+    return ctx._connection.create(entity.ogit, dbData, options)
+        .then(vertexize(ctx, entity));
+}
+
+/**
+ * @ignore
+ */
+export function update(ctx, entity, vertexId, data, options = {}) {
+    const dbData = entity.encode(data);
+    return ctx._connection.update(vertexId, dbData, options)
+        .then(vertexize(ctx, entity));
+}
+
+/**
+ * @ignore
+ */
+export function replace(ctx, entity, vertexId, data, options = {}) {
+    const dbData = entity.encode(data);
+    return ctx._connection.replace(vertexId, dbData, options)
+        .then(vertexize(ctx, entity));
+}
+
+/**
+ * @ignore
+ */
+export function deleteVertex(ctx, vertexId, options = {}) {
+    return ctx._connection.delete(vertexId, options);
+}
+
+/**
+ * @ignore
+ */
+export function connect(ctx, entity, { relation, source, target }, options = {}) {
+    const relationDef = entity.relation(relation);
+    if (!relationDef) {
+        throw badRequest(`No Relation ${relation} defined for ${entity.name}`);
+    }
+    if (relationDef.hops.length &gt; 1) {
+        throw badRequest(`Cannot &quot;connect&quot; multi-hop relation ${relation} for ${entity.name}`);
+    }
+    const { verb, direction } = relationDef.hops[0];
+    const [inId, outId] = direction === &quot;in&quot; ? [source, target] : [target, source];
+    return ctx._connection.connect(verb, inId, outId, options);
+}
+
+/**
+ * @ignore
+ */
+export function disconnect(ctx, entity, { relation, source, target }, options = {}) {
+    const relationDef = entity.relation(relation);
+    if (!relationDef) {
+        throw badRequest(`No Relation ${relation} defined for ${entity.name}`);
+    }
+    if (relationDef.hops.length &gt; 1) {
+        throw badRequest(`Cannot &quot;disconnect&quot; multi-hop relation ${relation} for ${entity.name}`);
+    }
+    const { verb, direction } = relationDef.hops[0];
+    const [inId, outId] = direction === &quot;in&quot; ? [source, target] : [target, source];
+    return ctx._connection.disconnect(verb, inId, outId, options);
+}
+
+/**
+ * @ignore
+ */
+export function gremlin(ctx, rootVertexId, query, options = {}) {
+    const queryResults = ctx._connection.gremlin(rootVertexId, query.toString(), options);
+    if (options.raw) {
+        return queryResults;
+    }
+    return queryResults.then(vertexize(ctx));
+}
+</code></pre>
+
+    </div>
+
+    <footer class="footer">
+        Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+    </footer>
+
+    <script src="script/search_index.js"></script>
+    <script src="script/search.js"></script>
+    <script src="script/pretty-print.js"></script>
+    <script src="script/inherited-summary.js"></script>
+    <script src="script/test-summary.js"></script>
+    <script src="script/inner-link.js"></script>
+    <script src="script/patch-for-local.js"></script>
+</body>
+
+</html>

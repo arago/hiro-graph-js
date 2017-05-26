@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Function | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+
+
+  <script src="script/manual.js"></script>
+</head>
+
+<body class="layout-container" data-ice="rootContainer">
+
+  <header>
+    <a href="./">Home</a>
+    <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+    <a href="identifiers.html">Reference</a>
+    <a href="source.html">Source</a>
+
+
+    <div class="search-box">
+      <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+      </span>
+      <ul class="search-result"></ul>
+    </div>
+  </header>
+
+  <nav class="navigation" data-ice="nav">
+    <div>
+      <ul>
+
+        <li data-ice="doc">
+          <div data-ice="dirPath" class="nav-dir-path">codec</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createBool">createBool</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEnum">createEnum</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createCodec">createCodec</a></span></span>
+        </li>
+        <li data-ice="doc">
+          <div data-ice="dirPath" class="nav-dir-path">context</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/context_entity.doc.js~Context$Entity.html">Context$Entity</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/index.js~Context.html">Context</a></span></span>
+        </li>
+        <li data-ice="doc">
+          <div data-ice="dirPath" class="nav-dir-path">gremlin</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-queryBuilder">queryBuilder</a></span></span>
+        </li>
+        <li data-ice="doc">
+          <div data-ice="dirPath" class="nav-dir-path">lucene</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseLucene">parseLucene</a></span></span>
+        </li>
+        <li data-ice="doc">
+          <div data-ice="dirPath" class="nav-dir-path">schema</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema/index.js~Schema.html">Schema</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEntity">createEntity</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validate">validate</a></span></span>
+        </li>
+        <li data-ice="doc">
+          <div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GremlinBranch">GremlinBranch</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-OneOrMoreVertices">OneOrMoreVertices</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/arago/js-graphit-client/blob/master/src/connection.js">Connection</a></span></span>
+        </li>
+        <li data-ice="doc">
+          <div data-ice="dirPath" class="nav-dir-path">vertex</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/graph.js~GraphVertex.html">GraphVertex</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/index.js~Vertex.html">Vertex</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createVertex">createVertex</a></span></span>
+        </li>
+        <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isVertex">isVertex</a></span></span>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content" data-ice="content">
+    <h1 data-ice="title">Function</h1>
+    <div data-ice="summaries">
+      <table class="summary" data-ice="summary">
+        <thead>
+          <tr>
+            <td data-ice="title" colspan="3">Static Public Summary</td>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-createBool">createBool</a></span></span>
+                  <span
+                    data-ice="signature">(stringForTrue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>,
+                    stringForFalse: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>):
+                    <span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> Creates a boolean coder/decoder function pair</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-createCodec">createCodec</a></span></span>
+                  <span
+                    data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>):
+                    <span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p>Creates a encoder/decoder function pair for the type given.</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-createEntity">createEntity</a></span></span>
+                  <span
+                    data-ice="signature">(definition: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>,
+                    schema: <span><a href="class/src/schema/index.js~Schema.html">Schema</a></span>): <span>Entity</span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> The entity is an object which provides the information to convert database database results into application
+                    data and application queries into database format.</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-createEnum">createEnum</a></span></span>
+                  <span
+                    data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>&gt;):
+                    <span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> Creates a coder/decoder with a fixed set of possible values.</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-createVertex">createVertex</a></span></span>
+                  <span
+                    data-ice="signature">(data: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>,
+                    context: <span><a href="class/src/context/index.js~Context.html">Context</a></span>): <span><a href="class/src/vertex/graph.js~GraphVertex.html">GraphVertex</a></span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> Create a Context bound GraphVertex</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-isVertex">isVertex</a></span></span>
+                  <span
+                    data-ice="signature">(vertex: <span>*</span>): <span>bool</span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> Check is an object is a vertex</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-parseLucene">parseLucene</a></span></span>
+                  <span
+                    data-ice="signature">(query: <span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span>, entity: <span>Entity</span>):
+                    {querystring: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>,
+                    placeholders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>}</span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> The lucene class takes a Schema and creates a query parser.</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-queryBuilder">queryBuilder</a></span></span>
+                  <span
+                    data-ice="signature">(initialQuery: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>                    | <span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span>,
+                    context: <span><a href="class/src/context/index.js~Context.html">Context</a></span>): <span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> Create a new query builder</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+          <tr data-ice="target">
+            <td>
+              <span class="access" data-ice="access">public</span>
+
+
+
+              <span class="override" data-ice="override"></span>
+            </td>
+            <td>
+              <div>
+                <p>
+                  <span data-ice="name"><span><a href="function/index.html#static-function-validate">validate</a></span></span>
+                  <span
+                    data-ice="signature">(schema: <span><a href="class/src/schema/index.js~Schema.html">Schema</a></span>, ontologyLocation: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>):
+                    <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+                </p>
+              </div>
+              <div>
+
+
+                <div data-ice="description">
+                  <p> Validate a schema against an OGIT ontology</p>
+                </div>
+              </div>
+            </td>
+            <td>
+
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div data-ice="details">
+      <h2 data-ice="title">Static Public </h2>
+
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-createBool">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">createBool</span><span data-ice="signature">(stringForTrue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>,
+          stringForFalse: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>):
+          <span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/codec/bool.js.html#lineNumber13">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import {createBool} from &apos;<span><a href="file/src/codec/bool.js.html#lineNumber13">hiro-graph-orm/lib/codec/bool</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> Creates a boolean coder/decoder function pair</p>
+          <p> Boolean Codecs can encode <code>true</code> or <code>false</code> in a variety of ways.</p>
+          <blockquote>
+            <p>Note that by omitting the <code>stringForFalse</code>, then <code>null</code> is used, which &quot;unset&apos;s&quot;
+              the property on a <code>false</code> value.</p>
+          </blockquote>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">stringForTrue</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+                  <td data-ice="appendix">
+                    <ul>
+                      <li>optional</li>
+                      <li>default: &quot;true&quot;</li>
+                    </ul>
+                  </td>
+                  <td data-ice="description">
+                    <p>the string to use to signify <code>true</code></p>
+                  </td>
+                </tr>
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">stringForFalse</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+                  <td data-ice="appendix">
+                    <ul>
+                      <li>optional</li>
+                      <li>default: null</li>
+                      <li>nullable: true</li>
+                    </ul>
+                  </td>
+                  <td data-ice="description">
+                    <p>the string to use to signify <code>false</code> (or not expplicitly <code>true</code>)</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>The custom boolean codec</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-createCodec">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">createCodec</span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>):
+          <span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/codec/index.js.html#lineNumber40">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import createCodec from &apos;<span><a href="file/src/codec/index.js.html#lineNumber40">hiro-graph-orm/lib/codec</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p>Creates a encoder/decoder function pair for the type given.</p>
+          <p>These are used by the <span><a href="class/src/schema/index.js~Schema.html">Schema</a></span> to map values to
+            and from the string-only types used in GraphIT. Theses are used in the property definitions for entities (see
+            <span><a href="function/index.html#static-function-createEntity">createEntity</a></span>).</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">name</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>The name of the codec to create</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>the <code>encode</code>/<code>decode</code> functions</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <div data-ice="see">
+          <h4>See:</h4>
+          <ul>
+            <li><span><a href="manual/usage.md#codecs">manual/usage.md#codecs</a></span></li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-createEntity">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">createEntity</span><span data-ice="signature">(definition: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>,
+          schema: <span><a href="class/src/schema/index.js~Schema.html">Schema</a></span>): <span>Entity</span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/schema/entity.js.html#lineNumber42">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import createEntity from &apos;<span><a href="file/src/schema/entity.js.html#lineNumber42">hiro-graph-orm/lib/schema/entity</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> The entity is an object which provides the information to convert database database results into application data
+            and application queries into database format.</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">definition</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>the schema definition of this entity (see the manual)</p>
+                  </td>
+                </tr>
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">schema</td>
+                  <td data-ice="type"><span><a href="class/src/schema/index.js~Schema.html">Schema</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>the actual schema this entity is defined in.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span>Entity</span></td>
+
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <div data-ice="see">
+          <h4>See:</h4>
+          <ul>
+            <li><span><a href="manual/overview.html#schema">manual/overview.html#schema</a></span></li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-createEnum">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">createEnum</span><span data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>&gt;):
+          <span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/codec/enum.js.html#lineNumber7">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import {createEnum} from &apos;<span><a href="file/src/codec/enum.js.html#lineNumber7">hiro-graph-orm/lib/codec/enum</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> Creates a coder/decoder with a fixed set of possible values.</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">options</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>&gt;</td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>The list of values this enum can take.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>the custom enum codec</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-createVertex">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">createVertex</span><span data-ice="signature">(data: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>,
+          context: <span><a href="class/src/context/index.js~Context.html">Context</a></span>): <span><a href="class/src/vertex/graph.js~GraphVertex.html">GraphVertex</a></span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/vertex/graph.js.html#lineNumber21">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import {createVertex} from &apos;<span><a href="file/src/vertex/graph.js.html#lineNumber21">hiro-graph-orm/lib/vertex/graph</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> Create a Context bound GraphVertex</p>
+          <p> The GraphVertex constructor should not be used directly, rather through this function.</p>
+          <p> It keeps the cache fresh, but clobbers object references so only a single object for each ID is created and updates
+            create new versions.</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">data</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>the initial data (as with <span><a href="class/src/vertex/index.js~Vertex.html">Vertex</a></span>)</p>
+                  </td>
+                </tr>
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">context</td>
+                  <td data-ice="type"><span><a href="class/src/context/index.js~Context.html">Context</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>the context this vertex was retrieved in</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span><a href="class/src/vertex/graph.js~GraphVertex.html">GraphVertex</a></span></td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>the vertex</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-isVertex">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">isVertex</span><span data-ice="signature">(vertex: <span>*</span>): <span>bool</span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/vertex/index.js.html#lineNumber13">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import {isVertex} from &apos;<span><a href="file/src/vertex/index.js.html#lineNumber13">hiro-graph-orm/lib/vertex</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> Check is an object is a vertex</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">vertex</td>
+                  <td data-ice="type"><span>*</span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>the thing which <em>could</em> be a <span><a href="class/src/vertex/index.js~Vertex.html">Vertex</a></span></p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span>bool</span></td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>whether or not it is.</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-parseLucene">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">parseLucene</span><span data-ice="signature">(query: <span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span>,
+          entity: <span>Entity</span>): {querystring: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>,
+          placeholders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>}</span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/lucene/index.js.html#lineNumber19">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import parseLucene from &apos;<span><a href="file/src/lucene/index.js.html#lineNumber19">hiro-graph-orm/lib/lucene</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> The lucene class takes a Schema and creates a query parser.</p>
+          <p> This is super powerful, the guide to all the syntax options is in the documentation for the <span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span>            type.</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">query</td>
+                  <td data-ice="type"><span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span></td>
+                  <td data-ice="appendix">
+                    <ul>
+                      <li>nullable: true</li>
+                    </ul>
+                  </td>
+                  <td data-ice="description">
+                    <p>the query to parse</p>
+                  </td>
+                </tr>
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">entity</td>
+                  <td data-ice="type"><span>Entity</span></td>
+                  <td data-ice="appendix">
+                    <ul>
+                      <li>nullable: true</li>
+                    </ul>
+                  </td>
+                  <td data-ice="description">
+                    <p>an optional schema entity to use to translate the keys and values</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType">{querystring: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>,
+                placeholders: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>}</td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>the return value contains the string to be used as the query body and the placeholders to go with it (if
+                  any)</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-queryBuilder">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">queryBuilder</span><span data-ice="signature">(initialQuery: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>          | <span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span>, context:
+          <span><a href="class/src/context/index.js~Context.html">Context</a></span>): <span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/gremlin/index.js.html#lineNumber22">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import {queryBuilder} from &apos;<span><a href="file/src/gremlin/index.js.html#lineNumber22">hiro-graph-orm/lib/gremlin</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> Create a new query builder</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">initialQuery</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>                    | <span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>a starting point query</p>
+                  </td>
+                </tr>
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">context</td>
+                  <td data-ice="type"><span><a href="class/src/context/index.js~Context.html">Context</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>a <span><a href="class/src/context/index.js~Context.html">Context</a></span> object, allowing this gremlin
+                      query to <code>execute</code> itself.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>a new query builder</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+      <div class="detail" data-ice="detail">
+        <h3 data-ice="anchor" id="static-function-validate">
+          <span class="access" data-ice="access">public</span>
+
+
+
+
+          <span data-ice="name">validate</span><span data-ice="signature">(schema: <span><a href="class/src/schema/index.js~Schema.html">Schema</a></span>,
+          ontologyLocation: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>):
+          <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+          <span class="right-info">
+
+
+      <span data-ice="source"><span><a href="file/src/schema/validate.js.html#lineNumber25">source</a></span></span>
+          </span>
+        </h3>
+
+        <div data-ice="importPath" class="import-path">
+          <pre class="prettyprint"><code data-ice="importPathCode">import validate from &apos;<span><a href="file/src/schema/validate.js.html#lineNumber25">hiro-graph-orm/lib/schema/validate</a></span>&apos;</code></pre>
+        </div>
+
+
+        <div data-ice="description">
+          <p> Validate a schema against an OGIT ontology</p>
+          <p> This allows a schema to validate itself against a given YAML OGIT ontology definition, either as a single file
+            or multiple (e.g. a cloned repo)</p>
+          <p> This is important as it allows our schema definitions to remain correct with respect to the ontology that your
+            GraphIT uses.</p>
+          <p> This is a <code>node</code> only piece of functionality and is intended to run as part of a linting or testing
+            phase.</p>
+        </div>
+
+
+
+        <div data-ice="properties">
+          <div data-ice="properties">
+            <h4 data-ice="title">Params:</h4>
+            <table class="params">
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Type</td>
+                  <td>Attribute</td>
+                  <td>Description</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">schema</td>
+                  <td data-ice="type"><span><a href="class/src/schema/index.js~Schema.html">Schema</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>the schema to check</p>
+                  </td>
+                </tr>
+                <tr data-ice="property" data-depth="0">
+                  <td data-ice="name" data-depth="0">ontologyLocation</td>
+                  <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+                  <td data-ice="appendix"></td>
+                  <td data-ice="description">
+                    <p>a path to an ontology file or repo.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="return-params" data-ice="returnParams">
+          <h4>Return:</h4>
+          <table>
+            <tr>
+              <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+              <td class="return-desc" data-ice="returnDescription">
+                <p>result</p>
+              </td>
+            </tr>
+          </table>
+          <div data-ice="returnProperties">
+            <div data-ice="properties">
+              <h4 data-ice="title">Return Properties:</h4>
+              <table class="params">
+                <thead>
+                  <tr>
+                    <td>Name</td>
+                    <td>Type</td>
+                    <td>Attribute</td>
+                    <td>Description</td>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr data-ice="property" data-depth="0">
+                    <td data-ice="name" data-depth="0">errors</td>
+                    <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+                    <td data-ice="appendix"></td>
+                    <td data-ice="description">
+                      <p>the number of problems found</p>
+                    </td>
+                  </tr>
+                  <tr data-ice="property" data-depth="0">
+                    <td data-ice="name" data-depth="0">detail</td>
+                    <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>,
+                      <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>&gt;&gt;</td>
+                    <td data-ice="appendix"></td>
+                    <td data-ice="description">
+                      <p>the errors grouped by entity name</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+  </footer>
+
+  <script src="script/search_index.js"></script>
+  <script src="script/search.js"></script>
+  <script src="script/pretty-print.js"></script>
+  <script src="script/inherited-summary.js"></script>
+  <script src="script/test-summary.js"></script>
+  <script src="script/inner-link.js"></script>
+  <script src="script/patch-for-local.js"></script>
+</body>
+
+</html>

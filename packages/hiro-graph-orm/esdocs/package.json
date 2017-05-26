@@ -1,0 +1,61 @@
+{
+  "private": true,
+  "name": "hiro-graph-orm",
+  "repository": "arago/hiro-graph-js",
+  "version": "0.1.20",
+  "description": "OGIT ontology to sane application mappings",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf lib/* && babel src/ --out-dir lib/ --source-maps",
+    "doc:clean": "rm -rf esdocs/",
+    "doc:build": "npm run doc:clean && esdoc -c esdoc.json",
+    "doc:serve": "static --host-address 0 --port 7000 esdocs/",
+    "doc": "[ ! -f esdocs/index.html ] && npm run doc:build; npm run doc:serve",
+    "lint": "eslint src/",
+    "prepublish": "npm run build",
+    "test": "mocha --require babel-register --compilers js:source-map-support/register",
+    "validate": "babel-node src/bin/validate-schema-against-ontology.js",
+    "watch": "babel --watch src/ --out-dir lib/"
+  },
+  "bin": "lib/bin/validate-schema-against-ontology.js",
+  "author": "Chris Walker <cwalker@arago.de>",
+  "dependencies": {
+    "hiro-graph-client": "hiro-graph-client",
+    "js-yaml": "^3.6.1",
+    "lodash.isplainobject": "^4.0.4"
+  },
+  "devDependencies": {
+    "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
+    "babel-cli": "^6.9.0",
+    "babel-eslint": "^6.0.4",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.9.0",
+    "chai": "^3.5.0",
+    "esdoc": "^0.4.7",
+    "esdoc-importpath-plugin": "0.0.1",
+    "eslint": "^2.10.2",
+    "mocha": "^2.5.3",
+    "node-static": "^0.7.7",
+    "source-map-support": "^0.4.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@arago/eslint-config-arago"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ],
+    "sourceMaps": true,
+    "env": {
+      "production": {
+        "sourceMaps": false
+      }
+    }
+  }
+}

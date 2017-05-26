@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/lucene/index.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">codec</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createBool">createBool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEnum">createEnum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createCodec">createCodec</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">context</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/context_entity.doc.js~Context$Entity.html">Context$Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/index.js~Context.html">Context</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">gremlin</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-queryBuilder">queryBuilder</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">lucene</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseLucene">parseLucene</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">schema</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema/index.js~Schema.html">Schema</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEntity">createEntity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validate">validate</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GremlinBranch">GremlinBranch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-OneOrMoreVertices">OneOrMoreVertices</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/arago/js-graphit-client/blob/master/src/connection.js">Connection</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">vertex</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/graph.js~GraphVertex.html">GraphVertex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/index.js~Vertex.html">Vertex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createVertex">createVertex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isVertex">isVertex</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/lucene/index.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ *  Schema aware Lucene Wrapper
+ */
+const OP_NOT = &quot;-&quot;;
+const OP_MUST = &quot;+&quot;;
+const OP_CAN = &quot;&quot;;
+
+/**
+ *  The lucene class takes a Schema and creates a query parser.
+ *
+ *  This is super powerful, the guide to all the syntax options is in the documentation
+ *  for the {@link LuceneQuery} type.
+ *
+ *  @param {?LuceneQuery} query - the query to parse
+ *  @param {?Entity} entity - an optional schema entity to use to translate the keys and values
+ *  @return {{ querystring: string, placeholders: object }} - the return value contains the string to be used
+ *          as the query body and the placeholders to go with it (if any)
+ */
+export default function parseLucene(query = {}, entity) {
+    return createLuceneQuery(entity, query);
+}
+
+/**
+ * Create a placeholder key
+ */
+const createPlaceholder = (placeholders, term) =&gt; {
+    placeholders.push(term);
+    return placeholderAliasInQuery(placeholders.length - 1);
+};
+
+const placeholderAliasInQuery = i =&gt; `$ph_${i}`;
+const placeholderKeyInRequest = i =&gt; `ph_${i}`;
+
+/**
+ *  The initial context object for the query building
+ */
+const initialContext = entity =&gt; {
+    return {
+        querystring: &quot;&quot;,
+        placeholders: [],
+        op: OP_MUST,
+        entity
+    };
+};
+
+/**
+ * using the entity given, map the query object to a Lucene query string + placeholders.
+ */
+function createLuceneQuery(entity, query) {
+    const context = initialContext(entity);
+    const querystring = createQuerySegment(context, normaliseQuery(query));
+    const parsed = {
+        querystring,
+        placeholders: context.placeholders.reduce((opts, placeholder, index) =&gt; {
+            opts[placeholderKeyInRequest(index)] = placeholder;
+            return opts;
+        }, {})
+    };
+    if (!entity.internal) {
+        //this is not an internal-only entity (i.e. a fake one that just translates
+        // ogit internal attributes. This means we should insert a &quot;ogit/_type&quot; filter.
+        parsed.querystring = `+${slashForward(&quot;ogit/_type&quot;)}:${quote(entity.ogit)} ${parsed.querystring}`;
+    }
+    return parsed;
+}
+
+//turns a single value into an array if not already
+const ensureArray = value =&gt; {
+    return Array.isArray(value) ? value : [value];
+};
+
+//the &quot;$&quot; keys which do not recurse
+const noRecurseKeys = [&quot;$search&quot;, &quot;$range&quot;, &quot;$missing&quot;];
+
+//forces all properties to be arrays.
+//knows how to recurse and when not to.
+const normaliseQuery = queryObject =&gt; {
+    return Object.keys(queryObject).map(key =&gt; {
+        const value = queryObject[key];
+        // console.log(&quot;key:&quot;, key);
+        // console.log(&quot;value:&quot;, value);
+        if (key[0] === &quot;$&quot; &amp;&amp; noRecurseKeys.indexOf(key) === -1) {
+            //we should recurse
+            return { key, values: normaliseQuery(value) };
+        }
+        return { key, values: ensureArray(value) };
+    });
+};
+
+/**
+ *  This is the recursive part that constructs the querystring from the
+ *  query given.
+ */
+function createQuerySegment(context, query) {
+//    console.log(&quot;segment&quot;, query);
+    return query.map(({ key, values }) =&gt; {
+        //always make value an array
+        if (key[0] === &quot;$&quot;) {
+            //special case!
+            return operators[key](context, values);
+        }
+        //default prop =&gt; values
+        return luceneTerm(context, key, values);
+    }).join(&quot; &quot;);
+}
+
+//helper to flatten an array of arrays
+//const doubleFlatten = arrayOfArrays =&gt; arrayOfArrays.map().join(&quot; &quot;);
+
+/**
+ *  So all of the &quot;special&quot; props are held here with how they work.
+ */
+
+const operators = {
+    //simple negation
+    $not: (context, values) =&gt; mapOperator(context, OP_NOT, values),
+
+    //simple boolean or
+    $or: (context, values) =&gt; mapOperator(context, OP_CAN, values),
+
+    //simple boolean and
+    $must: (context, values) =&gt; mapOperator(context, OP_MUST, values),
+    $and: (context, values) =&gt; mapOperator(context, OP_MUST, values),
+
+    /**
+     *  lucene field missing
+     *  { $missing: &quot;field&quot; }, or { $missing: [ &quot;field&quot;, &quot;second&quot; ] }
+     */
+    $missing: (context, values) =&gt; values.map(field =&gt; luceneMissing(context, field)).join(&quot; &quot;),
+
+    /**
+     *  lucene range operator
+     *  { $range: { &quot;prop&quot;: [ from, to ] }
+     */
+    $range: (context, values) =&gt; {
+        return values.reduce((acc, object) =&gt; acc.concat(Object.keys(object).map(field =&gt; {
+            const [lower, higher] = object[field];
+            return luceneRange(context, field, lower, higher);
+        })), []).join(&quot; &quot;);
+    },
+    /**
+     *  Search.
+     *  { $search: { field = &quot;_content.ngram&quot;, term = &quot;&quot; }, or { $search: &quot;term&quot; } (searches _content.ngram)
+     */
+    $search: (context, values) =&gt; {
+        return values.reduce((acc, searchInput) =&gt; {
+            let search = searchInput;
+            if (typeof search === &quot;string&quot;) {
+                //default search type.
+                search = { type: &quot;ngram&quot;, term: search };
+            }
+            if (!search.field) {
+                search.field = &quot;_content&quot;;
+            }
+            if (search.type === &quot;prefix&quot;) {
+                //this is terrible for multi-word searches.
+                return acc.concat(lucenePrefixMatch(context, search.field, search.term));
+            }
+
+            //we always return an array
+            return acc.concat(luceneSearch(context, search.field, search.term, { ngram: search.type === &quot;ngram&quot; }));
+        }, []).join(&quot; &quot;);
+    }
+};
+
+//maps the values with the given operator as a sub segment
+const mapOperator = (context, op, values) =&gt; {
+    //console.log(&quot;mapOperator&quot;, context, op, values);
+    const currentOp = context.op;
+    //we need to change the the op to MUST if they requested CAN but there is only one option.
+    //So we need to recurse and count
+    const nextOp = (values.length === 1 &amp;&amp; values[0].values.length === 1 &amp;&amp; op === OP_CAN) ? OP_MUST : op;
+    //set the inner context&apos;s op
+    context.op = nextOp;
+    const segment = `${currentOp}(${createQuerySegment(context, values)})`;
+    //return the context&apos;s op to the previous
+    context.op = currentOp;
+    return segment;
+};
+
+/**
+ *  lucene query pieces
+ */
+
+//Quotes a string with double-quotes, escaping existing doubles.
+// we need to make sure this handles:
+// help&quot; -&gt; &quot;help\&quot;&quot;
+// help \&quot; -&gt; &quot;help \\\&quot;&quot;
+// help \ -&gt; &quot;help \\&quot;
+const quote = function(string) {
+    return `&quot;${slashString(string)}&quot;`;
+};
+
+const SOLIDUS = &quot;/&quot;;
+const SLASH = &quot;\\&quot;; // two because it has to be escaped.
+const QUOTE = `&quot;`; // just to make the code more readable
+
+const slashForward = input =&gt; input.replace(/[\/]/g, SLASH + SOLIDUS);
+
+// this escapes quotes and slashes
+const slashString = function(input) {
+    return input.replace(/([\\&quot;])/g, function(i, slashOrQuote) {
+        switch (slashOrQuote) {
+            case SLASH: return SLASH + SLASH;
+            case QUOTE: return SLASH + QUOTE;
+            default: break;
+        }
+    });
+};
+
+//run through the term string and pull out terms.
+//if there are any quotes, this becomes complex...
+//so we use iteration and state rather than regexes
+//This function removes the quotes around the terms as well.
+/*
+    examples:
+
+    &apos;test terms&apos; =&gt; [&quot;test&quot;, &quot;terms&quot;]
+    &apos;test &quot;two words&quot;&apos; =&gt; [&quot;test&quot;, &quot;two words&quot;]
+    &apos;&quot;test unclosed&apos; =&gt; [&quot;\&quot;test unclosed&quot;]
+    &apos;&quot;test one&quot; two &quot;test three&quot;&apos; =&gt; [&quot;test one&quot;, &quot;two&quot;, &quot;test three&quot;]
+    &apos;something&quot;with a quote&apos; =&gt; [&quot;something\&quot;with&quot;, &quot;a&quot;, &quot;quote&quot;]
+    &apos;&quot;with \&quot;embedded\&quot; quotes&quot;&apos; =&gt; [&quot;with \&quot;embedded\&quot; quotes&quot;]
+*/
+const findQuotedTerms = function(str) {
+    const input = str.trim(); //ensure no trailing space.
+    const terms = [];
+    const l = input.length;
+    let i = 0;
+    let inQuoted = &quot;&quot;;
+    let inTerm = false;
+    let term = &quot;&quot;;
+    let char;
+
+    for (; i &lt; l; i++) {
+        char = input[i];
+        if (inTerm) {
+            if ((!inQuoted &amp;&amp; char === &quot; &quot;) || (inQuoted &amp;&amp; char === inQuoted)) {
+                terms.push(term);
+                term = &quot;&quot;;
+                inTerm = false;
+            } else if (inQuoted &amp;&amp; char === SLASH &amp;&amp; input[i + 1] === inQuoted) {
+                //escaped quote
+                term += SLASH + inQuoted;
+                i++; //bump forwards
+            } else {
+                term += char;
+            }
+        } else if (char !== &quot; &quot;) {
+            //ignore spaces between terms.
+            if (char === QUOTE || char === &quot;&apos;&quot;) {
+                inQuoted = char;
+            } else {
+                inQuoted = &quot;&quot;;
+                term = char;
+            }
+            inTerm = true;
+        }
+    }
+    //flush remaining term
+    terms.push(term);
+    //remove empties from output;
+    return terms.filter(Boolean);
+};
+
+//create a term query with an operator and many possible values.
+function luceneTerm(context, field, values) {
+    //console.log(&quot;term&quot;, context, field, values);
+    const prop = context.entity.prop(field);
+    return values
+        .map(v =&gt; prop.encode(v)) // encode for graphit with our mapping
+        .map(v =&gt; typeof v === &quot;string&quot; ? quote(v) : v) //quote if needed
+        .map(term =&gt; term === null
+            ? luceneMissing(context, field) //if term is null, that means the field should be missing.
+            : `${context.op}${slashForward(prop.src)}:${term}`) //create querystring
+        .join(&quot; &quot;); //join terms
+}
+
+//create a range query term
+function luceneRange(context, field, lower, higher) {
+    const prop = context.entity.prop(field);
+    const [low, high] = [lower, higher]
+        .map(v =&gt; prop.encode(v))
+        .map(v =&gt; typeof v === &quot;string&quot; ? quote(v) : v);
+    return `${context.op}${slashForward(prop.src)}:[${low} TO ${high}]`;
+}
+
+//create a _missing_ query
+function luceneMissing(context, field) {
+    const prop = context.entity.prop(field);
+    return `${context.op}_missing_:${quote(prop.src)}`;
+}
+
+//create a search query, this is a little different to a regular term
+//because we assume a phrase and we use placeholders for values.
+function luceneSearch(context, field, term, { ngram = false } = {}) {
+    const prop = context.entity.prop(field);
+    let terms;
+    if (term.indexOf(&quot;\&quot;&quot;) &gt; -1 || term.indexOf(&quot;&apos;&quot;) &gt; -1) {
+        //much more complex, but keeps spaces in quotes, and quoted quotes.
+        terms = findQuotedTerms(term);
+    } else {
+        //simple split
+        terms = term.split(/\s+/);
+    }
+    const finalTerm = terms.filter(Boolean).join(&quot; &quot;);
+    //now make a placeholder for the term
+    const placeholder = createPlaceholder(context.placeholders, slashString(finalTerm));
+
+    return `${context.op}${slashForward(prop.src)}${ngram ? &quot;.ngram&quot; : &quot;&quot;}:${placeholder}`;
+}
+
+//lucene is not good at prefixes when spaces are encountered.
+//the least bad solution is to use &quot;?&quot; for the spaces.
+//first escape the string (but don&apos;t add quotes)
+//then replace space with question mark, then add the final asterisk
+function lucenePrefixMatch(context, field, term) {
+    const prop = context.entity.prop(field);
+    const finalTerm = slashString(term).replace(/ /g, &quot;?&quot;) + &quot;*&quot;;
+    const placeholder = createPlaceholder(context.placeholders, finalTerm);
+    return `${context.op}${slashForward(prop.src)}:${placeholder}`;
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

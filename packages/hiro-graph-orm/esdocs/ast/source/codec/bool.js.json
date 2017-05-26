@@ -1,0 +1,775 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "FunctionDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "createBool",
+          "range": [
+            515,
+            525
+          ],
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 16
+            },
+            "end": {
+              "line": 13,
+              "column": 26
+            }
+          }
+        },
+        "params": [
+          {
+            "type": "AssignmentPattern",
+            "left": {
+              "type": "Identifier",
+              "name": "stringForTrue",
+              "range": [
+                526,
+                539
+              ],
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 27
+                },
+                "end": {
+                  "line": 13,
+                  "column": 40
+                }
+              }
+            },
+            "right": {
+              "type": "Literal",
+              "value": "true",
+              "raw": "\"true\"",
+              "range": [
+                542,
+                548
+              ],
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 43
+                },
+                "end": {
+                  "line": 13,
+                  "column": 49
+                }
+              }
+            },
+            "range": [
+              526,
+              548
+            ],
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 27
+              },
+              "end": {
+                "line": 13,
+                "column": 49
+              }
+            }
+          },
+          {
+            "type": "AssignmentPattern",
+            "left": {
+              "type": "Identifier",
+              "name": "stringForFalse",
+              "range": [
+                550,
+                564
+              ],
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 51
+                },
+                "end": {
+                  "line": 13,
+                  "column": 65
+                }
+              }
+            },
+            "right": {
+              "type": "Literal",
+              "value": null,
+              "raw": "null",
+              "range": [
+                567,
+                571
+              ],
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 68
+                },
+                "end": {
+                  "line": 13,
+                  "column": 72
+                }
+              }
+            },
+            "range": [
+              550,
+              571
+            ],
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 51
+              },
+              "end": {
+                "line": 13,
+                "column": 72
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "argument": {
+                "type": "ObjectExpression",
+                "properties": [
+                  {
+                    "type": "Property",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "decode",
+                      "range": [
+                        596,
+                        602
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 14
+                        }
+                      }
+                    },
+                    "value": {
+                      "type": "ArrowFunctionExpression",
+                      "id": null,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "name": "s",
+                          "range": [
+                            604,
+                            605
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 15,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 15,
+                              "column": 17
+                            }
+                          }
+                        }
+                      ],
+                      "body": {
+                        "type": "BinaryExpression",
+                        "operator": "===",
+                        "left": {
+                          "type": "Identifier",
+                          "name": "s",
+                          "range": [
+                            609,
+                            610
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 15,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 15,
+                              "column": 22
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "name": "stringForTrue",
+                          "range": [
+                            615,
+                            628
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 15,
+                              "column": 27
+                            },
+                            "end": {
+                              "line": 15,
+                              "column": 40
+                            }
+                          }
+                        },
+                        "range": [
+                          609,
+                          628
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 15,
+                            "column": 21
+                          },
+                          "end": {
+                            "line": 15,
+                            "column": 40
+                          }
+                        }
+                      },
+                      "generator": false,
+                      "expression": true,
+                      "range": [
+                        604,
+                        628
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 40
+                        }
+                      }
+                    },
+                    "kind": "init",
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "range": [
+                      596,
+                      628
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 15,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 15,
+                        "column": 40
+                      }
+                    }
+                  },
+                  {
+                    "type": "Property",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "encode",
+                      "range": [
+                        638,
+                        644
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 16,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 16,
+                          "column": 14
+                        }
+                      }
+                    },
+                    "value": {
+                      "type": "ArrowFunctionExpression",
+                      "id": null,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "name": "s",
+                          "range": [
+                            646,
+                            647
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 16,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 16,
+                              "column": 17
+                            }
+                          }
+                        }
+                      ],
+                      "body": {
+                        "type": "ConditionalExpression",
+                        "test": {
+                          "type": "Identifier",
+                          "name": "s",
+                          "range": [
+                            651,
+                            652
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 16,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 16,
+                              "column": 22
+                            }
+                          }
+                        },
+                        "consequent": {
+                          "type": "Identifier",
+                          "name": "stringForTrue",
+                          "range": [
+                            655,
+                            668
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 16,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 16,
+                              "column": 38
+                            }
+                          }
+                        },
+                        "alternate": {
+                          "type": "Identifier",
+                          "name": "stringForFalse",
+                          "range": [
+                            671,
+                            685
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 16,
+                              "column": 41
+                            },
+                            "end": {
+                              "line": 16,
+                              "column": 55
+                            }
+                          }
+                        },
+                        "range": [
+                          651,
+                          685
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 16,
+                            "column": 21
+                          },
+                          "end": {
+                            "line": 16,
+                            "column": 55
+                          }
+                        }
+                      },
+                      "generator": false,
+                      "expression": true,
+                      "range": [
+                        646,
+                        685
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 16,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 16,
+                          "column": 55
+                        }
+                      }
+                    },
+                    "kind": "init",
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "range": [
+                      638,
+                      685
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 16,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 16,
+                        "column": 55
+                      }
+                    }
+                  }
+                ],
+                "range": [
+                  586,
+                  691
+                ],
+                "loc": {
+                  "start": {
+                    "line": 14,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 5
+                  }
+                }
+              },
+              "range": [
+                579,
+                692
+              ],
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 4
+                },
+                "end": {
+                  "line": 17,
+                  "column": 6
+                }
+              }
+            }
+          ],
+          "range": [
+            573,
+            694
+          ],
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 74
+            },
+            "end": {
+              "line": 18,
+              "column": 1
+            }
+          }
+        },
+        "generator": false,
+        "expression": false,
+        "range": [
+          506,
+          694
+        ],
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 7
+          },
+          "end": {
+            "line": 18,
+            "column": 1
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n *  Creates a boolean coder/decoder function pair\n *\n *  Boolean Codecs can encode `true` or `false` in a variety of ways.\n *\n *  > Note that by omitting the `stringForFalse`, then `null` is used,\n *  > which \"unset's\" the property on a `false` value.\n *\n *  @param {string} [stringForTrue=\"true\"] - the string to use to signify `true`\n *  @param {?string} [stringForFalse=null] - the string to use to signify `false` (or not expplicitly `true`)\n *  @return {Codec} The custom boolean codec\n ",
+            "range": [
+              0,
+              498
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 12,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n *  The default boolean export is one that maps to the strings\n *  \"true\" and \"false\".\n ",
+            "range": [
+              696,
+              790
+            ],
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 0
+              },
+              "end": {
+                "line": 23,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        499,
+        694
+      ],
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 1
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n *  Creates a boolean coder/decoder function pair\n *\n *  Boolean Codecs can encode `true` or `false` in a variety of ways.\n *\n *  > Note that by omitting the `stringForFalse`, then `null` is used,\n *  > which \"unset's\" the property on a `false` value.\n *\n *  @param {string} [stringForTrue=\"true\"] - the string to use to signify `true`\n *  @param {?string} [stringForFalse=null] - the string to use to signify `false` (or not expplicitly `true`)\n *  @return {Codec} The custom boolean codec\n ",
+          "range": [
+            0,
+            498
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 12,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n *  The default boolean export is one that maps to the strings\n *  \"true\" and \"false\".\n ",
+          "range": [
+            696,
+            790
+          ],
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 0
+            },
+            "end": {
+              "line": 23,
+              "column": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "ExportDefaultDeclaration",
+      "declaration": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "Identifier",
+          "name": "createBool",
+          "range": [
+            806,
+            816
+          ],
+          "loc": {
+            "start": {
+              "line": 24,
+              "column": 15
+            },
+            "end": {
+              "line": 24,
+              "column": 25
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "Literal",
+            "value": "true",
+            "raw": "\"true\"",
+            "range": [
+              817,
+              823
+            ],
+            "loc": {
+              "start": {
+                "line": 24,
+                "column": 26
+              },
+              "end": {
+                "line": 24,
+                "column": 32
+              }
+            }
+          },
+          {
+            "type": "Literal",
+            "value": "false",
+            "raw": "\"false\"",
+            "range": [
+              825,
+              832
+            ],
+            "loc": {
+              "start": {
+                "line": 24,
+                "column": 34
+              },
+              "end": {
+                "line": 24,
+                "column": 41
+              }
+            }
+          }
+        ],
+        "range": [
+          806,
+          833
+        ],
+        "loc": {
+          "start": {
+            "line": 24,
+            "column": 15
+          },
+          "end": {
+            "line": 24,
+            "column": 42
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n *  The default boolean export is one that maps to the strings\n *  \"true\" and \"false\".\n ",
+            "range": [
+              696,
+              790
+            ],
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 0
+              },
+              "end": {
+                "line": 23,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": []
+      },
+      "range": [
+        791,
+        834
+      ],
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 0
+        },
+        "end": {
+          "line": 24,
+          "column": 43
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n *  The default boolean export is one that maps to the strings\n *  \"true\" and \"false\".\n ",
+          "range": [
+            696,
+            790
+          ],
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 0
+            },
+            "end": {
+              "line": 23,
+              "column": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    499,
+    834
+  ],
+  "loc": {
+    "start": {
+      "line": 13,
+      "column": 0
+    },
+    "end": {
+      "line": 24,
+      "column": 43
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n *  Creates a boolean coder/decoder function pair\n *\n *  Boolean Codecs can encode `true` or `false` in a variety of ways.\n *\n *  > Note that by omitting the `stringForFalse`, then `null` is used,\n *  > which \"unset's\" the property on a `false` value.\n *\n *  @param {string} [stringForTrue=\"true\"] - the string to use to signify `true`\n *  @param {?string} [stringForFalse=null] - the string to use to signify `false` (or not expplicitly `true`)\n *  @return {Codec} The custom boolean codec\n ",
+      "range": [
+        0,
+        498
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 12,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n *  The default boolean export is one that maps to the strings\n *  \"true\" and \"false\".\n ",
+      "range": [
+        696,
+        790
+      ],
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 23,
+          "column": 3
+        }
+      }
+    }
+  ]
+}

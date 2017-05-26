@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/schema/entity.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">codec</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createBool">createBool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEnum">createEnum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createCodec">createCodec</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">context</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/context_entity.doc.js~Context$Entity.html">Context$Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/context/index.js~Context.html">Context</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">gremlin</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/gremlin/index.js~GremlinQueryBuilder.html">GremlinQueryBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-queryBuilder">queryBuilder</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">lucene</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseLucene">parseLucene</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">schema</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/schema/index.js~Schema.html">Schema</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createEntity">createEntity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-validate">validate</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">types</div><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Codec">Codec</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GremlinBranch">GremlinBranch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-LuceneQuery">LuceneQuery</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-OneOrMoreVertices">OneOrMoreVertices</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://github.com/arago/js-graphit-client/blob/master/src/connection.js">Connection</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">vertex</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/graph.js~GraphVertex.html">GraphVertex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/vertex/index.js~Vertex.html">Vertex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createVertex">createVertex</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isVertex">isVertex</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/schema/entity.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ *  The entity is an object which provides the information to
+ *  convert database database results into application data and
+ *  application queries into database format
+ */
+import codec from &quot;../codec&quot;;
+
+const stringCodec = codec(&quot;string&quot;);
+const listCodec = codec(&quot;list&quot;);
+const identity = codec(&quot;identity&quot;);
+const iso8601 = codec(&quot;iso8601&quot;);
+// map an array of objects to an object keyed on the given key
+const indexBy = key =&gt; (acc, obj) =&gt; (acc[obj[key]] = obj, acc);
+
+/**
+ *  @ignore - internal only
+ */
+export const $dangerouslyGetProps = Symbol(&quot;dangerouslyGetProps&quot;);
+/**
+ *  @ignore - internal only
+ */
+export const $dangerouslyGetRelations = Symbol(&quot;dangerouslyGetRelations&quot;);
+/**
+ *  @ignore - internal only
+ */
+export const $dangerouslyGetDefinition = Symbol(&quot;dangerouslyGetDefinition&quot;);
+/**
+ *  @ignore - internal only
+ */
+export const $internal = Symbol(&quot;internal entity&quot;);
+
+/**
+ *  The entity is an object which provides the information to
+ *  convert database database results into application data and
+ *  application queries into database format.
+ *
+ *  @see manual/overview.html#schema
+ *  @param {object} definition - the schema definition of this entity (see the manual)
+ *  @param {Schema} schema - the actual schema this entity is defined in.
+ *  @return {Entity}
+ */
+export default function createEntity(definition, schema) {
+    const firstLetter = definition.name ? definition.name[0] : &quot;x&quot;;
+    if (!definition[$internal] &amp;&amp; firstLetter !== firstLetter.toUpperCase()) {
+        throw new Error(`entity defition name must start with a Capital letter (${definition.name})`);
+    }
+    const props = createPropList(schema, definition.required, definition.optional, definition.virtual);
+    const byDb = props.reduce(indexBy(&quot;src&quot;), {});
+    const byApp = props.reduce(indexBy(&quot;dst&quot;), {});
+
+    const shouldMapFreeAttributes = definition.includeUnmappedFreeAttributes === true;
+
+    const getProp = name =&gt; {
+        if (byApp[name]) {
+            return byApp[name];
+        }
+        if (byDb[name]) {
+            return byDb[name];
+        }
+        //nothing
+        return;
+    };
+
+    const relations = createRelationMap(definition.relations);
+    const getRelation = name =&gt; {
+        if (relations[name]) {
+            return relations[name];
+        }
+        //nothing
+        return;
+    };
+
+    const convert = (encode = true) =&gt; input =&gt; {
+        return objectEntries(input)
+            .reduce((output, [key, value]) =&gt; {
+                const prop = encode ? byApp[key] : byDb[key];
+                if (!prop) {
+                    //this might be missing, or it may be free.
+                    //if we are decoding, we have access to unmapped free props.
+                    if (!encode &amp;&amp; isFreeAttribute(key) &amp;&amp; shouldMapFreeAttributes) {
+                        //this is a little different
+                        addFreeAttribute(output, key, value);
+                    }
+                    return output;
+                } else if ((encode &amp;&amp; prop.immutable)) {
+                    //skip readOnly fields on encode
+                    return output;
+                }
+                if (encode) {
+                    //remember null is used for unset, so pass-through
+                    output[prop.src] = value === null ? null : prop.encode(value);
+                } else {
+                    output[prop.dst] = prop.decode(value);
+                }
+                return output;
+            }, {});
+    };
+
+    const entity = Object.create(null, {
+        ogit: {
+            enumerable: true,
+            value: definition.ogit
+        },
+        name: {
+            enumerable: true,
+            value: definition.name
+        },
+        relation: {
+            enumerable: true,
+            value: getRelation
+        },
+        prop: {
+            enumerable: true,
+            value: getProp
+        },
+        decode: {
+            enumerable: true,
+            value: convert(false)
+        },
+        encode: {
+            enumerable: true,
+            value: convert(true)
+        },
+        internal: {
+            enumerable: true,
+            value: definition[$internal] === true
+        }
+    });
+    entity[$dangerouslyGetProps] = () =&gt; props;
+    entity[$dangerouslyGetRelations] = () =&gt; relations;
+    entity[$dangerouslyGetDefinition] = () =&gt; definition;
+    return entity;
+}
+
+const internalProps = [
+    {
+        src: &quot;ogit/_id&quot;,
+        dst: &quot;_id&quot;,
+        encode: stringCodec.decode,
+        decode: stringCodec.encode,
+        required: false
+    },
+    { //_content and fields will be moved to ontology definition, e.g. github.com/arago/OGIT
+        src: &quot;ogit/_content&quot;,
+        dst: &quot;_content&quot;,
+        encode: stringCodec.decode,
+        decode: stringCodec.encode,
+        required: false
+    },
+    {
+        src: &quot;ogit/_tags&quot;,
+        dst: &quot;_tags&quot;,
+        encode: listCodec.decode,
+        decode: listCodec.encode,
+        required: false
+    }
+];
+
+const readOnlyProps = [
+    &quot;ogit/_created-on&quot;,
+    &quot;ogit/_modified-on&quot;,
+    &quot;ogit/_created-by&quot;,
+    &quot;ogit/_modified-by&quot;
+].map(src =&gt; ({
+    src,
+    dst: src.split(&quot;/&quot;)[1],
+    decode: identity.decode,
+    encode: /-on$/.test(src) ? iso8601.encode : identity.encode,
+    required: false,
+    immutable: true
+}));
+
+const _typeProp = {
+    src: &quot;ogit/_type&quot;,
+    dst: &quot;_type&quot;,
+    required: false
+};
+const typeProp = schema =&gt; {
+    if (&quot;encode&quot; in _typeProp) {
+        return _typeProp;
+    }
+    return Object.assign(_typeProp, {
+        encode: name =&gt; schema.get(name).ogit,
+        decode: ogit =&gt; schema.get(ogit).name
+    });
+};
+
+//free attributes start with Slash.
+const isFreeAttribute = prop =&gt; prop.indexOf(&quot;/&quot;) === 0;
+//adding one goes into the free pot.
+const addFreeAttribute = (output, key, value) =&gt; {
+    if (&quot;_free&quot; in output === false) {
+        output._free = {};
+    }
+    output._free[key.substring(1)] = value; //no coercion.
+};
+
+const ensureFullProps = base =&gt; ([key, def]) =&gt; {
+    const result = {
+        dst: key
+    };
+    if (typeof def === &quot;string&quot;) {
+        Object.assign(result, { src: def }, codec(&quot;string&quot;), base);
+    } else {
+        Object.assign(result, { src: def.src }, codec(def.type || &quot;string&quot;), base);
+    }
+    return result;
+};
+
+//to iterate objects easily
+const objectEntries = obj =&gt; Object.keys(obj).map(key =&gt; [key, obj[key]]);
+
+//create a flat array of props.
+const createPropList = (schema, required = {}, optional = {}, virtual = {}) =&gt; {
+    //we add the defaults as well.
+    return internalProps
+        .concat([typeProp(schema)])
+        .concat(readOnlyProps)
+        .concat(objectEntries(required).map(ensureFullProps({ required: true })))
+        .concat(objectEntries(optional).map(ensureFullProps({ required: false })))
+        .concat(objectEntries(virtual).map(ensureFullProps({ writable: false })));
+};
+
+//parse the relations into a common format.
+const createRelationMap = (relations = {}) =&gt; {
+    return objectEntries(relations).reduce((map, [alias, def]) =&gt; {
+        const relation = [];
+        if (typeof def === &quot;string&quot; || !Array.isArray(def)) {
+            relation.push(def);
+        } else {
+            relation.push(...def);
+        }
+        map[alias] = {
+            alias,
+            hops: relation.reduce(createRelation, [])
+        };
+        return map;
+    }, {});
+};
+
+/**
+ *  Create the long form relation object from a string or object
+ *
+ *  The object should look like this:
+ *  {
+ *      direction: &quot;in&quot; | &quot;out&quot;,
+ *      verb: &quot;ogit/edgeType&quot;,
+ *      vertices: [ &quot;ogit/vertexType&quot; ],
+ *      filter: { &quot;ogit/attribute&quot;: &quot;ogit/value&quot; }
+ *  }
+ *
+ *  The string shorthand is
+ *
+ *  &quot;ogit/edgeType -&gt; ogit/vertexType|ogit/otherType, ...&quot;
+ *
+ */
+const createRelation = (hops, def) =&gt; {
+    //if string, we must parse.
+    if (typeof def === &quot;string&quot;) {
+        return parseRelationString(def).reduce(createRelation, hops);
+    }
+    const {
+        direction,
+        verb,
+        filter = null,
+        vertex = false,
+        vertices = []
+    } = def;
+    const vertexTypes = [];
+    //now check the minimal definition.
+    if (direction !== &quot;in&quot; &amp;&amp; direction !== &quot;out&quot;) {
+        throw new Error(`relation: direction must be &quot;in&quot; or &quot;out&quot; not: ${direction}`);
+    }
+    if (typeof verb !== &quot;string&quot; || verb.indexOf(&quot;ogit/&quot;) !== 0) {
+        throw new Error(`relation: verb must be &apos;ogit/...&apos; got: ${verb}`);
+    }
+    //this should be a single item, but it might get an array...
+    if (vertex) {
+        if (Array.isArray(vertex)) {
+            vertexTypes.push(...vertex);
+        } else {
+            vertexTypes.push(vertex);
+        }
+    }
+    //this is the one that should be used as an array, be we might get a single item.
+    if (!Array.isArray(vertices)) {
+        vertexTypes.push(vertices);
+    } else {
+        vertexTypes.push(...vertices);
+    }
+    // now check everything we got was a string.
+    if (vertexTypes.some(r =&gt; typeof r !== &quot;string&quot;) || vertexTypes.length === 0) {
+        throw new Error(`relation: vertex must be a string, or an array of strings`);
+    }
+    //OK we have all the info we need, should we generate the gremlin base alias query now? nah.
+    return hops.concat([{
+        direction,
+        filter,
+        verb,
+        vertices: vertexTypes
+    }]);
+};
+
+//parse the string form of the relation definition.
+//
+// the definition is in the form &quot;verb dir type|type, verb dir type|type, ...&quot;
+const parseRelationString = string =&gt; {
+    //split the parts into an array on comma.
+    return string.split(/\s*,\s*/)
+        .map(rel =&gt; {
+            //OK this is a single one.
+            const [verb, dir, types, ...rest] = rel.split(/\s+/);
+            //if there is &quot;rest&quot; then the definiton is probably done something wrong.
+            if (rest.length) {
+                throw new Error(`relation: error parsing &apos;${rel}&apos; - (if you need a filter, use the longhand object form)`);
+            }
+            let direction;
+            switch (dir) {
+                case &quot;&lt;-&quot;:
+                    direction = &quot;in&quot;;
+                    break;
+                case &quot;-&gt;&quot;:
+                    direction = &quot;out&quot;;
+                    break;
+                default:
+                    direction = dir;
+            }
+            return {
+                direction,
+                verb,
+                vertices: types.split(&quot;|&quot;).map(v =&gt; v.trim())
+            };
+        });
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

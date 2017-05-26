@@ -1,0 +1,133 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ThrowStatement",
+      "argument": {
+        "type": "NewExpression",
+        "callee": {
+          "type": "Identifier",
+          "name": "Error",
+          "range": [
+            148,
+            153
+          ],
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 10
+            },
+            "end": {
+              "line": 5,
+              "column": 15
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "Literal",
+            "value": "float coercion not implemented. Do not import",
+            "raw": "\"float coercion not implemented. Do not import\"",
+            "range": [
+              154,
+              201
+            ],
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 16
+              },
+              "end": {
+                "line": 5,
+                "column": 63
+              }
+            }
+          }
+        ],
+        "range": [
+          144,
+          202
+        ],
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 6
+          },
+          "end": {
+            "line": 5,
+            "column": 64
+          }
+        }
+      },
+      "range": [
+        138,
+        203
+      ],
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 65
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n *  The float type is tricky so I haven't implemented it yet.\n *  We need a good algorithm for lexically sortable float encoding.\n ",
+          "range": [
+            0,
+            137
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 4,
+              "column": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    138,
+    203
+  ],
+  "loc": {
+    "start": {
+      "line": 5,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 65
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n *  The float type is tricky so I haven't implemented it yet.\n *  We need a good algorithm for lexically sortable float encoding.\n ",
+      "range": [
+        0,
+        137
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 3
+        }
+      }
+    }
+  ]
+}

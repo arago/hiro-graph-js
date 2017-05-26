@@ -1,0 +1,3581 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "ClassDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "Context$Entity",
+          "range": [
+            186,
+            200
+          ],
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 13
+            },
+            "end": {
+              "line": 6,
+              "column": 27
+            }
+          }
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "find",
+                "range": [
+                  454,
+                  458
+                ],
+                "loc": {
+                  "start": {
+                    "line": 14,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 14,
+                    "column": 8
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "query",
+                    "range": [
+                      459,
+                      464
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 14
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      466,
+                      473
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 23
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    475,
+                    478
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 14,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 14,
+                      "column": 28
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  458,
+                  478
+                ],
+                "loc": {
+                  "start": {
+                    "line": 14,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 14,
+                    "column": 28
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                454,
+                478
+              ],
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 4
+                },
+                "end": {
+                  "line": 14,
+                  "column": 28
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     *  find vertices of type `Entity`\n     *\n     *  @param {LuceneQuery} query - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<Array<GraphVertex>>}\n     ",
+                  "range": [
+                    207,
+                    449
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 7,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    479,
+                    500
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 14,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 14,
+                      "column": 50
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  find vertices of type `<Entity>` by Id or an array of ids\n     *\n     *  @param {string|Array<string>} idOrIds - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<OneOrMoreVertices>}\n     ",
+                  "range": [
+                    506,
+                    785
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 16,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 22,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "findById",
+                "range": [
+                  790,
+                  798
+                ],
+                "loc": {
+                  "start": {
+                    "line": 23,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 23,
+                    "column": 12
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "idOrIds",
+                    "range": [
+                      799,
+                      806
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 23,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 23,
+                        "column": 20
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      808,
+                      815
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 23,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 23,
+                        "column": 29
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    817,
+                    820
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 31
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 34
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  798,
+                  820
+                ],
+                "loc": {
+                  "start": {
+                    "line": 23,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 23,
+                    "column": 34
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                790,
+                820
+              ],
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 4
+                },
+                "end": {
+                  "line": 23,
+                  "column": 34
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    479,
+                    500
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 14,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 14,
+                      "column": 50
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  find vertices of type `<Entity>` by Id or an array of ids\n     *\n     *  @param {string|Array<string>} idOrIds - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<OneOrMoreVertices>}\n     ",
+                  "range": [
+                    506,
+                    785
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 16,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 22,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    821,
+                    842
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 56
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  find the first vertex of type `<Entity>`\n     *\n     *  @param {LuceneQuery} query - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    848,
+                    1093
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 25,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 31,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "findOne",
+                "range": [
+                  1098,
+                  1105
+                ],
+                "loc": {
+                  "start": {
+                    "line": 32,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 32,
+                    "column": 11
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "query",
+                    "range": [
+                      1106,
+                      1111
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 32,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 32,
+                        "column": 17
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      1113,
+                      1120
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 32,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 32,
+                        "column": 26
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    1122,
+                    1125
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 32,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 32,
+                      "column": 31
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1105,
+                  1125
+                ],
+                "loc": {
+                  "start": {
+                    "line": 32,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 32,
+                    "column": 31
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                1098,
+                1125
+              ],
+              "loc": {
+                "start": {
+                  "line": 32,
+                  "column": 4
+                },
+                "end": {
+                  "line": 32,
+                  "column": 31
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    821,
+                    842
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 23,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 56
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  find the first vertex of type `<Entity>`\n     *\n     *  @param {LuceneQuery} query - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    848,
+                    1093
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 25,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 31,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    1126,
+                    1147
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 32,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 32,
+                      "column": 53
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  find vertices of type `Entity` that match the search term as well as the filter\n     *\n     *  @param {string|object} term - the search term or `$search` object (see [Lucene Queries](../../../manual/usage.html#-search-queries))\n     *  @param {LuceneQuery} filter - the lucene query to used to limit results\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<Array<GraphVertex>>}\n     ",
+                  "range": [
+                    1153,
+                    1593
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 34,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 41,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "search",
+                "range": [
+                  1598,
+                  1604
+                ],
+                "loc": {
+                  "start": {
+                    "line": 42,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 10
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "term",
+                    "range": [
+                      1605,
+                      1609
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 42,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 42,
+                        "column": 15
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "filter",
+                    "range": [
+                      1611,
+                      1617
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 42,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 42,
+                        "column": 23
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      1619,
+                      1626
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 42,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 42,
+                        "column": 32
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    1628,
+                    1631
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 42,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 42,
+                      "column": 37
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1604,
+                  1631
+                ],
+                "loc": {
+                  "start": {
+                    "line": 42,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 37
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                1598,
+                1631
+              ],
+              "loc": {
+                "start": {
+                  "line": 42,
+                  "column": 4
+                },
+                "end": {
+                  "line": 42,
+                  "column": 37
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    1126,
+                    1147
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 32,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 32,
+                      "column": 53
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  find vertices of type `Entity` that match the search term as well as the filter\n     *\n     *  @param {string|object} term - the search term or `$search` object (see [Lucene Queries](../../../manual/usage.html#-search-queries))\n     *  @param {LuceneQuery} filter - the lucene query to used to limit results\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<Array<GraphVertex>>}\n     ",
+                  "range": [
+                    1153,
+                    1593
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 34,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 41,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    1632,
+                    1653
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 42,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 42,
+                      "column": 59
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  create a new vertex of type `<Entity>`\n     *\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    1659,
+                    1892
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 44,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 50,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "create",
+                "range": [
+                  1897,
+                  1903
+                ],
+                "loc": {
+                  "start": {
+                    "line": 51,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 51,
+                    "column": 10
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "appData",
+                    "range": [
+                      1904,
+                      1911
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 51,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 51,
+                        "column": 18
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      1913,
+                      1920
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 51,
+                        "column": 20
+                      },
+                      "end": {
+                        "line": 51,
+                        "column": 27
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    1922,
+                    1925
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 51,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 51,
+                      "column": 32
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1903,
+                  1925
+                ],
+                "loc": {
+                  "start": {
+                    "line": 51,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 51,
+                    "column": 32
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                1897,
+                1925
+              ],
+              "loc": {
+                "start": {
+                  "line": 51,
+                  "column": 4
+                },
+                "end": {
+                  "line": 51,
+                  "column": 32
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    1632,
+                    1653
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 42,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 42,
+                      "column": 59
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  create a new vertex of type `<Entity>`\n     *\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    1659,
+                    1892
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 44,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 50,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    1926,
+                    1947
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 51,
+                      "column": 33
+                    },
+                    "end": {
+                      "line": 51,
+                      "column": 54
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Connect 2 vertices with a given relation\n     *\n     *  The edge will be `{source}$${verb}$${target}`.\n     *  The verb is inferred from the `relation` parameter.\n     *\n     *  @param {string} relation - the named relation to connect by\n     *  @param {string} source - the ID of the source vertex\n     *  @param {string} target - the ID of the target vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<undefined>} - just a promise that resolves when connected\n     ",
+                  "range": [
+                    1953,
+                    2482
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 53,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 64,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "connect",
+                "range": [
+                  2487,
+                  2494
+                ],
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 65,
+                    "column": 11
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "relation",
+                    "range": [
+                      2495,
+                      2503
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 65,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 65,
+                        "column": 20
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "source",
+                    "range": [
+                      2505,
+                      2511
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 65,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 65,
+                        "column": 28
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "target",
+                    "range": [
+                      2513,
+                      2519
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 65,
+                        "column": 30
+                      },
+                      "end": {
+                        "line": 65,
+                        "column": 36
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      2521,
+                      2528
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 65,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 65,
+                        "column": 45
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    2530,
+                    2533
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 47
+                    },
+                    "end": {
+                      "line": 65,
+                      "column": 50
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  2494,
+                  2533
+                ],
+                "loc": {
+                  "start": {
+                    "line": 65,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 65,
+                    "column": 50
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                2487,
+                2533
+              ],
+              "loc": {
+                "start": {
+                  "line": 65,
+                  "column": 4
+                },
+                "end": {
+                  "line": 65,
+                  "column": 50
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    1926,
+                    1947
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 51,
+                      "column": 33
+                    },
+                    "end": {
+                      "line": 51,
+                      "column": 54
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Connect 2 vertices with a given relation\n     *\n     *  The edge will be `{source}$${verb}$${target}`.\n     *  The verb is inferred from the `relation` parameter.\n     *\n     *  @param {string} relation - the named relation to connect by\n     *  @param {string} source - the ID of the source vertex\n     *  @param {string} target - the ID of the target vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<undefined>} - just a promise that resolves when connected\n     ",
+                  "range": [
+                    1953,
+                    2482
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 53,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 64,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    2534,
+                    2555
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 51
+                    },
+                    "end": {
+                      "line": 65,
+                      "column": 72
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Disconnect 2 vertices along a given relation.\n     *\n     *  The edge deleted will be `{source}$${verb}$${target}`.\n     *  The verb is inferred from the `relation` parameter.\n     *\n     *  @param {string} relation - the named relation to disconnect\n     *  @param {string} source - the ID of the source vertex\n     *  @param {string} target - the ID of the target vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<undefined>} - just a promise that resolves when connected\n     ",
+                  "range": [
+                    2561,
+                    3103
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 67,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "disconnect",
+                "range": [
+                  3108,
+                  3118
+                ],
+                "loc": {
+                  "start": {
+                    "line": 79,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 79,
+                    "column": 14
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "relation",
+                    "range": [
+                      3119,
+                      3127
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 79,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 79,
+                        "column": 23
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "source",
+                    "range": [
+                      3129,
+                      3135
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 79,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 79,
+                        "column": 31
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "target",
+                    "range": [
+                      3137,
+                      3143
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 79,
+                        "column": 33
+                      },
+                      "end": {
+                        "line": 79,
+                        "column": 39
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      3145,
+                      3152
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 79,
+                        "column": 41
+                      },
+                      "end": {
+                        "line": 79,
+                        "column": 48
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    3154,
+                    3157
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 79,
+                      "column": 50
+                    },
+                    "end": {
+                      "line": 79,
+                      "column": 53
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  3118,
+                  3157
+                ],
+                "loc": {
+                  "start": {
+                    "line": 79,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 79,
+                    "column": 53
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                3108,
+                3157
+              ],
+              "loc": {
+                "start": {
+                  "line": 79,
+                  "column": 4
+                },
+                "end": {
+                  "line": 79,
+                  "column": 53
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    2534,
+                    2555
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 65,
+                      "column": 51
+                    },
+                    "end": {
+                      "line": 65,
+                      "column": 72
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Disconnect 2 vertices along a given relation.\n     *\n     *  The edge deleted will be `{source}$${verb}$${target}`.\n     *  The verb is inferred from the `relation` parameter.\n     *\n     *  @param {string} relation - the named relation to disconnect\n     *  @param {string} source - the ID of the source vertex\n     *  @param {string} target - the ID of the target vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<undefined>} - just a promise that resolves when connected\n     ",
+                  "range": [
+                    2561,
+                    3103
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 67,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 78,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    3158,
+                    3179
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 79,
+                      "column": 54
+                    },
+                    "end": {
+                      "line": 79,
+                      "column": 75
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  update a new vertex with new data.\n     *\n     *  @param {string} id - the ID of the vertex to update\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    3186,
+                    3475
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 81,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 88,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "update",
+                "range": [
+                  3480,
+                  3486
+                ],
+                "loc": {
+                  "start": {
+                    "line": 89,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 89,
+                    "column": 10
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "id",
+                    "range": [
+                      3487,
+                      3489
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 89,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 89,
+                        "column": 13
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "appData",
+                    "range": [
+                      3491,
+                      3498
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 89,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 89,
+                        "column": 22
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      3500,
+                      3507
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 89,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 89,
+                        "column": 31
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    3509,
+                    3512
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 89,
+                      "column": 33
+                    },
+                    "end": {
+                      "line": 89,
+                      "column": 36
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  3486,
+                  3512
+                ],
+                "loc": {
+                  "start": {
+                    "line": 89,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 89,
+                    "column": 36
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                3480,
+                3512
+              ],
+              "loc": {
+                "start": {
+                  "line": 89,
+                  "column": 4
+                },
+                "end": {
+                  "line": 89,
+                  "column": 36
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    3158,
+                    3179
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 79,
+                      "column": 54
+                    },
+                    "end": {
+                      "line": 79,
+                      "column": 75
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  update a new vertex with new data.\n     *\n     *  @param {string} id - the ID of the vertex to update\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    3186,
+                    3475
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 81,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 88,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    3513,
+                    3534
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 89,
+                      "column": 37
+                    },
+                    "end": {
+                      "line": 89,
+                      "column": 58
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  replace a new vertex with new data (destructive!)\n     *\n     *  @param {string} id - the ID of the vertex to update\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    3540,
+                    3844
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 91,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 98,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "replace",
+                "range": [
+                  3849,
+                  3856
+                ],
+                "loc": {
+                  "start": {
+                    "line": 99,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 99,
+                    "column": 11
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "id",
+                    "range": [
+                      3857,
+                      3859
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 99,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 99,
+                        "column": 14
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "appData",
+                    "range": [
+                      3861,
+                      3868
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 99,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 99,
+                        "column": 23
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      3870,
+                      3877
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 99,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 99,
+                        "column": 32
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    3879,
+                    3882
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 99,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 99,
+                      "column": 37
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  3856,
+                  3882
+                ],
+                "loc": {
+                  "start": {
+                    "line": 99,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 99,
+                    "column": 37
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                3849,
+                3882
+              ],
+              "loc": {
+                "start": {
+                  "line": 99,
+                  "column": 4
+                },
+                "end": {
+                  "line": 99,
+                  "column": 37
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    3513,
+                    3534
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 89,
+                      "column": 37
+                    },
+                    "end": {
+                      "line": 89,
+                      "column": 58
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  replace a new vertex with new data (destructive!)\n     *\n     *  @param {string} id - the ID of the vertex to update\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+                  "range": [
+                    3540,
+                    3844
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 91,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 98,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    3883,
+                    3904
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 99,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 99,
+                      "column": 59
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Encode application data to graph data.\n     *\n     *  @param {object} appData - application level data\n     *  @return {object} graphData - graph encoded data\n     ",
+                  "range": [
+                    3910,
+                    4088
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 101,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 106,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "encode",
+                "range": [
+                  4093,
+                  4099
+                ],
+                "loc": {
+                  "start": {
+                    "line": 107,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 107,
+                    "column": 10
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "appData",
+                    "range": [
+                      4100,
+                      4107
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 107,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 107,
+                        "column": 18
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    4109,
+                    4112
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 107,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 107,
+                      "column": 23
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  4099,
+                  4112
+                ],
+                "loc": {
+                  "start": {
+                    "line": 107,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 107,
+                    "column": 23
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                4093,
+                4112
+              ],
+              "loc": {
+                "start": {
+                  "line": 107,
+                  "column": 4
+                },
+                "end": {
+                  "line": 107,
+                  "column": 23
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    3883,
+                    3904
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 99,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 99,
+                      "column": 59
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Encode application data to graph data.\n     *\n     *  @param {object} appData - application level data\n     *  @return {object} graphData - graph encoded data\n     ",
+                  "range": [
+                    3910,
+                    4088
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 101,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 106,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4113,
+                    4134
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 107,
+                      "column": 24
+                    },
+                    "end": {
+                      "line": 107,
+                      "column": 45
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Decode graph data to application data.\n     *\n     *  @param {object} graphData - graph encoded data\n     *  @return {object} appData - application level data\n     ",
+                  "range": [
+                    4140,
+                    4318
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 109,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 114,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "decode",
+                "range": [
+                  4323,
+                  4329
+                ],
+                "loc": {
+                  "start": {
+                    "line": 115,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 115,
+                    "column": 10
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "graphData",
+                    "range": [
+                      4330,
+                      4339
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 115,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 115,
+                        "column": 20
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    4341,
+                    4344
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 115,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 115,
+                      "column": 25
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  4329,
+                  4344
+                ],
+                "loc": {
+                  "start": {
+                    "line": 115,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 115,
+                    "column": 25
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                4323,
+                4344
+              ],
+              "loc": {
+                "start": {
+                  "line": 115,
+                  "column": 4
+                },
+                "end": {
+                  "line": 115,
+                  "column": 25
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4113,
+                    4134
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 107,
+                      "column": 24
+                    },
+                    "end": {
+                      "line": 107,
+                      "column": 45
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Decode graph data to application data.\n     *\n     *  @param {object} graphData - graph encoded data\n     *  @return {object} appData - application level data\n     ",
+                  "range": [
+                    4140,
+                    4318
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 109,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 114,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4345,
+                    4366
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 115,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 115,
+                      "column": 47
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Generate the Gremlin Query factoty for the given relation.\n     *\n     *  @example\n     *      query = ctx.Entity.relationQuery(\"relates\");\n     *      gremlin = query(ctx.gremlin());\n     *      gremlin.execute(rootId).then(...)\n     *\n     *  @param {string} relation - the name of the relation\n     *  @return {GremlinBranch}\n     ",
+                  "range": [
+                    4372,
+                    4720
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 117,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 127,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "relationQuery",
+                "range": [
+                  4725,
+                  4738
+                ],
+                "loc": {
+                  "start": {
+                    "line": 128,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 128,
+                    "column": 17
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "relation",
+                    "range": [
+                      4739,
+                      4747
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 128,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 128,
+                        "column": 26
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    4749,
+                    4752
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 128,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 128,
+                      "column": 31
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  4738,
+                  4752
+                ],
+                "loc": {
+                  "start": {
+                    "line": 128,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 128,
+                    "column": 31
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                4725,
+                4752
+              ],
+              "loc": {
+                "start": {
+                  "line": 128,
+                  "column": 4
+                },
+                "end": {
+                  "line": 128,
+                  "column": 31
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4345,
+                    4366
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 115,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 115,
+                      "column": 47
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  Generate the Gremlin Query factoty for the given relation.\n     *\n     *  @example\n     *      query = ctx.Entity.relationQuery(\"relates\");\n     *      gremlin = query(ctx.gremlin());\n     *      gremlin.execute(rootId).then(...)\n     *\n     *  @param {string} relation - the name of the relation\n     *  @return {GremlinBranch}\n     ",
+                  "range": [
+                    4372,
+                    4720
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 117,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 127,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4753,
+                    4774
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 128,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 128,
+                      "column": 53
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  used internally\n     *  @ignore\n     ",
+                  "range": [
+                    4780,
+                    4831
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 130,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 133,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "fetchVertices",
+                "range": [
+                  4836,
+                  4849
+                ],
+                "loc": {
+                  "start": {
+                    "line": 134,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 134,
+                    "column": 17
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "relations",
+                    "range": [
+                      4850,
+                      4859
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 134,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 134,
+                        "column": 27
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      4861,
+                      4868
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 134,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 134,
+                        "column": 36
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    4870,
+                    4873
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 134,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 134,
+                      "column": 41
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  4849,
+                  4873
+                ],
+                "loc": {
+                  "start": {
+                    "line": 134,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 134,
+                    "column": 41
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                4836,
+                4873
+              ],
+              "loc": {
+                "start": {
+                  "line": 134,
+                  "column": 4
+                },
+                "end": {
+                  "line": 134,
+                  "column": 41
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4753,
+                    4774
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 128,
+                      "column": 32
+                    },
+                    "end": {
+                      "line": 128,
+                      "column": 53
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  used internally\n     *  @ignore\n     ",
+                  "range": [
+                    4780,
+                    4831
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 130,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 133,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4874,
+                    4895
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 134,
+                      "column": 42
+                    },
+                    "end": {
+                      "line": 134,
+                      "column": 63
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  used internally\n     *  @ignore\n     ",
+                  "range": [
+                    4900,
+                    4951
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 135,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 138,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "fetchIds",
+                "range": [
+                  4956,
+                  4964
+                ],
+                "loc": {
+                  "start": {
+                    "line": 139,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 139,
+                    "column": 12
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "relations",
+                    "range": [
+                      4965,
+                      4974
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 139,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 139,
+                        "column": 22
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      4976,
+                      4983
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 139,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 139,
+                        "column": 31
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    4985,
+                    4988
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 139,
+                      "column": 33
+                    },
+                    "end": {
+                      "line": 139,
+                      "column": 36
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  4964,
+                  4988
+                ],
+                "loc": {
+                  "start": {
+                    "line": 139,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 139,
+                    "column": 36
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                4956,
+                4988
+              ],
+              "loc": {
+                "start": {
+                  "line": 139,
+                  "column": 4
+                },
+                "end": {
+                  "line": 139,
+                  "column": 36
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4874,
+                    4895
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 134,
+                      "column": 42
+                    },
+                    "end": {
+                      "line": 134,
+                      "column": 63
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  used internally\n     *  @ignore\n     ",
+                  "range": [
+                    4900,
+                    4951
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 135,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 138,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4989,
+                    5010
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 139,
+                      "column": 37
+                    },
+                    "end": {
+                      "line": 139,
+                      "column": 58
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  used internally\n     *  @ignore\n     ",
+                  "range": [
+                    5015,
+                    5066
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 140,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 143,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "fetchCount",
+                "range": [
+                  5071,
+                  5081
+                ],
+                "loc": {
+                  "start": {
+                    "line": 144,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 144,
+                    "column": 14
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "relations",
+                    "range": [
+                      5082,
+                      5091
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 144,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 144,
+                        "column": 24
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "options",
+                    "range": [
+                      5093,
+                      5100
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 144,
+                        "column": 26
+                      },
+                      "end": {
+                        "line": 144,
+                        "column": 33
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [],
+                  "range": [
+                    5102,
+                    5105
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 144,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 144,
+                      "column": 38
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  5081,
+                  5105
+                ],
+                "loc": {
+                  "start": {
+                    "line": 144,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 144,
+                    "column": 38
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                5071,
+                5105
+              ],
+              "loc": {
+                "start": {
+                  "line": 144,
+                  "column": 4
+                },
+                "end": {
+                  "line": 144,
+                  "column": 38
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    4989,
+                    5010
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 139,
+                      "column": 37
+                    },
+                    "end": {
+                      "line": 139,
+                      "column": 58
+                    }
+                  }
+                },
+                {
+                  "type": "Block",
+                  "value": "*\n     *  used internally\n     *  @ignore\n     ",
+                  "range": [
+                    5015,
+                    5066
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 140,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 143,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Line",
+                  "value": "eslint-disable-line",
+                  "range": [
+                    5106,
+                    5127
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 144,
+                      "column": 39
+                    },
+                    "end": {
+                      "line": 144,
+                      "column": 60
+                    }
+                  }
+                }
+              ],
+              "static": false
+            }
+          ],
+          "range": [
+            201,
+            5129
+          ],
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 28
+            },
+            "end": {
+              "line": 145,
+              "column": 1
+            }
+          }
+        },
+        "range": [
+          180,
+          5129
+        ],
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 7
+          },
+          "end": {
+            "line": 145,
+            "column": 1
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * A {@link Context} has properties named after each Entity with a set of bound functions\n *\n *  This fake class documents the methods attached to each entity name.\n ",
+            "range": [
+              0,
+              172
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": []
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        173,
+        5129
+      ],
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 145,
+          "column": 1
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * A {@link Context} has properties named after each Entity with a set of bound functions\n *\n *  This fake class documents the methods attached to each entity name.\n ",
+          "range": [
+            0,
+            172
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 5,
+              "column": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    173,
+    5129
+  ],
+  "loc": {
+    "start": {
+      "line": 6,
+      "column": 0
+    },
+    "end": {
+      "line": 145,
+      "column": 1
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n * A {@link Context} has properties named after each Entity with a set of bound functions\n *\n *  This fake class documents the methods attached to each entity name.\n ",
+      "range": [
+        0,
+        172
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  find vertices of type `Entity`\n     *\n     *  @param {LuceneQuery} query - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<Array<GraphVertex>>}\n     ",
+      "range": [
+        207,
+        449
+      ],
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 4
+        },
+        "end": {
+          "line": 13,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        479,
+        500
+      ],
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 29
+        },
+        "end": {
+          "line": 14,
+          "column": 50
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  find vertices of type `<Entity>` by Id or an array of ids\n     *\n     *  @param {string|Array<string>} idOrIds - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<OneOrMoreVertices>}\n     ",
+      "range": [
+        506,
+        785
+      ],
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 4
+        },
+        "end": {
+          "line": 22,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        821,
+        842
+      ],
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 35
+        },
+        "end": {
+          "line": 23,
+          "column": 56
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  find the first vertex of type `<Entity>`\n     *\n     *  @param {LuceneQuery} query - the lucene query to use for search\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+      "range": [
+        848,
+        1093
+      ],
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 4
+        },
+        "end": {
+          "line": 31,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        1126,
+        1147
+      ],
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 32
+        },
+        "end": {
+          "line": 32,
+          "column": 53
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  find vertices of type `Entity` that match the search term as well as the filter\n     *\n     *  @param {string|object} term - the search term or `$search` object (see [Lucene Queries](../../../manual/usage.html#-search-queries))\n     *  @param {LuceneQuery} filter - the lucene query to used to limit results\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<Array<GraphVertex>>}\n     ",
+      "range": [
+        1153,
+        1593
+      ],
+      "loc": {
+        "start": {
+          "line": 34,
+          "column": 4
+        },
+        "end": {
+          "line": 41,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        1632,
+        1653
+      ],
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 38
+        },
+        "end": {
+          "line": 42,
+          "column": 59
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  create a new vertex of type `<Entity>`\n     *\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+      "range": [
+        1659,
+        1892
+      ],
+      "loc": {
+        "start": {
+          "line": 44,
+          "column": 4
+        },
+        "end": {
+          "line": 50,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        1926,
+        1947
+      ],
+      "loc": {
+        "start": {
+          "line": 51,
+          "column": 33
+        },
+        "end": {
+          "line": 51,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  Connect 2 vertices with a given relation\n     *\n     *  The edge will be `{source}$${verb}$${target}`.\n     *  The verb is inferred from the `relation` parameter.\n     *\n     *  @param {string} relation - the named relation to connect by\n     *  @param {string} source - the ID of the source vertex\n     *  @param {string} target - the ID of the target vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<undefined>} - just a promise that resolves when connected\n     ",
+      "range": [
+        1953,
+        2482
+      ],
+      "loc": {
+        "start": {
+          "line": 53,
+          "column": 4
+        },
+        "end": {
+          "line": 64,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        2534,
+        2555
+      ],
+      "loc": {
+        "start": {
+          "line": 65,
+          "column": 51
+        },
+        "end": {
+          "line": 65,
+          "column": 72
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  Disconnect 2 vertices along a given relation.\n     *\n     *  The edge deleted will be `{source}$${verb}$${target}`.\n     *  The verb is inferred from the `relation` parameter.\n     *\n     *  @param {string} relation - the named relation to disconnect\n     *  @param {string} source - the ID of the source vertex\n     *  @param {string} target - the ID of the target vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<undefined>} - just a promise that resolves when connected\n     ",
+      "range": [
+        2561,
+        3103
+      ],
+      "loc": {
+        "start": {
+          "line": 67,
+          "column": 4
+        },
+        "end": {
+          "line": 78,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        3158,
+        3179
+      ],
+      "loc": {
+        "start": {
+          "line": 79,
+          "column": 54
+        },
+        "end": {
+          "line": 79,
+          "column": 75
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  update a new vertex with new data.\n     *\n     *  @param {string} id - the ID of the vertex to update\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+      "range": [
+        3186,
+        3475
+      ],
+      "loc": {
+        "start": {
+          "line": 81,
+          "column": 5
+        },
+        "end": {
+          "line": 88,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        3513,
+        3534
+      ],
+      "loc": {
+        "start": {
+          "line": 89,
+          "column": 37
+        },
+        "end": {
+          "line": 89,
+          "column": 58
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  replace a new vertex with new data (destructive!)\n     *\n     *  @param {string} id - the ID of the vertex to update\n     *  @param {object} appData - the data for the new vertex\n     *  @param {object} [options={}] - extra options for the query\n     *  @return {Promise<GraphVertex>}\n     ",
+      "range": [
+        3540,
+        3844
+      ],
+      "loc": {
+        "start": {
+          "line": 91,
+          "column": 4
+        },
+        "end": {
+          "line": 98,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        3883,
+        3904
+      ],
+      "loc": {
+        "start": {
+          "line": 99,
+          "column": 38
+        },
+        "end": {
+          "line": 99,
+          "column": 59
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  Encode application data to graph data.\n     *\n     *  @param {object} appData - application level data\n     *  @return {object} graphData - graph encoded data\n     ",
+      "range": [
+        3910,
+        4088
+      ],
+      "loc": {
+        "start": {
+          "line": 101,
+          "column": 4
+        },
+        "end": {
+          "line": 106,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        4113,
+        4134
+      ],
+      "loc": {
+        "start": {
+          "line": 107,
+          "column": 24
+        },
+        "end": {
+          "line": 107,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  Decode graph data to application data.\n     *\n     *  @param {object} graphData - graph encoded data\n     *  @return {object} appData - application level data\n     ",
+      "range": [
+        4140,
+        4318
+      ],
+      "loc": {
+        "start": {
+          "line": 109,
+          "column": 4
+        },
+        "end": {
+          "line": 114,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        4345,
+        4366
+      ],
+      "loc": {
+        "start": {
+          "line": 115,
+          "column": 26
+        },
+        "end": {
+          "line": 115,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  Generate the Gremlin Query factoty for the given relation.\n     *\n     *  @example\n     *      query = ctx.Entity.relationQuery(\"relates\");\n     *      gremlin = query(ctx.gremlin());\n     *      gremlin.execute(rootId).then(...)\n     *\n     *  @param {string} relation - the name of the relation\n     *  @return {GremlinBranch}\n     ",
+      "range": [
+        4372,
+        4720
+      ],
+      "loc": {
+        "start": {
+          "line": 117,
+          "column": 4
+        },
+        "end": {
+          "line": 127,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        4753,
+        4774
+      ],
+      "loc": {
+        "start": {
+          "line": 128,
+          "column": 32
+        },
+        "end": {
+          "line": 128,
+          "column": 53
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  used internally\n     *  @ignore\n     ",
+      "range": [
+        4780,
+        4831
+      ],
+      "loc": {
+        "start": {
+          "line": 130,
+          "column": 4
+        },
+        "end": {
+          "line": 133,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        4874,
+        4895
+      ],
+      "loc": {
+        "start": {
+          "line": 134,
+          "column": 42
+        },
+        "end": {
+          "line": 134,
+          "column": 63
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  used internally\n     *  @ignore\n     ",
+      "range": [
+        4900,
+        4951
+      ],
+      "loc": {
+        "start": {
+          "line": 135,
+          "column": 4
+        },
+        "end": {
+          "line": 138,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        4989,
+        5010
+      ],
+      "loc": {
+        "start": {
+          "line": 139,
+          "column": 37
+        },
+        "end": {
+          "line": 139,
+          "column": 58
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     *  used internally\n     *  @ignore\n     ",
+      "range": [
+        5015,
+        5066
+      ],
+      "loc": {
+        "start": {
+          "line": 140,
+          "column": 4
+        },
+        "end": {
+          "line": 143,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Line",
+      "value": "eslint-disable-line",
+      "range": [
+        5106,
+        5127
+      ],
+      "loc": {
+        "start": {
+          "line": 144,
+          "column": 39
+        },
+        "end": {
+          "line": 144,
+          "column": 60
+        }
+      }
+    }
+  ]
+}

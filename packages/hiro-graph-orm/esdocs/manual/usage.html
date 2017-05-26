@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <base data-ice="baseUrl" href="../">
+    <title data-ice="title">Usage</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+    <script src="script/prettify/prettify.js"></script>
+
+
+    <script src="script/manual.js"></script>
+</head>
+
+<body class="layout-container manual-root" data-ice="rootContainer">
+
+    <header>
+        <a href="./">Home</a>
+        <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+        <a href="identifiers.html">Reference</a>
+        <a href="source.html">Source</a>
+
+
+        <div class="search-box">
+            <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+            </span>
+            <ul class="search-result"></ul>
+        </div>
+    </header>
+
+    <nav class="navigation" data-ice="nav">
+        <div class="manual-toc-root">
+
+            <div data-ice="manual" data-toc-name="overview">
+                <h1 class="manual-toc-title"><a href="manual/overview.html" data-ice="title">Overview</a></h1>
+                <ul class="manual-toc">
+
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/overview.html#features" data-ice="link">Features</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/overview.html#schema" data-ice="link">Schema</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/overview.html#context" data-ice="link">Context</a></li>
+                </ul>
+            </div>
+            <div data-ice="manual" data-toc-name="usage">
+                <h1 class="manual-toc-title"><a href="manual/usage.html" data-ice="title">Usage</a></h1>
+                <ul class="manual-toc">
+
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/usage.html#lucene-query-syntax" data-ice="link">Lucene Query Syntax</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#basic-syntax" data-ice="link">Basic Syntax</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#special-keys" data-ice="link">Special keys</a></li>
+                    <li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/usage.html#-range-queries" data-ice="link">$range queries</a></li>
+                    <li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/usage.html#-search-queries" data-ice="link">$search queries</a></li>
+                    <li data-ice="manualNav" class="indent-h4"><span class="manual-dot"></span><a href="manual/usage.html#-ogit-_tags-" data-ice="link">ogit/_tags</a></li>
+                    <li data-ice="manualNav" class="indent-h4"><span class="manual-dot"></span><a href="manual/usage.html#-ogit-_content-" data-ice="link">ogit/_content</a></li>
+                    <li data-ice="manualNav" class="indent-h4"><span class="manual-dot"></span><a href="manual/usage.html#-ogit-_content-ngram-" data-ice="link">ogit/_content.ngram</a></li>
+                    <li data-ice="manualNav" class="indent-h4"><span class="manual-dot"></span><a href="manual/usage.html#so-search-" data-ice="link">So, $search</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/usage.html#schema-definition" data-ice="link">Schema Definition</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/usage.html#codecs" data-ice="link">Codecs</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-string-" data-ice="link">string</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-list-" data-ice="link">list</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-uint-" data-ice="link">uint</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-int-" data-ice="link">int</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-json-" data-ice="link">json</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-bool-" data-ice="link">bool</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-bool-true-false-" data-ice="link">bool:&lt;true&gt;:&lt;?false&gt;</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-timestamp-" data-ice="link">timestamp</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-iso8601-" data-ice="link">iso8601</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-enum-value-value-" data-ice="link">enum:&lt;value&gt;:&lt;value&gt;...</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#-identity-" data-ice="link">identity</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/usage.html#validating-a-schema-against-an-ontology" data-ice="link">Validating a Schema against an Ontology</a></li>
+                    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/usage.html#usage-npm-run-validate-" data-ice="link">Usage npm run validate</a></li>
+                </ul>
+            </div>
+            <div data-ice="manual" data-toc-name="reference">
+                <h1 class="manual-toc-title"><a href="identifiers.html" data-ice="title">Reference</a></h1>
+                <ul class="manual-toc">
+
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#class" data-ice="link">Class</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#function" data-ice="link">Function</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#typedef" data-ice="link">Typedef</a></li>
+                    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#external" data-ice="link">External</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content" data-ice="content">
+        <div class="github-markdown">
+            <div class="manual-breadcrumb-list">
+                <a href="./manual/./index.html">Manual</a>
+                <span>&#xBB;</span>
+                <span data-ice="title">Usage</span>
+            </div>
+            <div data-ice="content">
+                <h1 id="lucene-query-syntax">Lucene Query Syntax</h1>
+                <p>Lucene Query Parser Syntax is complex (<a href="http://lucene.apache.org/core/4_6_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Overview">see for yourself</a>).
+                    So to ease development, we have an abstraction.</p>
+                <h2 id="basic-syntax">Basic Syntax</h2>
+                <p>First thing to say is that it is Schema aware, so if you are searching for one type of entity only (the most
+                    common case), then this is massively in your favour.</p>
+                <p>The abstraction is basically a Javascript Object whose <code>keys</code> are the fields to query, and whose
+                    <code>values</code> are the terms to query for. To specify multiple values for a field, simply pass an
+                    array as the value.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">import parse from &quot;hiro-graph-orm/lib/lucene&quot;;
+const person = ctx.getEntity(&quot;Person&quot;);
+
+
+//simple example (note we pass in the person entity for the translation)
+const { querystring } = parse({ username: &quot;thechriswalker&quot; }, person);
+console.log(querystring); // -&gt; `+ogit\/_type:&quot;ogit/Person&quot; +ogit/alternativeName:&quot;thechriswalker&quot;`
+
+//the Context object allows lucene query to retrieve vertices.
+ctx.Person.find({
+    username: &quot;thechriswalker&quot;,
+    email: &quot;cwalker@arago.de&quot;
+}).then(nodes =&gt; {
+    ...
+})</code>
+</code></pre>
+                <h2 id="special-keys">Special keys</h2>
+                <p>To assist with the more complex lucene syntax we introduce some (mongodb inspired) special keys:</p>
+                <ul>
+                    <li><code>$or</code>: switch to &quot;one or more of these conditions&quot;.</li>
+                    <li><code>$and</code>: switch to &quot;all of these conditions&quot; (the default, but allows to switch back
+                        once in <code>$or</code> or <code>$not</code>) (aliased as <code>$must</code> as well).</li>
+                    <li><code>$not</code>: switch to &quot;must not match these conditions&quot;.</li>
+                    <li><code>$range</code>: create a condition where matches must be in the given range.</li>
+                    <li><code>$missing</code>: create a condition which matches the presence of a field.</li>
+                    <li><code>$search</code>: helper for more complex matching</li>
+                </ul>
+                <p>A couple of these will need more explanation. Otherwise the test code is a good place to look.</p>
+                <h3 id="-range-queries"><code>$range</code> queries</h3>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">//find users with names starting with &quot;a&quot; or &quot;b&quot; (and the name &quot;c&quot; itself).
+//ranges are inclusive and most fields are strings, so lexical sorting applies
+const query = {
+    $range: {
+        &quot;username&quot;: [&quot;a&quot;, &quot;c&quot;]
+    }
+}
+
+//some fields like the internal `ogit/_modified-on` field is actually numeric
+//find everything modified in the last day
+const query = {
+    $range: {
+        &quot;_modified-on&quot;: [+new Date() - 86400, +new Date()]
+    }
+}</code>
+</code></pre>
+                <h3 id="-search-queries"><code>$search</code> queries</h3>
+                <p>Search is tricky. Before I get into the syntax, I need to explain a couple of concepts, and it would be good
+                    to get the terminology straight.</p>
+                <ul>
+                    <li><code>source</code>: the originally indexed JSON</li>
+                    <li><code>key</code>: an object key of the <code>source</code> document</li>
+                    <li><code>value</code>: the value (or values) of the data in the <code>source</code> at a given <code>key</code></li>
+                    <li><code>field</code>: a mapping in lucene representing the data in the <code>source</code> at some <code>key</code></li>
+                    <li><code>term</code>: a value stored for a <code>field</code> in lucene</li>
+                    <li><code>tokenizer</code>: a process by which a <code>value</code> is converted into one or more tokens
+                        (e.g. &quot;split on whitespace&quot;)</li>
+                    <li><code>analyzer</code>: a process by which <code>tokens</code> are further reduced into <code>terms</code>,
+                        e.g. a stemming algorithm, or a lowercasing</li>
+                </ul>
+                <p>With this in mind, in GraphIT&apos;s lucene index for vertices all <code>keys</code> in a <code>source</code>                    except for a few special internal ones, are NOT tokenised, NOR analyzed on indexing. The queries you
+                    send are NOT tokenised NOR analysed before search either, making these fields very predictable.</p>
+                <p>All fields are assumed to be (and coerced into) strings except for the following:</p>
+                <ul>
+                    <li><code>ogit/_is-deleted</code> =&gt; <code>boolean</code></li>
+                    <li><code>ogit/_created-on</code>, <code>ogit/_modified-on</code>, <code>ogit/_deleted-on</code> =&gt; <code>date</code></li>
+                </ul>
+                <p>The fields that have more complex analysis/mappings are important:</p>
+                <h4 id="-ogit-_tags-"><code>ogit/_tags</code></h4>
+                <p>This field is not handled in a special way by lucene, but GraphIT splits the string into a list comma-seperated
+                    values before sending for index, so lucene see&apos;s multiple <code>values</code> for the <code>key</code>.</p>
+                <p>In practice this means that you can search for <code>&quot;bar&quot;</code> in a <code>source</code> with
+                    <code>value</code> <code>&quot;foo, bar, quux&quot;</code> and it will match because <code>&quot;bar&quot;</code>                    is one of the <code>terms</code> in the <code>field</code> <code>&quot;ogit/_tags&quot;</code>.</p>
+                <p>Queries to this field are not <code>analysed</code> and so should be predictable.</p>
+                <h4 id="-ogit-_content-"><code>ogit/_content</code></h4>
+                <p>This field maps the key <code>ogit/_content</code> and is analysed in a more complex way. This was valid
+                    at time of writing, but the details are <a href="https://github.com/arago/graphit-plugins/blob/master/plugins/graphit-server-plugin-elasticsearch/src/main/java/de/arago/graphit/server/plugin/elasticsearch/ElasticsearchListener.java">in the repo on Github</a>                    (look for <code>setupIndex(ElasticsearchHelper.INDEX_VERTEX,</code> and <code>protected final void createAnalyzedMapping</code>).</p>
+                <p>So currently it uses the <code>standard</code> analyser (<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html">elasticsearch docs</a>),
+                    which is a generic english/european language based analyser.</p>
+                <p>Note that queries to this field are also analysed with the <code>standard</code> analyser! so results may
+                    not be what you expect.</p>
+                <h4 id="-ogit-_content-ngram-"><code>ogit/_content.ngram</code></h4>
+                <p>This field maps the same <code>key</code> but with a different analyser. This is a custom analyser (see the
+                    above GitHub link). It performs the following on inbound data</p>
+                <ol>
+                    <li>transform to lowercase</li>
+                    <li>perform stemming filter &quot;light_english&quot; (see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html">this</a>                        and <a href="http://ciir.cs.umass.edu/pubfiles/ir-35.pdf">this - if you must</a>)</li>
+                    <li>split into ngrams, min length 2, max length 10, on character sets &quot;letters&quot; and &quot;digits&quot;
+                        (see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-ngram-tokenizer.html">ngrams</a>).</li>
+                </ol>
+                <p>Queries sent in are <code>analysed</code> with the standard analyser.</p>
+                <h4 id="so-search-">So, <code>$search</code></h4>
+                <p>Now you have ingested all that complexity, here&apos;s how create a search query.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">// by default, searches `ogit/_content.ngram`
+const query = {
+    $search: &quot;foo&quot;
+}
+
+//but you can specify the search type as &quot;prefix&quot; to enable prefix searching on a specific field.
+const prefixQuery = {
+    $search: {
+        term: &quot;foo&quot;,
+        type: &quot;prefix&quot;,
+        field: &quot;username&quot;
+    }
+}
+// note that the prefix search will NOT match a term &quot;foo&quot; only, &quot;foo-something&quot;, ie. not the prefix itself, but the prefix AND more.</code>
+</code></pre>
+                <h1 id="schema-definition">Schema Definition</h1>
+                <p>@todo write this.</p>
+                <h1 id="codecs">Codecs</h1>
+                <p>When creating codecs with <code>createCodec</code> or defining entities for use with <code>createEntity</code>                    the possible values a codec descriptor are:</p>
+                <h2 id="-string-"><code>string</code></h2>
+                <p>Simply keeps values as strings, coercing if necessary.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;string&quot;);
+
+console.log(encode(&quot;hello&quot;)); //-&gt; &quot;hello&quot;
+console.log(encode(123)); //-&gt; &quot;123&quot;
+console.log(decode(123)); //-&gt; &quot;123&quot;
+console.log(decode(true)); //-&gt; &quot;true&quot;
+console.log(encode()); //-&gt; &quot;&quot;
+console.log(decode(null)); //-&gt; &quot;&quot;</code>
+</code></pre>
+                <h2 id="-list-"><code>list</code></h2>
+                <p>A list of comma-seperated values, (no comma&apos;s allowed in values).</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;list&quot;);
+
+console.log(encode(&quot;hello&quot;)); //-&gt; &quot;hello&quot;
+console.log(encode(&quot;hello,world&quot;)); //-&gt; &quot;hello, world&quot;
+console.log(encode([&quot;hello&quot;, &quot;world&quot;])); //-&gt; &quot;hello, world&quot;
+console.log(decode(&quot;hello&quot;)); //-&gt; [&quot;hello&quot;]
+console.log(decode(&quot;hello, world&quot;)); //-&gt; [&quot;hello&quot;, &quot;world&quot;]
+console.log(decode(&quot;hello, 123&quot;)); //-&gt; [&quot;hello&quot;, &quot;123&quot;]
+console.log(encode([&quot;hello&quot;, 123])); //-&gt; &quot;hello, 123&quot;</code>
+</code></pre>
+                <h2 id="-uint-"><code>uint</code></h2>
+                <p>An unsigned integer. This is stored in the database in a human readable form. It is left-padded with zeros
+                    to ensure lexical sorting matches the numerical value sort.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;uint&quot;);
+
+console.log(encode(1)); //-&gt; &quot;0000000000000001&quot;
+console.log(encode(-1)); //-&gt; &quot;0000000000000001&quot;
+console.log(decode(&quot;0000000000000009&quot;)); //-&gt; 9
+console.log(decode(&quot;foo&quot;)); //-&gt; 0
+console.log(encode(&quot;not a number&quot;)); //-&gt; &quot;0000000000000000&quot;
+console.log(encode(NaN)); //-&gt; &quot;0000000000000000&quot;
+console.log(encode(Infinity)); //-&gt; &quot;0000000000000000&quot;
+const big = decode(encode(Number.MAX_SAFE_INTEGER + 1)));
+console.log(big === Number.MAX_SAFE_INTEGER); //-&gt; true</code>
+</code></pre>
+                <h2 id="-int-"><code>int</code></h2>
+                <p>A signed integer. This allows negative values, but in order to keep lexical sorting the values are not human
+                    readable inside the database. This also means they are less likely to be compatible with other programs
+                    writing the data.</p>
+                <p>Because the data are not human readable, I will not give examples here, except that the same caveats about
+                    <code>Number.MAX_SAFE_INTEGER</code>, <code>NaN</code> and <code>Infinity</code> hold.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;int&quot;);
+
+console.log(encode(&quot;not a number&quot;)); //-&gt; &quot;0000000000000000&quot;
+console.log(encode(NaN)); //-&gt; &quot;0000000000000000&quot;
+console.log(encode(-Infinity)); //-&gt; &quot;0000000000000000&quot;
+
+const big = decode(encode(Number.MAX_SAFE_INTEGER + 1)));
+console.log(big === Number.MAX_SAFE_INTEGER); //-&gt; true
+
+const small = decode(encode((-1 * Number.MAX_SAFE_INTEGER) - 1)));
+console.log(small === -1 * Number.MAX_SAFE_INTEGER); //-&gt; true</code>
+</code></pre>
+                <h2 id="-json-"><code>json</code></h2>
+                <p>Stores objects serialised as JSON in the database. The values are parsed on decode, and stringified on encode.
+                    Invalid values are ignored.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;json&quot;);
+
+console.log(encode(&quot;hello&quot;)); //-&gt; &quot;hello&quot;
+console.log(encode({ hello: &quot;world&quot; })); //-&gt; `{&quot;hello&quot;:&quot;world&quot;}`
+console.log(decode(`{&quot;hello&quot;:&quot;world&quot;}`)); //-&gt; { hello: &quot;world&quot; }</code>
+</code></pre>
+                <h2 id="-bool-"><code>bool</code></h2>
+                <p>The default boolean conversion. <code>true</code> if and only if the string equals <code>&quot;true&quot;</code>.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;bool&quot;);
+
+console.log(encode(true)); //-&gt; &quot;true&quot;
+console.log(encode(false)); //-&gt; &quot;false&quot;
+console.log(encode(&quot;false&quot;)); //-&gt; &quot;true&quot; (string &quot;false&quot; is *truthy*)
+console.log(decode(&quot;false&quot;)); // -&gt; false
+console.log(decode(&quot;true&quot;)); // -&gt; true
+console.log(decode(&quot;True&quot;)); // -&gt; false (case sensitive)</code>
+</code></pre>
+                <h2 id="-bool-true-false-"><code>bool:&lt;true&gt;:&lt;?false&gt;</code></h2>
+                <p>Other boolean representations can be created with a string of this form. The <code>&lt;true&gt;</code> and
+                    <code>&lt;?false&gt;</code> values are passed to <code>createBool</code> to return a custom codec.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;bool:foo:bar&quot;);
+console.log(encode(true)); //-&gt; &quot;foo&quot;
+console.log(encode(false)); //-&gt; &quot;bar&quot;
+console.log(encode(&quot;false&quot;)); //-&gt; &quot;foo&quot; (string &quot;false&quot; is *truthy*)
+console.log(decode(&quot;random&quot;)); // -&gt; false (not === &quot;foo&quot;)
+console.log(decode(&quot;foo&quot;)); // -&gt; true
+console.log(decode(&quot;Foo&quot;)); // -&gt; false (case sensitive)
+
+//with only truth specified
+const { encode, decode } = createCodec(&quot;bool:foo&quot;);
+
+console.log(encode(true)); //-&gt; &quot;foo&quot;
+console.log(encode(false)); //-&gt; null (this would *unset* the value in the db)
+console.log(encode(&quot;false&quot;)); //-&gt; &quot;foo&quot; (string &quot;false&quot; is *truthy*)
+console.log(decode(&quot;random&quot;)); // -&gt; false (not === &quot;foo&quot;)
+console.log(decode(&quot;foo&quot;)); // -&gt; true
+console.log(decode(&quot;Foo&quot;)); // -&gt; false (case sensitive)</code>
+</code></pre>
+                <h2 id="-timestamp-"><code>timestamp</code></h2>
+                <p>A millisecond prescision timestamp. These are sortable only while a millisecond UNIX timestamp retains the
+                    same number of digits. This is from ~<code>Sun, 09 Sep 2001 01:46:39 GMT</code> to ~<code>Sat, 20 Nov 2286 17:46:40 GMT</code></p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;timestamp&quot;);
+
+const date = new Date(&quot;Fri, 27 Jun 2016 11:46:39 GMT&quot;)
+
+console.log(encode(date)); //-&gt; &quot;1467027999000&quot;
+console.log(encode(date.getTime()); //-&gt; &quot;1467027999000&quot;
+console.log(encode(&quot;not a date&quot;)); //-&gt; null
+
+console.log(decode(&quot;1467027999000&quot;)); //-&gt; 1467027999000
+console.log(decode(&quot;not a date&quot;)); //-&gt; null
+
+const tooEarly = new Date(&quot;Sun, 09 Sep 2001 01:00:00 GMT&quot;);
+console.log(encode(tooEarly)); //-&gt; null
+console.log(decode(&quot;&quot; + tooEarly.getTime())); //-&gt; null
+
+const tooLate = new Date(&quot;Sat, 20 Nov 2286 20:00:00 GMT&quot;);
+console.log(encode(tooEarly)); //-&gt; null
+console.log(decode(&quot;&quot; + tooEarly.getTime())); //-&gt; null</code>
+</code></pre>
+                <h2 id="-iso8601-"><code>iso8601</code></h2>
+                <p>A better way to store time information, as an <code>iso8061</code> formatted string. Decoded to a millisecond
+                    timestamp.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;iso8601&quot;);
+
+const date = new Date(&quot;Fri, 27 Jun 2016 11:46:39 GMT&quot;)
+const tooEarlyForTimestamp = new Date(&quot;Sun, 09 Sep 2001 01:00:00 GMT&quot;);
+const tooLateForTimestamp = new Date(&quot;Sat, 20 Nov 2286 20:00:00 GMT&quot;);
+
+console.log(encode(date)); //-&gt; &quot;2016-06-27T11:46:39.000Z&quot;
+console.log(encode(tooEarlyForTimestamp)); //-&gt; &quot;2001-09-09T01:00:00.000Z&quot;
+console.log(encode(tooLateForTimestamp)); //-&gt; &quot;2286-11-20T20:00:00.000Z&quot;</code>
+</code></pre>
+                <h2 id="-enum-value-value-"><code>enum:&lt;value&gt;:&lt;value&gt;...</code></h2>
+                <p>An <code>enum</code> codec only allows the set of values you supply, any others will be translated to <code>null</code>.
+                    See <code>createEnum</code>.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;enum:foo:bar:baz&quot;);
+
+console.log(encode(&quot;foo&quot;)); //-&gt; &quot;foo&quot;
+console.log(encode(&quot;bar&quot;)); //-&gt; &quot;bar&quot;
+console.log(encode(&quot;baz&quot;)); //-&gt; &quot;baz&quot;
+console.log(encode(&quot;quux&quot;)); //-&gt; null
+
+console.log(decode(&quot;foo&quot;)); //-&gt; &quot;foo&quot;
+console.log(decode(&quot;bar&quot;)); //-&gt; &quot;bar&quot;
+console.log(decode(&quot;baz&quot;)); //-&gt; &quot;baz&quot;
+console.log(decode(&quot;quux&quot;)); //-&gt; null</code>
+</code></pre>
+                <h2 id="-identity-"><code>identity</code></h2>
+                <p>Does no conversion either way. Used for the internal <code>ogit/_*</code> props that can have non-string
+                    values. You probably won&apos;t need to use this one.</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">const { encode, decode } = createCodec(&quot;identity&quot;);
+
+const obj = {}
+
+console.log(encode(obj) === obj); //-&gt; true
+console.log(decode(obj) === obj); //-&gt; true</code>
+</code></pre>
+                <h1 id="validating-a-schema-against-an-ontology">Validating a Schema against an Ontology</h1>
+                <p>The OGIT ontology is a well-defined set of attributes and entities and possible connections between them
+                    all. Our schema defines much the same sort of data. </p>
+                <p>It would be easy to reference an attribute that doesn&apos;t exist or is forbidden on an entity, or to not
+                    add one that is required by OGIT.</p>
+                <p>Therefore there is a tool installed by default alongside this package to validate such.</p>
+                <h2 id="usage-npm-run-validate-">Usage <code>npm run validate</code></h2>
+                <p><code>npm run validate &lt;mappings module&gt; &lt;OGIT ontology location&gt;</code></p>
+                <ul>
+                    <li><strong><code>&lt;mappings module&gt;</code></strong> should be the path to a module that exports a mapping
+                        for us to validate.</li>
+                    <li><strong><code>&lt;OGIT ontology location&gt;</code></strong> should be the path to a single YAML file
+                        (like the <code>graphit-ontology.yaml</code> distributed with GraphIT) or a directory structure like
+                        <a href="https://github.com/arago/OGIT">the OGIT repo</a>.</li>
+                </ul>
+                <p>The response will be either:</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">{
+    errors: 0,
+    detail: {}
+}</code>
+</code></pre>
+                <p>Which is what you want or:</p>
+                <pre><code class="lang-javascript"><code class="source-code prettyprint">{
+    errors: n,
+    detail: {
+        EntityName: [
+            &quot;some error&quot;,
+            &quot;another error&quot;
+            ...
+        ],
+        ...
+    }
+}</code>
+</code></pre>
+                <p>Which you don&apos;t want. The error messages are pretty verbose and should help you sort out any issues.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+    </footer>
+
+    <script src="script/search_index.js"></script>
+    <script src="script/search.js"></script>
+    <script src="script/pretty-print.js"></script>
+    <script src="script/inherited-summary.js"></script>
+    <script src="script/test-summary.js"></script>
+    <script src="script/inner-link.js"></script>
+    <script src="script/patch-for-local.js"></script>
+</body>
+
+</html>
