@@ -6,8 +6,10 @@
  *  from queries.
  */
 import { notFound, badRequest } from "hiro-graph-client/lib/errors";
+import parseLucene from "hiro-graph-lucene";
+
 import { decodeResults, filter, mapIfArray } from "../utils";
-import parseLucene from "../lucene";
+
 import { createVertex, isVertex } from "../vertex/graph";
 
 //this is not in utils, so utils doesn't need to import GraphVertex

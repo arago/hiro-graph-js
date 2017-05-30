@@ -28,17 +28,7 @@
   },
   "babel": {
     "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-runtime",
-      "transform-object-rest-spread"
-    ],
-    "sourceMaps": true,
-    "env": {
-      "production": {
-        "sourceMaps": false
-      }
-    }
-  }
+      "arago-react"
+    ]
+}
 }

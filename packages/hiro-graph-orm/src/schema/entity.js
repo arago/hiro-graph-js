@@ -3,12 +3,12 @@
  *  convert database database results into application data and
  *  application queries into database format
  */
-import codec from "../codec";
+import codec from "hiro-graph-codecs";
 
-const stringCodec = codec("string");
-const listCodec = codec("list");
-const identity = codec("identity");
-const iso8601 = codec("iso8601");
+const stringCodec = codec.string;
+const listCodec = codec.list;
+const identity = codec.identity;
+const iso8601 = codec.iso8601;
 // map an array of objects to an object keyed on the given key
 const indexBy = key => (acc, obj) => ((acc[obj[key]] = obj), acc);
 

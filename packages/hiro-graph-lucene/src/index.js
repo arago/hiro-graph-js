@@ -8,6 +8,8 @@ const OP_CAN = "";
 /**
  *  The lucene class takes a Schema and creates a query parser.
  *
+ *  It can be used without the Schema, and then it "identity" encodes all values/property names.
+ *
  *  This is super powerful, the guide to all the syntax options is in the documentation
  *  for the {@link LuceneQuery} type.
  *
@@ -32,6 +34,9 @@ const createPlaceholder = (placeholders, term) => {
 
 const placeholderAliasInQuery = i => `$ph_${i}`;
 const placeholderKeyInRequest = i => `ph_${i}`;
+
+// this is only exported to all for use in testing
+export const getPlaceholderKeyForIndex = placeholderKeyInRequest;
 
 /**
  *  The initial context object for the query building

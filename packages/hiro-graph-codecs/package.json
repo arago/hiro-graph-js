@@ -1,0 +1,44 @@
+{
+  "name": "hiro-graph-codecs",
+  "version": "0.0.1-0",
+  "description": "Coercion utilities for working with the *mostly* string values in HIRO Graph",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "rm -rf lib/* && babel src/ --out-dir lib/ --source-maps",
+    "test": "jest --silent"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arago/hiro-graph-js.git"
+  },
+  "author": "Chris Walker <cwalker@arago.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arago/hiro-graph-js/issues"
+  },
+  "homepage": "https://github.com/arago/hiro-graph-js#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-jest": "^20.0.3",
+    "babel-preset-env": "^1.5.1",
+    "jest": "^20.0.4"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
+    }
+  }
+}

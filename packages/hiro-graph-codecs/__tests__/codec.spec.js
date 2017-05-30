@@ -1,8 +1,7 @@
 /**
  *  Testing the codecs, and that number coercion is correctly lexically sortable.
  */
-import { expect } from "chai";
-import createCodec from "../src/codec";
+import createCodec from "../src";
 
 //rescursive object for JSON test.
 const recurser = {};
@@ -469,15 +468,15 @@ describe("Codecs:", function() {
                 .map(codec.encode)
                 .sort()
                 .map(codec.decode);
-            expect(afterShuffled).to.deep.equal(sorted);
-            expect(afterRandomised).to.deep.equal(sorted);
+            expect(afterShuffled).toEqual(sorted);
+            expect(afterRandomised).toEqual(sorted);
         });
     };
 
     const testExplicit = (type, codec, method) => ({ name, input, output }) => {
         it(`'${type}' ${method}: ${name}`, function() {
             const actual = codec[method](input);
-            expect(actual).to.be.deep.equal(output);
+            expect(actual).toEqual(output);
         });
     };
 
@@ -488,10 +487,10 @@ describe("Codecs:", function() {
             const encodeDecode = codec.decode(encoded);
             const decodeEncode = codec.encode(decoded);
             //console.log({ encoded, encodeDecode, decoded, decodeEncode })
-            expect(encoded).to.be.deep.equal(output);
-            expect(decodeEncode).to.be.deep.equal(output);
-            expect(decoded).to.be.deep.equal(input);
-            expect(encodeDecode).to.be.deep.equal(input);
+            expect(encoded).toEqual(output);
+            expect(decodeEncode).toEqual(output);
+            expect(decoded).toEqual(input);
+            expect(encodeDecode).toEqual(input);
         });
     };
 

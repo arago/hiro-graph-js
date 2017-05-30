@@ -1,5 +1,5 @@
 /**
- *  Codec define how we manipulate the (mostly) string data in GraphIT
+ *  Codec define how we manipulate the (mostly) string data in HIRO Graph
  */
 import string from "./string";
 import list from "./list";
@@ -29,10 +29,9 @@ const types = {
  * Creates a encoder/decoder function pair for the type given.
  *
  * These are used by the {@link Schema} to map values to and from the
- * string-only types used in GraphIT. Theses are used in the property
+ * string-only types used in HIRO Graph. Theses are used in the property
  * definitions for entities (see {@link createEntity}).
  *
- * @see manual/usage.md#codecs
  * @param {string} name - The name of the codec to create
  *
  * @return {Codec} - the `encode`/`decode` functions
@@ -62,3 +61,8 @@ export default function createCodec(name) {
     console.warn(`unknown coercion type: ${name}`);
     return string;
 }
+
+// allow direct access (of the main types)
+Object.keys(types).forEach(key => {
+    createCodec[key] = types[key];
+});

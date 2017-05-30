@@ -1,33 +1,32 @@
-import schema from "./mock/schema";
+import schema from "../__mocks__/schema";
 import createEntity, {
     $dangerouslyGetDefinition,
     $dangerouslyGetProps
 } from "../src/schema/entity";
-import { expect } from "chai";
 
 describe("Schema:", function() {
     const def = schema.get("Simple")[$dangerouslyGetDefinition]();
 
     it("should throw when trying to re-define a known entity", () => {
-        expect(() => schema.define(def)).to.throw(Error);
+        expect(() => schema.define(def)).toThrow(Error);
     });
 
     it("should throw when trying to define a new entity backed by the same OGIT entity", () => {
         def.name = "SomethingNew";
-        expect(() => schema.define(def)).to.throw(Error);
+        expect(() => schema.define(def)).toThrow(Error);
     });
 
     it("should throw when trying to define an entity that doesn't start with lowercase", () => {
         def.name = "lowercase";
         def.ogit = "ogit/somethingTotallyDifferent";
-        expect(() => schema.define(def)).to.throw(Error);
+        expect(() => schema.define(def)).toThrow(Error);
     });
 
     it("should return the same object when got by app name or OGIT name", () => {
         const app = schema.get("Simple");
         const ogit = schema.get(app.ogit);
 
-        expect(app === ogit).to.be.true;
+        expect(app === ogit).toBeTruthy();
     });
 });
 
@@ -37,13 +36,13 @@ describe("Entities", function() {
 
     it("should be able to get all props by application name", () => {
         props.forEach(prop => {
-            expect(entity.prop(prop.dst)).to.be.equal(prop);
+            expect(entity.prop(prop.dst)).toEqual(prop);
         });
     });
 
     it("should be able to get all props by ontology name", () => {
         props.forEach(prop => {
-            expect(entity.prop(prop.src)).to.be.equal(prop);
+            expect(entity.prop(prop.src)).toEqual(prop);
         });
     });
 
@@ -57,13 +56,11 @@ describe("Entities", function() {
         { prop: "bool", encoded: "true", decoded: true },
         {
             prop: "json",
-            deepEqual: true,
             encoded: `{"foo":[1,"2",true]}`,
             decoded: { foo: [1, "2", true] }
         },
         {
             prop: "list",
-            deepEqual: true,
             encoded: "a, b, c",
             decoded: ["a", "b", "c"]
         },
@@ -86,17 +83,19 @@ describe("Entities", function() {
 
     it("should correctly coerce on encode", () => {
         codecTests.forEach(({ prop, encoded, decoded }) => {
-            expect(entity.encode({ [prop.dst]: decoded })).to.have
-                .property(prop.src)
-                .which.is.equal(encoded);
+            expect(entity.encode({ [prop.dst]: decoded })).toHaveProperty(
+                prop.src,
+                encoded
+            );
         });
     });
 
     it("should correctly coerce on decode", () => {
-        codecTests.forEach(({ prop, encoded, decoded, deepEqual = false }) => {
-            expect(entity.decode({ [prop.src]: encoded })).to.have
-                .property(prop.dst)
-                .which[deepEqual ? "deep" : "is"].equal(decoded);
+        codecTests.forEach(({ prop, encoded, decoded }) => {
+            expect(entity.decode({ [prop.src]: encoded })).toHaveProperty(
+                prop.dst,
+                decoded
+            );
         });
     });
 
@@ -272,7 +271,7 @@ describe("Entities", function() {
     relationParsingTests.forEach(({ name, hops }) => {
         it("should parse the relations correctly: " + name, () => {
             const relation = relationTestEntity.relation(name);
-            expect(relation.hops).to.deep.equal(hops);
+            expect(relation.hops).toEqual(hops);
         });
     });
 });

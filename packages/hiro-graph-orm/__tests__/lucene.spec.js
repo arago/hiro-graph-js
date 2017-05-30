@@ -1,9 +1,8 @@
 /**
  *  Testing the Lucene Query Generator
  */
-import schema from "./mock/schema.js";
-import parse from "../src/lucene";
-import { expect } from "chai";
+import schema from "../__mocks__/schema.js";
+import parse, { getPlaceholderKeyForIndex } from "hiro-graph-lucene";
 
 describe("Lucene Query Generator:", function() {
     const simple = schema.get("Simple");
@@ -147,11 +146,11 @@ describe("Lucene Query Generator:", function() {
     tests.forEach(({ name, input, output, placeholders = [] }) => {
         it(name, function() {
             const actual = parse(...input);
-            expect(actual.querystring).to.equal(output);
-            Object.keys(actual.placeholders).forEach((key, idx) => {
-                expect(placeholders[idx]).to.exist.and.to.equal(
-                    actual.placeholders[key]
-                );
+            expect(actual.querystring).toBe(output);
+            placeholders.forEach((p, i) => {
+                expect(
+                    actual.placeholders[getPlaceholderKeyForIndex(i)]
+                ).toEqual(p);
             });
         });
     });

@@ -1,5 +1,4 @@
 import Vertex from "../src/vertex";
-import { expect } from "chai";
 
 describe("Vertex", function() {
     const testVertexInitialData = {
@@ -18,52 +17,59 @@ describe("Vertex", function() {
     const testVtx = new Vertex(testVertexInitialData);
 
     it("should know it's id", () => {
-        expect(testVtx._id).to.be.equal("test@vertex");
+        expect(testVtx._id).toEqual("test@vertex");
     });
 
     it("should know it's type", () => {
-        expect(testVtx.type()).to.be.equal("Test");
+        expect(testVtx.type()).toEqual("Test");
     });
 
     it("should be able to fetch props", () => {
-        expect(testVtx.get("foo")).to.be.equal("bar");
+        expect(testVtx.get("foo")).toEqual("bar");
     });
 
     it("should be able to update props", () => {
         testVtx.set("foo", "baz");
-        expect(testVtx.get("foo")).to.be.equal("baz");
+        expect(testVtx.get("foo")).toEqual("baz");
     });
 
     it("should not be care about mutations to the original data", () => {
-        expect(testVertexInitialData.foo).to.be.equal("bar");
+        expect(testVertexInitialData.foo).toEqual("bar");
         testVertexInitialData.baz = "not one any more";
-        expect(testVtx.get("baz")).to.be.equal(1);
+        expect(testVtx.get("baz")).toEqual(1);
     });
 
     it("should retain initial values", () => {
-        expect(testVtx._before.foo).to.be.equal("bar");
+        expect(testVtx._before.foo).toEqual("bar");
         testVtx.set({ foo: "boom" });
-        expect(testVtx._before.foo).to.be.equal("bar");
+        expect(testVtx._before.foo).toEqual("bar");
     });
 
     it("should be able to add and read relation data", () => {
         testVtx.setVertices("rel", testRelationObjects);
-        expect(testVtx.getIds("rel")).to.have.members(testRelationIds);
-        expect(testVtx.getCount("rel")).to.equal(testRelationIds.length);
+        expect(testVtx.getIds("rel")).toEqual(testRelationIds);
+        expect(testVtx.getCount("rel")).toEqual(testRelationIds.length);
     });
 
     it("should be able to serialize itself", () => {
         const serial = testVtx.plain();
         Object.keys(serial).forEach(key => {
-            if (key === "_") {
-                const keys = ["relIds", "relCount"];
-                expect(Object.keys(serial._)).to.have.members(keys);
-                expect(serial._.relIds).to.deep.equal(testVtx.getIds("rel"));
-                expect(serial._.relCount).to.deep.equal(
-                    testVtx.getCount("rel")
-                );
-            } else {
-                expect(testVtx.get(key)).to.deep.equal(serial[key]);
+            switch (key) {
+                case "_rel":
+                    expect(serial._rel).toHaveProperty(
+                        "relIds",
+                        testVtx.getIds("rel")
+                    );
+                    expect(serial._rel).toHaveProperty(
+                        "relCount",
+                        testVtx.getCount("rel")
+                    );
+                    break;
+                case "_free":
+                    expect(serial._free).toEqual({});
+                    break;
+                default:
+                    expect(testVtx.get(key)).toEqual(serial[key]);
             }
         });
     });
