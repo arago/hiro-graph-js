@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-implicit-oauth",
-  "version": "0.0.3-0",
+  "version": "0.0.4-0",
   "description": "Customisable Implicit Oauth",
   "main": "./lib/index.js",
   "scripts": {
@@ -30,5 +30,5 @@
     "presets": [
       "arago-react"
     ]
-}
+  }
 }
