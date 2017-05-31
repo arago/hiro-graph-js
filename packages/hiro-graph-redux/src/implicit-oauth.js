@@ -71,7 +71,6 @@ export default function setupImplicitOauth(
             store.dispatch(taskLoading(GRAPH_LOGIN));
             // we should still do the the "fetch me
             store.dispatch(fetchMeForToken(token));
-            store.dispatch(taskSuccess(GRAPH_LOGIN, token.accessToken));
         }
     });
     store.dispatch(setOnLogoutHook(logout));

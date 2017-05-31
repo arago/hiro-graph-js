@@ -18,8 +18,6 @@ import {
     connectionClosedBeforeSend
 } from "./errors";
 
-const __DEV__ = process.env.NODE_ENV !== "production";
-
 const passthru = fn => [
     r => (fn(), r),
     e => {
