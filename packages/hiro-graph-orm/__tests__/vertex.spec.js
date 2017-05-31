@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import Vertex from "../src/vertex";
 
 describe("Vertex", function() {

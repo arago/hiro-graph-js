@@ -1,3 +1,4 @@
+/* eslint-env jest */
 /**
  *  Testing the Gremlin Query Builder
  */

@@ -2,13 +2,16 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
     "husky": "^0.13.3",
     "lerna": "^2.0.0-rc.5",
     "lint-staged": "^3.5.0",
     "prettier": "^1.3.1"
   },
   "scripts": {
-    "lerna" : "lerna",
+    "lerna": "lerna",
     "publish": "lerna publish",
     "format": "prettier --tab-width=4 --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'"
   },
@@ -17,5 +20,11 @@
       "prettier --tab-width=4 --write",
       "git add"
     ]
+  },
+  "eslintConfig": {
+    "extends": "@arago/eslint-config-arago",
+    "globals": {
+      "__DEV__": true
+    }
   }
 }

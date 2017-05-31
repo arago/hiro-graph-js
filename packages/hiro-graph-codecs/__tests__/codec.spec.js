@@ -1,3 +1,4 @@
+/* eslint-env jest */
 /**
  *  Testing the codecs, and that number coercion is correctly lexically sortable.
  */

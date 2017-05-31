@@ -1,3 +1,4 @@
+/* eslint-env jest */
 /**
  *  Testing the Lucene Query Generator
  */

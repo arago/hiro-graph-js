@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import schema from "../__mocks__/schema";
 import createEntity, {
     $dangerouslyGetDefinition,
