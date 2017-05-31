@@ -69,7 +69,8 @@ export default function setupImplicitOauth(
     check((_err, token) => {
         if (token) {
             store.dispatch(taskLoading(GRAPH_LOGIN));
-            store.dispatch(setToken(token.accessToken, token.meta));
+            // we should still do the the "fetch me
+            store.dispatch(fetchMeForToken(token));
             store.dispatch(taskSuccess(GRAPH_LOGIN, token.accessToken));
         }
     });
