@@ -20,6 +20,7 @@
     "hiro-graph-client": "*",
     "hiro-graph-codecs": "*",
     "hiro-graph-gremlin": "*",
+    "hiro-graph-lucene": "*",
     "lodash.isplainobject": "^4.0.4"
   },
   "devDependencies": {

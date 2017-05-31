@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint src/",
-    "test": "mocha --require babel-register --compilers js:source-map-support/register",
+    "test": "echo no tests",
     "build": "rm -rf lib/* && babel src/ --out-dir lib/  --source-maps",
     "watch": "babel --watch src/ --out-dir lib/",
     "prepublish": "npm run build"
@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
-    "websocket": "^1.0.22"
+    "websocket": "^1.0.24"
   },
   "devDependencies": {
     "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
