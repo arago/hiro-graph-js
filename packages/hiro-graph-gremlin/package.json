@@ -1,13 +1,14 @@
 {
   "name": "hiro-graph-gremlin",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Gremlin Query builder for the HIRO Graph API",
   "main": "lib/gremlin.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "build": "rm -rf lib/* && babel src/ --out-dir lib/ --source-maps",
+    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+    "prepublish": "npm run build",
     "test": "jest --silent"
   },
   "repository": {

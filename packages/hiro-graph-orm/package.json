@@ -1,15 +1,15 @@
 {
   "name": "hiro-graph-orm",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "OGIT ontology to sane application mappings",
   "repository": "arago/hiro-graph-js",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rm -rf lib/* && babel src/ --out-dir lib/ --source-maps",
-    "doc:clean": "rm -rf esdocs/",
-    "doc:build": "npm run doc:clean && esdoc -c esdoc.json",
-    "doc:serve": "static --host-address 0 --port 7000 esdocs/",
+    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
     "doc": "[ ! -f esdocs/index.html ] && npm run doc:build; npm run doc:serve",
+    "doc:build": "npm run doc:clean && esdoc -c esdoc.json",
+    "doc:clean": "rm -rf esdocs/",
+    "doc:serve": "static --host-address 0 --port 7000 esdocs/",
     "lint": "eslint src/",
     "prepublish": "npm run build",
     "test": "jest --silent",
@@ -17,10 +17,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "hiro-graph-client": "^0.1.0",
-    "hiro-graph-codecs": "^0.1.1",
-    "hiro-graph-gremlin": "^0.1.0",
-    "hiro-graph-lucene": "^0.1.0",
+    "hiro-graph-client": "^0.1.2",
+    "hiro-graph-codecs": "^0.1.2",
+    "hiro-graph-gremlin": "^0.1.2",
+    "hiro-graph-lucene": "^0.1.2",
     "lodash.isplainobject": "^4.0.4"
   },
   "devDependencies": {

@@ -1,14 +1,14 @@
 {
   "name": "hiro-graph-codecs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Coercion utilities for working with the *mostly* string values in HIRO Graph",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
+    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
     "prepublish": "npm run build",
-    "build": "rm -rf lib/* && babel src/ --out-dir lib/ --source-maps",
     "test": "jest --silent"
   },
   "repository": {

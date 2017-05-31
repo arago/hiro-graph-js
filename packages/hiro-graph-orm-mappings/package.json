@@ -1,14 +1,14 @@
 {
   "name": "hiro-graph-orm-mappings",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "repository": "arago/hiro-graph-js",
   "description": "a set of mapping definitions useful across OGIT apps using `hiro-graph-orm`",
   "main": "lib/index.js",
   "scripts": {
+    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+    "prepublish": "npm run build",
     "test": "echo no tests",
-    "build": "rm -rf lib/* && babel src/ --out-dir lib/ --source-maps",
-    "watch": "babel --watch src/ --out-dir lib/",
-    "prepublish": "npm run build"
+    "watch": "babel --watch src/ --out-dir lib/"
   },
   "license": "MIT",
   "devDependencies": {
