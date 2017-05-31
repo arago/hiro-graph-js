@@ -1,50 +1,47 @@
 {
   "name": "hiro-graph-redux",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": "arago/hiro-graph-js",
   "description": "Redux awareness for the `hiro-graph-orm` package",
   "main": "lib/index.js",
   "scripts": {
     "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-    "lint": "eslint src/",
     "prepublish": "npm run build",
-    "test": "npm run build && mocha",
-    "watch": "babel --watch src/ --out-dir lib/"
+    "test": "jest --silent"
   },
   "license": "MIT",
   "dependencies": {
-    "hiro-graph-client": "^0.1.2",
-    "hiro-graph-implicit-oauth": "^0.1.0",
-    "hiro-graph-orm": "^0.1.2",
-    "lodash.isplainobject": "^4.0.4",
-    "redux": "^3.5.2",
-    "reselect": "^2.5.1"
+    "hiro-graph-client": "^0.1.3",
+    "hiro-graph-implicit-oauth": "^0.1.3",
+    "hiro-graph-orm": "^0.1.3",
+    "lodash.isplainobject": "^4.0.6",
+    "redux": "^3.6.0",
+    "reselect": "^2.5.4"
   },
   "devDependencies": {
-    "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
-    "babel-cli": "^6.9.0",
-    "babel-eslint": "6.x",
-    "babel-plugin-transform-object-rest-spread": "^6.8.0",
-    "babel-plugin-transform-runtime": "^6.9.0",
-    "babel-preset-es2015": "^6.9.0",
-    "eslint": "2.x"
-  },
-  "eslintConfig": {
-    "extends": "@arago/eslint-config-arago"
+    "babel-cli": "^6.6.5",
+    "babel-jest": "^20.0.3",
+    "babel-preset-hiro": "^0.1.0",
+    "jest": "^20.0.4"
   },
   "babel": {
     "presets": [
-      "es2015"
+      [
+        "hiro",
+        {
+          "library": true
+        }
+      ]
+    ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
     ],
-    "plugins": [
-      "transform-runtime",
-      "transform-object-rest-spread"
-    ],
-    "sourceMaps": true,
-    "env": {
-      "production": {
-        "sourceMaps": false
-      }
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
     }
   }
 }
