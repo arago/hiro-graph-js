@@ -1,4 +1,4 @@
-# `babel-preset-hiro`
+# `babel-preset-hiro`: A Babel preset
 
 A group of babel plugins used in the HIRO Graph JS libraries.
 

@@ -1,12 +1,18 @@
-# A base schema for sane application level mappings to OGIT
+# `hiro-graph-orm-mappings`: Common mappings for `hiro-graph-orm`
 
-see `arago/js-graph-orm` for details on how the schema works and what it is useful for.
+Common [OGIT](https://github.com/arago/OGIT) entity type and relation mappings for [`hiro-graph-orm`](https://github.com/arago/hiro-graph-js/tree/master/packages/hiro-graph-orm)
 
-This module provides schema definitions for common OGIT entities and relations.
+See [`hiro-graph-orm`](https://github.com/arago/hiro-graph-js/tree/master/packages/hiro-graph-orm) for details on how the schema works and what it is useful for.
 
-They can be imported individually or in a block.
+## installation
 
-as a block
+```
+$ npm install hiro-graph-orm-mappings
+```
+
+Then they can be imported individually or in a block.
+
+As a block:
 
 ```
 import { Schema } from "hiro-graph-orm";
@@ -16,7 +22,7 @@ import mappings from "hiro-graph-orm-mappings";
 const schema = new Schema(mappings);
 ```
 
-or individually
+Or individually:
 
 ```
 import { Schema } from "hiro-graph-orm";

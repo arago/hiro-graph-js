@@ -1,4 +1,4 @@
-# Gremlin Query Builder for HIRO Graph
+# `hiro-graph-gremlin`: Gremlin Query Builder for HIRO Graph
 
 Provides an imperative interface for building and composing Gremlin queries for use with the HIRO Graph API.
 

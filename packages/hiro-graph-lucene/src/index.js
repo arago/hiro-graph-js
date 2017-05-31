@@ -55,12 +55,15 @@ const initialContext = entity => {
  */
 const nativeEntity = {
     internal: true,
-    prop: name => ({
-        src: name,
-        dst: name,
-        encode: x => "" + x,
-        decode: x => "" + x
-    })
+    prop: name => {
+        const transform = /^ogit\/_/.test(name) ? x => x : x => "" + x;
+        return {
+            src: name,
+            dst: name,
+            encode: transform,
+            decode: transform
+        };
+    }
 };
 
 /**

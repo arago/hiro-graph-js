@@ -1,6 +1,4 @@
-# GraphORM for HIRO Graph
-
-Provides a *more-than-just-string* type aware wrapper for HIRO Graph.
+# `hiro-graph-orm`: a *more-than-just-string* type aware wrapper for HIRO Graph
 
 Define a schema, create a connection to HIRO Graph, and have a natural way to handle data.
 
@@ -29,7 +27,7 @@ const ctx = new Context({ endpoint: "https://graphit/", token }, mappings);
 
 //fetch the user of this access token.
 ctx.me().then(me => {
-    console.log(JSON.stringify(me, null, "    ");
+    console.log(JSON.stringify(me, null, 4);
 })
 .catch(err => {
     console.log("something bad happened", err.stack);

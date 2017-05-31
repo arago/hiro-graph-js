@@ -1,6 +1,6 @@
-# Graph ORM middleware for redux.
+# `hiro-graph-redux`: Graph ORM redux middleware
 
-This is middleware/reducer combo, a custom `Token`, an action creator and some actions for redux that wraps the Graph ORM (`@arago/graph-orm`).
+This is middleware/reducer combo, a custom `Token`, an action creator and some actions for redux that wraps the Graph ORM (`hiro-graph-orm`).
 
 ## Documentation
 
