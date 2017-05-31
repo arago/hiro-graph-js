@@ -17,10 +17,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "hiro-graph-client": "*",
-    "hiro-graph-codecs": "*",
-    "hiro-graph-gremlin": "*",
-    "hiro-graph-lucene": "*",
+    "hiro-graph-client": "^0.1.0",
+    "hiro-graph-codecs": "^0.1.0",
+    "hiro-graph-gremlin": "^0.1.0",
+    "hiro-graph-lucene": "^0.1.0",
     "lodash.isplainobject": "^4.0.4"
   },
   "devDependencies": {
