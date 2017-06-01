@@ -6,10 +6,15 @@ export default {
     ogit: "ogit/Person",
     required: {},
     optional: {
+        profileSet: {
+            src: "/profileSet",
+            type: "bool"
+        },
         email: "ogit/email",
         firstName: "ogit/firstName",
         lastName: "ogit/lastName",
-        username: "ogit/alternativeName"
+        username: "ogit/alternativeName",
+        status: "ogit/status"
     },
     relations: {
         leads: "ogit/leads -> ogit/Organization",
@@ -20,6 +25,8 @@ export default {
         licenses: "ogit/uses -> ogit/License",
         licenseRequests: "ogit/requests -> ogit/LicenseRequest",
         accounts: "ogit/connects <- ogit/Account",
-        roles: "ogit/complies -> ogit/Role"
+        roles: "ogit/complies -> ogit/Role",
+        socialAccounts: "ogit/connects <- ogit/Account",
+        emails: "ogit/connects <- ogit/Email"
     }
 };

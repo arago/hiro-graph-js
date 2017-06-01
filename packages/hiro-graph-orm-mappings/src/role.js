@@ -9,9 +9,11 @@ export default {
     },
     optional: {
         desc: "ogit/description",
+        boss: "/boss",
         status: "ogit/status"
     },
     relations: {
-        owner: "ogit/complies <- ogit/Person"
+        owner: "ogit/complies -> ogit/Person",
+        org: "ogit/defines <- ogit/Organization"
     }
 };

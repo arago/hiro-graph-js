@@ -12,6 +12,7 @@
   },
   "scripts": {
     "lerna": "lerna",
+    "test": "lerna run test",
     "publish": "lerna publish",
     "format": "prettier --tab-width=4 --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'"
   },
