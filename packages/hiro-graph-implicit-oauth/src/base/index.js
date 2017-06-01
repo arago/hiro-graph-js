@@ -15,13 +15,20 @@ import querystring from "querystring";
 const createKey = clientId => key => `___${clientId}:${key}`;
 const parseQuerystring = qs => querystring.parse(qs.replace(/^\?/, ""));
 const parseFragment = fragment => querystring.parse(fragment.replace(/^#/, ""));
-const getOrigin = (l = window.location) => !l.origin
-    ? l.protocol + "//" + l.hostname + (l.port ? ":" + l.port : "")
-    : l.origin;
+const getOrigin = (l = window.location) =>
+    !l.origin
+        ? l.protocol + "//" + l.hostname + (l.port ? ":" + l.port : "")
+        : l.origin;
 const defaultRedirectUri = () => getOrigin() + "/";
 
 export default function createOauthStrategy(implementation) {
-    return ({ clientId, url: baseURL, redirectUri = defaultRedirectUri(), logoutUri, ...options }) => {
+    return ({
+        clientId,
+        url: baseURL,
+        redirectUri = defaultRedirectUri(),
+        logoutUri,
+        ...options
+    }) => {
         const key = createKey(clientId);
         const TOKEN_KEY = key("token");
         const token = {
@@ -34,22 +41,35 @@ export default function createOauthStrategy(implementation) {
             }
         };
 
-        const url = baseURL + (baseURL.indexOf("?") > -1 ? "&" : "?") + querystring.stringify({
-            response_type: "token",
-            client_id: clientId,
-            redirect_uri: redirectUri
-        });
+        const url =
+            baseURL +
+            (baseURL.indexOf("?") > -1 ? "&" : "?") +
+            querystring.stringify({
+                response_type: "token",
+                client_id: clientId,
+                redirect_uri: redirectUri
+            });
 
         const logout = tok => {
             window.localStorage.removeItem(TOKEN_KEY);
-            return logoutUri + "?" + querystring.stringify({
-                clientid_token: clientId + "." + tok,
-                return_url: baseURL
-            });
+            return (
+                logoutUri +
+                "?" +
+                querystring.stringify({
+                    clientid_token: clientId + "." + tok,
+                    return_url: redirectUri
+                })
+            );
         };
 
         //create our strategy for getting tokens.
-        const strategy = implementation({ clientId, url, key, redirectUri, ...options });
+        const strategy = implementation({
+            clientId,
+            url,
+            key,
+            redirectUri,
+            ...options
+        });
 
         //turns out these are useful to the consumer as well.
         const baseReturnValue = {
@@ -64,7 +84,8 @@ export default function createOauthStrategy(implementation) {
             const frag = parseFragment(window.location.hash);
             if (frag.access_token) {
                 token.accessToken = frag.access_token;
-                const expiry = Date.now() + (parseInt(frag.expires_in, 10) * 1000);
+                const expiry =
+                    Date.now() + parseInt(frag.expires_in, 10) * 1000;
                 if (!isNaN(expiry)) {
                     token.meta.expiry = expiry;
                 }
@@ -103,8 +124,13 @@ export default function createOauthStrategy(implementation) {
             // try and pull from localstorage;
             let error = null;
             try {
-                const fromStorage = JSON.parse(window.localStorage.getItem(TOKEN_KEY));
-                if (fromStorage.meta.expiry && fromStorage.meta.expiry < Date.now()) {
+                const fromStorage = JSON.parse(
+                    window.localStorage.getItem(TOKEN_KEY)
+                );
+                if (
+                    fromStorage.meta.expiry &&
+                    fromStorage.meta.expiry < Date.now()
+                ) {
                     //token expired, silently remove.
                 } else if (fromStorage.meta.error) {
                     error = new Error(fromStorage.meta.error);
