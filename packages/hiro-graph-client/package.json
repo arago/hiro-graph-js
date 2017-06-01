@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-client",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
   "main": "lib/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
-    "babel-preset-hiro": "^0.1.4"
+    "babel-preset-hiro": "^0.1.5"
   },
   "babel": {
     "presets": [
