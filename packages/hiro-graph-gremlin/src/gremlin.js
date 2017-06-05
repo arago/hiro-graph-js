@@ -191,11 +191,6 @@ export class GremlinQueryBuilder {
      */
     limit(start, finish) {
         //this needs to be merged directly onto the last element of the query!
-        //but only after we have provided the clause to filter deleted elements.
-        //otherwise this limiting will no do what we expect.
-        //@TODO check in GraphIT as to whether this is still needed...
-        this.hasNot("ogit/_is-deleted", true);
-        //now append the limit
         return this.append(`[${start}..${finish}]`);
     }
 
