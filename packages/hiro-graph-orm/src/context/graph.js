@@ -55,6 +55,20 @@ export function findOne(ctx, entity, query, options = {}) {
     return find(ctx, entity, query, options).then(returnOneOrThrow);
 }
 
+/**
+ *  @ignore
+ */
+export function findCount(ctx, entity, query, options = {}) {
+    const { querystring, placeholders } = parseLucene(query, entity);
+    // the default limit is set to -1 here, so we get all results.
+    // otherwise the max count will be `limit` (we may/may not be desirable)
+    const luceneOptions = Object.assign({ limit: -1 }, options, placeholders, {
+        count: true
+    });
+    return ctx._connection
+        .lucene(querystring, luceneOptions)
+        .then(([count]) => count);
+}
 //this function return the response from the callback
 // in which ever case.
 const noop = () => {};

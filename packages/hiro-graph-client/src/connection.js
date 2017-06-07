@@ -314,6 +314,7 @@ export default class Connection {
             offset = 0,
             order = false,
             fields = [],
+            count = false,
             ...placeholders
         } = {},
         reqOptions = {}
@@ -322,6 +323,7 @@ export default class Connection {
             query,
             limit,
             offset,
+            count,
             ...placeholders
         };
         if (order) {

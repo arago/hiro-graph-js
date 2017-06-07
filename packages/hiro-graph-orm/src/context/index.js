@@ -9,6 +9,7 @@ import {
     find,
     findById,
     findOne,
+    findCount,
     search,
     create,
     update,
@@ -138,6 +139,19 @@ export default class Context {
      */
     find(query, options = {}) {
         return this._no_entity.find(query, options);
+    }
+
+    /**
+     *  On the Context itself, this is an `un-typed` query.
+     *
+     *  i.e. will search all entity types and return the count of results
+     *
+     *  @param {LuceneQuery} query - the lucene query to perform
+     *  @param {object} options - the options to pass on to the query {@todo document these}
+     *  @return {Promise<number>} - the count of results or an error
+     */
+    findCount(query, options = {}) {
+        return this._no_entity.findCount(query, options);
     }
     /**
      *  On the Context itself, this is an `un-typed` search.
@@ -271,6 +285,8 @@ const mixinMethods = {
         findById(ctx, entity, idOrIds, options),
     findOne: (ctx, entity) => (query, options = {}) =>
         findOne(ctx, entity, query, options),
+    findCount: (ctx, entity) => (query, options = {}) =>
+        findCount(ctx, entity, query, options),
     search: (ctx, entity) => (query, filter, options = {}) =>
         search(ctx, entity, query, options),
     create: (ctx, entity) => (data, options = {}) =>

@@ -10,7 +10,7 @@ The exported `createAction` and `createTask` are helpers that expose powerful si
 
 This module automatically stores and updates the vertices retrived from GraphIT. You should **NOT** store the vertices in redux yourself unless you have a very good reason to do so. |
 ---
-You **SHOULD** save the id's in the state yourself and use `createVertexSelector` in `mapStateToProps` as described in [`connect`ing react components](/docs/connecting-react-components). |
+You **SHOULD** save the id's in the state yourself and use `createVertexSelector` in `mapStateToProps` as described in [`connect`ing react components](/packages/hiro-graph-redux/docs/connecting-react-components). |
 ---
 
 ## `createAction`
@@ -46,7 +46,7 @@ reduxStore.dispatch(action(1,2,3)) //  -> logs "1 2 3"
 This is similar to `createAction` but creates a *task*. A task has a unique string key (optionally set by you, the user), and this action creator ensures only one running instance of this task runs at a time. It also store some meta-data about the task, whether is it loading, whether it was successful (and the results) or whether it failed (and the error). Tasks are also cancellable.
 
 ```javascript
-import { createTask } from "@arago/redux-graph";
+import { createTask } from "hiro-graph-redux";
 
 const myActionHandler = ({ orm }) => {
     return orm.find({})
@@ -65,6 +65,6 @@ selector(getState()); //will return the current task state (probably loading).
 
 > N.B. By convention **you should return** a single `ogit/_id` or an array of them, or a plain object with keys matching the previous conditions from your task handlers. This will fit in with the `mapStateToProps` selector functions described in the next section.
 
-More info on [tasks](/docs/tasks.md).
+More info on [tasks](/packages/hiro-graph-redux/docs/tasks.md).
 
-- next: [`connect`ing react components](/docs/connecting-react-components.md)
+- next: [`connect`ing react components](/packages/hiro-graph-redux/docs/connecting-react-components.md)

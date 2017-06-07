@@ -32,6 +32,18 @@ export class Context$Entity {
     findOne(query, options) {} //eslint-disable-line
 
     /**
+     *  find the number of vertices matching the query.
+     *
+     *  NB if you pass `limit` as an option and it is not `-1` the returned
+     *  value will be at most the `limit` value
+     *
+     *  @param {LuceneQuery} query - the lucene query to perform
+     *  @param {object} options - the options to pass on to the query {@todo document these}
+     *  @return {Promise<number>} - the count of results or an error
+     */
+    findCount(query, options = {}) {} //eslint-disable-line
+
+    /**
      *  find vertices of type `Entity` that match the search term as well as the filter
      *
      *  @param {string|object} term - the search term or `$search` object (see [Lucene Queries](../../../manual/usage.html#-search-queries))
