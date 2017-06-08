@@ -156,7 +156,7 @@ describe("Gremlin Query Builder", function() {
         {
             name: "limit",
             build: g => g.limit(0, 1),
-            output: `hasNot("ogit/_is-deleted",true)[0..1]`,
+            output: `[0..1]`,
             method: "limit"
         },
         {

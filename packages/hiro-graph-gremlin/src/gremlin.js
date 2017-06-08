@@ -26,6 +26,18 @@ export const T = [
     return obj;
 }, {});
 
+const $placeholder = Symbol("gremlin-placeholder");
+/**
+ *  Returns a string that will be used as is as a placeholder variable
+ *  @TODO discover what limitations there are on placeholder strings.
+ */
+export const placeholder = name => {
+    return {
+        toString: () => name,
+        [$placeholder]: true
+    };
+};
+
 /**
  *  long/float are simply helpers that add the correct suffixes to our queries
  */
@@ -100,8 +112,12 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     append(query) {
-        const chunk = this._stack.pop() + query;
-        return this.raw(chunk);
+        if (this._stack.length > 0) {
+            const chunk = this._stack.pop() + query;
+            return this.raw(chunk);
+        } else {
+            this.raw(query);
+        }
     }
 
     /**
@@ -517,6 +533,11 @@ const formatArgs = args =>
             //square brackets
             return `[${formatArgs(value).join(",")}]`;
         }
+        // check if this is a placeholder object
+        if (value && value[$placeholder]) {
+            return value.toString(); // raw value for placeholder
+        }
+
         //after this cast to string
         const str = "" + value;
 

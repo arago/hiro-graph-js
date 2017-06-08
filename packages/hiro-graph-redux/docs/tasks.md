@@ -13,12 +13,11 @@ Tasks have the following properties.
  - `finish`: hammertime that the task (last) finished (if it has finished)
  - `result`: the last result of the task
  - `error`: the last error (cleared on a successful result)
- - `vertices`: the data of the result converted to vertex data.
 
 This is complex and unwieldy to manage so we have `whenTask` you can use. It's usage is like this.
 
 ```javascript
-import { whenTask } from "@arago/redux-graph";
+import { whenTask } from "hiro-graph-redux";
 
 //assume we have a task
 const task;
@@ -27,7 +26,7 @@ const value = whenTask(task, {
     pre: () => "the task has not started yet. it doesn't exist"
     loading: () => "the task is loading",
     reloading: () => "the task is loading, but we have a result/error"
-    ok: () => "the task has finished successfully",
+    ok: results => "the task has finished successfully, results: " + JSON.stringify(results),
     error: err => "the task errored: " + err.message,
 });
 
@@ -61,7 +60,8 @@ const fetchPageFactory = createTaskFactory(({ orm }, page) => {
     const limit = 10,
     const offset = (page - 1) * limit;
     return orm.Things.find({}, { limit, offset })
-        .then(v => v._id); //return the ids.
+        // NB we return the Vertex objects
+        // But the selector returns plain data objects
 }
 
 const fetchOnePageAtATime = fetchPage("fixed-key");
@@ -76,13 +76,45 @@ store.dispatch(fetchPagesInParallel(2)); //fetch page two
 
 > Remember that these keys are **application global**. So make sure they are privately namespaced if you are in a library.
 
+## Task Results and Vertex handling
+
+Any vertex updated/deleted or creating during a task is added to a cache. The `taskSelector` (and results from `createVertexSelector`) always pull from this cache and will show new results if any values change. 
+
+This means it is efficient to `connect` with a `mapStateToProps` function using these selectors as your data will be consistent across the application.
+
+i.e
+
+```javascript
+//
+// THIS IS DISCOURAGED
+//
+createTask(orm => {
+    return orm.Thing.find({})
+        .then(nodes => nodes.map(n => ({
+            "foo": n.get("foo")
+        }))) // we lost the reference to the vertex data by extracting it
+}
+
+//
+//  In favour of
+//
+createTask(orm => {
+    return orm.Thing.find({})
+    // just return the array of vertices
+}
+```
+
+Because, in the first case, if another dispatch triggered an update the the `foo` value of one of these vertices then your task would not know and any components using the data would not update.
+
+In the second case, after a change to a `foo` field in one of the vertices, the taskSelector would update and a new result set would appear and you app stays consistent.
+
 ## Cancelling tasks.
 
 Tasks are also cancellable. You may have a component that wishes to start a task, but cancelling any existing tasks first. The action to cancel a task can be created with `cancelTask` and the key.
 
 
 ```javascript
-import { createAction, createTask, cancelTask } from "@arago/redux-graph";
+import { createAction, createTask, cancelTask } from "hiro-graph-redux";
 
 const theTask = createTask(({ orm }) => {
     return orm...
@@ -105,7 +137,7 @@ promise.cancel("I just wanted to stop the task"); //cancels the task.
 
 const task = getTaskState(store.getState());
 
-task.error === new Error("I just wanted to stop the task");
+// task.error === new Error("I just wanted to stop the task");
 ```
 
 Cancelling the promise does *NOT* stop the handler from being call or any other side-effects in the handler from happening. Only that this *task* will be considered cancelled and be in an error state. |

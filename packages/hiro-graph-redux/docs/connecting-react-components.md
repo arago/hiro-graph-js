@@ -23,7 +23,7 @@ This is used to get vertex data out of the store. The function takes an argument
 import React from "react";
 import { connect } from "redux";
 
-import { createVertexSelector } from "@arago/redux-graph";
+import { createVertexSelector } from "hiro-graph-redux";
 
 //of course your own reducers are responsible for managing your state
 const myVertexSelector = createVertexSelector(state => state.myVertices);
@@ -52,9 +52,9 @@ This one is similar to the vertex selector but for tasks. It takes just the task
 
 > You most likely will not need to use `createTaskSelector` directly, as you will want to use the selector returned from the task creation.
 
-Task data is described further in [Tasks in Detail](/docs/tasks.md).
+Task data is described further in [Tasks in Detail](/packages/hiro-graph-redux/docs/tasks.md).
 
-- next: [Access Token handling (and implicit oauth)](/docs/token-handling.md)
+- next: [Access Token handling (and implicit oauth)](/packages/hiro-graph-redux/docs/token-handling.md)
 
 
 
