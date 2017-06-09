@@ -4,7 +4,7 @@ This is middleware/reducer combo, a custom `Token`, an action creator and some a
 
 ## Documentation
 
-Please see [`/docs`](/docs/README.md)
+Please see [`./docs`](/packages/hiro-graph-redux/docs/README.md)
 
 ## Example
 
