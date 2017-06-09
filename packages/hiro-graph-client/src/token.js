@@ -47,3 +47,6 @@ export default class Token {
         return this._getMeta();
     }
 }
+
+export const fixedToken = tokenString =>
+    new Token({ getToken: () => tokenString });

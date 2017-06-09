@@ -17,6 +17,7 @@ import {
     isNotFound,
     connectionClosedBeforeSend
 } from "./errors";
+import { fixedToken } from "./token";
 
 const passthru = fn => [
     r => (fn(), r),
@@ -43,7 +44,7 @@ export default class Client {
         this.endpoint = endpoint;
 
         //we hold on to the token for ease of access/manual invalidation
-        this.token = token;
+        this.token = typeof token === "string" ? fixedToken(token) : token;
 
         //create the transports.
         //the http is for http only endpoint, e.g. the /_ki/* and /_variable/* servlets
@@ -217,9 +218,14 @@ export default class Client {
 
     /**
      *  GraphIT Server Info
+     *  Info is an HTTP only endpoint, and an un-authenticated one.
      */
     info(reqOptions = {}) {
-        return this.request({ type: "info" }, reqOptions);
+        return this.http.request(
+            null, // no token here
+            { type: "info" },
+            { token: false, ...reqOptions } //no token here
+        );
     }
 
     /**
