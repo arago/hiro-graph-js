@@ -50,7 +50,7 @@ const getChangedData = vertex => {
 /**
  *  This is like the regular vertex, but has database access.
  *  Depending on your use case, you would do different things.
- *  If your frontend has no direct GraphIT access, the use DataVertex
+ *  If your frontend has no direct GraphIT access, the use plain Vertex
  *  If you are on the backend (or frontend with graph access) use the GraphVertex
  *  which can be saved.
  */
