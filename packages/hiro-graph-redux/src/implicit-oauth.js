@@ -27,7 +27,7 @@ const fetchMeForToken = createAction(
     (
         { dispatch, getState, orm },
         { accessToken, meta },
-        { callOnFail = false }
+        { callOnFail = false } = {}
     ) => {
         return orm
             .getClient()
@@ -79,7 +79,7 @@ export default function setupImplicitOauth(
     strategySpec = "popup"
 ) {
     const strategy = typeof strategySpec === "string"
-        ? builtInStrategies[strategy]
+        ? builtInStrategies[strategySpec]
         : strategySpec;
     let shouldReallyLogout = false;
     const strategyLogout = typeof strategy.logout === "function"
