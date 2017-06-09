@@ -4,7 +4,7 @@ import {
     createTaskFactory,
     createTaskAction
 } from "./create-action";
-import storeEnhancer from "./middleware";
+import createStoreEnhancer from "./middleware";
 import { setToken, cancelTask, resetTask, doLogin, doLogout } from "./actions";
 import graphReducer, {
     createTaskSelector,
@@ -31,7 +31,7 @@ export {
     createTaskAction,
     cancelTask,
     resetTask,
-    storeEnhancer,
+    createStoreEnhancer,
     setToken,
     getTaskState,
     getMyId,

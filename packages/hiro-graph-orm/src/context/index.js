@@ -1,8 +1,5 @@
 /**
- *  Defines a Schema aware GraphIT connection library
- *
- *
- *
+ *  Defines a Schema aware GraphIT client library
  */
 import { queryBuilder } from "../gremlin";
 import {
@@ -20,7 +17,7 @@ import {
     fetchMe
 } from "./graph";
 import { createVertex } from "../vertex/graph";
-import { mapPromiseIfArray } from "../utils";
+import { mapPromiseIfArray, deprecationWarning } from "../utils";
 import {
     getRelationQuery,
     fetchVertices,
@@ -29,7 +26,7 @@ import {
 } from "./relations";
 import isPlainObject from "lodash.isplainobject";
 import Schema from "../schema";
-import { Connection } from "hiro-graph-client";
+import Client from "hiro-graph-client";
 
 //shorthand for creating the getCount/Ids/Vertices fetching functions
 const relationFetch = (method, relations, options = {}) =>
@@ -38,7 +35,7 @@ const relationFetch = (method, relations, options = {}) =>
 const noEntity = "_no_entity";
 
 /**
- *  The context is a wrapper for the schema and connection.
+ *  The context is a wrapper for the schema and client.
  *
  *  The major expost of the entire module.
  *
@@ -47,15 +44,15 @@ const noEntity = "_no_entity";
  */
 export default class Context {
     /**
-     *  @param {Connection|object} connectionSpec - This should be an `hiro-graph-client` `Connection` object,
+     *  @param {Client|object} clientSpec - This should be an `hiro-graph-client` `Client` object,
      *                                              or the constructor args to create one.
      *  @param {Schema|Array} schemaSpec - This should be a {@link Schema} or the constructor args to create one.
      *  @param {?Map} [cache=new&nbsp;Map()] - The vertex cache. Any object satisfying the `Map` interface should be OK.
      */
     constructor(connectionSpec, schemaSpec, cache = new Map()) {
-        let connection = connectionSpec;
+        let client = connectionSpec;
         if (isPlainObject(connectionSpec)) {
-            connection = new Connection(connectionSpec);
+            client = new Client(connectionSpec);
         }
 
         let schema = schemaSpec;
@@ -63,7 +60,7 @@ export default class Context {
             schema = new Schema(schemaSpec);
         }
 
-        this._connection = connection;
+        this._client = client;
         this._schema = schema;
         this._cache = cache;
         this._log = [];
@@ -83,12 +80,23 @@ export default class Context {
     }
 
     /**
-     * Get's the underlying GraphIT connection.
+     * Get's the underlying GraphIT Client.
      *
-     * @return {Connection}
+     * @return {Client}
+     */
+    getClient() {
+        return this._client;
+    }
+
+    /**
+     *  The old method for getting a connection, deprecated
+     *  @deprecated
      */
     getConnection() {
-        return this._connection;
+        return deprecationWarning(
+            () => this.getClient(),
+            "`getConnection` is deprecated, please use `getClient` instead. This method will be removed in a future version"
+        );
     }
 
     /**

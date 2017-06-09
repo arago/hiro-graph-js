@@ -1,5 +1,5 @@
 /**
- *  A GraphIT connection
+ *  A GraphIT Client
  *
  *  It will use Websockets where possible and fall back to HTTP where WebSockets not supported.
  *  Event streams require WebSockets so those will not work witout websocket support.
@@ -38,7 +38,7 @@ const dereference = obj => {
     return Object.assign({}, obj);
 };
 
-export default class Connection {
+export default class Client {
     constructor({ endpoint, token }, transportOptions = {}) {
         this.endpoint = endpoint;
 
@@ -68,6 +68,7 @@ export default class Connection {
         }
 
         // This is where we keep our event streams.
+        // NB EventStream is not implemented yet
         this.events = [];
 
         // Bind our fetch for extension servlets.
@@ -87,11 +88,13 @@ export default class Connection {
      *  Make a clone of this connection, but with new
      */
     cloneWithNewToken(newToken) {
-        const cloned = new Connection({
-            endpoint: this.endpoint,
-            token: newToken,
-            transport: this.transport
-        });
+        const cloned = new Client(
+            {
+                endpoint: this.endpoint,
+                token: newToken
+            },
+            this.transport
+        );
         this._servlets.forEach(([name, methods]) =>
             cloned.addServlet(name, methods)
         );

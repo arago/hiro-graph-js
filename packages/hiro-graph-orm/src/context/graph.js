@@ -43,7 +43,8 @@ const returnOneOrThrow = result => {
 export function find(ctx, entity, query, options = {}) {
     const { querystring, placeholders } = parseLucene(query, entity);
     const luceneOptions = Object.assign({}, options, placeholders);
-    return ctx._connection
+    return ctx
+        .getClient()
         .lucene(querystring, luceneOptions)
         .then(vertexize(ctx, entity));
 }
@@ -65,7 +66,8 @@ export function findCount(ctx, entity, query, options = {}) {
     const luceneOptions = Object.assign({ limit: -1 }, options, placeholders, {
         count: true
     });
-    return ctx._connection
+    return ctx
+        .getClient()
         .lucene(querystring, luceneOptions)
         .then(([count]) => count);
 }
@@ -96,7 +98,8 @@ const cacheCheck = (
  */
 export function fetchMe(ctx) {
     const entity = ctx.getEntity("ogit/Person");
-    return ctx._connection
+    return ctx
+        .getClient()
         .me()
         .then(vertexize(ctx, entity))
         .then(returnOneOrThrow);
@@ -130,7 +133,8 @@ export function findById(ctx, entity, query, options = {}) {
         }
         const fetched = toFetch.length === 0
             ? Promise.resolve([])
-            : ctx._connection
+            : ctx
+                  .getClient()
                   .ids(toFetch, options)
                   .then(vertexize(ctx, entity));
 
@@ -170,7 +174,8 @@ export function create(ctx, entity, data, options = {}) {
         data.created_on = Date.now();
     }
     const dbData = entity.encode(data);
-    return ctx._connection
+    return ctx
+        .getClient()
         .create(entity.ogit, dbData, options)
         .then(vertexize(ctx, entity));
 }
@@ -180,7 +185,8 @@ export function create(ctx, entity, data, options = {}) {
  */
 export function update(ctx, entity, vertexId, data, options = {}) {
     const dbData = entity.encode(data);
-    return ctx._connection
+    return ctx
+        .getClient()
         .update(vertexId, dbData, options)
         .then(vertexize(ctx, entity));
 }
@@ -190,7 +196,8 @@ export function update(ctx, entity, vertexId, data, options = {}) {
  */
 export function replace(ctx, entity, vertexId, data, options = {}) {
     const dbData = entity.encode(data);
-    return ctx._connection
+    return ctx
+        .getClient()
         .replace(vertexId, dbData, options)
         .then(vertexize(ctx, entity));
 }
@@ -199,7 +206,7 @@ export function replace(ctx, entity, vertexId, data, options = {}) {
  * @ignore
  */
 export function deleteVertex(ctx, vertexId, options = {}) {
-    return ctx._connection.delete(vertexId, options);
+    return ctx.getClient().delete(vertexId, options);
 }
 
 /**
@@ -224,7 +231,7 @@ export function connect(
     const [inId, outId] = direction === "in"
         ? [source, target]
         : [target, source];
-    return ctx._connection.connect(verb, inId, outId, options);
+    return ctx.getClient().connect(verb, inId, outId, options);
 }
 
 /**
@@ -249,18 +256,16 @@ export function disconnect(
     const [inId, outId] = direction === "in"
         ? [source, target]
         : [target, source];
-    return ctx._connection.disconnect(verb, inId, outId, options);
+    return ctx.getClient().disconnect(verb, inId, outId, options);
 }
 
 /**
  * @ignore
  */
 export function gremlin(ctx, rootVertexId, query, options = {}) {
-    const queryResults = ctx._connection.gremlin(
-        rootVertexId,
-        query.toString(),
-        options
-    );
+    const queryResults = ctx
+        .getClient()
+        .gremlin(rootVertexId, query.toString(), options);
     if (options.raw) {
         return queryResults;
     }

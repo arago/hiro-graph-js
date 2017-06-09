@@ -1,6 +1,6 @@
 # HIRO Graph Javascript Libraries
 
-These libraries are for interacting with the HIRO Graph API. For full details of the API see the [HIRO Graph Docs](https://docs.hiro.arago.co/hiro/5.4.2/developer/hiro-graph-api/).
+These libraries are for interacting with the HIRO Graph API. For full details of the API see the [HIRO Graph Docs](https://docs.hiro.arago.co/hiro/current/developer/hiro-graph-api/).
 
 ## Packages
 

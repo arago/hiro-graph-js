@@ -36,4 +36,3 @@ import Org from "hiro-graph-orm-mappings/lib/org";
 const schema = new Schema([Person, Org]);
 
 ```
-

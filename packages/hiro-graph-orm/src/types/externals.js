@@ -1,3 +1,3 @@
 /**
- * @external {Connection} https://github.com/arago/js-graphit-client/blob/master/src/connection.js
+ * @external {Client} https://github.com/arago/hiro-graph-js/blob/master/packages/hiro-graph-client/src/connection.js
  */

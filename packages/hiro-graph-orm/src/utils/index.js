@@ -88,3 +88,18 @@ export const mapPromiseIfArray = fn => input =>
     Array.isArray(input)
         ? Promise.all(input.map(fn))
         : Promise.resolve(fn(input));
+
+/**
+ *  Warn on calling a deprecated function
+ *  By pass through args to a new function for now.
+ */
+export const deprecationWarning = (fn, warning) => {
+    let warned = false;
+    return (...args) => {
+        if (!warned) {
+            console.warn(warning);
+            warned = true;
+        }
+        return fn(...args);
+    };
+};

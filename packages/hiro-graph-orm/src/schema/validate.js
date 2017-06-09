@@ -16,6 +16,8 @@ import { $dangerouslyGetProps, $dangerouslyGetRelations } from "./entity";
  *  This is a `node` only piece of functionality and is intended to run as part of a linting
  *  or testing phase.
  *
+ *  NB this will not validate (yet) against a directory of `.ttl` files (like the current OGIT repo)
+ *
  *  @param {Schema} schema - the schema to check
  *  @param {string} ontologyLocation - a path to an ontology file or repo.
  *  @return {object} result

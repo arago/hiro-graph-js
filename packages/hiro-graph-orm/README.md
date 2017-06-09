@@ -14,16 +14,18 @@ import Vertex from "hiro-graph-orm/lib/vertex";
 
 `npm install hiro-graph-orm hiro-graph-orm-mappings hiro-graph-client`
 
-### use
+### usage
+
+
 
 ```javascript
-import { Context } from "hiro-graph-orm";
+import HiroGraphOrm from "hiro-graph-orm";
 import { Token } from "hiro-graph-client";
 import mappings from "hiro-graph-orm-mappings";
 
 const token = new Token({ getToken: () => "some access token" });
 
-const ctx = new Context({ endpoint: "https://graphit/", token }, mappings);
+const ctx = new HiroGraphOrm({ endpoint: "https://graphit/", token }, mappings);
 
 //fetch the user of this access token.
 ctx.me().then(me => {
@@ -61,10 +63,33 @@ ctx.Person.find({
 ctx.Org.findById("arago.co"); //-> promise resolves with the arago.co vertex
 ctx.Person.findById("arago.co"); //-> promise rejects with a 404 error
 
-//do a gremlin query (get all memebers of all my orgs)
+//do a gremlin query (get all members of all my orgs)
 ctx.gremlin()
     .relation("Person", ["org"])
     .relation("Org", ["members"])
     .dedup()
     .execute(rootVertexId) //-> promise resolves to the returned vertices.
 ```
+
+## Validation
+
+This package contains a library to verify an your local schema mappings match up against a given OGIT schema. OGIT defines an ontology that restricts what attributes and connections a vertex can have, you may create a schema mapping that conflicts with this and this tool helps to identify any problems.
+
+@TODO: The tool only works with YAML ontologies, not the current TTL/RDF format. Also providing a binary would be nice ;).
+
+```javascript
+// NODE JS ONLY
+const { default: validate } = require("hiro-graph-orm/lib/schema/validate");
+
+const schema = require("/path/to/your/schema/mappings/array/module");
+
+const ontologyPath = "/path/to/your/OGIT/yaml/directory/or/file";
+
+const result = validate(schema, ontologyPath);
+
+console.log(result); // hopefully { errors: 0, detail: {} }
+```
+
+If there are errors, the `detail` object will contain much more information keyed by `ogit/_type`, to help you make the required changes to either the schema or the ontology.
+
+

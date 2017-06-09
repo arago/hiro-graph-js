@@ -1,4 +1,5 @@
 import Schema from "./schema";
 import Context from "./context";
 
-export { Schema, Context };
+export default Context;
+export { Schema };

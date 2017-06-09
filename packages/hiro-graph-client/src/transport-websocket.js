@@ -22,6 +22,7 @@ if (webSocketsAvailable) {
         ["CONNECTING", "OPEN", "CLOSING", "CLOSED"].forEach((prop, i) =>
             Object.defineProperty(WS, prop, { get: () => i })
         );
+        console.warn("patching node-websocket with readyState constants...");
     } else {
         // when this is called, we can relax
         console.warn(
