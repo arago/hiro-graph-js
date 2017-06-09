@@ -1,5 +1,6 @@
 import Token from "./token";
-import Connection from "./connection";
+import Client from "./client";
 import * as Errors from "./errors";
 
-export { Token, Connection, Errors };
+export default Client;
+export { Token, Errors };

@@ -17,15 +17,15 @@ export default class Token {
         if (!this._tokenPromise) {
             this._tokenPromise = Promise.resolve(this._getToken())
                 .catch(err => {
-                    //flatten this, so another attempt can be made
+                    // flatten this, so another attempt can be made
                     this._tokenPromise = null;
-                    //returning a bogus token (null), should hopefully trigger this again,
-                    //waiting subscribers will receive it, fail, and try again.
+                    // returning a bogus token (null), should hopefully trigger this again,
+                    // waiting subscribers will receive it, fail, and try again.
                     console.error("ERROR GETTING TOKEN!", err);
                     return null;
                 })
                 .then(token => {
-                    this._invalidated = false; //this resolved one way or another...
+                    this._invalidated = false; // this resolved one way or another...
                     return token;
                 });
         }

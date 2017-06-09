@@ -1,6 +1,11 @@
 /**
  *  Helper functions for getting data from oauth implicit auth flow.
  */
+import { createStrategy } from "hiro-graph-implicit-oauth";
+import { popupStrategy } from "hiro-graph-implicit-oauth/lib/popup";
+import { iframeStrategy } from "hiro-graph-implicit-oauth/lib/iframe";
+import { redirectStrategy } from "hiro-graph-implicit-oauth/lib/redirect";
+
 import {
     setToken,
     setOnLogoutHook,
@@ -19,9 +24,13 @@ export const loginTaskSelector = createTaskSelector(GRAPH_LOGIN);
 //then pending requests will start and the "me" value will be empty.
 //
 const fetchMeForToken = createAction(
-    ({ dispatch, getState, orm }, { accessToken, meta }) => {
+    (
+        { dispatch, getState, orm },
+        { accessToken, meta },
+        { callOnFail = false }
+    ) => {
         return orm
-            .getConnection()
+            .getClient()
             .http.request(
                 //force http transport.
                 null /* we don't use a token object here, but supply a fixed one - perhaps the api should update */,
@@ -47,19 +56,42 @@ const fetchMeForToken = createAction(
                 err => {
                     dispatch(setToken());
                     dispatch(taskError(GRAPH_LOGIN, err.message));
+                    if (callOnFail) {
+                        callOnFail();
+                    }
                 }
             );
     }
 );
 
+const builtInStrategies = {
+    popup: popupStrategy,
+    iframe: iframeStrategy,
+    redirect: redirectStrategy
+};
+
 /**
- *  The "strategy" option is one of the exports from "@arago/js-implicit-oauth"
+ *  The "strategy" option is one of the exports from "hiro-graph-implicit-oauth"
+ *  We provide a shorthand for the common ones, so you don't have to add the depenency explitictly
  */
 export default function setupImplicitOauth(
     { url, clientId, redirectUri, logoutUri, store, ...options },
-    strategy
+    strategySpec = "popup"
 ) {
-    const { check, request, logout } = strategy({
+    const strategy = typeof strategySpec === "string"
+        ? builtInStrategies[strategy]
+        : strategySpec;
+    let shouldReallyLogout = false;
+    const strategyLogout = typeof strategy.logout === "function"
+        ? strategy.logout
+        : uri => (window.location.href = uri);
+
+    strategy.logout = uri => {
+        if (shouldReallyLogout) {
+            strategyLogout(uri);
+        }
+    };
+    const { check, request, logout } = createStrategy(strategy)({
         url,
         clientId,
         redirectUri,
@@ -69,8 +101,12 @@ export default function setupImplicitOauth(
     check((_err, token) => {
         if (token) {
             store.dispatch(taskLoading(GRAPH_LOGIN));
-            // we should still do the the "fetch me
-            store.dispatch(fetchMeForToken(token));
+            // we should still do the the "fetch me", but we need to ensure the logout is triggered on failure (as the token is no longer valid)
+            store
+                .dispatch(fetchMeForToken(token, logout))
+                .then(() => (shouldReallyLogout = true)); //after this is done, reset the value of shouldRedirectOnLogout
+        } else {
+            shouldReallyLogout = true;
         }
     });
     store.dispatch(setOnLogoutHook(logout));

@@ -17,7 +17,7 @@ import { getMyId, $inflateVertex } from "./reducer";
 import ReduxToken from "./token";
 import { cancelablePromise } from "./utils";
 import { isUnknown } from "hiro-graph-client/lib/errors";
-import { Context } from "hiro-graph-orm";
+import Context from "hiro-graph-orm";
 import GraphVertex, { mergeRelations } from "hiro-graph-orm/lib/vertex/graph";
 import isPlainObject from "lodash.isplainobject";
 
@@ -28,9 +28,9 @@ const removeFromArray = (item, array) => {
     }
 };
 
-//this looks massively complex, but our middleware function
-//creates a redux middleware that is aware of our orm and provide helpers
-//to the action handlers inside.
+// this looks massively complex, but our middleware function
+// creates a redux middleware that is aware of our orm and provide helpers
+// to the action handlers inside.
 //
 //  This is the magic behind this module.
 //
@@ -40,7 +40,7 @@ const removeFromArray = (item, array) => {
 //
 // but we need access to subscribe.
 // So this needs to be a store enhancer...
-const storeEnhancer = (...ctxArgs) => createStore => (
+const createStoreEnhancer = (...ctxArgs) => createStore => (
     reducer,
     initialState,
     enhancer
@@ -63,7 +63,7 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
         )
     ) {
         throw new Error(
-            "could not create middleware, arguments not valid Context or Context constructor arguments"
+            "could not create middleware, arguments not valid HiroGraphOrm or HiroGraphOrm constructor arguments"
         );
     }
 
@@ -131,7 +131,7 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
                 }
                 return next(action);
             case GRAPH_LOGIN:
-                orm.getConnection().getToken().invalidate();
+                orm.getClient().getToken().invalidate();
                 return next(action);
             case GRAPH_LOGOUT:
                 //don't invalidate the token, but call the logout handler setup
@@ -188,9 +188,7 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
     orm._notifyCacheFlush = fn => notifyFlush.push(fn);
 
     //now grab the token to wire it in.
-    //I'd rather have a getter here than relying on the tight coupling, but hey, that
-    //would mean altering both js-graph-orm AND js-graphit-client
-    const token = orm.getConnection().getToken();
+    const token = orm.getClient().getToken();
     if (!(token instanceof ReduxToken)) {
         throw new Error(
             "could not create middleware, Graph Token not a `ReduxToken`"
@@ -226,7 +224,7 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
     return dispatch;
 }
 
-export default storeEnhancer;
+export default createStoreEnhancer;
 
 //this function tries to guard against storing vertices directly in state.
 const checkResultsForVertices = key => results => {
