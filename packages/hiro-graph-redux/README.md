@@ -9,27 +9,27 @@ Please see [`./docs`](/packages/hiro-graph-redux/docs/README.md)
 ## Example
 
 ```javascript
-import { Connection } from "hiro-graph-client";
-import { Context, Schema } from "hiro-graph-orm";
+import HiroGraphORM from "hiro-graph-orm";
+import schema from "path/to/schema/mappings";
 
 import {
     createAction,
-    createMiddleware,
+    createStoreEnhancer,
     graphReducer,
     createToken
-} from "@arago/graph-redux";
+} from "hiro-graph-redux";
 
 import {
     createStore,
-    applyMiddleware,
     combineReducers
 } from "redux";
 
 const endpoint = "http://graph:8888";
+// hiro-graph-redux will use the hiro-graph-implicit-oauth,
+// `createToken` instantiates a new token handler for the
+// redux application.
 const token = createToken();
-const conn = new Connection({ endpoint, token });
-const schema = new Schema(...);
-const ctx = new Context(schema, conn);
+const orm = new HiroGraphORM({ endpoint, token }, schema);
 
 const reducers = combineReducers(reducers, reducer);
 
@@ -37,7 +37,7 @@ const reducers = combineReducers(reducers, reducer);
 const store = createStore(
     createReducer(token),
     initialState,
-    applyMiddleware(createMiddleware(ctx))
+    createStoreEnhancer(orm)
 );
 
 //make an action creator.
