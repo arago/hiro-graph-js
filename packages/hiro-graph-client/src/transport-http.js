@@ -107,8 +107,7 @@ export const defaultFetchOptions = () => ({
         "Content-Type": "application/json",
         Accept: "application/json"
     },
-    mode: "cors",
-    credentials: "include"
+    mode: "cors"
 });
 
 //here are the mappings to fetch options from the websocket payloads.
