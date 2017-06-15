@@ -9,7 +9,7 @@ This package is used internally by `hiro-graph-orm` but may well have use outsid
 
 ## Installation
 
-```
+```bash
 $ npm install hiro-graph-lucene
 ```
 
@@ -91,7 +91,7 @@ Queries to this field are not `analysed` and so should be predictable.
 
 ##### `ogit/_content`
 
-This field maps the key `ogit/_content` and is analysed in a more complex way. 
+This field maps the key `ogit/_content` and is analysed in a more complex way.
 
 So currently it uses the `standard` analyser ([elasticsearch docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html)), which is a generic english/european language based analyser.
 

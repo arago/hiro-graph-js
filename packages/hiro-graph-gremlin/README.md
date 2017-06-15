@@ -4,8 +4,8 @@ Provides an imperative interface for building and composing Gremlin queries for 
 
 ## installation
 
-```
-$ npm install hiro-graph-gremalin
+```bash
+$ npm install hiro-graph-gremlin
 ```
 
 ## usage

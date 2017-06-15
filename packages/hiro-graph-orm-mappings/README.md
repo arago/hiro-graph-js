@@ -6,7 +6,7 @@ See [`hiro-graph-orm`](https://github.com/arago/hiro-graph-js/tree/master/packag
 
 ## installation
 
-```
+```bash
 $ npm install hiro-graph-orm-mappings
 ```
 
@@ -14,7 +14,7 @@ Then they can be imported individually or in a block.
 
 As a block:
 
-```
+```javascript
 import { Schema } from "hiro-graph-orm";
 
 import mappings from "hiro-graph-orm-mappings";
@@ -24,7 +24,7 @@ const schema = new Schema(mappings);
 
 Or individually:
 
-```
+```javascript
 import { Schema } from "hiro-graph-orm";
 
 //this would include everything in a bundle, not so good for frontend
