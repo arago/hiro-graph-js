@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-orm-mappings",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "repository": "arago/hiro-graph-js",
   "description": "a set of mapping definitions useful across OGIT apps using `hiro-graph-orm`",
   "main": "lib/index.js",

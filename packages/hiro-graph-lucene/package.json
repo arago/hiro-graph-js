@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-lucene",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Lucene Query helpers for HIRO Graph",
   "main": "lib/index.js",
   "directories": {
