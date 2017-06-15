@@ -95,7 +95,7 @@ export default class GraphVertex extends Vertex {
      */
     connect(relation, vertexOrId) {
         return this._db
-            .connect(relation, vertexOrId)
+            .connect(relation, this._id, vertexOrId)
             .then(refetchRelationData(this, relation));
     }
 
