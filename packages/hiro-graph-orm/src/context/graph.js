@@ -12,6 +12,14 @@ import { decodeResults, filter, mapIfArray } from "../utils";
 
 import { createVertex, isVertex } from "../vertex/graph";
 
+// Structural helper
+const identity = val => val;
+
+// Convenience method based on user options
+const convertVerticesToPlain = mapIfArray(
+    input => (typeof input.plain === "function" ? input.plain() : input)
+);
+
 //this is not in utils, so utils doesn't need to import GraphVertex
 const createVertices = ctx => mapIfArray(data => createVertex(data, ctx));
 
@@ -46,7 +54,8 @@ export function find(ctx, entity, query, options = {}) {
     return ctx
         .getClient()
         .lucene(querystring, luceneOptions)
-        .then(vertexize(ctx, entity));
+        .then(vertexize(ctx, entity))
+        .then(options.plain === true ? convertVerticesToPlain : identity);
 }
 
 /**
@@ -136,7 +145,10 @@ export function findById(ctx, entity, query, options = {}) {
             : ctx
                   .getClient()
                   .ids(toFetch, options)
-                  .then(vertexize(ctx, entity));
+                  .then(vertexize(ctx, entity))
+                  .then(
+                      options.plain === true ? convertVerticesToPlain : identity
+                  );
 
         return fetched.then(vertices => cached.concat(vertices));
     }
@@ -269,5 +281,7 @@ export function gremlin(ctx, rootVertexId, query, options = {}) {
     if (options.raw) {
         return queryResults;
     }
-    return queryResults.then(vertexize(ctx));
+    return queryResults
+        .then(vertexize(ctx))
+        .then(options.plain === true ? convertVerticesToPlain : identity);
 }

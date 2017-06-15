@@ -30,7 +30,15 @@ import Client from "hiro-graph-client";
 
 //shorthand for creating the getCount/Ids/Vertices fetching functions
 const relationFetch = (method, relations, options = {}) =>
-    mapPromiseIfArray(vertex => vertex[method](relations, options));
+    mapPromiseIfArray(vertex => {
+        if (typeof vertex[method] !== "function") {
+            throw new TypeError(
+                `Trying to call "${method}" on non GraphVertex object!\n` +
+                    `Check whether or not you have converted the objects to plain`
+            );
+        }
+        return vertex[method](relations, options);
+    });
 
 const noEntity = "_no_entity";
 
