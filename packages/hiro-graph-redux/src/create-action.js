@@ -8,6 +8,11 @@ import { createTaskSelector } from "./reducer";
 
 const IN_DEV = process.env.NODE_ENV !== "production";
 
+const consoleHasGroup =
+    console &&
+    typeof console.groupCollapsed === "function" &&
+    typeof console.groupEnd === "function";
+
 //this is what the user calls with their handler function.
 //the returned function is called with args in the middleware
 //creates a task with no key (no concurrency control)
@@ -21,7 +26,7 @@ const createAction = handler => createTask(handler, false).action;
 // this is a convenience as it greatly simplifies use and
 // especially re-use of the task handler functions.
 const createTask = (handler, key = createTaskKey()) => {
-    if (IN_DEV && /^@internal:/.test(key)) {
+    if (IN_DEV && /^@internal:/.test(key) && consoleHasGroup) {
         console.groupCollapsed(
             `%c@arago/redux-graph internal key: %c${key}`,
             "background:#ffa",
