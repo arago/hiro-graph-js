@@ -1,6 +1,12 @@
 # `hiro-graph-implicit-oauth`: Implicit OAuth flow helper
 
-A simple oauth implicit flow, with options for a Popup or a Redirect based 
+A simple oauth implicit flow, with options for a Popup or a Redirect based
+
+## installation
+
+```bash
+$ npm install hiro-graph-implicit-oauth
+```
 
 ## Usage example
 
@@ -36,5 +42,6 @@ check(authCallback);
 
 // Trigger implicitOauth when clicked (open popup)
 loginButton.addEventListener("click", () => request(authCallback));
+
 ```
 

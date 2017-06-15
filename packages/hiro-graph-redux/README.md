@@ -2,6 +2,12 @@
 
 This is middleware/reducer combo, a custom `Token`, an action creator and some actions for redux that wraps the Graph ORM (`hiro-graph-orm`).
 
+## installation
+
+```bash
+$ npm install hiro-graph-redux
+```
+
 ## Documentation
 
 Please see [`./docs`](/packages/hiro-graph-redux/docs/README.md)

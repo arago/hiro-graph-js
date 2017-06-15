@@ -2,7 +2,9 @@
 
 Define a schema, create a connection to HIRO Graph, and have a natural way to handle data.
 
+
 If you only want the Vertex Object for the frontend, only import the one file:
+
 
 ```javascript
 import Vertex from "hiro-graph-orm/lib/vertex";
@@ -10,9 +12,11 @@ import Vertex from "hiro-graph-orm/lib/vertex";
 
 ## Quick Start
 
-### install
+## installation
 
-`npm install hiro-graph-orm hiro-graph-orm-mappings hiro-graph-client`
+```bash
+$ npm install hiro-graph-orm hiro-graph-orm-mappings
+```
 
 ### usage
 
