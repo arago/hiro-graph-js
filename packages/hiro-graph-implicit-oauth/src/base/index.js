@@ -50,8 +50,10 @@ export default function createOauthStrategy(implementation) {
                 redirect_uri: redirectUri
             });
 
+        const clear = () => window.localStorage.removeItem(TOKEN_KEY);
+
         const logout = tok => {
-            window.localStorage.removeItem(TOKEN_KEY);
+            clear();
             return (
                 logoutUri +
                 "?" +
@@ -73,6 +75,7 @@ export default function createOauthStrategy(implementation) {
 
         //turns out these are useful to the consumer as well.
         const baseReturnValue = {
+            clear,
             isRemote: () => strategy.isRemote(),
             isLocal: () => !strategy.isRemote()
         };

@@ -16,7 +16,9 @@ const config = {
 // Your login button
 const loginButton = document.getElementById("loginButton")
 
-const { check, request } = Popup(config, (err, token) => {
+const { check, request } = Popup(config);
+
+const authCallback = (err, token) => {
     if (err) {
         //something bad happened :(
         console.warn(err);
@@ -30,9 +32,9 @@ const { check, request } = Popup(config, (err, token) => {
 });
 
 //perform passive login check
-check();
+check(authCallback);
 
 // Trigger implicitOauth when clicked (open popup)
-loginButton.addEventListener("click", request);
+loginButton.addEventListener("click", () => request(authCallback));
 ```
 
