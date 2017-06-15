@@ -407,7 +407,7 @@ export default class Client {
      *  Disconnect two nodes, convenience for delete, generates the edge id for you.
      */
     disconnect(type, inId, outId, reqOptions = {}) {
-        return this.delete(`${inId}$$${type}$$${outId}`, reqOptions).then(
+        return this.delete(`${outId}$$${type}$$${inId}`, reqOptions).then(
             () => {}, //return nothing.
             err => {
                 //Not Found or Conflict is OK here, just means that the edge was already deleted/didn't ever exist
