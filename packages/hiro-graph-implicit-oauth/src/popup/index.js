@@ -27,7 +27,11 @@ const popupStrategy = function({ url, key, width = 500, height = 600 }) {
             //i.e from remote
             const fn = window.opener[OPENER_CALLBACK_KEY];
             if (typeof fn === "function") {
-                delete window.opener[OPENER_CALLBACK_KEY]; //cleanup
+                try {
+                    delete window.opener[OPENER_CALLBACK_KEY]; //cleanup
+                } catch (_err) {
+                    window.opener[OPENER_CALLBACK_KEY] = undefined; //cleanup IE
+                }
                 fn(error, token);
             }
         },
