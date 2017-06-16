@@ -5,7 +5,7 @@ import { create as createError, connectionClosedBeforeSend } from "./errors";
 import { w3cwebsocket as WS } from "websocket";
 import dump from "./dump";
 
-export const webSocketsAvailable = WS !== undefined;
+export const webSocketsAvailable = WS !== undefined && WS !== null;
 
 // throw if websockets NOT available
 export const ensureWebSocketsAvailable = () => {
