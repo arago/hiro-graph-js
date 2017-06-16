@@ -33,7 +33,7 @@ const ctx = new HiroGraphOrm({ endpoint: "https://graphit/", token }, mappings);
 
 //fetch the user of this access token.
 ctx.me().then(me => {
-    console.log(JSON.stringify(me, null, 4);
+    console.log(JSON.stringify(me, null, 4));
 })
 .catch(err => {
     console.log("something bad happened", err.stack);
