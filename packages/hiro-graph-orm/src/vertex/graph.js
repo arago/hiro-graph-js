@@ -179,6 +179,11 @@ export default class GraphVertex extends Vertex {
             .filter(Boolean);
     }
 
+    // have we fetched vertices...
+    hasVertices(relation) {
+        return Array.isArray(this._vertices[relation]);
+    }
+
     /**
      *  Ascertain whether we have write privileges on this node
      *
@@ -214,13 +219,13 @@ const refetchRelationData = (vertex, relation) => () => {
     const vtx = vertex.getVertices(relation).length;
     const ids = vertex.getIds(relation).length;
     const cts = vertex.getCount(relation);
-    if (vtx > 0 && vtx === ids && vtx === cts) {
+    if (vertex.hasVertices(relation) && vtx === ids && vtx === cts) {
         return vertex.fetchVertices([relation], { refetch: true });
     }
-    if (ids > 0 && ids === cts) {
+    if (vertex.hasIds(relation) && ids === cts) {
         return vertex.fetchIds([relation], { refetch: true });
     }
-    if (cts > 0) {
+    if (vertex.hasCount(relation)) {
         return vertex.fetchCount([relation], { refetch: true });
     }
     //don't bother.
