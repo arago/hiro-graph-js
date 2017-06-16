@@ -18,7 +18,8 @@ mockSchema.define({
     },
     relations: {
         simpleOutbound: "ogit/verbName -> ogit/OtherType",
-        simpleInbound: "ogit/anotherVerb <- ogit/SomeOtherType"
+        simpleInbound: "ogit/anotherVerb <- ogit/SomeOtherType",
+        simpleSameType: "ogit/verb -> ogit/Simple"
     }
 });
 

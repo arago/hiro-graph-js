@@ -110,7 +110,9 @@ export default class Vertex {
     getCount(relation) {
         return this._counts[relation] || 0;
     }
-
+    hasCount(relation) {
+        return Array.isArray(this._counts[relation]);
+    }
     /**
      *  Get the ids of entities bound by the given relation (if known)
      *
@@ -120,7 +122,9 @@ export default class Vertex {
     getIds(relation) {
         return this._ids[relation] || [];
     }
-
+    hasIds(relation) {
+        return Array.isArray(this._ids[relation]);
+    }
     /**
      *  Setters for mutating the data.
      *
