@@ -1,20 +1,21 @@
-export const GRAPH_ACTION = "@arago/redux-graph:action";
-export const GRAPH_CANCEL = "@arago/redux-graph:cancel";
-export const GRAPH_LOGIN = "@arago/redux-graph:login";
-export const GRAPH_LOGOUT = "@arago/redux-graph:logout";
-export const GRAPH_UPDATE = "@arago/redux-graph:update";
-export const LOGOUT_HOOK = "@arago/redux-graph:logout-hook";
-export const TOKEN_INVALIDATION_HOOK =
-    "@arago/redux-graph:token-invalidation-hook";
-export const UPDATE_VERTICES = "@arago/redux-graph:update-vertices";
-export const SET_TOKEN = "@arago/redux-graph:set-token";
-export const SET_ME = "@arago/redux-graph:set-me";
-export const SET_ROLES = "@arago/redux-graph:set-roles";
-export const TASK_LOADING = "@arago/redux-graph:task-loading";
-export const TASK_SUCCESS = "@arago/redux-graph:task-success";
-export const TASK_UPDATE = "@arago/redux-graph:task-update";
-export const TASK_ERROR = "@arago/redux-graph:task-error";
-export const TASK_RESET = "@arago/redux-graph:task-reset";
+export const GRAPH_ACTION = "~hgr:action";
+export const GRAPH_CANCEL = "~hgr:cancel";
+export const GRAPH_LOGIN = "~hgr:login";
+export const GRAPH_LOGIN_TRIGGER = "~hgr:login-trigger";
+export const GRAPH_LOGIN_FUNCTION = "~hgr:login-function";
+export const GRAPH_LOGOUT = "~hgr:logout";
+export const GRAPH_UPDATE = "~hgr:update";
+export const LOGOUT_HOOK = "~hgr:logout-hook";
+export const TOKEN_INVALIDATION_HOOK = "~hgr:token-invalidation-hook";
+export const UPDATE_VERTICES = "~hgr:update-vertices";
+export const SET_TOKEN = "~hgr:set-token";
+export const SET_ME = "~hgr:set-me";
+export const SET_ROLES = "~hgr:set-roles";
+export const TASK_LOADING = "~hgr:task-loading";
+export const TASK_SUCCESS = "~hgr:task-success";
+export const TASK_UPDATE = "~hgr:task-update";
+export const TASK_ERROR = "~hgr:task-error";
+export const TASK_RESET = "~hgr:task-reset";
 
 //this is the action to set a newly acquired token into the
 //connection
@@ -25,6 +26,11 @@ export function setToken(accessToken, meta = {}, me, roles) {
 //register a hook to trigger on token invalidation.
 export function setOnTokenInvalidate(hook) {
     return { type: TOKEN_INVALIDATION_HOOK, hook };
+}
+
+// register the login function
+export function setLoginTrigger(login) {
+    return { type: GRAPH_LOGIN_FUNCTION, login };
 }
 
 //register a hook to trigger on logout
@@ -69,7 +75,7 @@ export function resetTask(key = false) {
 }
 
 export function doLogin() {
-    return { type: GRAPH_LOGIN };
+    return { type: GRAPH_LOGIN_TRIGGER };
 }
 
 export function doLogout() {

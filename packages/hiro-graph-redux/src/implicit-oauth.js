@@ -13,6 +13,8 @@ import {
     taskSuccess,
     taskError,
     taskLoading,
+    resetTask,
+    setLoginTrigger,
     GRAPH_LOGIN
 } from "./actions";
 import { createAction } from "./create-action";
@@ -111,7 +113,8 @@ export default function setupImplicitOauth(
     });
     store.dispatch(setOnLogoutHook(logout));
     store.dispatch(
-        setOnTokenInvalidate(() => {
+        setLoginTrigger(() => {
+            // we need an explicit function to say: this is what you do on login.
             store.dispatch(taskLoading(GRAPH_LOGIN));
             request((err, token) => {
                 if (err) {
@@ -130,6 +133,19 @@ export default function setupImplicitOauth(
                     );
                 }
             });
+        })
+    );
+    store.dispatch(
+        setOnTokenInvalidate(() => {
+            // we can't do the login on invalidate (like we used to)
+            // it happens without user intervention and we cannot trigger this without user consent
+            // popups for example will not happen.
+            // what we can do is RESET the login task and kill the token
+            console.log("token invalidated. resetting state");
+            console.log("before", store.getState());
+            store.dispatch(setToken());
+            store.dispatch(resetTask(GRAPH_LOGIN));
+            console.log("after", store.getState());
         })
     );
 }
