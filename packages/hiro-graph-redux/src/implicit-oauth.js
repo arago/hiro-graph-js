@@ -141,11 +141,8 @@ export default function setupImplicitOauth(
             // it happens without user intervention and we cannot trigger this without user consent
             // popups for example will not happen.
             // what we can do is RESET the login task and kill the token
-            console.log("token invalidated. resetting state");
-            console.log("before", store.getState());
             store.dispatch(setToken());
             store.dispatch(resetTask(GRAPH_LOGIN));
-            console.log("after", store.getState());
         })
     );
 }
