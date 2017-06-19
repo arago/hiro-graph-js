@@ -326,6 +326,11 @@ const findQuotedTerms = function(str) {
 function luceneTerm(context, field, values) {
     //console.log("term", context, field, values);
     const prop = context.entity.prop(field);
+    if (!prop) {
+        throw new TypeError(
+            `Cannot find '${field}' of type '${context.entity.name}'`
+        );
+    }
     return values
         .map(v => prop.encode(v)) // encode for graphit with our mapping
         .map(v => (typeof v === "string" ? quote(v) : v)) //quote if needed
