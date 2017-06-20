@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-implicit-oauth",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Customisable Implicit Oauth",
   "main": "./lib/index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-jest": "^20.0.3",
-    "babel-preset-hiro": "^0.2.0",
+    "babel-preset-hiro": "^0.2.6",
     "jest": "^20.0.4"
   },
   "babel": {
