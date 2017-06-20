@@ -72,6 +72,7 @@ export class OrmGremlinQueryBuilder extends GremlinQueryBuilder {
         if (!this._ctx) {
             throw new Error("Cannot use gremlin `relation` without context");
         }
-        return this._ctx[type].relationQuery(relations)(this);
+        const query = this._ctx[type].relationQuery(relations);
+        return this.raw(query);
     }
 }
