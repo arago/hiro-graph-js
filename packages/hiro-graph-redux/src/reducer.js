@@ -5,9 +5,9 @@
 import { createSelector } from "reselect";
 import { combineReducers } from "redux";
 import isPlainObject from "lodash.isplainobject";
-
+import { omit } from "./utils";
 //keys
-const NS = "@arago/redux-graph";
+const NS = "@hiro-graph-redux";
 const VERTEX_KEY = "vertices";
 const TOKEN_KEY = "token";
 const ME_KEY = "me";
@@ -20,6 +20,7 @@ import {
     SET_ROLES,
     UPDATE_VERTICES,
     SET_TOKEN,
+    TASK_RESET,
     TASK_LOADING,
     TASK_SUCCESS,
     TASK_ERROR,
@@ -103,6 +104,9 @@ export default {
                 case TASK_UPDATE:
                     task = Object.assign({}, state[key], { result });
                     break;
+                case TASK_RESET:
+                    // omit!
+                    return omit(state, key);
                 default:
                     //not our action.
                     return state;

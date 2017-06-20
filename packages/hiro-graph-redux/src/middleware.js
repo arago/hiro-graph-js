@@ -5,7 +5,8 @@ import {
     taskSuccess,
     taskError,
     GRAPH_ACTION,
-    GRAPH_LOGIN,
+    GRAPH_LOGIN_FUNCTION,
+    GRAPH_LOGIN_TRIGGER,
     GRAPH_LOGOUT,
     GRAPH_CANCEL,
     GRAPH_UPDATE,
@@ -66,6 +67,16 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
             "could not create middleware, arguments not valid HiroGraphOrm or HiroGraphOrm constructor arguments"
         );
     }
+    let loginTrigger;
+    const fireLoginFunction = () => {
+        if (typeof loginTrigger === "function") {
+            loginTrigger();
+        } else {
+            throw new Error(
+                "Attempt to login, with setting a login trigger - did you configure the implicit oauth correctly?"
+            );
+        }
+    };
 
     //now the middleware that performs the side-effects
     const dispatch = action => {
@@ -130,8 +141,11 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
                     return taskToPromise.get(task).cancel(error);
                 }
                 return next(action);
-            case GRAPH_LOGIN:
-                orm.getClient().getToken().invalidate();
+            case GRAPH_LOGIN_FUNCTION:
+                loginTrigger = action.login;
+                return next(action);
+            case GRAPH_LOGIN_TRIGGER:
+                fireLoginFunction();
                 return next(action);
             case GRAPH_LOGOUT:
                 //don't invalidate the token, but call the logout handler setup

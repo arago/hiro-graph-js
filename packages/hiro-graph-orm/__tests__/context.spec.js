@@ -39,7 +39,7 @@ describe("mock transport test", () => {
         });
     });
 
-    it("should verify bug on connect/disconnect relation fail", () => {
+    it("should verify bug on connect/disconnect relation fail when going to 0 relations, then connecting", () => {
         //client.debugMockRequests(true);
         //get a vertex, with relations, the connect/disconnect.
         const node1 = simpleTestNodeGenerator("node-1");
@@ -48,34 +48,28 @@ describe("mock transport test", () => {
         const relation = "simpleSameType";
         client.enqueueMockResponse(
             node1, // this is the initial find by id response
-            [node2, node3], //this is the fetchVertices gremlin query response
+            [node2], //this is the fetchVertices gremlin query response
             { delete: true }, // this is the disconnect result (ignored)
-            [node3], //this is the fetchVertices gremlin query response refetching after delete
+            [], //this is the fetchVertices gremlin query response refetching after delete
             { edge: true }, // this is the reconnect result (ignored)
-            [node2, node3] //this is the fetchVertices gremlin query response, refetching after connect
+            [node3] //this is the fetchVertices gremlin query response, refetching after connect
         );
         // boom!
         return ctx.Simple
             .findById("node-1")
             .then(ctx.fetchVertices([relation]))
             .then(res => {
-                expect(res.plain()._rel[relation + "Ids"]).toEqual([
-                    "node-2",
-                    "node-3"
-                ]);
+                expect(res.plain()._rel[relation + "Ids"]).toEqual(["node-2"]);
                 return res;
             })
             .then(res => res.disconnect(relation, "node-2"))
             .then(res => {
-                expect(res.plain()._rel[relation + "Ids"]).toEqual(["node-3"]);
+                expect(res.plain()._rel[relation + "Ids"]).toEqual([]);
                 return res;
             })
             .then(res => res.connect(relation, "node-2"))
             .then(res => {
-                expect(res.plain()._rel[relation + "Ids"]).toEqual([
-                    "node-2",
-                    "node-3"
-                ]);
+                expect(res.plain()._rel[relation + "Ids"]).toEqual(["node-3"]);
                 return res;
             });
     });

@@ -27,11 +27,7 @@ const createAction = handler => createTask(handler, false).action;
 // especially re-use of the task handler functions.
 const createTask = (handler, key = createTaskKey()) => {
     if (IN_DEV && /^@internal:/.test(key) && consoleHasGroup) {
-        console.groupCollapsed(
-            `%c@arago/redux-graph internal key: %c${key}`,
-            "background:#ffa",
-            "font-weight:bold;background:#666;padding:3px;border-radius:3px;color:#fff;"
-        );
+        console.groupCollapsed(`hiro-graph-redux internal key: ${key}`);
         console.log(handler.toString());
         console.groupEnd();
     }
