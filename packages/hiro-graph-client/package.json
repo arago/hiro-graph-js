@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
     "prepublish": "npm run build",
-    "test": "echo no tests"
+    "test": "jest --silent"
   },
   "license": "MIT",
   "dependencies": {
@@ -15,7 +15,8 @@
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
-    "babel-preset-hiro": "^0.2.6"
+    "babel-preset-hiro": "^0.2.6",
+    "jest": "^20.0.4"
   },
   "babel": {
     "presets": [
