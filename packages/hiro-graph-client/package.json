@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
+    "babel-jest": "^20.0.3",
     "babel-preset-hiro": "^0.2.6",
     "jest": "^20.0.4"
   },
@@ -27,5 +28,15 @@
         }
       ]
     ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
+    }
   }
 }
