@@ -1,6 +1,10 @@
 import createEntity, { $internal } from "./entity";
 import { mapIfArray } from "../utils";
 
+const defaultOptions = {
+    immutable: true
+};
+
 /**
  *  Defines an Ontology to application mapping
  */
@@ -8,21 +12,31 @@ export default class Schema {
     /**
      *  @param {Array<object>} initialDefinitions - definitions to apply on create
      */
-    constructor(initialDefinitions = false) {
-        /**
-         *  the entity lookup table
-         *
-         *  @private
-         *  @type {object<string, Entity>}
-         */
-        this.entities = {};
-        /**
-         *  the list of all entity names
-         *
-         *  @private
-         *  @type {Array<string>}
-         */
-        this.names = [];
+    constructor(initialDefinitions = false, opts = {}) {
+        this._changeListeners = [];
+        this.options = {
+            ...defaultOptions,
+            ...opts
+        };
+
+        this.__init = () => {
+            /**
+             *  the entity lookup table
+             *
+             *  @private
+             *  @type {object<string, Entity>}
+             */
+            this.entities = {};
+            /**
+             *  the list of all entity names
+             *
+             *  @private
+             *  @type {Array<string>}
+             */
+            this.names = [];
+        };
+
+        this.__init();
 
         /**
          *  The internal only type entity
@@ -37,9 +51,6 @@ export default class Schema {
             this
         );
 
-        //allows define to work seamlessly with single and arrays of definitions
-        this.define = mapIfArray(this.define.bind(this));
-
         if (initialDefinitions) {
             this.define(initialDefinitions);
         }
@@ -51,17 +62,79 @@ export default class Schema {
      *  @param {object} entityMapping - the definition
      *  @return {undefined}
      */
-    define(entityMapping) {
+    __define = entityMapping => {
+        const { immutable } = this.options;
+        let exists = false;
         const entity = createEntity(entityMapping, this);
         if (entity.name in this.entities) {
-            throw new Error(`duplicate entity name: ${entity.name}`);
+            if (immutable) {
+                throw new Error(`duplicate entity name: ${entity.name}`);
+            }
+            exists = true;
         }
         if (entity.ogit in this.entities) {
-            throw new Error(`duplicate entity for vertex type: ${entity.ogit}`);
+            if (immutable) {
+                throw new Error(
+                    `duplicate entity for vertex type: ${entity.ogit}`
+                );
+            }
         }
         this.entities[entity.name] = entity;
         this.entities[entity.ogit] = entity;
-        this.names.push(entity.name);
+        if (!exists) {
+            this.names.push(entity.name);
+        }
+    };
+
+    /**
+     *  Define a entity type(s) in the Schema and emit the update event
+     *
+     *  @param {object} entityMapping - the definition
+     *  @return {undefined}
+     */
+    define(entityMapping) {
+        //allows define to work seamlessly with single and arrays of definitions
+        mapIfArray(this.__define)(entityMapping);
+        this.emitUpdate();
+    }
+
+    emitUpdate() {
+        this._changeListeners.forEach(fn => {
+            fn(this);
+        });
+    }
+
+    setSchema = entityMapping => {
+        const { immutable } = this.options;
+        if (immutable) {
+            throw new TypeError("Cannot setSchema when `immutable: true`");
+        }
+        this.__init();
+        return this.define(entityMapping);
+    };
+
+    updateSchema = entityMapping => {
+        const { immutable } = this.options;
+        if (immutable) {
+            throw new TypeError("Cannot updateSchema when `immutable: true`");
+        }
+        return this.define(entityMapping);
+    };
+
+    addUpdateListener(fn) {
+        if (this._changeListeners.indexOf(fn) === -1) {
+            this._changeListeners.push(fn);
+        }
+        return () => {
+            this._changeListeners.splice(this._changeListeners.indexOf(fn), 1);
+        };
+    }
+
+    removeUpdateListener(fn) {
+        const idx = this._changeListeners.indexOf(fn);
+        if (idx > -1) {
+            this._changeListeners.splice(idx, 1);
+        }
     }
 
     /**
