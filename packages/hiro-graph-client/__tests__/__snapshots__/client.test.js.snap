@@ -115,7 +115,6 @@ Object {
 exports[`Client Requests should call lucene (basic) correctly 1`] = `
 Object {
   "body": Object {
-    "count": false,
     "limit": 50,
     "offset": 0,
     "query": "*:*",
@@ -130,7 +129,7 @@ Object {
 exports[`Client Requests should call lucene (count) correctly 1`] = `
 Object {
   "body": Object {
-    "count": true,
+    "count": "true",
     "limit": 50,
     "offset": 0,
     "query": "*:*",
@@ -145,7 +144,6 @@ Object {
 exports[`Client Requests should call lucene (fields) correctly 1`] = `
 Object {
   "body": Object {
-    "count": false,
     "fields": "/field1,/field2",
     "limit": 50,
     "offset": 0,
@@ -161,7 +159,6 @@ Object {
 exports[`Client Requests should call lucene (limits) correctly 1`] = `
 Object {
   "body": Object {
-    "count": false,
     "limit": -1,
     "offset": 1000,
     "query": "*:*",
@@ -176,7 +173,6 @@ Object {
 exports[`Client Requests should call lucene (order) correctly 1`] = `
 Object {
   "body": Object {
-    "count": false,
     "limit": 50,
     "offset": 0,
     "order": "/field1 asc,/field2 desc",
@@ -193,7 +189,6 @@ exports[`Client Requests should call lucene (placeholders) correctly 1`] = `
 Object {
   "body": Object {
     "bar": "123",
-    "count": false,
     "limit": 50,
     "offset": 0,
     "query": "/foo:$bar",
