@@ -12,9 +12,10 @@
   },
   "scripts": {
     "lerna": "lerna",
-    "test": "lerna run test",
+    "test": "lerna bootstrap --yes && lerna run test",
     "publish": "lerna publish",
     "format": "prettier --tab-width=4 --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'",
+    "lint": "eslint",
     "start-again": "lerna clean --yes && lerna exec 'rm -f package-lock.json' && lerna bootstrap"
   },
   "lint-staged": {
