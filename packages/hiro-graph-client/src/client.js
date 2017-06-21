@@ -332,7 +332,7 @@ export default class Client {
             query,
             limit,
             offset,
-            count,
+            count: String(count),
             ...placeholders
         };
         if (order) {

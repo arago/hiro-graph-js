@@ -20,6 +20,8 @@ const convertVerticesToPlain = mapIfArray(
     input => (typeof input.plain === "function" ? input.plain() : input)
 );
 
+export const naiveDetectRaw = input => input["ogit/_id"] && input["ogit/_type"];
+
 //this is not in utils, so utils doesn't need to import GraphVertex
 const createVertices = ctx => mapIfArray(data => createVertex(data, ctx));
 
@@ -51,11 +53,12 @@ const returnOneOrThrow = result => {
 export function find(ctx, entity, query, options = {}) {
     const { querystring, placeholders } = parseLucene(query, entity);
     const luceneOptions = Object.assign({}, options, placeholders);
-    return ctx
-        .getClient()
-        .lucene(querystring, luceneOptions)
-        .then(vertexize(ctx, entity))
-        .then(options.plain === true ? convertVerticesToPlain : identity);
+    const req = ctx.getClient().lucene(querystring, luceneOptions);
+    return options.raw
+        ? req
+        : req
+              .then(vertexize(ctx, entity))
+              .then(options.plain === true ? convertVerticesToPlain : identity);
 }
 
 /**
@@ -140,15 +143,21 @@ export function findById(ctx, entity, query, options = {}) {
         } else {
             toFetch = query;
         }
+
+        const finalise = promise =>
+            options.raw
+                ? promise
+                : promise
+                      .then(vertexize(ctx, entity))
+                      .then(
+                          options.plain === true
+                              ? convertVerticesToPlain
+                              : identity
+                      );
+
         const fetched = toFetch.length === 0
             ? Promise.resolve([])
-            : ctx
-                  .getClient()
-                  .ids(toFetch, options)
-                  .then(vertexize(ctx, entity))
-                  .then(
-                      options.plain === true ? convertVerticesToPlain : identity
-                  );
+            : finalise(ctx.getClient().ids(toFetch, options));
 
         return fetched.then(vertices => cached.concat(vertices));
     }
