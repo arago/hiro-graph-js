@@ -4,7 +4,9 @@ var node = require("./node");
 var env = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
 
 if (env === "test") {
-    module.exports = node;
+    module.exports = function(context, opts) {
+        return node;
+    };
 } else {
     module.exports = function(context, opts) {
         if (!opts) {
