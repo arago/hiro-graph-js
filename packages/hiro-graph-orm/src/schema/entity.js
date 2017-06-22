@@ -48,6 +48,7 @@ export default function createEntity(definition, schema) {
     }
     const props = createPropList(
         schema,
+        definition.name,
         definition.required,
         definition.optional,
         definition.virtual
@@ -207,7 +208,11 @@ const addFreeAttribute = (output, key, value) => {
     output._free[key.substring(1)] = value; //no coercion.
 };
 
-const ensureFullProps = base => ([key, def]) => {
+const restrictedPropsMap = internalProps
+    .concat(readOnlyProps)
+    .reduce((obj, prop) => ((obj[prop.src] = prop), obj), {});
+
+const ensureFullProps = (name, base) => ([key, def]) => {
     const result = {
         dst: key
     };
@@ -221,6 +226,15 @@ const ensureFullProps = base => ([key, def]) => {
             base
         );
     }
+    // check for defined internal props.
+    if (result.src in restrictedPropsMap) {
+        const p = restrictedPropsMap[result.src];
+        throw new Error(
+            `Trying to redefine an internal property as '${result.dst}'. ` +
+                `The property '${p.src}' will already be available as '${p.dst}'. ` +
+                `Check the schema mapping for entity '${name}'.`
+        );
+    }
     return result;
 };
 
@@ -228,20 +242,66 @@ const ensureFullProps = base => ([key, def]) => {
 const objectEntries = obj => Object.keys(obj).map(key => [key, obj[key]]);
 
 //create a flat array of props.
-const createPropList = (schema, required = {}, optional = {}, virtual = {}) => {
+const createPropList = (
+    schema,
+    name,
+    required = {},
+    optional = {},
+    virtual = {}
+) => {
     //we add the defaults as well.
-    return internalProps
+    const props = internalProps
         .concat([typeProp(schema)])
         .concat(readOnlyProps)
         .concat(
-            objectEntries(required).map(ensureFullProps({ required: true }))
+            objectEntries(required).map(
+                ensureFullProps(name, { required: true })
+            )
         )
         .concat(
-            objectEntries(optional).map(ensureFullProps({ required: false }))
+            objectEntries(optional).map(
+                ensureFullProps(name, { required: false })
+            )
         )
         .concat(
-            objectEntries(virtual).map(ensureFullProps({ writable: false }))
+            objectEntries(virtual).map(
+                ensureFullProps(name, { immutable: true })
+            )
         );
+    // now check if anything is "double defined"
+    const check = {};
+    props.forEach(p => {
+        if (p.immutable) {
+            // it doesn't matter if immutable props have multiple definitions
+            return;
+        }
+        if (p.src in check === false) {
+            check[p.src] = [];
+        }
+        check[p.src].push(p);
+    });
+    const problems = Object.keys(check)
+        .map(k => {
+            if (check[k].length === 1) {
+                return false;
+            }
+            return check[k];
+        })
+        .filter(Boolean);
+    if (problems.length) {
+        const message =
+            `Conflicting property definitions in entity: ${name}.` +
+            problems.map(
+                defs =>
+                    "\n" +
+                    `OGIT property '${defs[0]
+                        .src}' is mapped by ${defs.length} definitions (${defs
+                        .map(d => d.dst)
+                        .join(", ")})`
+            );
+        throw new Error(message);
+    }
+    return props;
 };
 
 //parse the relations into a common format.
