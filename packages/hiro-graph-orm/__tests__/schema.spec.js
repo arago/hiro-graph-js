@@ -9,18 +9,52 @@ describe("Schema:", function() {
     const def = schema.get("Simple")[$dangerouslyGetDefinition]();
 
     it("should throw when trying to re-define a known entity", () => {
-        expect(() => schema.define(def)).toThrow(Error);
+        expect(() => schema.define(def)).toThrowErrorMatchingSnapshot();
     });
 
     it("should throw when trying to define a new entity backed by the same OGIT entity", () => {
         def.name = "SomethingNew";
-        expect(() => schema.define(def)).toThrow(Error);
+        expect(() => schema.define(def)).toThrowErrorMatchingSnapshot();
+    });
+
+    it("should throw when trying to define an entity with an internal property", () => {
+        //lets make this return a function to make the tests easier.
+        const badSchema = prop => () =>
+            schema.define({
+                name: "Bad",
+                ogit: "ogit/Bad",
+                optional: { bad: prop }
+            });
+
+        expect(badSchema("ogit/_id")).toThrowErrorMatchingSnapshot();
+        expect(badSchema("ogit/_created-on")).toThrowErrorMatchingSnapshot();
+        expect(badSchema("ogit/_modified-by")).toThrowErrorMatchingSnapshot();
+    });
+
+    it("should throw when trying to map multiple properties to the same dst", () => {
+        expect(() =>
+            schema.define({
+                name: "Bad",
+                ogit: "ogit/Bad",
+                required: {
+                    foo: "/bar",
+                    baz: "/quux"
+                },
+                optional: {
+                    foo2: "/bar",
+                    baz2: "/quux"
+                },
+                virtual: {
+                    foo3: "/bar"
+                }
+            })
+        ).toThrowErrorMatchingSnapshot();
     });
 
     it("should throw when trying to define an entity that doesn't start with lowercase", () => {
         def.name = "lowercase";
         def.ogit = "ogit/somethingTotallyDifferent";
-        expect(() => schema.define(def)).toThrow(Error);
+        expect(() => schema.define(def)).toThrowErrorMatchingSnapshot();
     });
 
     it("should return the same object when got by app name or OGIT name", () => {
