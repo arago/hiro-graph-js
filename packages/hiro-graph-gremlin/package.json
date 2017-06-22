@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-gremlin",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Gremlin Query builder for the HIRO Graph API",
   "main": "lib/gremlin.js",
   "directories": {
@@ -29,7 +29,7 @@
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-jest": "^20.0.3",
-    "babel-preset-hiro": "^0.2.6",
+    "babel-preset-hiro": "^0.2.7",
     "jest": "^20.0.4"
   },
   "babel": {
