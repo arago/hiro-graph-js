@@ -158,7 +158,8 @@ describe("Codecs:", function() {
                     output: 123
                 },
                 {
-                    name: "something that looks like -ve `int` encoding (we should lose sign)",
+                    name:
+                        "something that looks like -ve `int` encoding (we should lose sign)",
                     input: "n9007199254740890",
                     output: 101
                 }

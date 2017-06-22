@@ -67,8 +67,8 @@ describe("Entities", function() {
         },
         {
             prop: "timestamp",
-            encoded: "" +
-                new Date(Date.parse("2016-05-26T12:50:37.577Z")).getTime(),
+            encoded:
+                "" + new Date(Date.parse("2016-05-26T12:50:37.577Z")).getTime(),
             decoded: Date.parse("2016-05-26T12:50:37.577Z")
         },
         {

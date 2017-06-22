@@ -52,7 +52,9 @@ const dateToISO8601 = date => {
         date.getUTCSeconds(),
         date.getUTCMilliseconds()
     ];
-    return `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(min)}:${pad(second)}.${pad3(ms)}Z`;
+    return `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(min)}:${pad(
+        second
+    )}.${pad3(ms)}Z`;
 };
 
 const pad = n => (n > 9 ? n : "0" + n);

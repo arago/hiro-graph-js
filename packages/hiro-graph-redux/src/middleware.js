@@ -114,7 +114,9 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
                     error => {
                         if (isUnknown(error)) {
                             console.error(
-                                `Error in ORM ${taskKey ? "Task (" + taskKey + ")" : "Action"} Handler`
+                                `Error in ORM ${taskKey
+                                    ? "Task (" + taskKey + ")"
+                                    : "Action"} Handler`
                             );
                             console.error(error.stack);
                         }
