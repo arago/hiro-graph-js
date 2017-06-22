@@ -145,7 +145,7 @@ function validateEntity(appEntity, { entities, verbs }) {
     const validAttributes = getValidAttributes(ogitEntity);
 
     appEntity
-        [$dangerouslyGetProps]()
+        [$dangerouslyGetProps]() //eslint-disable-line no-unexpected-multiline
         //we are checking non-free attributes. so we remove the free ones
         //and also remove the "ogit" internal attributes
         .filter(
@@ -155,7 +155,9 @@ function validateEntity(appEntity, { entities, verbs }) {
         .forEach(invalidProp => {
             //all the remaining are invalid
             errors.push(
-                `Entity ${invalidProp.required ? "required" : "optional"} property (${invalidProp.dst}) does not reference an available attribute in Ontology (${invalidProp.src})`
+                `Entity ${invalidProp.required
+                    ? "required"
+                    : "optional"} property (${invalidProp.dst}) does not reference an available attribute in Ontology (${invalidProp.src})`
             );
         });
 
@@ -173,7 +175,8 @@ function validateEntity(appEntity, { entities, verbs }) {
             //first check the verb exists.
             if (verb in verbs === false) {
                 errors.push(
-                    `Relation (${alias}) invalid at hop (${i + 1}): Verb (${verb}) does not exist in ontology.`
+                    `Relation (${alias}) invalid at hop (${i +
+                        1}): Verb (${verb}) does not exist in ontology.`
                 );
                 broken = false;
                 return;
@@ -186,7 +189,8 @@ function validateEntity(appEntity, { entities, verbs }) {
                         : [endNode, startNode];
                     if (!connections[key.join()]) {
                         errors.push(
-                            `Relation (${alias}) invalid at hop (${i + 1}): Connection from '${key[0]} --> ${verb} -> ${key[1]}' not allowed.`
+                            `Relation (${alias}) invalid at hop (${i +
+                                1}): Connection from '${key[0]} --> ${verb} -> ${key[1]}' not allowed.`
                         );
                     }
                 });
@@ -209,7 +213,8 @@ function validateEntity(appEntity, { entities, verbs }) {
                         //the rest are errors
                         .forEach(prop =>
                             errors.push(
-                                `Relation (${alias}) invalid at hop (${i + 1}): filter contains invalid prop (${prop}) for Entity (${endNode})`
+                                `Relation (${alias}) invalid at hop (${i +
+                                    1}): filter contains invalid prop (${prop}) for Entity (${endNode})`
                             )
                         );
                 }
@@ -235,9 +240,7 @@ function getValidAttributes(entity) {
 const validConnectionsCache = {};
 function getValidConnections(verb) {
     if (verb.ogit in validConnectionsCache === false) {
-        validConnectionsCache[
-            verb.ogit
-        ] = (verb.allowed || [])
+        validConnectionsCache[verb.ogit] = (verb.allowed || [])
             .map(({ from, to }) => [depurl(from), depurl(to)].join())
             .reduce((valid, attr) => ((valid[attr] = true), valid), {});
     }

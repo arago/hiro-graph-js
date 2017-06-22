@@ -85,7 +85,9 @@ function convertLuceneQuery(entity, query) {
     if (!entity.internal) {
         //this is not an internal-only entity (i.e. a fake one that just translates
         // ogit internal attributes. This means we should insert a "ogit/_type" filter.
-        parsed.querystring = `+${slashForward("ogit/_type")}:${quote(entity.ogit)} ${parsed.querystring}`;
+        parsed.querystring = `+${slashForward("ogit/_type")}:${quote(
+            entity.ogit
+        )} ${parsed.querystring}`;
     }
     return parsed;
 }
@@ -244,7 +246,7 @@ const SOLIDUS = "/";
 const SLASH = "\\"; // two because it has to be escaped.
 const QUOTE = `"`; // just to make the code more readable
 
-const slashForward = input => input.replace(/[\/]/g, SLASH + SOLIDUS);
+const slashForward = input => input.replace(/[/]/g, SLASH + SOLIDUS);
 
 // this escapes quotes and slashes
 const slashString = function(input) {
@@ -377,7 +379,9 @@ function luceneSearch(context, field, term, { ngram = false } = {}) {
         slashString(finalTerm)
     );
 
-    return `${context.op}${slashForward(prop.src)}${ngram ? ".ngram" : ""}:${placeholder}`;
+    return `${context.op}${slashForward(prop.src)}${ngram
+        ? ".ngram"
+        : ""}:${placeholder}`;
 }
 
 //lucene is not good at prefixes when spaces are encountered.

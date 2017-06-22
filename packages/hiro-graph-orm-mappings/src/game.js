@@ -4,7 +4,7 @@
 export default {
     name: "Game",
     ogit: "ogit/UserMeta/Game",
-    required: { },
+    required: {},
     optional: {
         question: "/question",
         relevance: "/relevance"

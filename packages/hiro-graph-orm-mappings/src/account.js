@@ -4,7 +4,7 @@
 export default {
     name: "Account",
     ogit: "ogit/Account",
-    required: { },
+    required: {},
     optional: {
         desc: "ogit/description",
         email: "ogit/email",

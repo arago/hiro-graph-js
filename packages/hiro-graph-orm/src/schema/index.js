@@ -54,38 +54,56 @@ export default class Schema {
         if (initialDefinitions) {
             this.define(initialDefinitions);
         }
-    }
 
-    /**
-     *  Define a new entity type in the Schema
-     *
-     *  @param {object} entityMapping - the definition
-     *  @return {undefined}
-     */
-    __define = entityMapping => {
-        const { immutable } = this.options;
-        let exists = false;
-        const entity = createEntity(entityMapping, this);
-        if (entity.name in this.entities) {
-            if (immutable) {
-                throw new Error(`duplicate entity name: ${entity.name}`);
+        /**
+         *  Define a new entity type in the Schema
+         *
+         *  @param {object} entityMapping - the definition
+         *  @return {undefined}
+         */
+        this.__define = entityMapping => {
+            const { immutable } = this.options;
+            let exists = false;
+            const entity = createEntity(entityMapping, this);
+            if (entity.name in this.entities) {
+                if (immutable) {
+                    throw new Error(`duplicate entity name: ${entity.name}`);
+                }
+                exists = true;
             }
-            exists = true;
-        }
-        if (entity.ogit in this.entities) {
+            if (entity.ogit in this.entities) {
+                if (immutable) {
+                    throw new Error(
+                        `duplicate entity for vertex type: ${entity.ogit}`
+                    );
+                }
+            }
+            this.entities[entity.name] = entity;
+            this.entities[entity.ogit] = entity;
+            if (!exists) {
+                this.names.push(entity.name);
+            }
+        };
+
+        this.setSchema = entityMapping => {
+            const { immutable } = this.options;
             if (immutable) {
-                throw new Error(
-                    `duplicate entity for vertex type: ${entity.ogit}`
+                throw new TypeError("Cannot setSchema when `immutable: true`");
+            }
+            this.__init();
+            return this.define(entityMapping);
+        };
+
+        this.updateSchema = entityMapping => {
+            const { immutable } = this.options;
+            if (immutable) {
+                throw new TypeError(
+                    "Cannot updateSchema when `immutable: true`"
                 );
             }
-        }
-        this.entities[entity.name] = entity;
-        this.entities[entity.ogit] = entity;
-        if (!exists) {
-            this.names.push(entity.name);
-        }
-    };
-
+            return this.define(entityMapping);
+        };
+    }
     /**
      *  Define a entity type(s) in the Schema and emit the update event
      *
@@ -103,23 +121,6 @@ export default class Schema {
             fn(this);
         });
     }
-
-    setSchema = entityMapping => {
-        const { immutable } = this.options;
-        if (immutable) {
-            throw new TypeError("Cannot setSchema when `immutable: true`");
-        }
-        this.__init();
-        return this.define(entityMapping);
-    };
-
-    updateSchema = entityMapping => {
-        const { immutable } = this.options;
-        if (immutable) {
-            throw new TypeError("Cannot updateSchema when `immutable: true`");
-        }
-        return this.define(entityMapping);
-    };
 
     addUpdateListener(fn) {
         if (this._changeListeners.indexOf(fn) === -1) {

@@ -44,7 +44,9 @@ const relationFetch = (ctx, method, relations, options = {}) =>
                         } else {
                             throw new TypeError(
                                 `Trying to call "${method}" on raw GraphVertex without Schema!\n` +
-                                    `Check whether you have defined Schema for "ogit/_type: ${vertex["ogit/_type"]}"`
+                                    `Check whether you have defined Schema for "ogit/_type: ${vertex[
+                                        "ogit/_type"
+                                    ]}"`
                             );
                         }
                     } else {

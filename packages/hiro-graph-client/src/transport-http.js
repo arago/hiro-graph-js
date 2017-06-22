@@ -53,7 +53,8 @@ export default class HttpTransport {
                             return [
                                 500,
                                 {
-                                    error: "Invalid JSON in response from GraphIT"
+                                    error:
+                                        "Invalid JSON in response from GraphIT"
                                 }
                             ];
                         }

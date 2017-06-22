@@ -4,7 +4,6 @@ import createStrategy from "../base";
 // and back again afterwards
 const redirectStrategy = function({ url, redirectUri }) {
     return {
-
         isRemote() {
             return /access_token/.test(window.location.hash);
         },

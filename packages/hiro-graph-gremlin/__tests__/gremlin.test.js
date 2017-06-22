@@ -257,7 +257,7 @@ describe("Gremlin Query Builder", function() {
     tests.forEach(({ method }) => testedMethods.add(method));
 
     //now run them
-    tests.forEach(({ name, build, output, throws = false, method }) => {
+    tests.forEach(({ name, build, output, throws = false }) => {
         it(name, function() {
             const gremlin = queryBuilder();
             if (throws) {

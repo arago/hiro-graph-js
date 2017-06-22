@@ -80,4 +80,3 @@ export function createEmail(id) {
     };
 }
 export default [person, org, email];
-
