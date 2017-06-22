@@ -332,9 +332,11 @@ export default class Client {
             query,
             limit,
             offset,
-            count: String(count),
             ...placeholders
         };
+        if (count) {
+            body.count = "true"; // string true
+        }
         if (order) {
             body.order = "" + order; // this implicitly does array.join(",") for arrays. (and works with strings...)
         }

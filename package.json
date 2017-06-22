@@ -12,11 +12,11 @@
   },
   "scripts": {
     "lerna": "lerna",
-    "test": "lerna bootstrap --yes && lerna run test",
+    "test": "lerna bootstrap --concurrency 1 --yes && lerna run test",
     "publish": "lerna publish",
     "format": "prettier --tab-width=4 --write 'packages/*/*.js' 'packages/*/!(node_modules)/**/*.js'",
     "lint": "eslint",
-    "start-again": "lerna clean --yes && lerna exec 'rm -f package-lock.json' && lerna bootstrap"
+    "start-again": "rm -rf package-lock.json node_modules/* && lerna exec 'rm -rf package-lock.json node_modules/*' && lerna bootstrap --concurrency 1"
   },
   "lint-staged": {
     "*.js": [
