@@ -18,6 +18,7 @@ export default class Schema {
             ...defaultOptions,
             ...opts
         };
+        const { immutable } = this.options;
 
         this.__init = () => {
             /**
@@ -51,10 +52,6 @@ export default class Schema {
             this
         );
 
-        if (initialDefinitions) {
-            this.define(initialDefinitions);
-        }
-
         /**
          *  Define a new entity type in the Schema
          *
@@ -62,7 +59,6 @@ export default class Schema {
          *  @return {undefined}
          */
         this.__define = entityMapping => {
-            const { immutable } = this.options;
             let exists = false;
             const entity = createEntity(entityMapping, this);
             if (entity.name in this.entities) {
@@ -86,7 +82,6 @@ export default class Schema {
         };
 
         this.setSchema = entityMapping => {
-            const { immutable } = this.options;
             if (immutable) {
                 throw new TypeError("Cannot setSchema when `immutable: true`");
             }
@@ -95,7 +90,6 @@ export default class Schema {
         };
 
         this.updateSchema = entityMapping => {
-            const { immutable } = this.options;
             if (immutable) {
                 throw new TypeError(
                     "Cannot updateSchema when `immutable: true`"
@@ -103,6 +97,11 @@ export default class Schema {
             }
             return this.define(entityMapping);
         };
+
+        // bootstrap the initial definitions
+        if (initialDefinitions) {
+            this.define(initialDefinitions);
+        }
     }
     /**
      *  Define a entity type(s) in the Schema and emit the update event
