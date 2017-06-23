@@ -134,6 +134,31 @@ describe("Entities", function() {
         });
     });
 
+    it("should handle all internal properties correctly", () => {
+        const knownDate = new Date(Date.parse("2016-05-26T12:50:37.577Z"));
+        const input = {
+            "ogit/_id": "some-id",
+            "ogit/_type": "ogit/Simple",
+            "ogit/_created-on": knownDate.getTime(),
+            "ogit/_modified-on": knownDate.getTime() + 1,
+            "ogit/_created-by": "some-creator",
+            "ogit/_modified-by": "some-modifier",
+            "ogit/_content": "some-content",
+            "ogit/_tags": "a,  comma-seperated, list,of tags "
+        };
+        const output = {
+            _id: "some-id",
+            _type: "Simple",
+            "_created-on": knownDate.getTime(),
+            "_modified-on": knownDate.getTime() + 1,
+            "_created-by": "some-creator",
+            "_modified-by": "some-modifier",
+            _content: "some-content",
+            _tags: ["a", "comma-seperated", "list", "of tags"]
+        };
+        expect(entity.decode(input)).toEqual(output);
+    });
+
     const relationParsingTests = [
         {
             name: "simple",

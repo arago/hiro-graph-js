@@ -90,7 +90,9 @@ export function find(ctx, entity, query, options = {}) {
  * @ignore
  */
 export function findOne(ctx, entity, query, options = {}) {
-    return find(ctx, entity, query, options).then(returnOneOrThrow);
+    // force the limit to be 1
+    const limitOneOptions = Object.assign({}, options, { limit: 1 });
+    return find(ctx, entity, query, limitOneOptions).then(returnOneOrThrow);
 }
 
 /**
