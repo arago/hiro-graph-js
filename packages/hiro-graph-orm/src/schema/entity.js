@@ -148,23 +148,23 @@ const internalProps = [
     {
         src: "ogit/_id",
         dst: "_id",
-        encode: stringCodec.decode,
-        decode: stringCodec.encode,
+        encode: stringCodec.encode,
+        decode: stringCodec.decode,
         required: false
     },
     {
         //_content and fields will be moved to ontology definition, e.g. github.com/arago/OGIT
         src: "ogit/_content",
         dst: "_content",
-        encode: stringCodec.decode,
-        decode: stringCodec.encode,
+        encode: stringCodec.encode,
+        decode: stringCodec.decode,
         required: false
     },
     {
         src: "ogit/_tags",
         dst: "_tags",
-        encode: listCodec.decode,
-        decode: listCodec.encode,
+        encode: listCodec.encode,
+        decode: listCodec.decode,
         required: false
     }
 ];

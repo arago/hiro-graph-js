@@ -105,4 +105,13 @@ describe("mock transport test", () => {
             "notARealProp asc"
         );
     });
+
+    it("should force limit to 1 when performing a `findOne`", async () => {
+        const node1 = simpleTestNodeGenerator("node-1");
+        client.enqueueMockResponse([node1]);
+        await ctx.Simple.findOne({});
+        expect(client.retrieveLastRequest()).toMatchObject({
+            body: { limit: 1 }
+        });
+    });
 });
