@@ -77,10 +77,43 @@ export default class Client {
 
         //keep this so we can duplicate them
         this._servlets = [];
+
+        this.requestListeners = [];
     }
 
     debugRequests(turnOnDebugging) {
         this._debug_requests = turnOnDebugging === true;
+    }
+
+    addOnRequestListener(fn) {
+        if (this.requestListeners.indexOf(fn) === -1) {
+            this.requestListeners.push(fn);
+        }
+        return () => {
+            this.requestListeners.splice(this.requestListeners.indexOf(fn), 1);
+        };
+    }
+
+    removeOnRequestListener(fn) {
+        const idx = this.requestListeners.indexOf(fn);
+        if (idx > -1) {
+            this.requestListeners.splice(idx, 1);
+        }
+    }
+
+    emitOnRequest(payload) {
+        if (this.requestListeners.length) {
+            this.requestListeners.forEach(fn => {
+                try {
+                    fn(payload);
+                } catch (err) {
+                    console.error(
+                        "Error in onRequestListener in HiroGraphClient"
+                    );
+                    console.error(err);
+                }
+            });
+        }
     }
 
     /**
@@ -109,6 +142,16 @@ export default class Client {
         reqOptions = {},
         retries = 1
     ) {
+        if (typeof this.token.get === "function") {
+            this.token.get().then(token => {
+                this.emitOnRequest({
+                    token,
+                    type,
+                    headers,
+                    body
+                });
+            });
+        }
         return this.transport
             .request(
                 this.token,
