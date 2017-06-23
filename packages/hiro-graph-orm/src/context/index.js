@@ -211,7 +211,7 @@ export default class Context {
      *  @return {Promise<OneOrMoreVertices>} - the first vertex found or an error
      */
     search(query, filter = {}, options = {}) {
-        return this._no_entity.search(query, options);
+        return this._no_entity.search(query, filter, options);
     }
 
     /**

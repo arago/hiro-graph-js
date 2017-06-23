@@ -2,7 +2,7 @@
 packages/babel-preset-hiro
 
 # all built code
-packages/*/lib
+packages/**/lib
 
 # any node modules default only ignores /node_modules/*
 packages/**/node_modules
