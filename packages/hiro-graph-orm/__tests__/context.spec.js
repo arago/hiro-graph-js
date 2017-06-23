@@ -73,4 +73,36 @@ describe("mock transport test", () => {
                 return res;
             });
     });
+
+    it("should convert `order` to OGIT props on `find` queries", async () => {
+        const node1 = simpleTestNodeGenerator("node-1");
+        // find, findOne,
+        client.enqueueMockResponse([node1]);
+        await ctx.Simple.find({}, { order: ["prop asc"] });
+        expect(client.retrieveLastRequest().body.order).toBe(
+            "ogit/requiredProp asc"
+        );
+        client.enqueueMockResponse([node1]);
+        await ctx.Simple.find({}, { order: ["ogit/requiredProp asc"] });
+        expect(client.retrieveLastRequest().body.order).toBe(
+            "ogit/requiredProp asc"
+        );
+        client.enqueueMockResponse(node1);
+        await ctx.Simple.findOne({}, { order: ["prop asc"] });
+        expect(client.retrieveLastRequest().body.order).toBe(
+            "ogit/requiredProp asc"
+        );
+        client.enqueueMockResponse(node1);
+        await ctx.Simple.findOne({}, { order: ["ogit/requiredProp asc"] });
+        expect(client.retrieveLastRequest().body.order).toBe(
+            "ogit/requiredProp asc"
+        );
+
+        // if the prop is not a real prop, ignore.
+        client.enqueueMockResponse(node1);
+        await ctx.Simple.findOne({}, { order: ["notARealProp asc"] });
+        expect(client.retrieveLastRequest().body.order).toBe(
+            "notARealProp asc"
+        );
+    });
 });

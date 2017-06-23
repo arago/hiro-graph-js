@@ -47,12 +47,37 @@ const returnOneOrThrow = result => {
     return Array.isArray(result) ? result[0] : result;
 };
 
+// order specified as ["field1 desc", "field2 asc"]
+const convertSortOrderToOGIT = (order, entity) => {
+    if (!Array.isArray(order)) {
+        const a = order.split(" ");
+        if (a.length === 2 && /^(asc|desc)$/i.test(a[1])) {
+            //OK we can work with this
+            return convertSortOrderToOGIT([order], entity);
+        }
+    }
+    return order.map(def => {
+        const [field, dir = ""] = def.split(" ");
+        const p = entity.prop(field);
+        if (p) {
+            return [p.src, dir].join(" ");
+        }
+        return def;
+    });
+};
+
 /**
  * @ignore
  */
 export function find(ctx, entity, query, options = {}) {
     const { querystring, placeholders } = parseLucene(query, entity);
     const luceneOptions = Object.assign({}, options, placeholders);
+    if (luceneOptions.order) {
+        luceneOptions.order = convertSortOrderToOGIT(
+            luceneOptions.order,
+            entity
+        );
+    }
     const req = ctx.getClient().lucene(querystring, luceneOptions);
     return options.raw
         ? req
