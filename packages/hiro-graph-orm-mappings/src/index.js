@@ -2,16 +2,43 @@
  *  Import all for export.
  */
 import Account from "./account";
-import License from "./license";
-import Person from "./person";
-import Org from "./org";
-import Role from "./role";
+import CustomApplicationData from "./custom-application-data";
 import Email from "./email";
 import Game from "./game";
+import KnowledgeItem from "./knowledge-item";
+import License from "./license";
+import Notification from "./notification";
+import Org from "./org";
+import Person from "./person";
 import Question from "./question";
+import Role from "./role";
 
 //we export an array by default as this is what the schema.define method expects.
-export default [Account, License, Person, Org, Role, Email, Game, Question];
+export default [
+    Account,
+    CustomApplicationData,
+    Email,
+    Game,
+    KnowledgeItem,
+    License,
+    Notification,
+    Org,
+    Person,
+    Question,
+    Role
+];
 
 //but we also export them as named exports for convenience
-export { Account, License, Person, Org, Role, Email, Game, Question };
+export {
+    Account,
+    CustomApplicationData,
+    Email,
+    Game,
+    KnowledgeItem,
+    License,
+    Notification,
+    Org,
+    Person,
+    Question,
+    Role
+};
