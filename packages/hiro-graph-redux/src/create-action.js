@@ -4,7 +4,8 @@
  *  Super enterprisey!
  */
 import { GRAPH_ACTION, GRAPH_UPDATE } from "./actions";
-import { createTaskSelector } from "./reducer";
+import { createVertexSelector, createTaskSelector } from "./reducer";
+import whenTask from "./when-task";
 
 const IN_DEV = process.env.NODE_ENV !== "production";
 
@@ -70,3 +71,45 @@ export { createAction, createTask, createTaskFactory, createTaskAction };
 //generate a non-conflicting (but hopefully deterministic within the app).
 let globalKeyId = 0;
 const createTaskKey = () => `@internal:${globalKeyId++}`;
+
+// The live task is a 2-phase process.
+// phase 1 (kernel space) is the normal task execution environment
+// phase 2 (user space) is the normal react/redux/component-side environment (e.g. with plain, immutable objects).
+//
+// The idea is that your task fetches data, but returns the vertex that forms the dependency of the data
+// you actually want.
+//
+// That is if you want the "foo" edges of some "bar" vertex, then you really want to return "bar" as
+// it will update when it's "foo" edges change and you want to react to that.
+
+// this is important for being empty AND being a unique object instance.
+const emptyArray = [];
+
+/**
+ *  fetch must return dependent vertices.
+ *  interpreter runs on "plain" graph objects, not Vertex instances
+ *  the interpreter is passed the result of the task, and the `state`
+ *  object, in case you wish to use further selectors in it.
+ */
+export function createLiveTask(fetch, interpreter = x => x, key = false) {
+    const createdTask = createTask(fetch, key);
+    const { selector } = createdTask.selector;
+    const resultSelector = createVertexSelector(state => {
+        let value = emptyArray;
+        whenTask(createdTask.selector(state), {
+            ok: res => {
+                value = interpreter(res, state);
+            }
+        });
+        return value;
+    });
+    const liveSelector = state => {
+        const task = selector(state);
+        const result = resultSelector(state);
+        if (result !== emptyArray) {
+            return { ...task, result };
+        }
+        return task;
+    };
+    return { ...createdTask, selector: liveSelector };
+}

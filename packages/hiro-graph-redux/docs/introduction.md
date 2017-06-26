@@ -8,4 +8,4 @@ The results of all GraphIT requests are stored into the redux state. Any compone
 
 To use it you must add the middleware and the reducer to your redux store. Then you can create actions which have access to the graph-orm.
 
-- next: [Middleware and Reducer](/packages/hiro-graph-redux/docs/middleware-and-reducer.md)
+- next: [Middleware and Reducer](./middleware-and-reducer.md)

@@ -192,12 +192,22 @@ const pluckVerticesInflatable = (vertices, object) => {
     return object;
 };
 
-//this only works on ids or arrays of ids
-const pluckVerticesSimple = (vertices, idOrIds) => {
-    if (Array.isArray(idOrIds)) {
-        return idOrIds.map(v => pluckVerticesSimple(vertices, v));
+// this only works on ids or arrays of ids, or plain objects with keys of one of those 3.
+// if you pass anything else it will be returned as is.
+const pluckVerticesSimple = (vertices, idShape) => {
+    if (Array.isArray(idShape)) {
+        return idShape.map(v => pluckVerticesSimple(vertices, v));
     }
-    return vertices[idOrIds];
+    if (typeof idShape === "string") {
+        return vertices[idShape];
+    }
+    if (isPlainObject(idShape)) {
+        return Object.keys(idShape).reduce((final, key) => {
+            final[key] = pluckVerticesSimple(vertices, idShape[key]);
+        }, {});
+    }
+    // none of the above. leave it.
+    return idShape;
 };
 
 //this gets the "me" id

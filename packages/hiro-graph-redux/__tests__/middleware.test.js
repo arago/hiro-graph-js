@@ -48,7 +48,7 @@ describe("testing test setup", () => {
         });
     });
 
-    it("Verify Bug: fetch relation (1 result), disconnect (0 results), connect (still 0 results)", () => {
+    it("Verify Bug: fetch relation (1 result), disconnect (0 results), connect (still 0 results)", async () => {
         const rel = "subordinates";
         const relIds = rel + "Ids";
 
@@ -84,41 +84,44 @@ describe("testing test setup", () => {
             );
             return orm.me().then(me => me.connect(rel, "person3"));
         });
-        return (
-            store
-                .dispatch(relationTask.action())
-                .then(() => {
-                    //now we have finished, we should be able to select the result.
-                    const res = relationTask.selector(store.getState());
-                    expect(whenTask(res, { ok: () => true })).toBe(true);
-                    expect(res.result._rel[relIds]).toEqual(["person1"]);
-                    const v = relationVertexSelector(store.getState());
-                    expect(v.length).toEqual(1);
-                    expect(v.map(n => n._id)).toEqual(["person1"]);
-                })
-                // now we dispatch the disconnect.
-                .then(() => store.dispatch(disconnectTask.action()))
-                .then(() => {
-                    const res = disconnectTask.selector(store.getState());
-                    expect(whenTask(res, { ok: () => true })).toBe(true);
-                    expect(res.result._rel[relIds]).toEqual([]);
-                    const v = relationVertexSelector(store.getState());
-                    expect(v.length).toEqual(0);
-                    expect(v.map(n => n._id)).toEqual([]);
-                })
-                // now we dispatch the reconnect.
-                .then(() => store.dispatch(connectTask.action()))
-                .then(() => {
-                    const res = connectTask.selector(store.getState());
-                    expect(whenTask(res, { ok: () => true })).toBe(true);
 
-                    // THIS IS WHERE THE BUG WAS
+        let res, v;
 
-                    expect(res.result._rel[relIds]).toEqual(["person3"]);
-                    const v = relationVertexSelector(store.getState());
-                    expect(v.length).toEqual(1);
-                    expect(v.map(n => n._id)).toEqual(["person3"]);
-                })
-        );
+        // dispatch the action
+        await store.dispatch(relationTask.action());
+
+        //now we have finished, we should be able to select the result.
+        res = relationTask.selector(store.getState());
+        expect(whenTask(res, { ok: () => true })).toBe(true);
+        expect(res.result._rel[relIds]).toEqual(["person1"]);
+
+        v = relationVertexSelector(store.getState());
+        expect(v.length).toEqual(1);
+        expect(v.map(n => n._id)).toEqual(["person1"]);
+
+        // now we dispatch the disconnect.
+        await store.dispatch(disconnectTask.action());
+
+        res = disconnectTask.selector(store.getState());
+        expect(whenTask(res, { ok: () => true })).toBe(true);
+        expect(res.result._rel[relIds]).toEqual([]);
+
+        v = relationVertexSelector(store.getState());
+        expect(v.length).toEqual(0);
+        expect(v.map(n => n._id)).toEqual([]);
+
+        // now we dispatch the reconnect.
+        await store.dispatch(connectTask.action());
+
+        res = connectTask.selector(store.getState());
+        expect(whenTask(res, { ok: () => true })).toBe(true);
+
+        // THIS IS WHERE THE BUG WAS
+
+        expect(res.result._rel[relIds]).toEqual(["person3"]);
+
+        v = relationVertexSelector(store.getState());
+        expect(v.length).toEqual(1);
+        expect(v.map(n => n._id)).toEqual(["person3"]);
     });
 });
