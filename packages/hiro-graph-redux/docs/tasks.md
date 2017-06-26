@@ -47,7 +47,7 @@ const createTask = (handlerFn, ?key) => ({
 });
 ```
 
-So first you pass in a handlerFn, which is exactly the same as the `createAction` uses (see [`createAction`](/docs/action-creators.md#createaction)) and optionally a `key`.
+So first you pass in a handlerFn, which is exactly the same as the `createAction` uses (see [`createAction`](./action-creators.md#createaction)) and optionally a `key`.
 
 > If you wish to seperate these functions to give the same task different keys, `createTaskFactory` just takes the `handler` and returns a function of `key`. Basic currying.
 
@@ -106,7 +106,7 @@ createTask(orm => {
 
 Because, in the first case, if another dispatch triggered an update the the `foo` value of one of these vertices then your task would not know and any components using the data would not update.
 
-In the second case, after a change to a `foo` field in one of the vertices, the taskSelector would update and a new result set would appear and you app stays consistent.
+In the second case, after a change to a `foo` field in one of the vertices, the taskSelector would update and a new result set would appear and you app stays consistent. There are some more complex interactions at play concerning consistency, see [tasks and consistency](./tasks-and-consistency.md)
 
 ## Cancelling tasks.
 
@@ -140,9 +140,9 @@ const task = getTaskState(store.getState());
 // task.error === new Error("I just wanted to stop the task");
 ```
 
-Cancelling the promise does *NOT* stop the handler from being call or any other side-effects in the handler from happening. Only that this *task* will be considered cancelled and be in an error state. |
----
+| Cancelling the promise does *NOT* stop the handler from being call or any other side-effects in the handler from happening. Only that this *task* will be considered cancelled and be in an error state. |
+| --- |
 
 > We have yet to so how useful this feature will be, but hopefully together the feature of the tasks should provide enough flexibility to do anything we need.
 
-- back to: [table of contents](/docs/README.md)
+- back to: [table of contents](./README.md)
