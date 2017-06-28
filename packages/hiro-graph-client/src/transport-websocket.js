@@ -23,7 +23,7 @@ if (webSocketsAvailable) {
             Object.defineProperty(WS, prop, { get: () => i })
         );
         console.warn("patching node-websocket with readyState constants...");
-    } else {
+    } else if (process.browser) {
         // when this is called, we can relax
         console.warn(
             "node-websocket has now correctly got the readyState constants, please remove this code from `transport-websocket.js`"

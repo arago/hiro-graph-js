@@ -127,26 +127,39 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
             break;
         case "create":
             url = "/new/" + encodeURIComponent(headers["ogit/_type"]);
+            if (headers.waitForIndex) {
+                url += "?waitForIndex=true";
+            }
             options.body = JSON.stringify(body);
             options.method = "POST";
             break;
         case "update":
             url = "/" + encodeURIComponent(headers["ogit/_id"]);
             options.method = "POST";
+            if (headers.waitForIndex) {
+                url += "?waitForIndex=true";
+            }
             options.body = JSON.stringify(body);
             break;
         case "replace":
             url = "/" + encodeURIComponent(headers["ogit/_id"]);
             options.method = "PUT";
+            const extraHeader = [];
             if (headers.createIfNotExists) {
-                url += "?createIfNotExists=" + headers.createIfNotExists
-                    ? "true"
-                    : "false";
-                //not sure where the type needs to go here, maybe the params...
-                url +=
-                    "&ogit%2f_type=" +
-                    encodeURIComponent(headers["ogit/_type"]);
+                extraHeader.push(
+                    "createIfNotExists=" +
+                        (headers.createIfNotExists ? "true" : "false") +
+                        "&ogit%2f_type=" +
+                        encodeURIComponent(headers["ogit/_type"])
+                );
             }
+            if (headers.waitForIndex) {
+                extraHeader.push("waitForIndex=true");
+            }
+            if (extraHeader.length) {
+                url += "?" + extraHeader.join("&");
+            }
+
             options.body = JSON.stringify(body);
             break;
         case "delete":
