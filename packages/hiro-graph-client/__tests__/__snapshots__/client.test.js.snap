@@ -92,6 +92,50 @@ Object {
 }
 `;
 
+exports[`Client Requests should call history (with limit) correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "limit": 500,
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
+exports[`Client Requests should call history (with offset + limit) correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "limit": 5,
+    "offset": 100,
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
+exports[`Client Requests should call history (with offset) correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "offset": 10,
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
+exports[`Client Requests should call history correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
 exports[`Client Requests should call ids correctly 1`] = `
 Object {
   "body": Object {
@@ -247,6 +291,50 @@ Object {
 }
 `;
 
+exports[`Client Requests should call streamts (from only) correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "from": 1399999999999,
+    "ogit/_id": "ts-id",
+  },
+  "type": "streamts",
+}
+`;
+
+exports[`Client Requests should call streamts (to + from) correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "from": 1399999999999,
+    "ogit/_id": "ts-id",
+    "to": 1400000000001,
+  },
+  "type": "streamts",
+}
+`;
+
+exports[`Client Requests should call streamts (to only) correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "ogit/_id": "ts-id",
+    "to": 1400000000001,
+  },
+  "type": "streamts",
+}
+`;
+
+exports[`Client Requests should call streamts correctly 1`] = `
+Object {
+  "body": Object {},
+  "headers": Object {
+    "ogit/_id": "ts-id",
+  },
+  "type": "streamts",
+}
+`;
+
 exports[`Client Requests should call update (waitForIndex) correctly 1`] = `
 Object {
   "body": Object {
@@ -269,5 +357,22 @@ Object {
     "ogit/_id": "some-id",
   },
   "type": "update",
+}
+`;
+
+exports[`Client Requests should call writets correctly 1`] = `
+Object {
+  "body": Object {
+    "items": Array [
+      Object {
+        "timestamp": 1400000000000,
+        "value": "value1",
+      },
+    ],
+  },
+  "headers": Object {
+    "ogit/_id": "ts-id",
+  },
+  "type": "writets",
 }
 `;

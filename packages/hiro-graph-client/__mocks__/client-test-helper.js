@@ -1,3 +1,5 @@
+const date = 14e11; // 14e11 is about 5pm on 13th may 2014. it just easy to remember its a valid date and short.
+
 export default client => [
     {
         name: "me",
@@ -95,5 +97,42 @@ export default client => [
     {
         name: "gremlin",
         fn: () => client.gremlin("root-id", "pow()")
+    },
+    {
+        name: "writets",
+        fn: () =>
+            client.writets("ts-id", [{ timestamp: date, value: "value1" }])
+    },
+    {
+        name: "streamts",
+        fn: () => client.streamts("ts-id")
+    },
+    {
+        name: "streamts (from only)",
+        fn: () => client.streamts("ts-id", { from: date - 1 })
+    },
+    {
+        name: "streamts (to only)",
+        fn: () => client.streamts("ts-id", { to: date + 1 })
+    },
+    {
+        name: "streamts (to + from)",
+        fn: () => client.streamts("ts-id", { from: date - 1, to: date + 1 })
+    },
+    {
+        name: "history",
+        fn: () => client.history("some-id")
+    },
+    {
+        name: "history (with offset)",
+        fn: () => client.history("some-id", { offset: 10 })
+    },
+    {
+        name: "history (with limit)",
+        fn: () => client.history("some-id", { limit: 500 })
+    },
+    {
+        name: "history (with offset + limit)",
+        fn: () => client.history("some-id", { limit: 5, offset: 100 })
     }
 ];

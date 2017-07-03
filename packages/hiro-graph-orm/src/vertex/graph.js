@@ -196,7 +196,7 @@ export default class GraphVertex extends Vertex {
                 ""
             ) + Date.now();
         const testKey = `/__jsGraphOrm_${randVal}`;
-        const rawConn = this._ctx.getConnection();
+        const rawConn = this._ctx.getClient();
         return rawConn
             .update(this._id, { [testKey]: randVal })
             .then(res => {
@@ -210,6 +210,28 @@ export default class GraphVertex extends Vertex {
                 console.error(err);
                 return false;
             });
+    }
+
+    // if this is a Timeseries vertex or a Log vertex we can fetchEntries();
+    // this will fail if called on a different.
+    // note that this returns the entries, they are not stored on the vertex as they have
+    // no primary key and we cannot merge safely without more knowledge.
+    // best left up to user code.
+    fetchEntries(options) {
+        const t = this.type();
+        const o = this._ctx.get(t).ogit;
+        switch (o) {
+            case "ogit/Timeseries":
+                return this._ctx.getClient().streamts(this._id, options);
+            case "ogit/Log":
+                return this._ctx.getClient().readlogs(this._id, options);
+            default:
+                return Promise.reject(
+                    new Error(
+                        `Cannot fetch entries for vertex type: ${t} (${o})`
+                    )
+                );
+        }
     }
 }
 

@@ -7,6 +7,8 @@ const fakeTokenPromise = Promise.resolve("<token>");
 const onInvalidate = jest.fn();
 const fakeToken = { get: () => fakeTokenPromise, onInvalidate };
 
+// These test are run with a client, in order to assure that the correct
+// client calls result in the correct HTTP requests.
 describe("transport-http", () => {
     // uses the real HttpTransport, but with fake fetch
     const client = new Client(

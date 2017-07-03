@@ -116,6 +116,62 @@ Array [
 ]
 `;
 
+exports[`transport-http should create the right options for: history (with limit) 1`] = `
+Array [
+  "https://graphit/some-id/history?limit=500&_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with offset + limit) 1`] = `
+Array [
+  "https://graphit/some-id/history?offset=100&limit=5&_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with offset) 1`] = `
+Array [
+  "https://graphit/some-id/history?offset=10&_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history 1`] = `
+Array [
+  "https://graphit/some-id/history?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
 exports[`transport-http should create the right options for: ids 1`] = `
 Array [
   "https://graphit/query/ids?_TOKEN=<token>",
@@ -251,7 +307,7 @@ Array [
 
 exports[`transport-http should create the right options for: replace (createIfNotExists) 1`] = `
 Array [
-  "https://graphit/some-id?createIfNotExists=true&ogit%2f_type=some-type&_TOKEN=<token>",
+  "https://graphit/some-id?createIfNotExists=true&ogit%2F_type=some-type&_TOKEN=<token>",
   Object {
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
@@ -294,6 +350,62 @@ Array [
 ]
 `;
 
+exports[`transport-http should create the right options for: streamts (from only) 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: streamts (to + from) 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: streamts (to only) 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: streamts 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
 exports[`transport-http should create the right options for: update (waitForIndex) 1`] = `
 Array [
   "https://graphit/some-id?waitForIndex=true&_TOKEN=<token>",
@@ -314,6 +426,21 @@ Array [
   "https://graphit/some-id?_TOKEN=<token>",
   Object {
     "body": "{\\"/foo\\":\\"bar\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: writets 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "body": "{\\"items\\":[{\\"timestamp\\":1400000000000,\\"value\\":\\"value1\\"}]}",
     "headers": Object {
       "Accept": "application/json",
       "Content-Type": "application/json",

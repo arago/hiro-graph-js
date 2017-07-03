@@ -464,6 +464,73 @@ export default class Client {
     }
 
     /**
+     *  Write timeseries values (only ogit/Timeseries vertices)
+     *
+     *  values are { timestamp: millisecond unix, value: string value }
+     */
+    writets(timeseriesId, values) {
+        let items = values;
+        if (!Array.isArray(values)) {
+            items = [values];
+        }
+        return this.request({
+            type: "writets",
+            headers: {
+                "ogit/_id": timeseriesId
+            },
+            body: { items }
+        });
+    }
+
+    /**
+     *  Read timeseries values (only ogit/Timeseries vertices)
+     */
+    streamts(timeseriesId, { from = false, to = false } = {}) {
+        const headers = {
+            "ogit/_id": timeseriesId
+        };
+        if (from !== false) {
+            headers.from = from;
+        }
+        if (to !== false) {
+            headers.to = to;
+        }
+        return this.dedupedRequest({
+            type: "streamts",
+            headers
+        });
+    }
+
+    /**
+     * Placeholders here for reading/writing log files (ogit/Log)
+     */
+    //eslint-disable-next-line no-unused-vars
+    writelog(logId, entries) {
+        return Promise.reject(new Error("Log writing is not implemented yet"));
+    }
+    //eslint-disable-next-line no-unused-vars
+    readlog(logId, options) {
+        return Promise.reject(new Error("Log reading is not implemented yet"));
+    }
+
+    /**
+     *  Returns previous versions of a vertex
+     */
+    history(id, { offset = false, limit = false } = {}) {
+        const headers = { "ogit/_id": id };
+        if (offset !== false) {
+            headers.offset = offset;
+        }
+        if (limit !== false) {
+            headers.limit = limit;
+        }
+        return this.dedupedRequest({
+            type: "history",
+            headers: headers
+        });
+    }
+
+    /**
      *  Custom servlet endpoints
      *  always use HTTP transport, which knows how to handle these types.
      *

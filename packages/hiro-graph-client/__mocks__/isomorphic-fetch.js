@@ -1,7 +1,11 @@
 /* eslint-env jest */
 // mock of isomorphic-fetch for tests.
 // fetch is a single function so we mock it with a
-const f = require.requireActual("isomorphic-fetch");
+// mock fn.
+
+// we need to require the real thing, as it mutates `global`, giving us access
+// to Response
+require.requireActual("isomorphic-fetch");
 const Response = global.Response;
 const mockFn = jest.fn();
 
