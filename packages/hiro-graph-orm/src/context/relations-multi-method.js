@@ -93,7 +93,7 @@ export function fetchCount(ctx, entity) {
  * @ignore - we don't need docs about this. they are internal exports
  */
 export function getRelationQuery(entity, relation, options = {}) {
-    return relationQueryGenerator(entity, options)(relation)(queryBuilder())
+    return relationQueryGenerator(entity)(relation, options)(queryBuilder())
         .query;
 }
 
@@ -104,7 +104,7 @@ export function getRelationQuery(entity, relation, options = {}) {
 function relationQuery(ctx, entity, finaliser) {
     const getQuery = relationQueryGenerator(entity);
     return (relations, options = {}) => {
-        const queries = relations.map(getQuery);
+        const queries = relations.map(r => getQuery(r, options));
         //finish up indiviually
         return finaliser(relations, queries, options);
     };
@@ -117,8 +117,17 @@ function relationQuery(ctx, entity, finaliser) {
  * @ignore - we don't need docs about this. they are internal exports
  */
 export function relationQueryGenerator(entity) {
-    return relation => {
+    return (relation, { limit = false, offset = 0 } = {}) => {
         const { alias, hops } = entity.relation(relation);
+        let limiter = x => x;
+        if (limit !== false) {
+            limiter = g => g.limit(offset, offset + limit);
+        } else if (offset !== 0) {
+            // this is a bit of a hack, there is no offset without limit
+            // but Integer.MAX_VALUE is as big as we are allowed anyway.
+            // Hopefully we won't get that many results!
+            limiter = g => g.limit(offset, "Integer.MAX_VALUE");
+        }
         return gremlin => {
             hops.forEach(({ verb, direction, filter, vertices }) => {
                 const inbound = direction === "in";
@@ -153,6 +162,8 @@ export function relationQueryGenerator(entity) {
                 if (filter) {
                     gremlin.has(filter);
                 }
+
+                limiter(gremlin);
             });
 
             return { alias, query: gremlin };
