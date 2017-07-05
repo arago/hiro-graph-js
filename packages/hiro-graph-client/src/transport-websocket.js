@@ -23,7 +23,7 @@ if (webSocketsAvailable) {
             Object.defineProperty(WS, prop, { get: () => i })
         );
         console.warn("patching node-websocket with readyState constants...");
-    } else {
+    } else if (process.browser) {
         // when this is called, we can relax
         console.warn(
             "node-websocket has now correctly got the readyState constants, please remove this code from `transport-websocket.js`"
@@ -222,7 +222,9 @@ export default class WebSocketTransport {
                     // NB, all real response bodies are `truthy` (even empty array and empty object)
                     // so if this is `falsy` then we didn't get a result. In the new protocol, that
                     // happens in a "multi" response when there where no hits.
-                    if (body) {
+                    // NOP. we can have gremlin/count results with a single numeric/string value
+                    // so we check those too
+                    if (body || body === 0 || body === "") {
                         if (handle.debug) {
                             console.log("WS: batching up results:", body);
                         }
@@ -307,7 +309,7 @@ export default class WebSocketTransport {
                                         );
                                     }
                                     return new Promise((_resolve, _reject) => {
-                                        if (ws.readyState !== WebSocket.OPEN) {
+                                        if (ws.readyState !== WS.OPEN) {
                                             //we may have closed whilst waiting for the token.
                                             //always retry.
                                             if (debug) {

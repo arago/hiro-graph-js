@@ -1,0 +1,473 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transport-http should create the right options for: connect 1`] = `
+Array [
+  "https://graphit/connect/some-verb?_TOKEN=<token>",
+  Object {
+    "body": "{\\"in\\":\\"the-in-id\\",\\"out\\":\\"the-out-id\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: create (waitForIndex) 1`] = `
+Array [
+  "https://graphit/new/some-type?waitForIndex=true&_TOKEN=<token>",
+  Object {
+    "body": "{\\"some\\":\\"prop\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: create 1`] = `
+Array [
+  "https://graphit/new/some-type?_TOKEN=<token>",
+  Object {
+    "body": "{\\"some\\":\\"prop\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: delete (waitForIndex) 1`] = `
+Array [
+  "https://graphit/some-id?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "DELETE",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: delete 1`] = `
+Array [
+  "https://graphit/some-id?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "DELETE",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: disconnect 1`] = `
+Array [
+  "https://graphit/the-out-id%24%24some-verb%24%24the-in-id?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "DELETE",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: get 1`] = `
+Array [
+  "https://graphit/some-id?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: gremlin 1`] = `
+Array [
+  "https://graphit/query/gremlin?_TOKEN=<token>",
+  Object {
+    "body": "{\\"root\\":\\"root-id\\",\\"query\\":\\"pow()\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with limit) 1`] = `
+Array [
+  "https://graphit/some-id/history?limit=500&_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with offset + limit) 1`] = `
+Array [
+  "https://graphit/some-id/history?offset=100&limit=5&_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with offset) 1`] = `
+Array [
+  "https://graphit/some-id/history?offset=10&_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history 1`] = `
+Array [
+  "https://graphit/some-id/history?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: ids 1`] = `
+Array [
+  "https://graphit/query/ids?_TOKEN=<token>",
+  Object {
+    "body": "{\\"query\\":\\"a,b,c\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: info 1`] = `
+Array [
+  "https://graphit/info",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: lucene (basic) 1`] = `
+Array [
+  "https://graphit/query/vertices?_TOKEN=<token>",
+  Object {
+    "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: lucene (count) 1`] = `
+Array [
+  "https://graphit/query/vertices?_TOKEN=<token>",
+  Object {
+    "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0,\\"count\\":\\"true\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: lucene (fields) 1`] = `
+Array [
+  "https://graphit/query/vertices?_TOKEN=<token>",
+  Object {
+    "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0,\\"fields\\":\\"/field1,/field2\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: lucene (limits) 1`] = `
+Array [
+  "https://graphit/query/vertices?_TOKEN=<token>",
+  Object {
+    "body": "{\\"query\\":\\"*:*\\",\\"limit\\":-1,\\"offset\\":1000}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: lucene (order) 1`] = `
+Array [
+  "https://graphit/query/vertices?_TOKEN=<token>",
+  Object {
+    "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0,\\"order\\":\\"/field1 asc,/field2 desc\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: lucene (placeholders) 1`] = `
+Array [
+  "https://graphit/query/vertices?_TOKEN=<token>",
+  Object {
+    "body": "{\\"query\\":\\"/foo:$bar\\",\\"limit\\":50,\\"offset\\":0,\\"bar\\":\\"123\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: me 1`] = `
+Array [
+  "https://graphit/_me?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: replace (createIfNotExists) 1`] = `
+Array [
+  "https://graphit/some-id?createIfNotExists=true&ogit%2F_type=some-type&_TOKEN=<token>",
+  Object {
+    "body": "{\\"/foo\\":\\"bar\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "PUT",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: replace (waitForIndex) 1`] = `
+Array [
+  "https://graphit/some-id?waitForIndex=true&_TOKEN=<token>",
+  Object {
+    "body": "{\\"/foo\\":\\"bar\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "PUT",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: replace 1`] = `
+Array [
+  "https://graphit/some-id?_TOKEN=<token>",
+  Object {
+    "body": "{\\"/foo\\":\\"bar\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "PUT",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: streamts (from only) 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: streamts (to + from) 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: streamts (to only) 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: streamts 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: update (waitForIndex) 1`] = `
+Array [
+  "https://graphit/some-id?waitForIndex=true&_TOKEN=<token>",
+  Object {
+    "body": "{\\"/foo\\":\\"bar\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: update 1`] = `
+Array [
+  "https://graphit/some-id?_TOKEN=<token>",
+  Object {
+    "body": "{\\"/foo\\":\\"bar\\"}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: writets 1`] = `
+Array [
+  "https://graphit/ts-id/values?_TOKEN=<token>",
+  Object {
+    "body": "{\\"items\\":[{\\"timestamp\\":1400000000000,\\"value\\":\\"value1\\"}]}",
+    "headers": Object {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should handle bad http responses appropriately 1`] = `
+Object {
+  "code": 500,
+  "message": "[HTTP] Error: Invalid JSON in response from GraphIT",
+}
+`;
+
+exports[`transport-http should handle bad http responses appropriately 2`] = `
+Object {
+  "code": 403,
+  "message": "[HTTP] Error: forbidden",
+}
+`;
+
+exports[`transport-http should handle bad http responses appropriately 3`] = `
+Object {
+  "code": 404,
+  "message": "[HTTP] Error: not found",
+}
+`;

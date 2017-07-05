@@ -52,9 +52,9 @@ This one is similar to the vertex selector but for tasks. It takes just the task
 
 > You most likely will not need to use `createTaskSelector` directly, as you will want to use the selector returned from the task creation.
 
-Task data is described further in [Tasks in Detail](/packages/hiro-graph-redux/docs/tasks.md).
+Task data is described further in [Tasks in Detail](./tasks.md).
 
-- next: [Access Token handling (and implicit oauth)](/packages/hiro-graph-redux/docs/token-handling.md)
+- next: [Access Token handling (and implicit oauth)](./token-handling.md)
 
 
 

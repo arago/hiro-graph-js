@@ -2,7 +2,7 @@
 
 The OAuth flow for access tokens included here requires a little setup. 
 
-Once you have created the store (see [middleware and reducers](/packages/hiro-graph-redux/docs/middleware-and-reducer.md)) you can setup the implicit oauth flow:
+Once you have created the store (see [middleware and reducers](./middleware-and-reducer.md)) you can setup the implicit oauth flow:
 
 ```javascript
 

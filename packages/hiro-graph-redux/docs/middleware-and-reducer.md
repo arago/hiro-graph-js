@@ -29,5 +29,6 @@ const store = createStore(
         window.devToolsExtension ? window.devToolsExtension() : f => f
     )
 );
+```
 
-- next: [Creating Action Creators](/docs/action-creators.md)
+- next: [Creating Action Creators](./action-creators.md)

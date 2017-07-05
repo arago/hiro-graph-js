@@ -126,28 +126,29 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
             url = "/" + encodeURIComponent(headers["ogit/_id"]);
             break;
         case "create":
-            url = "/new/" + encodeURIComponent(headers["ogit/_type"]);
-            options.body = JSON.stringify(body);
-            options.method = "POST";
+            url =
+                "/new/" +
+                encodeURIComponent(headers["ogit/_type"]) +
+                qsKeys(headers, "waitForIndex");
+            sendJSON(options, body);
             break;
         case "update":
-            url = "/" + encodeURIComponent(headers["ogit/_id"]);
-            options.method = "POST";
-            options.body = JSON.stringify(body);
+            url =
+                "/" +
+                encodeURIComponent(headers["ogit/_id"]) +
+                qsKeys(headers, "waitForIndex");
+            sendJSON(options, body);
             break;
         case "replace":
-            url = "/" + encodeURIComponent(headers["ogit/_id"]);
-            options.method = "PUT";
-            if (headers.createIfNotExists) {
-                url += "?createIfNotExists=" + headers.createIfNotExists
-                    ? "true"
-                    : "false";
-                //not sure where the type needs to go here, maybe the params...
-                url +=
-                    "&ogit%2f_type=" +
-                    encodeURIComponent(headers["ogit/_type"]);
-            }
-            options.body = JSON.stringify(body);
+            const t = headers.createIfNotExists
+                ? headers["ogit/_type"]
+                : undefined;
+            const obj = Object.assign({ "ogit/_type": t }, headers);
+            url =
+                "/" +
+                encodeURIComponent(headers["ogit/_id"]) +
+                qsKeys(obj, "createIfNotExists", "ogit/_type", "waitForIndex");
+            sendJSON(options, body, "PUT");
             break;
         case "delete":
             url = "/" + encodeURIComponent(headers["ogit/_id"]);
@@ -155,16 +156,54 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
             break;
         case "connect":
             url = "/connect/" + encodeURIComponent(headers["ogit/_type"]);
-            options.body = JSON.stringify(body);
-            options.method = "POST";
+            sendJSON(options, body);
             break;
         case "query":
             url = "/query/" + headers.type;
-            options.body = JSON.stringify(body);
-            options.method = "POST";
+            sendJSON(options, body);
+            break;
+        case "streamts":
+            url =
+                "/" +
+                encodeURIComponent(headers["ogit/_id"]) +
+                "/values" +
+                qsKeys(headers, "offset", "limit");
+            break;
+        case "writets":
+            url = "/" + encodeURIComponent(headers["ogit/_id"]) + "/values";
+            sendJSON(options, body);
+            break;
+        case "history":
+            url =
+                "/" +
+                encodeURIComponent(headers["ogit/_id"]) +
+                "/history" +
+                qsKeys(headers, "offset", "limit");
+            break;
+        case "meta":
+            url = "/" + encodeURIComponent(headers["ogit/_id"]) + "/meta";
             break;
         default:
             throw new Error(`[HTTP] Unknown API call: ${type}`);
     }
     return [url, options];
+}
+
+function qsKeys(obj = {}, ...keys) {
+    const qs = keys
+        .map(k => {
+            if (k in obj && obj[k] !== undefined) {
+                return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`;
+            }
+            return false;
+        })
+        .filter(Boolean)
+        .join("&");
+    return qs.length ? "?" + qs : "";
+}
+
+function sendJSON(options, body, method = "POST") {
+    options.method = method;
+    options.body = JSON.stringify(body);
+    return options;
 }
