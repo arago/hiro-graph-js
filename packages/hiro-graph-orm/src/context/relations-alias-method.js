@@ -103,7 +103,7 @@ export function fetchCount(ctx, entity) {
  * @ignore - we don't need docs about this. they are internal exports
  */
 export function getRelationQuery(entity, relation, options = {}) {
-    return relationQueryGenerator(entity, options)(relation)(queryBuilder());
+    return relationQueryGenerator(entity)(relation, options)(queryBuilder());
 }
 
 //creates a relation query and returns it.
@@ -113,7 +113,7 @@ export function getRelationQuery(entity, relation, options = {}) {
 function relationQuery(ctx, entity, finaliser) {
     const getQuery = relationQueryGenerator(entity, { withAlias: "$_alias" });
     return (relations, options = {}) => {
-        const queries = relations.map(getQuery);
+        const queries = relations.map(r => getQuery(r, options));
 
         //now we have an array.
         const gremlin = ctx.gremlin();
@@ -134,8 +134,17 @@ function relationQuery(ctx, entity, finaliser) {
  * @ignore - we don't need docs about this. they are internal exports
  */
 export function relationQueryGenerator(entity, { withAlias = false }) {
-    return relation => {
+    return (relation, { offset = 0, limit = false } = {}) => {
         const { alias, hops } = entity.relation(relation);
+        let limiter = x => x;
+        if (limit !== false) {
+            limiter = g => g.limit(offset, offset + limit);
+        } else if (offset !== 0) {
+            // this is a bit of a hack, there is no offset without limit
+            // but Integer.MAX_VALUE is as big as we are allowed anyway.
+            // Hopefully we won't get that many results!
+            limiter = g => g.limit(offset, "Integer.MAX_VALUE");
+        }
         return gremlin => {
             hops.forEach(({ verb, direction, filter, vertices }) => {
                 const inbound = direction === "in";
@@ -170,6 +179,8 @@ export function relationQueryGenerator(entity, { withAlias = false }) {
                 if (filter) {
                     gremlin.has(filter);
                 }
+
+                limiter(gremlin);
             });
 
             //now we have the vertices, if we were going to add an alias, here it comes.

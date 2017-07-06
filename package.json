@@ -4,7 +4,7 @@
   "devDependencies": {
     "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
     "babel-eslint": "^7.2.3",
-    "eslint": "^4.0.0",
+    "eslint": "^3.19.0",
     "husky": "^0.14.0",
     "lerna": "^2.0.0-rc.5",
     "lint-staged": "^4.0.0",
