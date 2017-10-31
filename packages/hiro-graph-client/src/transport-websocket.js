@@ -101,7 +101,7 @@ export default class WebSocketTransport {
                 //in the server side implementation these are important
                 let refCount = 0;
                 const ref = () => {
-                    if (refCount++ && ws._connection && ws._connection.socket) {
+                    if (++refCount && ws._connection && ws._connection.socket) {
                         ws._connection.socket.ref();
                     }
                 };
@@ -209,6 +209,8 @@ export default class WebSocketTransport {
                         }
                         //This is a single packet response.
                         handle.callback(null, body);
+                        inflight.delete(id);
+                        return; //or we'll double callback and breqak the refs
                     } else if (handle.debug) {
                         console.log("WS: multi packet response:", body);
                     }
@@ -320,8 +322,14 @@ export default class WebSocketTransport {
                                             return connectionClosedBeforeSend;
                                         }
                                         ref();
+                                        let called = false;
                                         const callback = (err, data) => {
+                                            if (called) {
+                                                return;
+                                            }
+                                            called = true;
                                             unref();
+
                                             if (debug) {
                                                 console.log(
                                                     "WS: send callback",
