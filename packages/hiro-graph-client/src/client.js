@@ -382,7 +382,9 @@ export default class Client {
             body.order = "" + order; // this implicitly does array.join(",") for arrays. (and works with strings...)
         }
         if (fields.length > 0) {
-            body.fields = fields.join(",");
+            body.fields = Array.isArray(fields)
+                ? fields.join(",")
+                : String(fields);
         }
         return this.dedupedRequest(
             {
