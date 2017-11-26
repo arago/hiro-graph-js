@@ -1,13 +1,14 @@
 language: node_js
 node_js:
-   - "8"
-
-# https://docs.travis-ci.com/user/languages/javascript-with-nodejs#Node.js-v4-(or-io.js-v3)-compiler-requirements
+- '8'
 env:
-  - CXX=g++-4.8
+- CXX=g++-4.8
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-      - g++-4.8
+    - g++-4.8
+notifications:
+  slack:
+    secure: hZsyfvEh1eb+PBRXy1+fCZy19C05Q9xh3iMtQ5wDZmx3K4km4lIiDGgHf83dhCTlhlH/m8BEvRAPYVc5lhtk8qIIfV3VKD8Wzp2czvmJgQhxD8oL9scUjZ/w2TP6RH+FnLWn3xmAKU6jBQsvyPQ+QYYd+nANgIQJsdfqPohPvL/H35iH9ouamqQu5JvKmj2jZ4eogToG1GfgrsFCiXdI2SZgtTjaxLIn/ZsuiRa+13ong/1CeAmrK7ilnx4OXuym8T0bc200eNvtglSyMTDgorYjb0+KPzGsq2hGGR7q/bVKk+kRxj3NvmQA74W4kTGAtPHMkHF+RdtMuUs+cqmpFnb3dY3JNCeZTx/yzYaWJrRlD8dfOLuD6VaP6Z45rIHhhmhN9FtXxB8ZtWujSOxHTo6jXubJHVe730RdguoSTbVizDyBowCtxhPIq0d6yXBM4UHoKJrUEoSw3R5HfvKn7YpjnLhZdhzE1T167l/7oG1rkkTLPt/LYAK/dCcpi+oR2QnkcY4MfqU/zzZDCITfbXUZs+D9hSQvlME0voXuKj9YOjcQyb5jYgsu7p6rmZa2VLdS6knCqOOjEpWwcWm2pvfaM6WB0GOdiLP1KtixBIBObPxbnm6zyt6X67m76TwEpbJRcAWk707L+9Up3sQ8MmKDV2atkd/djdWOWFXDoTo=
