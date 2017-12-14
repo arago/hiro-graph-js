@@ -7,7 +7,6 @@
  */
 import WebsocketTransport, { webSocketsAvailable } from "./transport-websocket-pool";
 import HttpTransport from "./transport-http";
-//import EventTransport from "./eventstream";
 import {
     isUnauthorized,
     isTransactionFail,
@@ -16,6 +15,7 @@ import {
     connectionClosedBeforeSend
 } from "./errors";
 import { fixedToken } from "./token";
+import EventStream from "./eventstream";
 
 const passthru = fn => [
     r => (fn(), r),
@@ -66,10 +66,6 @@ export default class Client {
             this.transport = this.http;
         }
 
-        // This is where we keep our event streams.
-        // NB EventStream is not implemented yet
-        this.events = [];
-
         // Bind our fetch for extension servlets.
         this.fetch = (...args) => this.http.fetch(this.token, ...args);
 
@@ -79,6 +75,29 @@ export default class Client {
         this._servlets = [];
 
         this.requestListeners = [];
+    }
+
+    // NB this is not held anywhere in this instance, but returned
+    // to the caller. It only connects when it's subscribe() method
+    // is called.
+    eventStream(filters = [], { groupId, offset } = {}) {
+        let filtersArray = filters;
+        if (!Array.isArray(filters)) {
+            filtersArray = [filters];
+        }
+        if (filtersArray.some(f => typeof f !== "string")) {
+            throw new Error(
+                "All filters must be strings representing `jfilter` filters"
+            );
+        }
+        if (filtersArray.length === 0) {
+            // add a default one that catches everything
+            filtersArray.push("(element.ogit/_id = *)");
+        }
+        return new EventStream(
+            { endpoint: this.endpoint, token: this.token },
+            { groupId, offset, filters: filtersArray }
+        );
     }
 
     debugRequests(turnOnDebugging) {

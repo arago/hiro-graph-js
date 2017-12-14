@@ -12,82 +12,62 @@ export default class HttpTransport {
     }
 
     //this is basically window.fetch with a token.get() before it.
-    fetch(token, url, options = {}, reqOptions = {}) {
-        let tokenPromise;
-        const tokenSupplied = "token" in reqOptions;
-        if (!tokenSupplied) {
-            //this is the likely path!
-            tokenPromise = token.get();
-        } else {
-            tokenPromise = Promise.resolve(reqOptions.token);
+    async fetch(token, url, options = {}, reqOptions = {}) {
+        const tok = "token" in reqOptions
+            ? reqOptions.token
+            : await token.get();
+
+        //add to query string or add query string.
+        //if the given url is full (e.g. starts http), don't use our endpoint.
+        //otherwise do.
+        const finalUrl = url.indexOf("http") === 0 ? url : this.endpoint + url;
+        options.headers = {
+            ...(options.headers || {}),
+            Authorization: "Bearer " + tok
+        };
+        const fetchPromise = fetch(finalUrl, options);
+        if (options.raw === true) {
+            return fetchPromise;
         }
-        return tokenPromise.then(tok => {
-            //add to query string or add query string.
-            //if the given url is full (e.g. starts http), don't use our endpoint.
-            //otherwise do.
-            const urlPrefix = url.indexOf("http") === 0 ? "" : this.endpoint;
-            let urlWithToken;
-            if (tok) {
-                const qsSeperator = url.indexOf("?") === -1 ? "?" : "&";
-                urlWithToken = `${urlPrefix}${url}${qsSeperator}_TOKEN=${tok}`;
-            } else {
-                urlWithToken = `${urlPrefix}${url}`;
+        const res = await fetchPromise;
+        let object;
+        if (res.status !== 204) {
+            //we are expecting content
+            try {
+                object = await res.json();
+            } catch (err) {
+                res.status = 502; // pretend bad status from upstream
+                object = {
+                    error: "Invalid JSON in response from GraphIT"
+                };
             }
-            const fetchPromise = fetch(urlWithToken, options);
-            if (options.raw === true) {
-                return fetchPromise;
+        }
+
+        //check for error.
+        if ("error" in object) {
+            let errorMessage = "Unknown GraphIT Error";
+            if (typeof object.error === "string") {
+                errorMessage = object.error;
+            } else if (
+                typeof object.error === "object" &&
+                typeof object.error.message === "string"
+            ) {
+                errorMessage = object.error.message;
             }
-            return fetchPromise
-                .then(res => {
-                    if (res.status === 204) {
-                        //we aren't expecting content
-                        return [204, {}];
-                    }
-                    return res.json().then(
-                        object => {
-                            //we want the status code as well.
-                            return [res.status, object];
-                        },
-                        () => {
-                            //parse error.
-                            return [
-                                500,
-                                {
-                                    error:
-                                        "Invalid JSON in response from GraphIT"
-                                }
-                            ];
-                        }
-                    );
-                })
-                .then(([status, object]) => {
-                    //check for error.
-                    if ("error" in object) {
-                        let errorMessage = "Unknown GraphIT Error";
-                        if (typeof object.error === "string") {
-                            errorMessage = object.error;
-                        } else if (
-                            typeof object.error === "object" &&
-                            typeof object.error.message === "string"
-                        ) {
-                            errorMessage = object.error.message;
-                        }
-                        const error = createError(
-                            status,
-                            "[HTTP] Error: " + errorMessage
-                        );
-                        //the "connection" decides what to do with each error.
-                        throw error;
-                    }
-                    //what to do here, if "items" in object, then we return items, other
-                    //things return plain graphit nodes (which CANNOT have items as a key - they need a slash).
-                    if ("items" in object) {
-                        return object.items;
-                    }
-                    //assume it is the object we want.
-                    return object;
-                });
-        });
+            const error = createError(
+                res.status,
+                "[HTTP] Error: " + errorMessage
+            );
+            //the "connection" decides what to do with each error.
+            throw error;
+        }
+        //what to do here, if "items" in object, then we return items, other
+        //things return plain graphit nodes (which CANNOT have items as a key - they need a slash).
+        if ("items" in object) {
+            return object.items;
+        }
+        //assume it is the object we want.
+        return object;
     }
 
     //request has to translate the base request objects to fetch.
