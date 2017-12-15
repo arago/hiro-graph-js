@@ -16,6 +16,8 @@ import {
 } from "./errors";
 import { fixedToken } from "./token";
 import EventStream from "./eventstream";
+import subscriberFanout from "./subscriber-fanout";
+import timer from "./timer";
 
 const passthru = fn => [
     r => (fn(), r),
@@ -74,7 +76,7 @@ export default class Client {
         //keep this so we can duplicate them
         this._servlets = [];
 
-        this.requestListeners = [];
+        this._pubsub = subscriberFanout();
     }
 
     // NB this is not held anywhere in this instance, but returned
@@ -96,43 +98,17 @@ export default class Client {
         }
         return new EventStream(
             { endpoint: this.endpoint, token: this.token },
-            { groupId, offset, filters: filtersArray }
+            { groupId, offset, filters: filtersArray },
+            this._pubsub.fanout
         );
     }
 
-    debugRequests(turnOnDebugging) {
-        this._debug_requests = turnOnDebugging === true;
-    }
-
-    addOnRequestListener(fn) {
-        if (this.requestListeners.indexOf(fn) === -1) {
-            this.requestListeners.push(fn);
-        }
-        return () => {
-            this.requestListeners.splice(this.requestListeners.indexOf(fn), 1);
-        };
-    }
-
-    removeOnRequestListener(fn) {
-        const idx = this.requestListeners.indexOf(fn);
-        if (idx > -1) {
-            this.requestListeners.splice(idx, 1);
-        }
-    }
-
-    emitOnRequest(payload) {
-        if (this.requestListeners.length) {
-            this.requestListeners.forEach(fn => {
-                try {
-                    fn(payload);
-                } catch (err) {
-                    console.error(
-                        "Error in onRequestListener in HiroGraphClient"
-                    );
-                    console.error(err);
-                }
-            });
-        }
+    /**
+     *  Could be useful for more than just logging, all events emitted
+     *  have { name: "<event name>", data: <any> }
+     */
+    introspect(fn) {
+        return this._pubsub.subscribe(fn);
     }
 
     /**
@@ -161,23 +137,20 @@ export default class Client {
         reqOptions = {},
         retries = 1
     ) {
-        if (typeof this.token.get === "function") {
-            this.token.get().then(token => {
-                this.emitOnRequest({
-                    token,
-                    type,
-                    headers,
-                    body
-                });
-            });
-        }
+        this._pubsub.fanout({
+            name: "client:pre-request",
+            data: { type, headers, body }
+        });
         return this.transport
             .request(
                 this.token,
                 { type, headers, body },
-                Object.assign({ debug: this._debug_requests }, reqOptions)
+                Object.assign({ debug: this._debug_requests }, reqOptions, {
+                    emit: this._pubsub.fanout
+                })
             )
             .catch(err => {
+                this._pubsub.fanout({ name: "client:error", data: err });
                 //these are the special cases.
                 //regular errors end up with code === undefined, so not retryable.
                 switch (true) {
@@ -190,6 +163,10 @@ export default class Client {
                         );
                     case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
                         this.token.invalidate();
+                        this._pubsub.fanout({
+                            name: "client:unauthorized",
+                            data: null
+                        });
                         err.isRetryable = true;
                         break;
                     case isTransactionFail(err): //error persisting transaction. retryable.
@@ -204,6 +181,10 @@ export default class Client {
                 }
                 //a chance to retry
                 if (err.isRetryable && retries > 0) {
+                    this._pubsub.fanout({
+                        name: "client:retry",
+                        data: { type, headers, body }
+                    });
                     return this.request(
                         { type, headers, body },
                         reqOptions,
@@ -220,35 +201,27 @@ export default class Client {
         reqOptions = {},
         retries = 1
     ) {
-        // isDebug is either set in requestion options, or if not, it is inherited from `this`
-        const isDebug = "debug" in reqOptions
-            ? reqOptions.debug
-            : this._debug_requests;
         try {
             const requestKey = JSON.stringify({ type, headers, body });
-            if (isDebug) {
-                console.info(
-                    "deduped request, key:",
-                    requestKey,
-                    "isDupe?",
-                    requestKey in this._dedup
-                );
-            }
+            this._pubsub.fanout({
+                name: "client:deduping",
+                data: {
+                    key: requestKey,
+                    calls: this._dedup[requestKey]
+                        ? this._dedup[requestKey]._calls
+                        : 0
+                }
+            });
             if (requestKey in this._dedup) {
                 this._dedup[requestKey]._calls++;
                 return this._dedup[requestKey].then(dereference);
             }
             const cleanUp = passthru(() => {
-                if (isDebug) {
-                    const calls = this._dedup[requestKey]._calls;
-                    if (calls > 1) {
-                        console.info("Depuped Request (%dx)", calls, {
-                            type,
-                            headers,
-                            body
-                        });
-                    }
-                }
+                const calls = this._dedup[requestKey]._calls;
+                this._pubsub.fanout({
+                    name: "client:deduped",
+                    data: { key: requestKey, calls }
+                });
                 delete this._dedup[requestKey];
             });
             const promise = (this._dedup[requestKey] = this.request(
@@ -261,13 +234,29 @@ export default class Client {
             promise._calls = 1;
             return promise;
         } catch (e) {
-            console.error("dedup error", e.stack);
+            this._pubsub.fanout({
+                name: "client:dedup-error",
+                data: e
+            });
             return Promise.reject(e);
         }
     }
 
     getToken() {
         return this.token;
+    }
+
+    // helper to get debug info...
+    wrapTimedEvent(event, args, promise) {
+        const t = timer();
+        return promise.then(
+            ...passthru(() =>
+                this._pubsub.fanout({
+                    name: "client:" + event,
+                    data: { time: t(), args }
+                })
+            )
+        );
     }
 
     /**
@@ -281,10 +270,14 @@ export default class Client {
      *  Info is an HTTP only endpoint, and an un-authenticated one.
      */
     info(reqOptions = {}) {
-        return this.http.request(
-            null, // no token here
-            { type: "info" },
-            { token: false, ...reqOptions } //no token here
+        return this.wrapTimedEvent(
+            "info",
+            {},
+            this.http.request(
+                null, // no token here
+                { type: "info" },
+                { token: false, ...reqOptions } //no token here
+            )
         );
     }
 
@@ -295,9 +288,13 @@ export default class Client {
         if (id === "_me") {
             return this.me(reqOptions);
         }
-        return this.dedupedRequest(
-            { type: "get", headers: { "ogit/_id": id } },
-            reqOptions
+        return this.wrapTimedEvent(
+            "get",
+            { id },
+            this.dedupedRequest(
+                { type: "get", headers: { "ogit/_id": id } },
+                reqOptions
+            )
         );
     }
 
@@ -305,7 +302,11 @@ export default class Client {
      *  Get the node for the owner of this token
      */
     me(reqOptions = {}) {
-        return this.dedupedRequest({ type: "me" }, reqOptions);
+        return this.wrapTimedEvent(
+            "me",
+            {},
+            this.dedupedRequest({ type: "me" }, reqOptions)
+        );
     }
 
     /**
@@ -316,9 +317,10 @@ export default class Client {
         if (reqOptions.waitForIndex) {
             headers.waitForIndex = "true";
         }
-        return this.request(
-            { type: "create", headers, body: data },
-            reqOptions
+        return this.wrapTimedEvent(
+            "create",
+            { data },
+            this.request({ type: "create", headers, body: data }, reqOptions)
         );
     }
 
@@ -330,9 +332,10 @@ export default class Client {
         if (reqOptions.waitForIndex) {
             headers.waitForIndex = "true";
         }
-        return this.request(
-            { type: "update", headers, body: data },
-            reqOptions
+        return this.wrapTimedEvent(
+            "update",
+            { id, data },
+            this.request({ type: "update", headers, body: data }, reqOptions)
         );
     }
 
@@ -353,9 +356,10 @@ export default class Client {
         if (waitForIndex) {
             headers.waitForIndex = "true";
         }
-        return this.request(
-            { type: "replace", headers, body: data },
-            reqOptions
+        return this.wrapTimedEvent(
+            "replace",
+            { id, data },
+            this.request({ type: "replace", headers, body: data }, reqOptions)
         );
     }
 
@@ -370,7 +374,11 @@ export default class Client {
         if (waitForIndex) {
             headers.waitForIndex = "true";
         }
-        return this.request({ type: "delete", headers }, reqOptions);
+        return this.wrapTimedEvent(
+            "delete",
+            { id },
+            this.request({ type: "delete", headers }, reqOptions)
+        );
     }
 
     /**
@@ -405,24 +413,32 @@ export default class Client {
                 ? fields.join(",")
                 : String(fields);
         }
-        return this.dedupedRequest(
-            {
-                type: "query",
-                headers: { type: "vertices" },
-                body
-            },
-            reqOptions
+        return this.wrapTimedEvent(
+            "lucene",
+            body,
+            this.dedupedRequest(
+                {
+                    type: "query",
+                    headers: { type: "vertices" },
+                    body
+                },
+                reqOptions
+            )
         );
     }
 
     ids(list, reqOptions = {}) {
-        return this.dedupedRequest(
-            {
-                type: "query",
-                headers: { type: "ids" },
-                body: { query: list.join(",") } // yes, it has to be a comma-seperated string
-            },
-            reqOptions
+        return this.wrapTimedEvent(
+            "ids",
+            { ids: list },
+            this.dedupedRequest(
+                {
+                    type: "query",
+                    headers: { type: "ids" },
+                    body: { query: list.join(",") } // yes, it has to be a comma-seperated string
+                },
+                reqOptions
+            )
         );
     }
 
@@ -430,16 +446,17 @@ export default class Client {
      *  This is a gremlin query
      */
     gremlin(root, query, reqOptions = {}) {
-        if (this._debug_requests) {
-            console.log(`GRAPHIT#gremlin(${root}, ${query})`);
-        }
-        return this.dedupedRequest(
-            {
-                type: "query",
-                headers: { type: "gremlin" },
-                body: { root, query }
-            },
-            reqOptions
+        return this.wrapTimedEvent(
+            "gremlin",
+            { root, query: "" + query },
+            this.dedupedRequest(
+                {
+                    type: "query",
+                    headers: { type: "gremlin" },
+                    body: { root, query }
+                },
+                reqOptions
+            )
         );
     }
 
@@ -447,23 +464,27 @@ export default class Client {
      *  Connect two Nodes with an edge of `type`
      */
     connect(type, inId, outId, reqOptions = {}) {
-        return this.request(
-            {
-                type: "connect",
-                headers: { "ogit/_type": type },
-                body: { in: inId, out: outId }
-            },
-            reqOptions
-        ).then(
-            () => {}, //return nothing.
-            err => {
-                //Conflict is OK here, just means that the edge was already connected.
-                if (isConflict(err)) {
-                    return; //return nothing.
+        return this.wrapTimedEvent(
+            "connect",
+            { verb: type, in: inId, out: outId },
+            this.request(
+                {
+                    type: "connect",
+                    headers: { "ogit/_type": type },
+                    body: { in: inId, out: outId }
+                },
+                reqOptions
+            ).then(
+                () => {}, //return nothing.
+                err => {
+                    //Conflict is OK here, just means that the edge was already connected.
+                    if (isConflict(err)) {
+                        return; //return nothing.
+                    }
+                    //real error.
+                    throw err;
                 }
-                //real error.
-                throw err;
-            }
+            )
         );
     }
 
@@ -471,16 +492,20 @@ export default class Client {
      *  Disconnect two nodes, convenience for delete, generates the edge id for you.
      */
     disconnect(type, inId, outId, reqOptions = {}) {
-        return this.delete(`${outId}$$${type}$$${inId}`, reqOptions).then(
-            () => {}, //return nothing.
-            err => {
-                //Not Found or Conflict is OK here, just means that the edge was already deleted/didn't ever exist
-                if (isNotFound(err) || isConflict(err)) {
-                    return; //return nothing.
+        return this.wrapTimedEvent(
+            "disconnect",
+            { verb: type, in: inId, out: outId },
+            this.delete(`${outId}$$${type}$$${inId}`, reqOptions).then(
+                () => {}, //return nothing.
+                err => {
+                    //Not Found or Conflict is OK here, just means that the edge was already deleted/didn't ever exist
+                    if (isNotFound(err) || isConflict(err)) {
+                        return; //return nothing.
+                    }
+                    //real error.
+                    throw err;
                 }
-                //real error.
-                throw err;
-            }
+            )
         );
     }
 
@@ -494,13 +519,17 @@ export default class Client {
         if (!Array.isArray(values)) {
             items = [values];
         }
-        return this.request({
-            type: "writets",
-            headers: {
-                "ogit/_id": timeseriesId
-            },
-            body: { items }
-        });
+        return this.wrapTimedEvent(
+            "writets",
+            { id: timeseriesId, items },
+            this.request({
+                type: "writets",
+                headers: {
+                    "ogit/_id": timeseriesId
+                },
+                body: { items }
+            })
+        );
     }
 
     /**
@@ -516,10 +545,14 @@ export default class Client {
         if (to !== false) {
             headers.to = to;
         }
-        return this.dedupedRequest({
-            type: "streamts",
-            headers
-        });
+        return this.wrapTimedEvent(
+            "streamts",
+            { id: timeseriesId, from, to },
+            this.dedupedRequest({
+                type: "streamts",
+                headers
+            })
+        );
     }
 
     /**
@@ -545,10 +578,14 @@ export default class Client {
         if (limit !== false) {
             headers.limit = limit;
         }
-        return this.dedupedRequest({
-            type: "history",
-            headers: headers
-        });
+        return this.wrapTimedEvent(
+            "history",
+            { id, offset, limit },
+            this.dedupedRequest({
+                type: "history",
+                headers: headers
+            })
+        );
     }
 
     /**
@@ -577,38 +614,42 @@ export default class Client {
         Object.keys(servletMethods).reduce((acc, method) => {
             acc[method] = (...args) => {
                 const call = servletMethods[method];
-                return call(
-                    this.fetch,
-                    this.http.defaultOptions(),
-                    ...args
-                ).catch(err => {
-                    //these are the special cases.
-                    //regular errors end up with code === undefined, so not retryable.
-                    switch (true) {
-                        case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
-                            this.token.invalidate();
-                            err.isRetryable = true;
-                            break;
-                        case isTransactionFail(err): //error persisting transaction. retryable.
-                            err.isRetryable = true;
-                            break;
-                        //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
-                        default:
-                            if ("isRetryable" in err === false) {
-                                err.isRetryable = false;
-                            }
-                            break;
-                    }
-                    //a chance to retry - only once.
-                    if (err.isRetryable) {
-                        return servletMethods[method](
-                            this.fetch,
-                            this.http.defaultOptions(),
-                            ...args
-                        );
-                    }
-                    throw err;
-                });
+                return this.wrapTimedEvent(
+                    "servlet-" + method,
+                    { args },
+                    call(
+                        this.fetch,
+                        this.http.defaultOptions(),
+                        ...args
+                    ).catch(err => {
+                        //these are the special cases.
+                        //regular errors end up with code === undefined, so not retryable.
+                        switch (true) {
+                            case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
+                                this.token.invalidate();
+                                err.isRetryable = true;
+                                break;
+                            case isTransactionFail(err): //error persisting transaction. retryable.
+                                err.isRetryable = true;
+                                break;
+                            //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
+                            default:
+                                if ("isRetryable" in err === false) {
+                                    err.isRetryable = false;
+                                }
+                                break;
+                        }
+                        //a chance to retry - only once.
+                        if (err.isRetryable) {
+                            return servletMethods[method](
+                                this.fetch,
+                                this.http.defaultOptions(),
+                                ...args
+                            );
+                        }
+                        throw err;
+                    })
+                );
             };
             return acc;
         }, this[prefix]);

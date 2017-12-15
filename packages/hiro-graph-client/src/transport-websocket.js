@@ -3,7 +3,8 @@
  */
 import { create as createError, connectionClosedBeforeSend } from "./errors";
 import { w3cwebsocket as WS } from "websocket";
-import dump from "./dump";
+import timer from "./timer";
+const noop = () => {};
 
 export const webSocketsAvailable = WS !== undefined && WS !== null;
 
@@ -31,7 +32,7 @@ export default class WebSocketTransport {
      */
     request(token, { type, headers = {}, body = {} }, reqOptions = {}) {
         //the connect call ensures the websocket is connected before continuing.
-        return this.connect(token).then(client =>
+        return this.connect(token, reqOptions.emit).then(client =>
             client.send(token, { type, headers, body }, reqOptions)
         );
     }
@@ -39,9 +40,9 @@ export default class WebSocketTransport {
     /**
      *  Return a promise for the connected websocket.
      */
-    connect(token) {
+    connect(token, emit = noop) {
         if (!this.__connectionPromise) {
-            this.__connectionPromise = this.createWebSocket(token);
+            this.__connectionPromise = this.createWebSocket(token, emit);
         }
         return this.__connectionPromise;
     }
@@ -49,13 +50,15 @@ export default class WebSocketTransport {
     /**
      *  Creates a WebSocket connection, with the initial token.
      */
-    async createWebSocket(initialToken) {
+    async createWebSocket(initialToken, emit) {
         if (!initialToken) {
             throw new Error("createWebSocket received no initial token!");
         }
         //we do all this in a promise, so the result is shared between
         //all requests that come in during connection.
+        const t = timer({ laps: false }); // always since beginning timer
         const initialTok = await initialToken.get();
+        emit({ name: "token:get", data: { token: initialTok, time: t() } });
         return new Promise((resolve, reject) => {
             //always try for the newer protocol. The older one is forwards compatible so
             //we don't really care if we get the old one.
@@ -86,6 +89,7 @@ export default class WebSocketTransport {
             const ref = () => {
                 if (++refCount && ws._connection && ws._connection.socket) {
                     ws._connection.socket.ref();
+                    emit({ name: "ws:ref", data: refCount });
                 }
             };
             const unref = () => {
@@ -95,11 +99,13 @@ export default class WebSocketTransport {
                     ws._connection.socket
                 ) {
                     ws._connection.socket.unref();
+                    emit({ name: "ws:unref", data: null });
                 }
             };
 
             //when the connection closes we need to tidy up.
             ws.onclose = () => {
+                emit({ name: "ws:close", data: t() }); // give how long it was open as data
                 //most importantly, remove this promise. so a new one can be created.
                 this.__connectionPromise = null;
 
@@ -114,6 +120,7 @@ export default class WebSocketTransport {
                 if (!hasResolved) {
                     hasResolved = true;
                     initialToken.invalidate();
+                    emit({ name: "ws:invalidate", data: null });
                     reject(error);
                 }
             };
@@ -121,7 +128,7 @@ export default class WebSocketTransport {
             //on connection error, we almost certainly close after this anyway, so just
             //log the error
             ws.onerror = err => {
-                console.error("[REST] WebSocket Connection Error", err);
+                emit({ name: "ws:error", data: err });
             };
 
             //how to handle inbound messages, find the inflight it matches and return
@@ -129,7 +136,7 @@ export default class WebSocketTransport {
                 //we can only handle string messages
                 if (typeof msg.data !== "string") {
                     //we don't handle messages like this.
-                    console.warn("[REST] unknown websocket message type", msg);
+                    emit({ name: "ws:bad-message", data: msg.data });
                     return;
                 }
                 //try and parse as JSON
@@ -137,27 +144,22 @@ export default class WebSocketTransport {
                 try {
                     object = JSON.parse(msg.data);
                 } catch (e) {
-                    console.warn(
-                        "[REST] invalid JSON in websocket message",
-                        msg.data
-                    );
+                    emit({ name: "ws:bad-message", data: msg.data });
                     return;
                 }
                 //ok, we should now have an ID we can use.
                 const id = object.id;
                 const handle = inflight.get(id);
                 if (!handle) {
-                    console.warn("[REST] unknown ID in websocket response", id);
+                    emit({ name: "ws:unknown", data: id });
                     return;
-                }
-                if (handle.debug) {
-                    console.log("WS: onmessage for request", dump(object));
                 }
                 // check for error response.
                 if (object.error) {
-                    if (handle.debug) {
-                        console.log("WS: onmessage reports error, cleaning up");
-                    }
+                    emit({
+                        name: "ws:message-error",
+                        data: { id, error: object.error }
+                    });
                     //remove object from inflight immediately.
                     inflight.delete(id);
 
@@ -175,15 +177,11 @@ export default class WebSocketTransport {
                     : object.body;
 
                 if (!object.multi) {
-                    if (handle.debug) {
-                        console.log("WS: single packet response", dump(body));
-                    }
+                    emit({ name: "ws:single", data: { id } });
                     //This is a single packet response.
                     handle.callback(null, body);
                     inflight.delete(id);
                     return; //or we'll double callback and breqak the refs
-                } else if (handle.debug) {
-                    console.log("WS: multi packet response:", body);
                 }
 
                 //if this is a partial, add data to the inflight request.
@@ -195,33 +193,36 @@ export default class WebSocketTransport {
                 // NB, all real response bodies are `truthy` (even empty array and empty object)
                 // so if this is `falsy` then we didn't get a result. In the new protocol, that
                 // happens in a "multi" response when there where no hits.
-                // NOP. we can have gremlin/count results with a single numeric/string value
+                // NOPE! we can have gremlin/count results with a single numeric/string value
                 // so we check those too
                 if (body || body === 0 || body === "") {
-                    if (handle.debug) {
-                        console.log("WS: batching up results:", body);
-                    }
                     handle.result.push(body);
                 }
 
                 if (object.more === true) {
-                    if (handle.debug) {
-                        console.log("WS: more results expected");
-                    }
+                    emit({
+                        name: "ws:more",
+                        data: { id, count: handle.result.length }
+                    });
                     return;
-                }
-                if (handle.debug) {
-                    console.log("WS: req finished, clean up and return");
                 }
                 //final response
                 //remove object from inflight immediately.
                 inflight.delete(id);
                 //ok, we should have an array in handle.result
+                emit({
+                    name: "ws:multi",
+                    data: { id, count: handle.result.length }
+                });
                 handle.callback(null, handle.result);
             };
 
             //now the socket is opened we can resolve our promise with a client API
             ws.onopen = () => {
+                emit({
+                    name: "ws:open",
+                    data: { time: t(), protocol: ws.protocol }
+                });
                 this.protocol = ws.protocol;
                 if (
                     !this.useLegacyProtocol &&
@@ -251,22 +252,17 @@ export default class WebSocketTransport {
                     }
                     //now mark this as resolving so we don't invalidate our token accidentally.
                     hasResolved = true;
+                    emit({ name: "ws:connected", data: { time: t() } });
                     resolve({
                         //this is how we initiate a send and create the callback.
-                        send: (
-                            token,
-                            { type, headers, body },
-                            { debug = false } = {}
-                        ) => {
-                            if (debug) {
-                                console.log("WS: fetch token", {
-                                    type,
-                                    headers,
-                                    body
-                                });
-                            }
+                        send: (token, { type, headers, body }) => {
                             //first we get the new Token.
+                            const reqtimer = timer();
                             return token.get().then(tok => {
+                                emit({
+                                    name: "token:get",
+                                    data: { token: tok, time: reqtimer() }
+                                });
                                 const id = nextId();
                                 const payload = JSON.stringify({
                                     _TOKEN: tok,
@@ -275,18 +271,14 @@ export default class WebSocketTransport {
                                     headers,
                                     body
                                 });
-                                if (debug) {
-                                    console.log("WS: got token", dump(payload));
-                                }
                                 return new Promise((_resolve, _reject) => {
                                     if (ws.readyState !== WS.OPEN) {
                                         //we may have closed whilst waiting for the token.
                                         //always retry.
-                                        if (debug) {
-                                            console.log(
-                                                "WS: connection closed before send called"
-                                            );
-                                        }
+                                        emit({
+                                            name: "ws:close-before-send",
+                                            data: null
+                                        });
                                         return connectionClosedBeforeSend;
                                     }
                                     ref();
@@ -297,25 +289,25 @@ export default class WebSocketTransport {
                                         }
                                         called = true;
                                         unref();
-
-                                        if (debug) {
-                                            console.log(
-                                                "WS: send callback",
-                                                err,
-                                                data
-                                            );
-                                        }
+                                        emit({
+                                            name: "ws:complete",
+                                            data: {
+                                                ok: Boolean(err),
+                                                time: reqtimer(),
+                                                data: err ? err : data
+                                            }
+                                        });
                                         return err
                                             ? _reject(err)
                                             : _resolve(data);
                                     };
 
                                     //create a callback for the inflight requests.
-                                    inflight.set(id, {
-                                        callback,
-                                        debug
+                                    inflight.set(id, { callback });
+                                    emit({
+                                        name: "ws:send",
+                                        data: { payload, time: reqtimer() }
                                     });
-
                                     //now send the request.
                                     ws.send(payload);
                                 });

@@ -16,6 +16,9 @@ describe("transport-http", () => {
         { forceHTTP: true }
     );
 
+    // uncomment the next line to get a lot of debug output...
+    //client.introspect(event => console.log(event));
+
     const tests = clientTestHelper(client);
 
     beforeEach(() => mockFn.mockReset());

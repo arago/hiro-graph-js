@@ -6,6 +6,9 @@
 import fetch from "isomorphic-fetch";
 import { create as createError } from "./errors";
 
+import timer from "./timer";
+const noop = () => {};
+
 export default class HttpTransport {
     constructor(endpoint) {
         this.endpoint = endpoint.replace(/\/$/, ""); //remove trailing slash.
@@ -13,10 +16,11 @@ export default class HttpTransport {
 
     //this is basically window.fetch with a token.get() before it.
     async fetch(token, url, options = {}, reqOptions = {}) {
+        const emit = reqOptions.emit || noop;
         const tok = "token" in reqOptions
             ? reqOptions.token
             : await token.get();
-
+        emit({ name: "token", data: tok });
         //add to query string or add query string.
         //if the given url is full (e.g. starts http), don't use our endpoint.
         //otherwise do.
@@ -25,11 +29,16 @@ export default class HttpTransport {
             ...(options.headers || {}),
             Authorization: "Bearer " + tok
         };
+        const t = timer();
         const fetchPromise = fetch(finalUrl, options);
         if (options.raw === true) {
             return fetchPromise;
         }
         const res = await fetchPromise;
+        emit({
+            name: "http:fetch-header",
+            data: { status: res.status, time: t() }
+        });
         let object;
         if (res.status !== 204) {
             //we are expecting content
@@ -42,7 +51,10 @@ export default class HttpTransport {
                 };
             }
         }
-
+        emit({
+            name: "http:fetch-body",
+            data: { time: t(), body: object }
+        });
         //check for error.
         if ("error" in object) {
             let errorMessage = "Unknown GraphIT Error";

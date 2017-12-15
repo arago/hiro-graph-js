@@ -11,6 +11,8 @@ import { w3cwebsocket as WebSocket } from "websocket";
 import { ensureWebSocketsAvailable } from "./transport-websocket";
 import { channel } from "./subscriber-fanout";
 import qs from "querystring";
+import timer from "./timer";
+const noop = () => {};
 
 const RECONNECT_TIMEOUT = 5e3;
 
@@ -20,7 +22,8 @@ export default class EventStream {
 
     constructor(
         { endpoint, token },
-        { groupId, offset = EventStream.OFFSET_NEWEST_MSG, filters = [] } = {}
+        { groupId, offset = EventStream.OFFSET_NEWEST_MSG, filters = [] } = {},
+        emit = noop // this function is used to hook into all internal events.
     ) {
         ensureWebSocketsAvailable();
         this._token = token;
@@ -50,25 +53,47 @@ export default class EventStream {
             // we only need the client here.
             let socket, reconnectTimeout;
             let shouldShutdown = false;
+            let reconnects = 0; // start at -1 and the first connect
+            const t = timer({ laps: false });
+            emit({
+                name: "es:power-up",
+                data: { filters, groupId, offset }
+            });
             const shutdown = () => {
+                emit({
+                    name: "es:power-down",
+                    data: t()
+                });
                 clearTimeout(reconnectTimeout);
                 shouldShutdown = true;
                 if (socket) {
+                    emit({
+                        name: "es:closing",
+                        data: { time: t(), reconnects }
+                    });
                     socket.close();
                 }
                 socket = null;
             };
             const reconnect = () =>
-                (reconnectTimeout = setTimeout(connect, RECONNECT_TIMEOUT));
+                (reconnectTimeout = setTimeout(
+                    connect(true),
+                    RECONNECT_TIMEOUT
+                ));
 
             // this is the loop that gets the connection and uses it, reconnecting
             // until it's told to shutdown.
-            const connect = async () => {
+            const connect = async (isReconnect = false) => {
                 if (shouldShutdown) {
                     return;
                 }
                 try {
+                    const conntime = timer();
                     const initialToken = await this._token.get();
+                    emit({
+                        name: "token:get",
+                        data: { time: conntime(), token: initialToken }
+                    });
                     if (shouldShutdown) {
                         return;
                     }
@@ -79,9 +104,18 @@ export default class EventStream {
                             if (!shouldShutdown) {
                                 reconnect();
                             }
-                        }
+                        },
+                        emit
                     );
+                    if (isReconnect) {
+                        reconnects++;
+                    }
+                    emit({
+                        name: "es:connect",
+                        data: { time: conntime(), reconnects }
+                    });
                 } catch (e) {
+                    emit({ name: "es:error", data: e });
                     reconnect();
                 }
             };
@@ -96,10 +130,15 @@ export default class EventStream {
      *  Creates a WebSocket connection, with the initial token.
      *
      *  Similiar logic to the websocket-transport
+     *
+     * confusingly, "fanout" is to fanout events from the eventstream
+     * and "emit" is the pubsub emitter passes to all hiro-graph-client components for
+     * introspection
      */
-    __createWebSocket(intialToken, emit, onClose) {
+    __createWebSocket(intialToken, fanout, onClose, emit) {
         //we do all this in a promise, so the result is shared between
         //all requests that come in during connection.
+        const t = timer();
         return new Promise((resolve, reject) => {
             const ws = new WebSocket(this._endpoint + intialToken);
 
@@ -108,11 +147,13 @@ export default class EventStream {
 
             //when the connection closes we need to tidy up.
             ws.onclose = () => {
+                emit({ name: "es:sock-close", data: t() });
                 //if we haven't resolved yet, then this is an *immediate* close by GraphIT.
                 //therefore we probably have an invalid token, and we should definitely reject.
                 if (!hasResolved) {
                     hasResolved = true;
                     this._token.invalidate();
+                    emit({ name: "es:invalidate", data: null });
                     reject();
                 } else {
                     onClose();
@@ -122,7 +163,7 @@ export default class EventStream {
             //on connection error, we almost certainly close after this anyway, so just
             //log the error
             ws.onerror = err => {
-                console.error("[EVT] WebSocket Connection Error", err);
+                emit({ name: "es:sock-error", data: err });
             };
 
             //how to handle inbound messages, find the inflight it matches and return
@@ -130,7 +171,7 @@ export default class EventStream {
                 //we can only handle string messages
                 if (typeof msg.data !== "string") {
                     //we don't handle messages like this.
-                    console.warn("[EVT] unknown websocket message type", msg);
+                    emit({ name: "es:bad-message", data: msg.data });
                     return;
                 }
                 //try and parse as JSON
@@ -138,12 +179,10 @@ export default class EventStream {
                 try {
                     object = JSON.parse(msg.data);
                 } catch (e) {
-                    console.warn(
-                        "[EVT] invalid JSON in websocket message",
-                        msg.data
-                    );
+                    emit({ name: "es:bad-message", data: msg.data });
                     return;
                 }
+                emit({ name: "es:message", data: object });
                 //this event should have properties:
                 //
                 //  id: the id of the object entity (who it was done to)
@@ -152,11 +191,15 @@ export default class EventStream {
                 //  timestamp: hammertime (milliseconds since unix epoch)
                 //  nanotime: ??? (does not appear to be nanoseconds since unix epoch)
                 //  body: the full content of the object entity
-                emit(object);
+                fanout(object);
             };
 
             //now the socket is opened we can resolve our promise with a client API
             ws.onopen = () => {
+                emit({
+                    name: "es:sock-open",
+                    data: { time: t(), protocol: ws.protocol }
+                });
                 //actually if we send a bad token, we need to wait for a moment before resolving.
                 //otherwise, the connection will shut straightaway.
                 //testing shows this usually takes about 10ms, but the largest time I saw was

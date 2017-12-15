@@ -16,6 +16,9 @@ describe("Client Requests", () => {
         client.resetMockTransport();
     });
 
+    // uncomment the next line to enable debug logging
+    //client.introspect(evt => console.log(evt));
+
     tests.forEach(({ name, fn }) => {
         it(`should call ${name} correctly`, async () => {
             client.enqueueMockResponse({});
