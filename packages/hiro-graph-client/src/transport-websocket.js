@@ -230,7 +230,9 @@ export default class WebSocketTransport {
                 ) {
                     throw Object.assign(
                         new Error(
-                            `Expecting Graph API SubProtocol: '${GRAPH_API_PROTOCOL}', got: '${ws.protocol}'`
+                            `Expecting Graph API SubProtocol: '${GRAPH_API_PROTOCOL}', got: '${
+                                ws.protocol
+                            }'`
                         ),
                         {
                             protocolError: {

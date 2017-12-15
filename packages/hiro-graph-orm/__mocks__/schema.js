@@ -67,11 +67,13 @@ mockSchema.define({
 mockSchema.define({
     name: "ForExtremeQueryTest",
     ogit: "ogit/Extreme",
-    required: Array(14).fill("").reduce((result, _, i) => {
-        const key = "key" + (i + 1);
-        result[key] = "/" + key;
-        return result;
-    }, {})
+    required: Array(14)
+        .fill("")
+        .reduce((result, _, i) => {
+            const key = "key" + (i + 1);
+            result[key] = "/" + key;
+            return result;
+        }, {})
 });
 
 export default mockSchema;

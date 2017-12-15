@@ -114,9 +114,11 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
                     error => {
                         if (isUnknown(error)) {
                             console.error(
-                                `Error in ORM ${taskKey
-                                    ? "Task (" + taskKey + ")"
-                                    : "Action"} Handler`
+                                `Error in ORM ${
+                                    taskKey
+                                        ? "Task (" + taskKey + ")"
+                                        : "Action"
+                                } Handler`
                             );
                             console.error(error.stack);
                         }
@@ -137,9 +139,10 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
                 //NB the `key` here has to be the real key. You would need to know the args if a function is
                 //used to generate your task key.
                 if (task && taskToPromise.has(task)) {
-                    const error = reason instanceof Error
-                        ? reason
-                        : new Error("" + reason);
+                    const error =
+                        reason instanceof Error
+                            ? reason
+                            : new Error("" + reason);
                     return taskToPromise.get(task).cancel(error);
                 }
                 return next(action);

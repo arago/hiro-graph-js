@@ -77,12 +77,10 @@ const disabledFeatures = [
     .join(",");
 
 const createPopup = (url, popWidth, popHeight) => {
-    const dualScreenLeft = window.screenLeft !== undefined
-        ? window.screenLeft
-        : screen.left;
-    const dualScreenTop = window.screenTop !== undefined
-        ? window.screenTop
-        : screen.top;
+    const dualScreenLeft =
+        window.screenLeft !== undefined ? window.screenLeft : screen.left;
+    const dualScreenTop =
+        window.screenTop !== undefined ? window.screenTop : screen.top;
     const winWidth = window.innerWidth //eslint-disable-line no-nested-ternary
         ? window.innerWidth
         : document.documentElement.clientWidth

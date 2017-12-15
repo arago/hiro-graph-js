@@ -5,7 +5,9 @@
  *  Event streams require WebSockets so those will not work witout websocket support.
  *  The connection requires a `Token`.
  */
-import WebsocketTransport, { webSocketsAvailable } from "./transport-websocket-pool";
+import WebsocketTransport, {
+    webSocketsAvailable
+} from "./transport-websocket-pool";
 import HttpTransport from "./transport-http";
 import {
     isUnauthorized,
@@ -617,38 +619,36 @@ export default class Client {
                 return this.wrapTimedEvent(
                     "servlet-" + method,
                     { args },
-                    call(
-                        this.fetch,
-                        this.http.defaultOptions(),
-                        ...args
-                    ).catch(err => {
-                        //these are the special cases.
-                        //regular errors end up with code === undefined, so not retryable.
-                        switch (true) {
-                            case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
-                                this.token.invalidate();
-                                err.isRetryable = true;
-                                break;
-                            case isTransactionFail(err): //error persisting transaction. retryable.
-                                err.isRetryable = true;
-                                break;
-                            //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
-                            default:
-                                if ("isRetryable" in err === false) {
-                                    err.isRetryable = false;
-                                }
-                                break;
+                    call(this.fetch, this.http.defaultOptions(), ...args).catch(
+                        err => {
+                            //these are the special cases.
+                            //regular errors end up with code === undefined, so not retryable.
+                            switch (true) {
+                                case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
+                                    this.token.invalidate();
+                                    err.isRetryable = true;
+                                    break;
+                                case isTransactionFail(err): //error persisting transaction. retryable.
+                                    err.isRetryable = true;
+                                    break;
+                                //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
+                                default:
+                                    if ("isRetryable" in err === false) {
+                                        err.isRetryable = false;
+                                    }
+                                    break;
+                            }
+                            //a chance to retry - only once.
+                            if (err.isRetryable) {
+                                return servletMethods[method](
+                                    this.fetch,
+                                    this.http.defaultOptions(),
+                                    ...args
+                                );
+                            }
+                            throw err;
                         }
-                        //a chance to retry - only once.
-                        if (err.isRetryable) {
-                            return servletMethods[method](
-                                this.fetch,
-                                this.http.defaultOptions(),
-                                ...args
-                            );
-                        }
-                        throw err;
-                    })
+                    )
                 );
             };
             return acc;

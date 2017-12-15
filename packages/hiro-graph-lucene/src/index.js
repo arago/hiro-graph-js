@@ -216,11 +216,10 @@ const mapOperator = (context, op, values) => {
     const currentOp = context.op;
     //we need to change the the op to MUST if they requested CAN but there is only one option.
     //So we need to recurse and count
-    const nextOp = values.length === 1 &&
-        values[0].values.length === 1 &&
-        op === OP_CAN
-        ? OP_MUST
-        : op;
+    const nextOp =
+        values.length === 1 && values[0].values.length === 1 && op === OP_CAN
+            ? OP_MUST
+            : op;
     //set the inner context's op
     context.op = nextOp;
     const segment = `${currentOp}(${createQuerySegment(context, values)})`;
@@ -379,9 +378,9 @@ function luceneSearch(context, field, term, { ngram = false } = {}) {
         slashString(finalTerm)
     );
 
-    return `${context.op}${slashForward(prop.src)}${ngram
-        ? ".ngram"
-        : ""}:${placeholder}`;
+    return `${context.op}${slashForward(prop.src)}${
+        ngram ? ".ngram" : ""
+    }:${placeholder}`;
 }
 
 //lucene is not good at prefixes when spaces are encountered.

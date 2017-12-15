@@ -43,7 +43,9 @@ export default function createEntity(definition, schema) {
     const firstLetter = definition.name ? definition.name[0] : "x";
     if (!definition[$internal] && firstLetter !== firstLetter.toUpperCase()) {
         throw new Error(
-            `entity defition name must start with a Capital letter (${definition.name})`
+            `entity defition name must start with a Capital letter (${
+                definition.name
+            })`
         );
     }
     const props = createPropList(
@@ -231,7 +233,9 @@ const ensureFullProps = (name, base) => ([key, def]) => {
         const p = restrictedPropsMap[result.src];
         throw new Error(
             `Trying to redefine an internal property as '${result.dst}'. ` +
-                `The property '${p.src}' will already be available as '${p.dst}'. ` +
+                `The property '${p.src}' will already be available as '${
+                    p.dst
+                }'. ` +
                 `Check the schema mapping for entity '${name}'.`
         );
     }
@@ -294,10 +298,9 @@ const createPropList = (
             problems.map(
                 defs =>
                     "\n" +
-                    `OGIT property '${defs[0]
-                        .src}' is mapped by ${defs.length} definitions (${defs
-                        .map(d => d.dst)
-                        .join(", ")})`
+                    `OGIT property '${defs[0].src}' is mapped by ${
+                        defs.length
+                    } definitions (${defs.map(d => d.dst).join(", ")})`
             );
         throw new Error(message);
     }

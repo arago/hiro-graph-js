@@ -17,9 +17,8 @@ export default class HttpTransport {
     //this is basically window.fetch with a token.get() before it.
     async fetch(token, url, options = {}, reqOptions = {}) {
         const emit = reqOptions.emit || noop;
-        const tok = "token" in reqOptions
-            ? reqOptions.token
-            : await token.get();
+        const tok =
+            "token" in reqOptions ? reqOptions.token : await token.get();
         emit({ name: "token", data: tok });
         //add to query string or add query string.
         //if the given url is full (e.g. starts http), don't use our endpoint.
