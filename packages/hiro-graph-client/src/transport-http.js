@@ -19,7 +19,7 @@ export default class HttpTransport {
         const emit = reqOptions.emit || noop;
         const tok =
             "token" in reqOptions ? reqOptions.token : await token.get();
-        emit({ name: "token", data: tok });
+        emit({ name: "token:get", data: tok });
         //add to query string or add query string.
         //if the given url is full (e.g. starts http), don't use our endpoint.
         //otherwise do.
