@@ -182,9 +182,10 @@ export function findById(ctx, entity, query, options = {}) {
                               : identity
                       );
 
-        const fetched = toFetch.length === 0
-            ? Promise.resolve([])
-            : finalise(ctx.getClient().ids(toFetch, options));
+        const fetched =
+            toFetch.length === 0
+                ? Promise.resolve([])
+                : finalise(ctx.getClient().ids(toFetch, options));
 
         return fetched.then(vertices => cached.concat(vertices));
     }
@@ -276,9 +277,8 @@ export function connect(
         );
     }
     const { verb, direction } = relationDef.hops[0];
-    const [inId, outId] = direction === "in"
-        ? [source, target]
-        : [target, source];
+    const [inId, outId] =
+        direction === "in" ? [source, target] : [target, source];
     return ctx.getClient().connect(verb, inId, outId, options);
 }
 
@@ -297,13 +297,14 @@ export function disconnect(
     }
     if (relationDef.hops.length > 1) {
         throw badRequest(
-            `Cannot "disconnect" multi-hop relation ${relation} for ${entity.name}`
+            `Cannot "disconnect" multi-hop relation ${relation} for ${
+                entity.name
+            }`
         );
     }
     const { verb, direction } = relationDef.hops[0];
-    const [inId, outId] = direction === "in"
-        ? [source, target]
-        : [target, source];
+    const [inId, outId] =
+        direction === "in" ? [source, target] : [target, source];
     return ctx.getClient().disconnect(verb, inId, outId, options);
 }
 

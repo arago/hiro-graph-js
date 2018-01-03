@@ -24,12 +24,12 @@
  */
 
 /**
-  *  A possible branch definition for a Gremlin function
-  *
-  *  Used in `transform`, `copySplit`, etc...
-  *
-  *  It is either a static string, or a function which is provided a gremlin pipeline
-  *  which the function should act on.
-  *
-  *  @typedef {string|function(pipe: GremlinQueryBuilder)} GremlinBranch
-  */
+ *  A possible branch definition for a Gremlin function
+ *
+ *  Used in `transform`, `copySplit`, etc...
+ *
+ *  It is either a static string, or a function which is provided a gremlin pipeline
+ *  which the function should act on.
+ *
+ *  @typedef {string|function(pipe: GremlinQueryBuilder)} GremlinBranch
+ */

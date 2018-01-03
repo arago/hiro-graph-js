@@ -6,7 +6,7 @@
     "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",
     "husky": "^0.14.0",
-    "lerna": "^2.0.0-rc.5",
+    "lerna": "^2.5.1",
     "lint-staged": "^4.0.0",
     "prettier": "^1.4.4"
   },

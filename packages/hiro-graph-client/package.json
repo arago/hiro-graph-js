@@ -14,7 +14,7 @@
     "license": "MIT",
     "dependencies": {
         "isomorphic-fetch": "^2.2.1",
-        "websocket": "^1.0.24"
+        "websocket": "^1.0.25"
     },
     "devDependencies": {
         "babel-cli": "^6.6.5",

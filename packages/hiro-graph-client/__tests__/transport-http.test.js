@@ -16,6 +16,9 @@ describe("transport-http", () => {
         { forceHTTP: true }
     );
 
+    // uncomment the next line to get a lot of debug output...
+    //client.introspect(event => console.log(event));
+
     const tests = clientTestHelper(client);
 
     beforeEach(() => mockFn.mockReset());
@@ -37,9 +40,8 @@ describe("transport-http", () => {
             [403, { error: { code: 403, message: "forbidden" } }],
             [404, { error: { code: 404, message: "not found" } }]
         ];
-        await bad.reduce(async (previous, args) => {
-            await previous;
-            mockFn.mockReturnValueOnce(args);
+        for (let i = 0; i < bad.length; i++) {
+            mockFn.mockReturnValueOnce(bad[i]);
             let error;
             try {
                 await client.me();
@@ -48,6 +50,6 @@ describe("transport-http", () => {
             }
             expect(error).toBeDefined();
             expect(error).toMatchSnapshot();
-        }, Promise.resolve());
+        }
     });
 });

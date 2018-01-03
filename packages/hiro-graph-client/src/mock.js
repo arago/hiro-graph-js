@@ -9,12 +9,7 @@ export class MockTransport {
         // each request simply shifts off a response.
         this._responses = [];
         this._requests = [];
-        this._debug = false;
         this.errors = errors; // for simplicity you don't need to import them all in consuming code
-    }
-
-    debugMockRequests(shouldDebug = true) {
-        this._debug = shouldDebug;
     }
 
     // enqueues responses from the graph
@@ -58,13 +53,6 @@ Please add a mock response for it to return.`);
         }
         const req = { type, headers, body, options };
         const res = this._responses.shift();
-        if (this._debug === true) {
-            console.log(`MockTransport.request
-Request: ${JSON.stringify(req, null, 2)}
-
-Response: ${JSON.stringify(res, null, 2)}
-`);
-        }
         // otherwise use the first in the stack
         // store the requests for introspection
         this._requests.push(req);

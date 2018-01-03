@@ -6,6 +6,9 @@
 import fetch from "isomorphic-fetch";
 import { create as createError } from "./errors";
 
+import timer from "./timer";
+const noop = () => {};
+
 export default class HttpTransport {
     constructor(endpoint) {
         this.endpoint = endpoint.replace(/\/$/, ""); //remove trailing slash.
@@ -13,54 +16,47 @@ export default class HttpTransport {
 
     //this is basically window.fetch with a token.get() before it.
     fetch(token, url, options = {}, reqOptions = {}) {
-        let tokenPromise;
-        const tokenSupplied = "token" in reqOptions;
-        if (!tokenSupplied) {
-            //this is the likely path!
-            tokenPromise = token.get();
-        } else {
-            tokenPromise = Promise.resolve(reqOptions.token);
-        }
-        return tokenPromise.then(tok => {
+        const emit = reqOptions.emit || noop;
+        const tp =
+            "token" in reqOptions
+                ? Promise.resolve(reqOptions.token)
+                : token.get();
+        return tp.then(tok => {
+            emit({ name: "token:get", data: tok });
             //add to query string or add query string.
             //if the given url is full (e.g. starts http), don't use our endpoint.
             //otherwise do.
-            const urlPrefix = url.indexOf("http") === 0 ? "" : this.endpoint;
-            let urlWithToken;
-            if (tok) {
-                const qsSeperator = url.indexOf("?") === -1 ? "?" : "&";
-                urlWithToken = `${urlPrefix}${url}${qsSeperator}_TOKEN=${tok}`;
-            } else {
-                urlWithToken = `${urlPrefix}${url}`;
-            }
-            const fetchPromise = fetch(urlWithToken, options);
+            const finalUrl =
+                url.indexOf("http") === 0 ? url : this.endpoint + url;
+            options.headers = {
+                ...(options.headers || {}),
+                Authorization: "Bearer " + tok
+            };
+            const t = timer();
+            const fetchPromise = fetch(finalUrl, options);
             if (options.raw === true) {
                 return fetchPromise;
             }
-            return fetchPromise
-                .then(res => {
-                    if (res.status === 204) {
-                        //we aren't expecting content
-                        return [204, {}];
-                    }
-                    return res.json().then(
-                        object => {
-                            //we want the status code as well.
-                            return [res.status, object];
-                        },
-                        () => {
-                            //parse error.
-                            return [
-                                500,
-                                {
-                                    error:
-                                        "Invalid JSON in response from GraphIT"
-                                }
-                            ];
-                        }
-                    );
-                })
-                .then(([status, object]) => {
+            return fetchPromise.then(res => {
+                emit({
+                    name: "http:fetch-header",
+                    data: { status: res.status, time: t() }
+                });
+                let op = Promise.resolve();
+                if (res.status !== 204) {
+                    //we are expecting content as json
+                    op = res.json().catch(() => {
+                        res.status = 502; // pretend bad status from upstream
+                        return {
+                            error: "Invalid JSON in response from GraphIT"
+                        };
+                    });
+                }
+                return op.then(object => {
+                    emit({
+                        name: "http:fetch-body",
+                        data: { time: t(), body: object }
+                    });
                     //check for error.
                     if ("error" in object) {
                         let errorMessage = "Unknown GraphIT Error";
@@ -73,7 +69,7 @@ export default class HttpTransport {
                             errorMessage = object.error.message;
                         }
                         const error = createError(
-                            status,
+                            res.status,
                             "[HTTP] Error: " + errorMessage
                         );
                         //the "connection" decides what to do with each error.
@@ -87,6 +83,7 @@ export default class HttpTransport {
                     //assume it is the object we want.
                     return object;
                 });
+            });
         });
     }
 

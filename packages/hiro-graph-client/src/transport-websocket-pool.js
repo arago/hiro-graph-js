@@ -19,10 +19,17 @@ export default class PooledWebsocketTransport {
             () => new WebsocketTransport(endpoint, wsOptions)
         );
         let lastConnectionIndex = 0;
-        this.request = (...args) => {
+        this.request = (token, data, options = {}) => {
             const index = lastConnectionIndex;
             lastConnectionIndex = (lastConnectionIndex + 1) % poolSize;
-            return pool[index].request(...args);
+            if (options.emit) {
+                options.emit({
+                    name: "pool:select",
+                    size: poolSize,
+                    index: index
+                });
+            }
+            return pool[index].request(token, data, options);
         };
     }
 }

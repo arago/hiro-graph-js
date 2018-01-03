@@ -10,7 +10,6 @@ const ctx = new Context(client, schema, cache);
 const reset = () => {
     cache.clear();
     client.resetMockTransport();
-    client.debugMockRequests(false);
 };
 
 const simpleTestNodeGenerator = id => ({
@@ -55,8 +54,7 @@ describe("mock transport test", () => {
             [node3] //this is the fetchVertices gremlin query response, refetching after connect
         );
         // boom!
-        return ctx.Simple
-            .findById("node-1")
+        return ctx.Simple.findById("node-1")
             .then(ctx.fetchVertices([relation]))
             .then(res => {
                 expect(res.plain()._rel[relation + "Ids"]).toEqual(["node-2"]);

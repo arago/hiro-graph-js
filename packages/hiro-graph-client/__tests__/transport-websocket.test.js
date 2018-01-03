@@ -16,6 +16,12 @@ describe("transport-websocket", () => {
     // it doesn't connect until we ask it
     let sock;
 
+    // eslint-disable-next-line no-unused-vars
+    const log = evt => {
+        // uncomment the next line to get all the debug output.
+        //console.log(evt);
+    };
+
     const getRequestId = () => {
         return new Promise(resolve => {
             sock.once("send", payload => {
@@ -29,7 +35,7 @@ describe("transport-websocket", () => {
     };
     const getIdAndResPromise = async req => {
         const idp = getRequestId();
-        const res = transport.request(fakeToken, req);
+        const res = transport.request(fakeToken, req, { emit: log });
         const id = await idp;
         return { id, res };
     };
@@ -46,7 +52,7 @@ describe("transport-websocket", () => {
         // this is a setup pain, but without it we couldn't easily use this transport in many tests
         // with making them reliant on each other.
         captureNextConnection();
-        await transport.connect(fakeToken);
+        await transport.connect(fakeToken, log);
         // now  we have a connection.
     });
 
@@ -141,7 +147,7 @@ describe("transport-websocket", () => {
         const lastSock = sock;
         captureNextConnection();
         // we have to do this one manually.
-        transport.request(fakeToken, { type: "bar" });
+        transport.request(fakeToken, { type: "bar" }, { emit: log });
         // and leave the promise hanging... but we also have to wait for a bunch of
         // promises to resolve...
         await nextTick();

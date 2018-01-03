@@ -7,172 +7,167 @@
  *  if it is renewed by any other part of the app that shares the `Token` object, it will reconnect
  *  and continue to emit events.
  */
+import { w3cwebsocket as WebSocket } from "websocket";
 import { ensureWebSocketsAvailable } from "./transport-websocket";
+import { channel } from "./subscriber-fanout";
+import qs from "querystring";
+import timer from "./timer";
+const noop = () => {};
 
-//unique ids.
-let _id = 0;
-const nextId = () => {
-    const n = _id++;
-    if (_id > 1e9) {
-        //this has got big. let's reset.
-        _id = 0;
-    }
-    return "" + n; //needs to be a string.
-};
-
-const cloneEvent = evt => {
-    //the only "deep" prop is the "body", and it's just one level deep.
-    return Object.assign({}, evt, { body: Object.assign({}, evt.body) });
-};
+const RECONNECT_TIMEOUT = 5e3;
 
 export default class EventStream {
-    constructor({ endpoint, token }) {
+    static OFFSET_NEWEST_MSG = "largest";
+    static OFFSET_OLDEST_MSG = "smallest";
+
+    constructor(
+        { endpoint, token },
+        { groupId, offset = EventStream.OFFSET_NEWEST_MSG, filters = [] } = {},
+        emit = noop // this function is used to hook into all internal events.
+    ) {
         ensureWebSocketsAvailable();
-        this.token = token;
-        this.endpoint = endpoint
+        this._token = token;
+        this._endpoint = endpoint
             .replace(/^http/, "ws") //replace http(s) with ws(s)
-            .replace(/\/?$/, "/_events/?_TOKEN="); // replace possible trailing slash with api endpoint
-        this.callbacks = [];
-        this.filters = [];
-        //we don't connect immediately.
-    }
-
-    connected() {
-        return this.__connectionPromise;
-    }
-
-    //stop events.
-    stop() {
-        this.stopped = true;
-        if (!this.connected()) {
-            return;
+            .replace(/\/?$/, "/_events/?"); // replace possible trailing slash with api endpoint
+        const query = {};
+        if (groupId) {
+            query.groupId = groupId;
         }
-        return this.connect().then(ws => {
-            ws.close();
-        });
-    }
-
-    //start events
-    start() {
-        this.stopped = false;
-        if (this.connected()) {
-            return;
+        if (offset) {
+            query.offset = offset;
         }
-        //don't actually return the connection.
-        return this.connect().then(() => {});
-    }
+        this._endpoint += qs.stringify(query) + "&_TOKEN="; // this needs to be last...
 
-    //Private function used to broadcast events.
-    emit(event) {
-        //return as a promise in case we want to wait for the callbacks.
-        return Promise.all(this.callbacks.map(fn => fn(cloneEvent(event))));
-    }
-
-    //Start a subscription to events. returns a function used to remove the subscription
-    subscribe(callback) {
-        if (typeof callback !== "function") {
-            throw new TypeError("callback must be a function");
-        }
-        this.callbacks.push(callback);
-        //return the unsubscribe function.
-        return () =>
-            (this.callbacks = this.callbacks.filter(fn => fn !== callback));
-    }
-
-    //Register a filter to the stream.
-    //returns the unregister function.
-    filter(type, content) {
-        const id = nextId();
-        const filter = {
-            "filter-id": id,
-            "filter-type": type,
+        this._groupId = groupId;
+        this._offset = offset;
+        this._filters = filters.map(content => ({
+            "filter-id": content,
+            "filter-type": "jfilter",
             "filter-content": content
-        };
-        this.filters.push(filter);
-        const unfilter = () => {
-            this.filters = this.filters.filter(f => f["filter-id"] !== id);
-            return (
-                this.connected() &&
-                this.connect().then(ws =>
-                    ws.send(
-                        JSON.stringify({
-                            type: "unregister",
-                            args: { "filter-id": id }
-                        })
-                    )
-                )
-            );
-        };
+        }));
+        //we don't connect immediately.
+        // but via a pubsub interface.
+        this.subscribe = channel(fanout => {
+            // connect, then apply filters, then start emitting events.
+            // we only need the client here.
+            let socket, reconnectTimeout;
+            let shouldShutdown = false;
+            let reconnects = 0; // start at -1 and the first connect
+            const t = timer({ laps: false });
+            emit({
+                name: "es:power-up",
+                data: { filters, groupId, offset }
+            });
+            const shutdown = () => {
+                emit({
+                    name: "es:power-down",
+                    data: t()
+                });
+                clearTimeout(reconnectTimeout);
+                shouldShutdown = true;
+                if (socket) {
+                    emit({
+                        name: "es:closing",
+                        data: { time: t(), reconnects }
+                    });
+                    socket.close();
+                }
+                socket = null;
+            };
+            const reconnect = () =>
+                (reconnectTimeout = setTimeout(
+                    connect(true),
+                    RECONNECT_TIMEOUT
+                ));
 
-        if (this.connected()) {
-            return this.connect()
-                .send({
-                    type: "register",
-                    args: filter
-                })
-                .then(() => unfilter);
-        }
-        return Promise.resolve(unfilter);
-    }
-
-    //clear all filters.
-    clear() {
-        this.filters = [];
-        return this.connect().then(ws =>
-            ws.send(
-                JSON.stringify({
-                    type: "clear",
-                    args: {}
-                })
-            )
-        );
-    }
-
-    connect() {
-        if (!this.__connectionPromise) {
-            this.__connectionPromise = this.token
-                .get()
-                .then(token => this.createWebSocket(token));
-        }
-        return this.__connectionPromise;
+            // this is the loop that gets the connection and uses it, reconnecting
+            // until it's told to shutdown.
+            const connect = (isReconnect = false) => {
+                if (shouldShutdown) {
+                    return;
+                }
+                const conntime = timer();
+                return this._token
+                    .get()
+                    .then(initialToken => {
+                        emit({
+                            name: "token:get",
+                            data: { time: conntime(), token: initialToken }
+                        });
+                        if (shouldShutdown) {
+                            return;
+                        }
+                        return this.__createWebSocket(
+                            initialToken,
+                            fanout,
+                            () => {
+                                if (!shouldShutdown) {
+                                    reconnect();
+                                }
+                            },
+                            emit
+                        ).then(_socket => {
+                            socket = _socket;
+                            if (isReconnect) {
+                                reconnects++;
+                            }
+                            emit({
+                                name: "es:connect",
+                                data: { time: conntime(), reconnects }
+                            });
+                        });
+                    })
+                    .catch(e => {
+                        emit({ name: "es:error", data: e });
+                        reconnect();
+                    });
+            };
+            // start the recurrent connect process
+            connect();
+            // return the shutdown function.
+            return shutdown;
+        });
     }
 
     /**
      *  Creates a WebSocket connection, with the initial token.
      *
      *  Similiar logic to the websocket-transport
+     *
+     * confusingly, "fanout" is to fanout events from the eventstream
+     * and "emit" is the pubsub emitter passes to all hiro-graph-client components for
+     * introspection
      */
-    createWebSocket(intialToken) {
+    __createWebSocket(intialToken, fanout, onClose, emit) {
         //we do all this in a promise, so the result is shared between
         //all requests that come in during connection.
+        const t = timer();
         return new Promise((resolve, reject) => {
-            const ws = new WebSocket(this.endpoint + intialToken);
+            const ws = new WebSocket(this._endpoint + intialToken);
 
             //this keeps track of whether we have resolved yet.
             let hasResolved = false;
 
             //when the connection closes we need to tidy up.
             ws.onclose = () => {
-                //most importantly, remove this promise. so a new one can be created.
-                this.__connectionPromise = null;
-
+                emit({ name: "es:sock-close", data: t() });
                 //if we haven't resolved yet, then this is an *immediate* close by GraphIT.
                 //therefore we probably have an invalid token, and we should definitely reject.
                 if (!hasResolved) {
                     hasResolved = true;
-                    this.token.invalidate();
+                    this._token.invalidate();
+                    emit({ name: "es:invalidate", data: null });
                     reject();
-                }
-                //We want to reconnect unless this.stopped
-                if (!this.stopped) {
-                    this.connect();
+                } else {
+                    onClose();
                 }
             };
 
             //on connection error, we almost certainly close after this anyway, so just
             //log the error
             ws.onerror = err => {
-                console.error("[EVT] WebSocket Connection Error", err);
+                emit({ name: "es:sock-error", data: err });
             };
 
             //how to handle inbound messages, find the inflight it matches and return
@@ -180,7 +175,7 @@ export default class EventStream {
                 //we can only handle string messages
                 if (typeof msg.data !== "string") {
                     //we don't handle messages like this.
-                    console.warn("[EVT] unknown websocket message type", msg);
+                    emit({ name: "es:bad-message", data: msg.data });
                     return;
                 }
                 //try and parse as JSON
@@ -188,12 +183,10 @@ export default class EventStream {
                 try {
                     object = JSON.parse(msg.data);
                 } catch (e) {
-                    console.warn(
-                        "[EVT] invalid JSON in websocket message",
-                        msg.data
-                    );
+                    emit({ name: "es:bad-message", data: msg.data });
                     return;
                 }
+                emit({ name: "es:message", data: object });
                 //this event should have properties:
                 //
                 //  id: the id of the object entity (who it was done to)
@@ -202,16 +195,30 @@ export default class EventStream {
                 //  timestamp: hammertime (milliseconds since unix epoch)
                 //  nanotime: ??? (does not appear to be nanoseconds since unix epoch)
                 //  body: the full content of the object entity
-                this.emit(object);
+                fanout(object);
             };
 
             //now the socket is opened we can resolve our promise with a client API
             ws.onopen = () => {
+                emit({
+                    name: "es:sock-open",
+                    data: { time: t(), protocol: ws.protocol }
+                });
                 //actually if we send a bad token, we need to wait for a moment before resolving.
                 //otherwise, the connection will shut straightaway.
                 //testing shows this usually takes about 10ms, but the largest time I saw was
                 //32ms. We use 100ms just in case. This makes the initial connection slower, but
-                //is a one off cost.
+                //is a one off cost and not a problem with the events stream. Also, we might as well
+                //try and apply the filters immediately.
+                // now apply all filters.
+                this._filters.forEach(filter =>
+                    ws.send(
+                        JSON.stringify({
+                            type: "register",
+                            args: filter
+                        })
+                    )
+                );
                 setTimeout(() => {
                     if (hasResolved) {
                         //crap, we did fail.
@@ -220,15 +227,6 @@ export default class EventStream {
                     //now mark this as resolving so we don't invalidate our token accidentally.
                     hasResolved = true;
                     resolve(ws);
-                    //now add all our filters.
-                    this.filters.forEach(filter => {
-                        ws.send(
-                            JSON.stringify({
-                                type: "register",
-                                args: filter
-                            })
-                        );
-                    });
                 }, 100);
             };
         });

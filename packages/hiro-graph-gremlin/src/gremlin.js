@@ -12,19 +12,13 @@ export default function queryBuilder(initialQuery) {
  *  We export this constant T for easy/intuitive use in querys, although the strings
  *  work just the same.
  */
-export const T = [
-    "in",
-    "notin",
-    "eq",
-    "neq",
-    "lt",
-    "lte",
-    "gt",
-    "gte"
-].reduce((obj, key) => {
-    obj[key] = "T." + key;
-    return obj;
-}, {});
+export const T = ["in", "notin", "eq", "neq", "lt", "lte", "gt", "gte"].reduce(
+    (obj, key) => {
+        obj[key] = "T." + key;
+        return obj;
+    },
+    {}
+);
 
 const $placeholder = Symbol("gremlin-placeholder");
 /**
@@ -283,9 +277,10 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     groupBy(groupingProp, resultProp = false) {
-        const prop = groupingProp === "label"
-            ? groupingProp
-            : `getProperty(${quote(groupingProp)})`;
+        const prop =
+            groupingProp === "label"
+                ? groupingProp
+                : `getProperty(${quote(groupingProp)})`;
         const resultStanza = resultProp
             ? `it.getProperty(${quote(resultProp)})`
             : "it";
@@ -301,9 +296,10 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     groupCount(groupingProp) {
-        const prop = groupingProp === "label"
-            ? groupingProp
-            : `getProperty(${quote(groupingProp)})`;
+        const prop =
+            groupingProp === "label"
+                ? groupingProp
+                : `getProperty(${quote(groupingProp)})`;
         return this.raw(`groupCount{it.${prop}}.cap`);
     }
 

@@ -19,10 +19,10 @@ export default class Token {
                 .catch(err => {
                     // flatten this, so another attempt can be made
                     this._tokenPromise = null;
-                    // returning a bogus token (null), should hopefully trigger this again,
+                    // returning a bogus token ("", falsy), should hopefully trigger this again,
                     // waiting subscribers will receive it, fail, and try again.
                     console.error("ERROR GETTING TOKEN!", err);
-                    return null;
+                    return "";
                 })
                 .then(token => {
                     this._invalidated = false; // this resolved one way or another...

@@ -80,13 +80,15 @@ export default function setupImplicitOauth(
     { url, clientId, redirectUri, logoutUri, store, ...options },
     strategySpec = "popup"
 ) {
-    const strategy = typeof strategySpec === "string"
-        ? builtInStrategies[strategySpec]
-        : strategySpec;
+    const strategy =
+        typeof strategySpec === "string"
+            ? builtInStrategies[strategySpec]
+            : strategySpec;
     let shouldReallyLogout = false;
-    const strategyLogout = typeof strategy.logout === "function"
-        ? strategy.logout
-        : uri => (window.location.href = uri);
+    const strategyLogout =
+        typeof strategy.logout === "function"
+            ? strategy.logout
+            : uri => (window.location.href = uri);
 
     strategy.logout = uri => {
         if (shouldReallyLogout) {

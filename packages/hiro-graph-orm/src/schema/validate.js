@@ -35,17 +35,17 @@ export default function validate(schema, ontologyLocation) {
         };
     }
     //schema.names has the application name of each entity.
-    return schema.names.map(name => schema.get(name)).reduce((
-        output,
-        entity
-    ) => {
-        const errors = validateEntity(entity, ontology);
-        if (errors.length) {
-            output.errors += errors.length;
-            output.detail[entity.name] = errors;
-        }
-        return output;
-    }, { errors: 0, detail: {} });
+    return schema.names.map(name => schema.get(name)).reduce(
+        (output, entity) => {
+            const errors = validateEntity(entity, ontology);
+            if (errors.length) {
+                output.errors += errors.length;
+                output.detail[entity.name] = errors;
+            }
+            return output;
+        },
+        { errors: 0, detail: {} }
+    );
 }
 
 //load an ontology.
@@ -117,7 +117,9 @@ const emptyOntology = () => ({
 function validateEntity(appEntity, { entities, verbs }) {
     if (appEntity.ogit in entities === false) {
         return [
-            `Entity (${appEntity.name}) does not exist in Ontology as '${appEntity.ogit}'`
+            `Entity (${appEntity.name}) does not exist in Ontology as '${
+                appEntity.ogit
+            }'`
         ];
     }
     const ogitEntity = entities[appEntity.ogit];
@@ -130,11 +132,15 @@ function validateEntity(appEntity, { entities, verbs }) {
             const prop = appEntity.prop(attr);
             if (!prop) {
                 errors.push(
-                    `Ontology mandatory field (${attr}) not defined in Entity (${appEntity.name})`
+                    `Ontology mandatory field (${attr}) not defined in Entity (${
+                        appEntity.name
+                    })`
                 );
             } else if (!prop.required) {
                 errors.push(
-                    `Ontology mandatory field (${attr}) not listed as 'required' in Entity (${appEntity.name})`
+                    `Ontology mandatory field (${attr}) not listed as 'required' in Entity (${
+                        appEntity.name
+                    })`
                 );
             }
         }, []);
@@ -144,8 +150,7 @@ function validateEntity(appEntity, { entities, verbs }) {
     //first get the list of attributes in this ontology item
     const validAttributes = getValidAttributes(ogitEntity);
 
-    appEntity
-        [$dangerouslyGetProps]() //eslint-disable-line no-unexpected-multiline
+    appEntity[$dangerouslyGetProps]() //eslint-disable-line no-unexpected-multiline
         //we are checking non-free attributes. so we remove the free ones
         //and also remove the "ogit" internal attributes
         .filter(
@@ -155,9 +160,13 @@ function validateEntity(appEntity, { entities, verbs }) {
         .forEach(invalidProp => {
             //all the remaining are invalid
             errors.push(
-                `Entity ${invalidProp.required
-                    ? "required"
-                    : "optional"} property (${invalidProp.dst}) does not reference an available attribute in Ontology (${invalidProp.src})`
+                `Entity ${
+                    invalidProp.required ? "required" : "optional"
+                } property (${
+                    invalidProp.dst
+                }) does not reference an available attribute in Ontology (${
+                    invalidProp.src
+                })`
             );
         });
 
@@ -184,13 +193,16 @@ function validateEntity(appEntity, { entities, verbs }) {
             const connections = getValidConnections(verbs[verb]);
             vertices.forEach(endNode => {
                 startNodes.forEach(startNode => {
-                    const key = direction === "out"
-                        ? [startNode, endNode]
-                        : [endNode, startNode];
+                    const key =
+                        direction === "out"
+                            ? [startNode, endNode]
+                            : [endNode, startNode];
                     if (!connections[key.join()]) {
                         errors.push(
                             `Relation (${alias}) invalid at hop (${i +
-                                1}): Connection from '${key[0]} --> ${verb} -> ${key[1]}' not allowed.`
+                                1}): Connection from '${
+                                key[0]
+                            } --> ${verb} -> ${key[1]}' not allowed.`
                         );
                     }
                 });
