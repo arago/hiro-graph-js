@@ -83,41 +83,45 @@ export default class EventStream {
 
             // this is the loop that gets the connection and uses it, reconnecting
             // until it's told to shutdown.
-            const connect = async (isReconnect = false) => {
+            const connect = (isReconnect = false) => {
                 if (shouldShutdown) {
                     return;
                 }
-                try {
-                    const conntime = timer();
-                    const initialToken = await this._token.get();
-                    emit({
-                        name: "token:get",
-                        data: { time: conntime(), token: initialToken }
-                    });
-                    if (shouldShutdown) {
-                        return;
-                    }
-                    socket = await this.__createWebSocket(
-                        initialToken,
-                        fanout,
-                        () => {
-                            if (!shouldShutdown) {
-                                reconnect();
+                const conntime = timer();
+                return this._token
+                    .get()
+                    .then(initialToken => {
+                        emit({
+                            name: "token:get",
+                            data: { time: conntime(), token: initialToken }
+                        });
+                        if (shouldShutdown) {
+                            return;
+                        }
+                        return this.__createWebSocket(
+                            initialToken,
+                            fanout,
+                            () => {
+                                if (!shouldShutdown) {
+                                    reconnect();
+                                }
+                            },
+                            emit
+                        ).then(_socket => {
+                            socket = _socket;
+                            if (isReconnect) {
+                                reconnects++;
                             }
-                        },
-                        emit
-                    );
-                    if (isReconnect) {
-                        reconnects++;
-                    }
-                    emit({
-                        name: "es:connect",
-                        data: { time: conntime(), reconnects }
+                            emit({
+                                name: "es:connect",
+                                data: { time: conntime(), reconnects }
+                            });
+                        });
+                    })
+                    .catch(e => {
+                        emit({ name: "es:error", data: e });
+                        reconnect();
                     });
-                } catch (e) {
-                    emit({ name: "es:error", data: e });
-                    reconnect();
-                }
             };
             // start the recurrent connect process
             connect();

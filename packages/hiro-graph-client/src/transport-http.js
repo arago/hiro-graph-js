@@ -15,70 +15,76 @@ export default class HttpTransport {
     }
 
     //this is basically window.fetch with a token.get() before it.
-    async fetch(token, url, options = {}, reqOptions = {}) {
+    fetch(token, url, options = {}, reqOptions = {}) {
         const emit = reqOptions.emit || noop;
-        const tok =
-            "token" in reqOptions ? reqOptions.token : await token.get();
-        emit({ name: "token:get", data: tok });
-        //add to query string or add query string.
-        //if the given url is full (e.g. starts http), don't use our endpoint.
-        //otherwise do.
-        const finalUrl = url.indexOf("http") === 0 ? url : this.endpoint + url;
-        options.headers = {
-            ...(options.headers || {}),
-            Authorization: "Bearer " + tok
-        };
-        const t = timer();
-        const fetchPromise = fetch(finalUrl, options);
-        if (options.raw === true) {
-            return fetchPromise;
-        }
-        const res = await fetchPromise;
-        emit({
-            name: "http:fetch-header",
-            data: { status: res.status, time: t() }
-        });
-        let object;
-        if (res.status !== 204) {
-            //we are expecting content
-            try {
-                object = await res.json();
-            } catch (err) {
-                res.status = 502; // pretend bad status from upstream
-                object = {
-                    error: "Invalid JSON in response from GraphIT"
-                };
+        const tp =
+            "token" in reqOptions
+                ? Promise.resolve(reqOptions.token)
+                : token.get();
+        return tp.then(tok => {
+            emit({ name: "token:get", data: tok });
+            //add to query string or add query string.
+            //if the given url is full (e.g. starts http), don't use our endpoint.
+            //otherwise do.
+            const finalUrl =
+                url.indexOf("http") === 0 ? url : this.endpoint + url;
+            options.headers = {
+                ...(options.headers || {}),
+                Authorization: "Bearer " + tok
+            };
+            const t = timer();
+            const fetchPromise = fetch(finalUrl, options);
+            if (options.raw === true) {
+                return fetchPromise;
             }
-        }
-        emit({
-            name: "http:fetch-body",
-            data: { time: t(), body: object }
+            return fetchPromise.then(res => {
+                emit({
+                    name: "http:fetch-header",
+                    data: { status: res.status, time: t() }
+                });
+                let op = Promise.resolve();
+                if (res.status !== 204) {
+                    //we are expecting content as json
+                    op = res.json().catch(() => {
+                        res.status = 502; // pretend bad status from upstream
+                        return {
+                            error: "Invalid JSON in response from GraphIT"
+                        };
+                    });
+                }
+                return op.then(object => {
+                    emit({
+                        name: "http:fetch-body",
+                        data: { time: t(), body: object }
+                    });
+                    //check for error.
+                    if ("error" in object) {
+                        let errorMessage = "Unknown GraphIT Error";
+                        if (typeof object.error === "string") {
+                            errorMessage = object.error;
+                        } else if (
+                            typeof object.error === "object" &&
+                            typeof object.error.message === "string"
+                        ) {
+                            errorMessage = object.error.message;
+                        }
+                        const error = createError(
+                            res.status,
+                            "[HTTP] Error: " + errorMessage
+                        );
+                        //the "connection" decides what to do with each error.
+                        throw error;
+                    }
+                    //what to do here, if "items" in object, then we return items, other
+                    //things return plain graphit nodes (which CANNOT have items as a key - they need a slash).
+                    if ("items" in object) {
+                        return object.items;
+                    }
+                    //assume it is the object we want.
+                    return object;
+                });
+            });
         });
-        //check for error.
-        if ("error" in object) {
-            let errorMessage = "Unknown GraphIT Error";
-            if (typeof object.error === "string") {
-                errorMessage = object.error;
-            } else if (
-                typeof object.error === "object" &&
-                typeof object.error.message === "string"
-            ) {
-                errorMessage = object.error.message;
-            }
-            const error = createError(
-                res.status,
-                "[HTTP] Error: " + errorMessage
-            );
-            //the "connection" decides what to do with each error.
-            throw error;
-        }
-        //what to do here, if "items" in object, then we return items, other
-        //things return plain graphit nodes (which CANNOT have items as a key - they need a slash).
-        if ("items" in object) {
-            return object.items;
-        }
-        //assume it is the object we want.
-        return object;
     }
 
     //request has to translate the base request objects to fetch.
