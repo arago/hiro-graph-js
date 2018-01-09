@@ -77,7 +77,7 @@ export default class EventStream {
             };
             const reconnect = () =>
                 (reconnectTimeout = setTimeout(
-                    connect(true),
+                    () => connect(true),
                     RECONNECT_TIMEOUT
                 ));
 
