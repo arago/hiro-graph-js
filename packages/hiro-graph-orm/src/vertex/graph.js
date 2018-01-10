@@ -158,8 +158,8 @@ export default class GraphVertex extends Vertex {
      *
      *  @return {Promise<undefined>}
      */
-    delete() {
-        return this._db.delete(this._id).then(() => {
+    delete(options = {}) {
+        return this._ctx.delete(this._id, options).then(() => {
             this._ctx._cache.delete(this._id);
         });
     }
