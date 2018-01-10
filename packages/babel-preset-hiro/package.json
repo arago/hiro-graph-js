@@ -1,7 +1,7 @@
 {
     "name": "babel-preset-hiro",
     "repository": "arago/hiro-graph-js",
-    "version": "0.2.7",
+    "version": "0.3.0",
     "description": "Babel preset for hiro-graph, extends react-app",
     "main": "index.js",
     "author": "Brendan Moore <bmoore@arago.co>",

@@ -1,13 +1,11 @@
 {
     "name": "hiro-graph-client",
     "repository": "arago/hiro-graph-js",
-    "version": "0.2.10",
-    "description":
-        "Javascript client for HIRO Graph REST API. Works in both node and browser.",
+    "version": "0.3.0",
+    "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
     "scripts": {
-        "build":
-            "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "npm run build",
         "test": "jest --silent"
     },
@@ -19,7 +17,7 @@
     "devDependencies": {
         "babel-cli": "^6.6.5",
         "babel-jest": "^20.0.3",
-        "babel-preset-hiro": "^0.2.7",
+        "babel-preset-hiro": "^0.3.0",
         "jest": "^20.0.4"
     },
     "babel": {
@@ -33,7 +31,9 @@
         ]
     },
     "jest": {
-        "testPathIgnorePatterns": ["<rootDir>[/\\\\](lib|node_modules)[/\\\\]"],
+        "testPathIgnorePatterns": [
+            "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+        ],
         "testEnvironment": "node",
         "testURL": "http://localhost",
         "transform": {

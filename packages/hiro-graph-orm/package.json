@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-orm",
-  "version": "0.2.10",
+  "version": "0.3.0",
   "description": "OGIT ontology to sane application mappings",
   "repository": "arago/hiro-graph-js",
   "main": "lib/index.js",
@@ -11,16 +11,16 @@
   },
   "license": "MIT",
   "dependencies": {
-    "hiro-graph-client": "^0.2.10",
-    "hiro-graph-codecs": "^0.2.7",
-    "hiro-graph-gremlin": "^0.2.7",
-    "hiro-graph-lucene": "^0.2.7",
+    "hiro-graph-client": "^0.3.0",
+    "hiro-graph-codecs": "^0.3.0",
+    "hiro-graph-gremlin": "^0.3.0",
+    "hiro-graph-lucene": "^0.3.0",
     "lodash.isplainobject": "^4.0.6"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-jest": "^20.0.3",
-    "babel-preset-hiro": "^0.2.7",
+    "babel-preset-hiro": "^0.3.0",
     "jest": "^20.0.4"
   },
   "babel": {
