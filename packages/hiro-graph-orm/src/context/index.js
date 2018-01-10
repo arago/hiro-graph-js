@@ -297,7 +297,7 @@ export default class Context {
      *  @return {undefined} - no return value
      */
     remove(vertexId) {
-        this.cache.delete(vertexId);
+        this._cache.delete(vertexId);
     }
 
     /**
