@@ -1,6 +1,6 @@
 {
   "name": "hiro-graph-orm-mappings",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "repository": "arago/hiro-graph-js",
   "description": "a set of mapping definitions useful across OGIT apps using `hiro-graph-orm`",
   "main": "lib/index.js",
@@ -13,7 +13,7 @@
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-jest": "^20.0.3",
-    "babel-preset-hiro": "^0.3.0",
+    "babel-preset-hiro": "^0.4.0",
     "jest": "^20.0.4"
   },
   "babel": {
