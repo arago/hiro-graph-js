@@ -46,6 +46,10 @@ export default class HttpTransport {
                 if (res.status !== 204) {
                     //we are expecting content as json
                     op = res.json().catch(() => {
+                        if (res.status === 202) {
+                            // Special case when there is potentially no body
+                            return {};
+                        }
                         res.status = 502; // pretend bad status from upstream
                         return {
                             error: "Invalid JSON in response from GraphIT"
