@@ -541,18 +541,20 @@ export default class Client {
         const headers = {
             "ogit/_id": timeseriesId
         };
+        const body = {};
         if (from !== false) {
-            headers.from = from;
+            body.from = from;
         }
         if (to !== false) {
-            headers.to = to;
+            body.to = to;
         }
         return this.wrapTimedEvent(
             "streamts",
             { id: timeseriesId, from, to },
             this.dedupedRequest({
                 type: "streamts",
-                headers
+                headers,
+                body
             })
         );
     }
