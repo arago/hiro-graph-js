@@ -293,9 +293,10 @@ Object {
 
 exports[`Client Requests should call streamts (from only) correctly 1`] = `
 Object {
-  "body": Object {},
-  "headers": Object {
+  "body": Object {
     "from": 1399999999999,
+  },
+  "headers": Object {
     "ogit/_id": "ts-id",
   },
   "type": "streamts",
@@ -304,11 +305,12 @@ Object {
 
 exports[`Client Requests should call streamts (to + from) correctly 1`] = `
 Object {
-  "body": Object {},
-  "headers": Object {
+  "body": Object {
     "from": 1399999999999,
-    "ogit/_id": "ts-id",
     "to": 1400000000001,
+  },
+  "headers": Object {
+    "ogit/_id": "ts-id",
   },
   "type": "streamts",
 }
@@ -316,10 +318,11 @@ Object {
 
 exports[`Client Requests should call streamts (to only) correctly 1`] = `
 Object {
-  "body": Object {},
+  "body": Object {
+    "to": 1400000000001,
+  },
   "headers": Object {
     "ogit/_id": "ts-id",
-    "to": 1400000000001,
   },
   "type": "streamts",
 }
