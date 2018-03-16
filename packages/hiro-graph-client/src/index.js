@@ -1,6 +1,6 @@
-import Token from "./token";
+import Token, { cannotGetToken } from "./token";
 import Client from "./client";
 import * as Errors from "./errors";
 
 export default Client;
-export { Token, Errors };
+export { Token, cannotGetToken, Errors };
