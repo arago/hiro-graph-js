@@ -5,7 +5,14 @@ import {
     createTaskAction
 } from "./create-action";
 import createStoreEnhancer from "./middleware";
-import { setToken, cancelTask, resetTask, doLogin, doLogout } from "./actions";
+import { 
+    setToken,
+    cancelTask,
+    resetTask,
+    doLogin,
+    doLogout,
+    setOnLogoutHook
+} from "./actions";
 import graphReducer, {
     createTaskSelector,
     createVertexSelector,
@@ -41,5 +48,6 @@ export {
     implicitOauth,
     loginTaskSelector,
     doLogin,
-    doLogout
+    doLogout,
+    setOnLogoutHook
 };
