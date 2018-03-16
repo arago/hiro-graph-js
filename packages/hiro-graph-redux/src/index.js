@@ -5,7 +5,7 @@ import {
     createTaskAction
 } from "./create-action";
 import createStoreEnhancer from "./middleware";
-import { 
+import {
     setToken,
     cancelTask,
     resetTask,
