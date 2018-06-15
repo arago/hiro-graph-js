@@ -123,10 +123,44 @@ export default class EventStream {
                         reconnect();
                     });
             };
+
+            const unregister = (filterId) => {
+                this._filters = this._filters.filter(filter => filter["filter-id"] !== filterId);
+                socket.send(JSON.stringify({
+                    type: "unregister",
+                    args: {
+                        "filter-id": filterId,
+                    }
+                }));
+                // Emit unregister filter just in case
+                emit({
+                    name: "es:unregister-filter",
+                    data: { "filter-id": filterId }
+                })
+            };
+
+            const register = filter => {
+                const filterObj = {
+                    "filter-id": filter,
+                    "filter-type": "jfilter",
+                    "filter-content": filter
+                };
+                this._filters.push(filterObj);
+                socket.send(JSON.stringify({
+                    type: "register",
+                    args: filterObj
+                }));
+                // Emit unregister filter just in case
+                emit({
+                    name: "es:register-filter",
+                    data: { filter, offset, groupId }
+                });
+            };
+
             // start the recurrent connect process
             connect();
-            // return the shutdown function.
-            return shutdown;
+            // return object with methods .
+            return { shutdown, unregister, register };
         });
     }
 
