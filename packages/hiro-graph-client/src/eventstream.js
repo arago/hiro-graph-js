@@ -124,19 +124,23 @@ export default class EventStream {
                     });
             };
 
-            const unregister = (filterId) => {
-                this._filters = this._filters.filter(filter => filter["filter-id"] !== filterId);
-                socket.send(JSON.stringify({
-                    type: "unregister",
-                    args: {
-                        "filter-id": filterId,
-                    }
-                }));
+            const unregister = filterId => {
+                this._filters = this._filters.filter(
+                    filter => filter["filter-id"] !== filterId
+                );
+                socket.send(
+                    JSON.stringify({
+                        type: "unregister",
+                        args: {
+                            "filter-id": filterId
+                        }
+                    })
+                );
                 // Emit unregister filter just in case
                 emit({
                     name: "es:unregister-filter",
                     data: { "filter-id": filterId }
-                })
+                });
             };
 
             const register = filter => {
@@ -146,10 +150,12 @@ export default class EventStream {
                     "filter-content": filter
                 };
                 this._filters.push(filterObj);
-                socket.send(JSON.stringify({
-                    type: "register",
-                    args: filterObj
-                }));
+                socket.send(
+                    JSON.stringify({
+                        type: "register",
+                        args: filterObj
+                    })
+                );
                 // Emit unregister filter just in case
                 emit({
                     name: "es:register-filter",
