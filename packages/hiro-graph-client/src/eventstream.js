@@ -128,7 +128,7 @@ export default class EventStream {
 
             // start the recurrent connect process
             connect();
-            // return shotdown function.
+            // return shutdown function.
             return shutdown;
         });
     }
