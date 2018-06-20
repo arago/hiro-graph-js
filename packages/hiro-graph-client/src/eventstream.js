@@ -46,12 +46,14 @@ export default class EventStream {
             "filter-type": "jfilter",
             "filter-content": content
         }));
+        this._emit = emit;
+        this._socket = null;
         //we don't connect immediately.
         // but via a pubsub interface.
         this.subscribe = channel(fanout => {
             // connect, then apply filters, then start emitting events.
             // we only need the client here.
-            let socket, reconnectTimeout;
+            let reconnectTimeout;
             let shouldShutdown = false;
             let reconnects = 0; // start at -1 and the first connect
             const t = timer({ laps: false });
@@ -66,14 +68,14 @@ export default class EventStream {
                 });
                 clearTimeout(reconnectTimeout);
                 shouldShutdown = true;
-                if (socket) {
+                if (this._socket) {
                     emit({
                         name: "es:closing",
                         data: { time: t(), reconnects }
                     });
-                    socket.close();
+                    this._socket.close();
                 }
-                socket = null;
+                this._socket = null;
             };
             const reconnect = () =>
                 (reconnectTimeout = setTimeout(
@@ -108,7 +110,7 @@ export default class EventStream {
                             },
                             emit
                         ).then(_socket => {
-                            socket = _socket;
+                            this._socket = _socket;
                             if (isReconnect) {
                                 reconnects++;
                             }
@@ -123,10 +125,70 @@ export default class EventStream {
                         reconnect();
                     });
             };
+
             // start the recurrent connect process
             connect();
-            // return the shutdown function.
+            // return shotdown function.
             return shutdown;
+        });
+    }
+
+    /**
+     * Register new filter for the same connection.
+     * All updates for newly registered filters will be passed to subscribed callback.
+     *
+     * @param filter - String
+     */
+
+    register(filter) {
+        const filterObj = {
+            "filter-id": filter,
+            "filter-type": "jfilter",
+            "filter-content": filter
+        };
+        this._filters.push(filterObj);
+        // If there is still no connection it's ok. We'll subscribe latter
+        if (this._socket) {
+            this._socket.send(
+                JSON.stringify({
+                    type: "register",
+                    args: filterObj
+                })
+            );
+        }
+        // Emit unregister filter just in case
+        this._emit({
+            name: "es:register-filter",
+            data: { filter, offset: this._offset, groupId: this._groupId }
+        });
+    }
+
+    /**
+     * Unregisters existing filter by sending request to server with type unregister.
+     * Stop getting events for this filter
+     *
+     * @param filterId - String
+     */
+
+    unregister(filterId) {
+        this._filters = this._filters.filter(
+            filter => filter["filter-id"] !== filterId
+        );
+        //If there is still no connection it's ok. We won't subscribe
+        if (this._socket) {
+            this._socket.send(
+                JSON.stringify({
+                    type: "unregister",
+                    args: {
+                        "filter-id": filterId
+                    }
+                })
+            );
+        }
+        // Emit unregister filter just in case
+        this._emit({
+            name: "es:unregister-filter",
+            data: { "filter-id": filterId }
         });
     }
 
