@@ -45,9 +45,8 @@ export default function createOauthStrategy(implementation) {
             baseURL +
             (baseURL.indexOf("?") > -1 ? "&" : "?") +
             querystring.stringify({
-                response_type: "token",
                 client_id: clientId,
-                redirect_uri: redirectUri
+                redirect_url: redirectUri
             });
 
         const clear = () => window.localStorage.removeItem(TOKEN_KEY);
