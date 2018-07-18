@@ -131,12 +131,12 @@ const cacheCheck = (
 };
 
 //get Me is a little different as we have no ID to start with,
-//but we will get an "ogit/Person" node.
+//but we will get an "ogit/Auth/Account" node.
 /**
  * @ignore
  */
 export function fetchMe(ctx) {
-    const entity = ctx.getEntity("ogit/Person");
+    const entity = ctx.getEntity("ogit/Auth/Account");
     return ctx
         .getClient()
         .me()
