@@ -138,8 +138,20 @@ describe("Gremlin Query Builder", function() {
         {
             name: "or",
             build: g => g.or([_ => _, _ => _.has("foo", "bar")]),
-            output: `or(_(),_().has("foo","bar"))`,
+            output: `or(__,__.has("foo","bar"))`,
             method: "or"
+        },
+        {
+            name: "by",
+            build: g => g.by("ogit/name"),
+            output: 'by("ogit/name")',
+            method: "by",
+        },
+        {
+            name: "range",
+            build: g => g.range(0, 10),
+            output: "range(0, 10)",
+            method: "range"
         },
         {
             name: "dedup (default)",
@@ -160,15 +172,9 @@ describe("Gremlin Query Builder", function() {
             method: "limit"
         },
         {
-            name: "order (default dir - desc)",
-            build: g => g.order("foo"),
-            output: `order{it.b.getProperty("foo") <=> it.a.getProperty("foo")}`,
-            method: "order"
-        },
-        {
-            name: "order (explicit dir - asc)",
-            build: g => g.order("foo", "asc"),
-            output: `order{it.a.getProperty("foo") <=> it.b.getProperty("foo")}`,
+            name: "order",
+            build: g => g.order(),
+            output: `order()`,
             method: "order"
         },
         {
