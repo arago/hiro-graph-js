@@ -164,13 +164,13 @@ export class GremlinQueryBuilder {
      *  Each condition is considered and any one pass means the
      *  object continues through the pipeline.
      *
-     *  @see http://gremlindocs.spmallette.documentup.com/#or
+     *  @see http://tinkerpop.apache.org/docs/3.3.1/reference/#or-step
      *
      *  @param {Array<GremlinBranch>} conditions - the array of possible conditions
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     or(conditions) {
-        const brancher = createBrancher("_()");
+        const brancher = createBrancher("__");
         const branches = conditions.map(value => brancher(value));
         return this.raw(`or(${branches.join(",")})`);
     }
@@ -210,19 +210,37 @@ export class GremlinQueryBuilder {
      *  Note that in GraphIT almost everything is a string, so ordering is
      *  lexical. (most codecs created by {@link createCodec} respect lexical ordering)
      *
-     *  @see http://gremlindocs.spmallette.documentup.com/#order
+     *  @see http://tinkerpop.apache.org/docs/3.3.1/reference/#order-step
      *
-     *  @param {string} prop - the property to order by
-     *  @param {string} dir - the direction of the ordering, `asc` or `desc`.
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
-    order(prop, dir = "desc") {
-        const isAsc = dir === "asc";
-        const getProp = `.getProperty(${quote(prop)})`;
-        const [first, second] = isAsc ? ["a", "b"] : ["b", "a"];
-        return this.raw(
-            `order{it.${first}${getProp} <=> it.${second}${getProp}}`
-        );
+    order() {
+        return this.raw("order()");
+    }
+
+    /**
+     * Insert "by" step-modulator
+     *
+     *  @see http://tinkerpop.apache.org/docs/3.3.1/reference/#by-step
+     *
+     *  @param field
+     *  @return {GremlinQueryBuilder} - the same object (chainable)
+     */
+    by(field) {
+        return this.raw(`by("${field}")`);
+    }
+
+    /**
+     * Insert a range() statement
+     *
+     *  @see http://tinkerpop.apache.org/docs/3.3.1/reference/#range-step
+     *
+     *  @param {Number} from
+     *  @param {Number} to
+     *  @return {GremlinQueryBuilder} - the same object (chainable)
+     */
+    range(from, to) {
+        return this.raw(`range(${from}, ${to})`);
     }
 
     /**
