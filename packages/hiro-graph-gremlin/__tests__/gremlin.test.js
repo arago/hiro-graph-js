@@ -145,7 +145,7 @@ describe("Gremlin Query Builder", function() {
             name: "by",
             build: g => g.by("ogit/name"),
             output: 'by("ogit/name")',
-            method: "by",
+            method: "by"
         },
         {
             name: "range",

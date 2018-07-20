@@ -215,7 +215,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     order() {
-        return this.raw('order()');
+        return this.raw("order()");
     }
 
     /**
