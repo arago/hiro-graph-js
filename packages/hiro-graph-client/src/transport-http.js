@@ -42,7 +42,7 @@ export default class HttpTransport {
                     name: "http:fetch-header",
                     data: { status: res.status, time: t() }
                 });
-                let op = Promise.resolve();
+                let op = Promise.resolve({});
                 if (res.status !== 204) {
                     //we are expecting content as json
                     op = res.json().catch(() => {
