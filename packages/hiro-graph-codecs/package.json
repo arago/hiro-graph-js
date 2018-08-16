@@ -23,9 +23,9 @@
   "homepage": "https://github.com/arago/hiro-graph-js#readme",
   "devDependencies": {
     "babel-cli": "^6.6.5",
-    "babel-jest": "^20.0.3",
+    "babel-jest": "^23.4.2",
     "babel-preset-hiro": "^0.4.0",
-    "jest": "^20.0.4"
+    "jest": "^23.5.0"
   },
   "babel": {
     "presets": [
