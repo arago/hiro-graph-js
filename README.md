@@ -24,6 +24,6 @@ Each package maintains it's own documentation:
 To work on these packages, a tool called `lerna` is used. To get up and running:
 
 ```
-$ npm install
-$ npm run lerna -- bootstrap
+$ yarn
+$ yarn lerna -- bootstrap
 ```

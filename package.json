@@ -1,6 +1,15 @@
 {
     "private": true,
     "license": "MIT",
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ],
+        "nohoist": [
+            "**/babel-jest",
+            "**/hiro-*"
+        ]
+    },
     "devDependencies": {
         "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "babel-eslint": "^8.2.6",
@@ -11,13 +20,12 @@
         "prettier": "1.14.2"
     },
     "scripts": {
-        "lerna": "lerna",
-        "test": "lerna bootstrap --concurrency 1 && npm run lint && lerna run test",
+        "test": "lerna bootstrap --concurrency 1 && yarn lint && lerna run build && lerna run test",
         "publish": "lerna publish",
         "format": "prettier --tab-width=4 'packages/*/*.js' 'packages/*/!(node_modules|lib)/**/*.js' --write",
         "lint-prettier": "prettier --tab-width=4 'packages/*/*.js' 'packages/*/!(node_modules|lib)/**/*.js' --list-different",
         "lint-eslint": "eslint packages/",
-        "lint": "npm run lint-prettier && npm run lint-eslint",
+        "lint": "yarn lint-prettier && yarn lint-eslint",
         "start-again": "rm -rf package-lock.json node_modules/* && lerna exec 'rm -rf package-lock.json node_modules/*' && lerna bootstrap --concurrency 1",
         "precommit": "yarn format"
     },
