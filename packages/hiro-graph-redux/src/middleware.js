@@ -221,7 +221,10 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
         invalidationHooks.forEach(fn => fn());
     };
     //connect our token to redux
-    token.connect({ dispatch, getState, subscribe }, onInvalidate);
+    token.connect(
+        { dispatch, getState, subscribe },
+        onInvalidate
+    );
 
     //here we cache the promises of inflight tasks
     const taskToPromise = new Map();

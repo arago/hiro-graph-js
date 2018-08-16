@@ -32,7 +32,10 @@ export default class WebSocketTransport {
      */
     request(token, { type, headers = {}, body = {} }, reqOptions = {}) {
         //the connect call ensures the websocket is connected before continuing.
-        return this.connect(token, reqOptions.emit).then(client =>
+        return this.connect(
+            token,
+            reqOptions.emit
+        ).then(client =>
             client.send(token, { type, headers, body }, reqOptions)
         );
     }

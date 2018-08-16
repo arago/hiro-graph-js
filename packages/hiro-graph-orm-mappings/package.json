@@ -1,29 +1,31 @@
 {
-  "name": "hiro-graph-orm-mappings",
-  "version": "1.0.0",
-  "repository": "arago/hiro-graph-js",
-  "description": "a set of mapping definitions useful across OGIT apps using `hiro-graph-orm`",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-    "prepublish": "npm run build",
-    "test": "echo no tests"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-cli": "^6.6.5",
-    "babel-jest": "^20.0.3",
-    "babel-preset-hiro": "^0.4.0",
-    "jest": "^20.0.4"
-  },
-  "babel": {
-    "presets": [
-      [
-        "hiro",
-        {
-          "library": true
-        }
-      ]
-    ]
-  }
+    "name": "hiro-graph-orm-mappings",
+    "version": "1.0.0",
+    "repository": "arago/hiro-graph-js",
+    "description":
+        "a set of mapping definitions useful across OGIT apps using `hiro-graph-orm`",
+    "main": "lib/index.js",
+    "scripts": {
+        "build":
+            "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "prepublish": "yarn build",
+        "test": "echo no tests"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "babel-cli": "^6.6.5",
+        "babel-jest": "^23.4.2",
+        "babel-preset-hiro": "^0.4.0",
+        "jest": "^23.5.0"
+    },
+    "babel": {
+        "presets": [
+            [
+                "hiro",
+                {
+                    "library": true
+                }
+            ]
+        ]
+    }
 }

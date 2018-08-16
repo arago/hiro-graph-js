@@ -6,9 +6,9 @@ It would be easy to reference an attribute that doesn't exist or is forbidden on
 
 Therefore there is a tool installed by default alongside this package to validate such.
 
-## Usage `npm run validate`
+## Usage `yarn validate`
 
-`npm run validate <mappings module> <OGIT ontology location>`
+`yarn validate <mappings module> <OGIT ontology location>`
 
  - **`<mappings module>`** should be the path to a module that exports a mapping for us to validate.
  - **`<OGIT ontology location>`** should be the path to a single YAML file (like the `graphit-ontology.yaml` distributed with GraphIT) or a directory structure like [the OGIT repo](https://github.com/arago/OGIT).

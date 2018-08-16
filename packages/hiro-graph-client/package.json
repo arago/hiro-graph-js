@@ -1,43 +1,43 @@
 {
-  "name": "hiro-graph-client",
-  "repository": "arago/hiro-graph-js",
-  "version": "1.0.1",
-  "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-    "prepublish": "npm run build",
-    "test": "jest --silent"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "websocket": "^1.0.25"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.6.5",
-    "babel-jest": "^20.0.3",
-    "babel-preset-hiro": "^0.4.0",
-    "jest": "^20.0.4"
-  },
-  "babel": {
-    "presets": [
-      [
-        "hiro",
-        {
-          "library": true
+    "name": "hiro-graph-client",
+    "repository": "arago/hiro-graph-js",
+    "version": "1.0.1",
+    "description":
+        "Javascript client for HIRO Graph REST API. Works in both node and browser.",
+    "main": "lib/index.js",
+    "scripts": {
+        "build":
+            "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "prepublish": "yarn build",
+        "test": "jest --silent"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "isomorphic-fetch": "^2.2.1",
+        "websocket": "^1.0.25"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.6.5",
+        "babel-jest": "^23.4.2",
+        "babel-preset-hiro": "^0.4.0",
+        "jest": "^23.5.0"
+    },
+    "babel": {
+        "presets": [
+            [
+                "hiro",
+                {
+                    "library": true
+                }
+            ]
+        ]
+    },
+    "jest": {
+        "testPathIgnorePatterns": ["<rootDir>[/\\\\](lib|node_modules)[/\\\\]"],
+        "testEnvironment": "node",
+        "testURL": "http://localhost",
+        "transform": {
+            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
         }
-      ]
-    ]
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
-    ],
-    "testEnvironment": "node",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
     }
-  }
 }

@@ -1,47 +1,46 @@
 {
-  "name": "hiro-graph-redux",
-  "version": "1.0.1",
-  "repository": "arago/hiro-graph-js",
-  "description": "Redux awareness for the `hiro-graph-orm` package",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-    "prepublish": "npm run build",
-    "test": "jest --silent"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "hiro-graph-client": "^1.0.1",
-    "hiro-graph-implicit-oauth": "^1.0.0",
-    "hiro-graph-orm": "^1.0.2",
-    "lodash.isplainobject": "^4.0.6",
-    "redux": "^3.6.0",
-    "reselect": "^2.5.4"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.6.5",
-    "babel-jest": "^20.0.3",
-    "babel-preset-hiro": "^0.4.0",
-    "jest": "^20.0.4"
-  },
-  "babel": {
-    "presets": [
-      [
-        "hiro",
-        {
-          "library": true
+    "name": "hiro-graph-redux",
+    "version": "1.0.1",
+    "repository": "arago/hiro-graph-js",
+    "description": "Redux awareness for the `hiro-graph-orm` package",
+    "main": "lib/index.js",
+    "scripts": {
+        "build":
+            "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "prepublish": "yarn build",
+        "test": "jest --silent"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "hiro-graph-client": "^1.0.1",
+        "hiro-graph-implicit-oauth": "^1.0.0",
+        "hiro-graph-orm": "^1.0.2",
+        "lodash.isplainobject": "^4.0.6",
+        "redux": "^4.0.0",
+        "reselect": "^3.0.1"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.6.5",
+        "babel-jest": "^23.4.2",
+        "babel-preset-hiro": "^0.4.0",
+        "jest": "^23.5.0"
+    },
+    "babel": {
+        "presets": [
+            [
+                "hiro",
+                {
+                    "library": true
+                }
+            ]
+        ]
+    },
+    "jest": {
+        "testPathIgnorePatterns": ["<rootDir>[/\\\\](lib|node_modules)[/\\\\]"],
+        "testEnvironment": "node",
+        "testURL": "http://localhost",
+        "transform": {
+            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
         }
-      ]
-    ]
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
-    ],
-    "testEnvironment": "node",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
     }
-  }
 }
