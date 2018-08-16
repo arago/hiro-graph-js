@@ -339,7 +339,12 @@ const mixinMethods = {
     create: (ctx, entity) => (data, options = {}) =>
         create(ctx, entity, data, options),
     connect: (ctx, entity) => (relation, source, target, options = {}) =>
-        connect(ctx, entity, { relation, source, target }, options),
+        connect(
+            ctx,
+            entity,
+            { relation, source, target },
+            options
+        ),
     disconnect: (ctx, entity) => (relation, source, target, options = {}) =>
         disconnect(ctx, entity, { relation, source, target }, options),
     update: (ctx, entity) => (vertexId, appData, options = {}) =>

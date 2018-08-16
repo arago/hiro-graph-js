@@ -279,7 +279,12 @@ export function connect(
     const { verb, direction } = relationDef.hops[0];
     const [inId, outId] =
         direction === "in" ? [source, target] : [target, source];
-    return ctx.getClient().connect(verb, inId, outId, options);
+    return ctx.getClient().connect(
+        verb,
+        inId,
+        outId,
+        options
+    );
 }
 
 /**

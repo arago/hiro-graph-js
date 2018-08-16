@@ -63,7 +63,12 @@ export default client => [
     },
     {
         name: "connect",
-        fn: () => client.connect("some-verb", "the-in-id", "the-out-id")
+        fn: () =>
+            client.connect(
+                "some-verb",
+                "the-in-id",
+                "the-out-id"
+            )
     },
     {
         name: "disconnect",
