@@ -12,7 +12,7 @@
   },
   "scripts": {
     "lerna": "lerna",
-    "test": "lerna bootstrap --concurrency 1 --yes && npm run lint && lerna run test",
+    "test": "lerna bootstrap --concurrency 1 && npm run lint && lerna run test",
     "publish": "lerna publish",
     "format": "prettier --tab-width=4 'packages/*/*.js' 'packages/*/!(node_modules|lib)/**/*.js' --write",
     "lint-prettier": "prettier --tab-width=4 'packages/*/*.js' 'packages/*/!(node_modules|lib)/**/*.js' --list-different",
