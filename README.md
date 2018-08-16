@@ -1,6 +1,6 @@
 <img src="https://github.com/arago/hiro-graph-js/blob/master/logo.png" alt="HIRO Graph JS" width="800px" />
 
-# HIRO Graph JavaScript Libraries [![Build Status](https://travis-ci.org/arago/hiro-graph-js.svg?branch=master)](https://travis-ci.org/arago/hiro-graph-js)
+# HIRO Graph JavaScript Libraries [![Build Status](https://travis-ci.org/arago/hiro-graph-js.svg?branch=master)](https://travis-ci.org/arago/hiro-graph-js) [![Greenkeeper badge](https://badges.greenkeeper.io/arago/hiro-graph-js.svg)](https://greenkeeper.io/)
 
 These libraries are for interacting with the HIRO Graph API. For full details of the API see the [HIRO Graph Docs](https://docs.hiro.arago.co/hiro/current/developer/hiro-graph-api/).
 
