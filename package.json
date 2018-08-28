@@ -12,7 +12,7 @@
     },
     "devDependencies": {
         "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
-        "babel-eslint": "^8.2.6",
+        "babel-eslint": "^9.0.0",
         "eslint": "^5.3.0",
         "husky": "^0.14.3",
         "lerna": "^3.0.6",
