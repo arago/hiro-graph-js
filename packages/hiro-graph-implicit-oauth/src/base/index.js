@@ -27,6 +27,7 @@ export default function createOauthStrategy(implementation) {
         url: baseURL,
         redirectUri = defaultRedirectUri(),
         logoutUri,
+        logoutReturnUrl,
         ...options
     }) => {
         const key = createKey(clientId);
@@ -58,7 +59,7 @@ export default function createOauthStrategy(implementation) {
                 "?" +
                 querystring.stringify({
                     clientid_token: clientId + "." + tok,
-                    return_url: redirectUri
+                    return_url: logoutReturnUrl
                 })
             );
         };
