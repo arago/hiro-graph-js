@@ -28,6 +28,7 @@ export default function createOauthStrategy(implementation) {
         redirectUri = defaultRedirectUri(),
         logoutUri,
         logoutReturnUrl,
+        clearStorageOnLogout = true,
         ...options
     }) => {
         const key = createKey(clientId);
@@ -53,7 +54,9 @@ export default function createOauthStrategy(implementation) {
         const clear = () => window.localStorage.removeItem(TOKEN_KEY);
 
         const logout = tok => {
-            clear();
+            if (clearStorageOnLogout) {
+                clear();
+            }
             return (
                 logoutUri +
                 "?" +
