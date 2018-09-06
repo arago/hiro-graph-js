@@ -1,12 +1,11 @@
 {
     "name": "hiro-graph-orm",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "OGIT ontology to sane application mappings",
     "repository": "arago/hiro-graph-js",
     "main": "lib/index.js",
     "scripts": {
-        "build":
-            "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "yarn build",
         "test": "jest --silent"
     },
@@ -35,7 +34,9 @@
         ]
     },
     "jest": {
-        "testPathIgnorePatterns": ["<rootDir>[/\\\\](lib|node_modules)[/\\\\]"],
+        "testPathIgnorePatterns": [
+            "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+        ],
         "testEnvironment": "node",
         "testURL": "http://localhost",
         "transform": {
