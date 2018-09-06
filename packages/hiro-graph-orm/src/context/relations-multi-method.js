@@ -43,7 +43,7 @@ export function fetchIds(ctx, entity) {
                         .map(fn => fn(queryBuilder()))
                         .map(({ alias, query }) => {
                             return query
-                                .property("ogit/_id")
+                                .values("ogit/_id")
                                 .executeInContext(
                                     ctx,
                                     vertex._id,

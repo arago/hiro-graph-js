@@ -244,6 +244,22 @@ export class GremlinQueryBuilder {
     }
 
     /**
+     * Reduce the pipeline to a single property from each item.
+     *
+     *  @see http://tinkerpop.apache.org/docs/3.3.1/reference/#value-step
+     *
+     *  @param {String} target
+     *  @return {GremlinQueryBuilder} - the same object (chainable)
+     */
+    values(target) {
+        if (!target) {
+            return this.raw("values()");
+        }
+
+        return this.raw(`values("${target}")`);
+    }
+
+    /**
      *  Filter the pipeline with a closure.
      *
      *  **NB there is currently no validation of the input**

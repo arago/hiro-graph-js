@@ -78,6 +78,7 @@ describe("Gremlin Query Builder", function() {
         "in",
         "out",
         "both",
+        "values",
         "property",
         "getProperty",
         "count",
