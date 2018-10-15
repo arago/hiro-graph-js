@@ -119,6 +119,17 @@ export default class Context {
     }
 
     /**
+     *  This returns the vertex from the owner of the access token in use.
+     *  @return {Promise<GraphVertex>}
+     */
+    person() {
+        //this is a bit different.
+        return fetchMe(this)
+            .then(this.fetchVertices(["person"]))
+            .then(me => me.getVertices("person").pop());
+    }
+
+    /**
      * Get's the underlying GraphIT Client.
      *
      * @return {Client}

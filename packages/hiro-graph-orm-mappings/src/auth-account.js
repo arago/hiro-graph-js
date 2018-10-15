@@ -10,5 +10,8 @@ export default {
             src: "/roles",
             type: "list"
         }
+    },
+    relations: {
+        person: "ogit/belongs -> ogit/Person"
     }
 };
