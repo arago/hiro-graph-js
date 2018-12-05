@@ -1,0 +1,66 @@
+# hiro-graph-populate
+
+Tool for populating graph with data.
+
+## Install
+
+The tool is executable and can be installed locally, or globally.
+
+### Local
+
+`yarn add -D hiro-graph-populate`
+
+### Global
+
+`yarn global add hiro-graph-populate`
+
+## Usage
+
+A config (.rc, .json, .js or in package.json) for `hiro-graph-populate` is required.
+The config will be used to populate a graph using the details given in the environmental variables.
+
+### Local
+
+`yarn hiro-graph-populate`
+
+### Global
+
+`hiro-graph-populate`
+
+### Environmental variables
+
+Environment variables must be set in-order to retrieve a token, a `.env.` file can be used for this:
+
+```env
+CLIENT_ID=[application client id]
+CLIENT_SECRET=[application secret]
+URL=https://stagegraph.arago.co
+USER_NAME=[username]
+USER_PASSWORD=[password]
+```
+
+### Config
+
+Config is required and can be stored as:
+
+-   `hiro-graph-populate` in package.json
+-   `.hiro-graph-populaterc` (JSON or YAML)
+-   `.hiro-graph-populaterc.{json|yaml|yml|js}`
+-   `hiro-graph-populate.config.js`
+
+```js
+exports.module = {
+    populate: [
+        {
+            name: "a.arago-demo.com",
+            admins: [
+                { name: "Lydia Mason", email: "lydia.mason@a.arago-demo.com" }
+            ],
+            users: [
+                { name: "Nyah Cross", email: "nyah.cross@a.arago-demo.com" },
+                { name: "Mia Rose", email: "mia-rose.irving@a.arago-demo.com" }
+            ]
+        }
+    ]
+};
+```
