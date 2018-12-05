@@ -1,0 +1,41 @@
+{
+    "name": "hiro-graph-populate",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "bin": {
+        "hiro-graph-populate": "lib/index.js"
+    },
+    "license": "MIT",
+    "description": "Populate a graph with data for tests",
+    "scripts": {
+        "start": "node lib/index.js",
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "prepublish": "yarn build",
+        "test": "jest --silent"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.6.5",
+        "babel-jest": "^23.4.2",
+        "babel-preset-hiro": "^0.4.0",
+        "jest": "^23.5.0"
+    },
+    "babel": {
+        "presets": [
+            [
+                "hiro",
+                {
+                    "library": true
+                }
+            ]
+        ]
+    },
+    "dependencies": {
+        "chalk": "^2.4.1",
+        "cosmiconfig": "^5.0.7",
+        "dotenv": "^6.1.0",
+        "hiro-graph-orm": "^1.0.4",
+        "hiro-graph-orm-mappings": "^1.0.1",
+        "node-fetch": "^2.3.0",
+        "shelljs": "^0.8.3"
+    }
+}
