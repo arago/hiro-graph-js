@@ -1,7 +1,8 @@
 {
     "name": "ogit-ts",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "lib/index.js",
+    "description": "Automatic generation of ORM mapping based on OGIT",
     "license": "MIT",
     "scripts": {
         "build": "yarn lint && TS_NODE_FILES=true ts-node ./src/index && yarn format",
