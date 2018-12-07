@@ -1,29 +1,26 @@
 {
     "name": "hiro-graph-orm-mappings",
-    "version": "1.0.1",
-    "repository": "arago/hiro-graph-js",
-    "description": "a set of mapping definitions useful across OGIT apps using `hiro-graph-orm`",
+    "version": "1.0.0",
     "main": "lib/index.js",
+    "description": "Automatic generation of ORM mapping based on OGIT",
+    "license": "MIT",
     "scripts": {
-        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build": "yarn lint && TS_NODE_FILES=true ts-node ./src/index && yarn format",
+        "lint": "tslint ./src/**/*.{ts,tsx} --fix",
+        "format": "prettier --tab-width=4 'lib/*.js' --write",
         "prepublish": "yarn build",
         "test": "echo no tests"
     },
-    "license": "MIT",
     "devDependencies": {
-        "babel-cli": "^6.6.5",
-        "babel-jest": "^23.4.2",
-        "babel-preset-hiro": "^0.4.0",
-        "jest": "^23.5.0"
+        "@types/shelljs": "^0.8.1",
+        "ts-node": "^7.0.1",
+        "tslib": "^1.9.3",
+        "tslint": "^5.11.0",
+        "tslint-config-prettier": "^1.15.0",
+        "typescript": "^3.1.3",
+        "prettier": "^1.15.3"
     },
-    "babel": {
-        "presets": [
-            [
-                "hiro",
-                {
-                    "library": true
-                }
-            ]
-        ]
+    "dependencies": {
+        "shelljs": "^0.8.3"
     }
 }
