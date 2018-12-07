@@ -1,0 +1,9 @@
+.DS_STORE
+.gitignore
+.rpt2_cache
+.vscode
+node_modules/
+src
+tsconfig.json
+tslint.json
+yarn-error.log
