@@ -1,0 +1,29 @@
+{
+    "OGIT": "../../../OGIT/NTO",
+    "OUTPUT_DIR": "lib",
+    "blacklist": [
+        "Factory",
+        "Forum",
+        "MRP",
+        "Network",
+        "oslc-arch",
+        "oslc-asset",
+        "oslc-automation",
+        "oslc-change",
+        "oslc-core",
+        "oslc-crtv",
+        "oslc-ems",
+        "oslc-perfmon",
+        "oslc-qm",
+        "oslc-rddl",
+        "oslc-reqman"
+    ],
+    "mapping": {
+        "ogit/Auth/belongs -> ogit/Auth/Organization": "parentOrg",
+        "ogit/Auth/belongs <- ogit/Auth/AccountProfile": "profile",
+        "ogit/Auth/isMemberOf -> ogit/Auth/Team": "team",
+        "ogit/Auth/belongs -> ogit/Auth/Account": "account",
+        "ogit/belongs -> ogit/Person": "person",
+        "ogit/Auth/isMemberOf -> ogit/Auth/Organization": "org"
+    }
+}

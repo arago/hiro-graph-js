@@ -26,7 +26,7 @@
         "lint-prettier": "prettier --tab-width=4 'packages/*/*.js' 'packages/*/!(node_modules|lib)/**/*.js' --list-different",
         "lint-eslint": "eslint packages/",
         "lint": "yarn lint-prettier && yarn lint-eslint",
-        "start-again": "rm -rf package-lock.json node_modules/* && lerna exec 'rm -rf package-lock.json node_modules/*' && lerna bootstrap --concurrency 1",
+        "start-again": "rm -rf package-lock.json node_modules/* && yarn lerna exec 'rm -rf package-lock.json node_modules/*' && yarn lerna bootstrap --concurrency 1",
         "precommit": "yarn format"
     },
     "lint-staged": {
