@@ -10,7 +10,7 @@ export default {
         description: "ogit/description"
     },
     relations: {
-        assignments: "ogit/Auth/assigns <= ogit/Auth/RoleAssignment",
-        account: "ogit/Auth/assumes <= ogit/Auth/Account "
+        assignments: "ogit/Auth/assigns <- ogit/Auth/RoleAssignment",
+        account: "ogit/Auth/assumes <- ogit/Auth/Account "
     }
 };
