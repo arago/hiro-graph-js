@@ -101,7 +101,8 @@ const output: IOutput = {};
         const dirPath = join(config.OGIT, ns, "entities");
         const dir = fs
             .readdirSync(dirPath)
-            .map((v: string) => v.split(".").shift());
+            .map((v: string) => v.split(".").shift() || "")
+            .filter(v => !config.blacklist.includes(ns + "/" + v));
 
         if (!dir) {
             console.error("Failed to parse namespace: " + ns);
@@ -123,11 +124,29 @@ const output: IOutput = {};
         }
     }
 
-    Object.keys(tbd).map(key => {
+    // Handle dependencies until none
+    for (let keys; (keys = Object.keys(tbd)); ) {
+        // Check if empty
+        if (keys.length === 0) {
+            break;
+        }
+
+        const key = keys.pop() || "";
+
+        // Check if already done
+        if (output[key] && (output[key].optional || output[key].required)) {
+            delete tbd[key];
+            continue;
+        }
+
+        // Handle mapping
         const data = tbd[key];
-        console.log({ data });
+
         output[key] = createMapping(data.ns, data.name);
-    });
+
+        // Remove when done
+        delete tbd[key];
+    }
 
     if (fs.existsSync(config.OUTPUT_DIR)) {
         shell.rm("-r", config.OUTPUT_DIR);
