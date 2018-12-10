@@ -6,7 +6,7 @@ import {
     getOptionalAttributes,
     getRelations
 } from "./regex";
-import { getName, createIndex } from "./helper";
+import { getName, createIndex, flipRelationshipName } from "./helper";
 import { mapRelationship } from "./relations";
 
 import config from "../config.json";
@@ -27,6 +27,7 @@ const addRelation = (v: string[], from: string) => {
     }
 
     const left = v[0].split("/").pop() || "";
+    const safeLeft = flipRelationshipName(left);
     const right = from.split("/").pop() || "";
 
     if (!left || !right) {
@@ -37,7 +38,7 @@ const addRelation = (v: string[], from: string) => {
     const relationship = v[0] + " <- " + from;
     // @ts-ignore
     output[to].relations[
-        mapRelationship(relationship, left + right)
+        mapRelationship(relationship, safeLeft + right)
     ] = relationship;
 };
 

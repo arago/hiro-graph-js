@@ -12,6 +12,29 @@ export const getName = (value: string) => {
     return { ns: split[split.length - 2], name: split[split.length - 1] };
 };
 
+export const flipRelationshipName = (value: string) => {
+    if (value.endsWith("s")) {
+        if (value === "belongs") {
+            return "owns";
+        }
+        return value.charAt(value.length - 2) === "e"
+            ? value.substr(0, value.length - 2) + "edBy"
+            : value.substr(0, value.length - 1) + "edBy";
+    } else if (value.endsWith("To")) {
+        return value + "By";
+    } else if (value === "runsOn") {
+        return "runnable";
+    } else if (value.endsWith("With")) {
+        return value.substr(0, value.length - 4) + "From";
+    } else if (value === "derivesFrom") {
+        return "deriving";
+    } else if (value === "dependsOn") {
+        return "dependant";
+    }
+
+    return value;
+};
+
 export const createIndex = (output: IOutput) => {
     let imports = "";
     let exports = "";
