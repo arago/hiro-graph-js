@@ -11,11 +11,15 @@ import { mapRelationship } from "./relations";
 
 import config from "../config.json";
 
+const tbd: IToBeDone = {};
+
 const addRelation = (v: string[], from: string) => {
     const to = v[1];
 
     if (!output[to]) {
-        output[to] = { name: getName(to), ogit: to };
+        const name = getName(to);
+        output[to] = { name: name.ns + name.name, ogit: to };
+        tbd[to] = name;
     }
 
     if (!output[to].relations) {
@@ -38,12 +42,14 @@ const addRelation = (v: string[], from: string) => {
 };
 
 const createMapping = (namespace: string, name: string) => {
-    const data = fs
-        .readFileSync(join(config.OGIT, namespace, "entities", `${name}.ttl`))
-        .toString();
+    const filePath = namespace
+        ? join(config.OGIT, namespace, "entities", `${name}.ttl`)
+        : join(config.OGIT, "../SGO/sgo", "entities", `${name}.ttl`);
+
+    const data = fs.readFileSync(filePath).toString();
 
     const safeNamespace = namespace.replace(/-/g, "");
-    const ogit = `ogit/${safeNamespace}/${name}`;
+    const ogit = namespace ? `ogit/${namespace}/${name}` : `ogit/${name}`;
     const mapping: IEntity = {
         name: safeNamespace + name,
         ogit
@@ -107,10 +113,21 @@ const output: IOutput = {};
                 continue;
             }
 
-            console.log(`ogit/${ns}/${entity}`);
-            output[`ogit/${ns}/${entity}`] = createMapping(ns, entity);
+            const name = `ogit/${ns}/${entity}`;
+
+            // Delete from TBD list
+            delete tbd[name];
+
+            console.log(name);
+            output[name] = createMapping(ns, entity);
         }
     }
+
+    Object.keys(tbd).map(key => {
+        const data = tbd[key];
+        console.log({ data });
+        output[key] = createMapping(data.ns, data.name);
+    });
 
     if (fs.existsSync(config.OUTPUT_DIR)) {
         shell.rm("-r", config.OUTPUT_DIR);

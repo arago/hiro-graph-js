@@ -1,19 +1,23 @@
 interface IData {
-  [index: string]: string;
+    [index: string]: string;
 }
 
 interface IMapping {
-  [index: string]: string;
+    [index: string]: string;
 }
 
 interface IEntity {
-  name: string;
-  ogit: string;
-  required?: IData;
-  optional?: IData;
-  relations?: IData;
+    name: string;
+    ogit: string;
+    required?: IData;
+    optional?: IData;
+    relations?: IData;
 }
 
 interface IOutput {
-  [index: string]: IEntity;
+    [index: string]: IEntity;
+}
+
+interface IToBeDone {
+    [index: string]: { ns: string; name: string };
 }

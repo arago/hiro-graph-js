@@ -1,10 +1,10 @@
 export const getName = (value: string) => {
-    const split = value.replace(/-/g, "").split("/");
+    const split = value.split("/");
     if (split.length === 2) {
-        return split[1];
+        return { ns: "", name: split[1] };
     }
 
-    return split[split.length - 2] + split[split.length - 1];
+    return { ns: split[split.length - 2], name: split[split.length - 1] };
 };
 
 export const createIndex = (output: IOutput) => {
