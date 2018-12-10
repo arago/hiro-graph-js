@@ -43,7 +43,12 @@ const addRelation = (v: string[], from: string) => {
 
 const createMapping = (namespace: string, name: string) => {
     const filePath = namespace
-        ? join(config.OGIT, namespace, "entities", `${name}.ttl`)
+        ? join(
+              config.OGIT,
+              namespace.includes("OSLC") ? namespace.toLowerCase() : namespace,
+              "entities",
+              `${name}.ttl`
+          )
         : join(config.OGIT, "../SGO/sgo", "entities", `${name}.ttl`);
 
     const data = fs.readFileSync(filePath).toString();
@@ -97,6 +102,7 @@ const output: IOutput = {};
         })
         .filter(v => !config.blacklist.includes(v));
 
+    console.group("Build:", config.OGIT);
     for (const ns of topDir) {
         const dirPath = join(config.OGIT, ns, "entities");
         const dir = fs
@@ -123,8 +129,10 @@ const output: IOutput = {};
             output[name] = createMapping(ns, entity);
         }
     }
+    console.groupEnd();
 
     // Handle dependencies until none
+    console.group("Build: deps");
     for (let keys; (keys = Object.keys(tbd)); ) {
         // Check if empty
         if (keys.length === 0) {
@@ -141,19 +149,23 @@ const output: IOutput = {};
 
         // Handle mapping
         const data = tbd[key];
-
+        console.log(key);
         output[key] = createMapping(data.ns, data.name);
 
         // Remove when done
         delete tbd[key];
     }
+    console.groupEnd();
 
     if (fs.existsSync(config.OUTPUT_DIR)) {
+        console.log("Remove build dir:", config.OUTPUT_DIR);
         shell.rm("-r", config.OUTPUT_DIR);
     }
 
+    console.log("Create build dir:", config.OUTPUT_DIR);
     fs.mkdirSync(config.OUTPUT_DIR);
 
+    console.log("Generate library files");
     Object.keys(output).map(key => {
         const name = key
             .toLowerCase()
@@ -165,5 +177,6 @@ const output: IOutput = {};
         );
     });
 
+    console.log("Generate index.js");
     fs.writeFileSync(config.OUTPUT_DIR + "/index.js", createIndex(output));
 })();
