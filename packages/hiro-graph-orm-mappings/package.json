@@ -2,6 +2,7 @@
     "name": "hiro-graph-orm-mappings",
     "version": "1.0.0",
     "main": "lib/index.js",
+    "typings": "lib/typings.d.ts",
     "description": "Automatic generation of ORM mapping based on OGIT",
     "license": "MIT",
     "scripts": {

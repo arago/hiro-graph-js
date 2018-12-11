@@ -35,10 +35,11 @@ export const flipRelationshipName = (value: string) => {
     return value;
 };
 
-export const createIndex = (output: IOutput) => {
+const generateOutputs = (output: IOutput) => {
     let imports = "";
     let exports = "";
     let singleExports = "";
+    const names: string[] = [];
     const keys = Object.keys(output).sort((a, b) => {
         if (a === b) {
             return 0;
@@ -59,8 +60,37 @@ export const createIndex = (output: IOutput) => {
         imports += `const ${safeName} = require("./${fileName}");\n`;
         exports += `    ${safeName}${i === keys.length - 1 ? "" : ",\n"}`;
         singleExports += `exports.${safeName} = ${safeName};`;
+        names.push(safeName);
     });
 
+    return { imports, exports, singleExports, names };
+};
+
+export const createTypings = (output: IOutput) => {
+    const { exports, names } = generateOutputs(output);
+    return `declare module "hiro-graph-orm-mappings" {
+    export interface IEntity {
+        name: string;
+        ogit: string;
+        required?: IData;
+        optional?: IData;
+        relations?: IData;
+    }
+
+    export type MappedTypes =
+${names.map(n => `        | "${n}"`).join("\n")};
+
+${names.map(n => `    export const ${n}: IEntity;`).join("\n")}
+
+    export default [
+${names.map(n => `        ${n},`).join("\n")}
+    ];
+}
+`;
+};
+
+export const createIndex = (output: IOutput) => {
+    const { imports, exports, singleExports } = generateOutputs(output);
     return `"use strict";
 
 Object.defineProperty(exports, "__esModule", {

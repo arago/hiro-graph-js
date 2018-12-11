@@ -9,6 +9,7 @@
         "prepublish": "yarn build",
         "test": "jest --silent"
     },
+    "types": "typings.d.ts",
     "license": "MIT",
     "dependencies": {
         "hiro-graph-client": "^1.0.1",

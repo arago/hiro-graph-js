@@ -6,7 +6,12 @@ import {
     getOptionalAttributes,
     getRelations
 } from "./regex";
-import { getName, createIndex, flipRelationshipName } from "./helper";
+import {
+    getName,
+    createIndex,
+    flipRelationshipName,
+    createTypings
+} from "./helper";
 import { mapRelationship } from "./relations";
 
 import config from "../config.json";
@@ -180,4 +185,10 @@ const output: IOutput = {};
 
     console.log("Generate index.js");
     fs.writeFileSync(config.OUTPUT_DIR + "/index.js", createIndex(output));
+
+    console.log("Generate typings");
+    fs.writeFileSync(
+        config.OUTPUT_DIR + "/typings.d.ts",
+        createTypings(output)
+    );
 })();
