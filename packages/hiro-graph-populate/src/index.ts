@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import HiroGraphOrm, { ORM } from "hiro-graph-orm";
-import mappings, { MappedTypes } from "hiro-graph-orm-mappings";
+import HiroGraphOrm, { ORM } from "@hiro-graph/orm";
+import mappings, { MappedTypes } from "@hiro-graph/orm-mappings";
 
 import fetch from "node-fetch";
 
@@ -106,14 +106,14 @@ const populate = async (orm: ORM<MappedTypes>, values: IPopulateValue[]) => {
 */
 
     configs!.config.orgs.map(async o => {
+        const res = await createOrg(token, o.name);
+
         const admins = (await Promise.all(
-            o.admins.map(a => createUser(token, a))
+            o.admins.map(a => createUser(token, a, o.name))
         )).map(a => (a ? a.account["ogit/_id"] : ""));
 
-        const users = (await Promise.all(
-            o.users.map(a => createUser(token, a))
-        )).map(a => (a ? a.account["ogit/_id"] : ""));
+        await Promise.all(o.users.map(a => createUser(token, a, o.name)));
 
-        await createOrg(token, o.name, users, admins);
+        await res!.addAdmins(admins);
     });
 })();

@@ -14,6 +14,7 @@ interface ICreateAccount {
     "ogit/name": string;
     "ogit/email"?: string;
     "ogit/Auth/Account/type": AuthAccountType;
+    "ogit/_organization": string;
 }
 
 export interface ICreateAccountResponse {
@@ -165,12 +166,7 @@ const helpers = (token: string, url: string) => ({
         }).then<IAddMembersResponse[] | IResponse>(res => res.json())
 });
 
-export const createOrg = async (
-    token: string,
-    name: string,
-    users?: string[],
-    admins?: string[]
-) => {
+export const createOrg = async (token: string, name: string) => {
     const configs = await configsSingleton;
 
     if (!configs) {
@@ -203,51 +199,35 @@ export const createOrg = async (
                 .join(", ")}]`
         );
 
-        if (admins && admins.length > 0) {
-            o = new Ora(`Adding admins`);
-            const adminTeam = resTeams
-                .filter(t => t["ogit/name"] === "admin")
-                .pop();
+        const addAdmins = async (admins: string[]) => {
+            if (admins && admins.length > 0) {
+                o = new Ora(`Adding admins`);
+                const adminTeam = resTeams
+                    .filter(t => t["ogit/name"] === "admin")
+                    .pop();
 
-            if (!adminTeam) {
-                throw new Error(
-                    `Team named 'admin' not found for org '${name}'`
+                if (!adminTeam) {
+                    throw new Error(
+                        `Team named 'admin' not found for org '${name}'`
+                    );
+                }
+
+                const resAddMem = await addMembers(
+                    adminTeam["ogit/_id"],
+                    admins
                 );
+                const error = (resAddMem as IResponse).error;
+
+                if (error) {
+                    throw new Error(error.message);
+                }
+
+                o.succeed(`Added admins`);
             }
-
-            const resAddMem = await addMembers(adminTeam["ogit/_id"], admins);
-            const error = (resAddMem as IResponse).error;
-
-            if (error) {
-                throw new Error(error.message);
-            }
-
-            o.succeed(`Added admins`);
-        }
-
-        if (users && users.length > 0) {
-            o = new Ora(`Adding users`);
-            const defaultTeam = resTeams
-                .filter(t => t["ogit/name"] === "default-team")
-                .pop();
-
-            if (!defaultTeam) {
-                throw new Error(
-                    `Team named 'default-team' not found for org '${name}'`
-                );
-            }
-
-            const resAddMem = await addMembers(defaultTeam["ogit/_id"], users);
-            const error = (resAddMem as IResponse).error;
-
-            if (error) {
-                throw new Error(error.message);
-            }
-
-            o.succeed(`Added users`);
-        }
+        };
 
         return {
+            addAdmins,
             org: resCreate,
             teams: resTeams
         };
@@ -256,7 +236,7 @@ export const createOrg = async (
     }
 };
 
-export const createUser = async (token: string, user: IPerson) => {
+export const createUser = async (token: string, user: IPerson, org: string) => {
     const configs = await configsSingleton;
 
     if (!configs) {
@@ -272,6 +252,7 @@ export const createUser = async (token: string, user: IPerson) => {
     try {
         const resCreate = await createAccount({
             "ogit/Auth/Account/type": user.email ? "person" : "application",
+            "ogit/_organization": org,
             "ogit/email": user.email,
             "ogit/name": user.name
         });
