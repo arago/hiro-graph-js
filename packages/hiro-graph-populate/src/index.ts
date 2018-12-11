@@ -11,7 +11,8 @@ import shell from "shelljs";
 const explorer = cosmiconfig("hiro-graph-populate");
 
 const envSchema = Joi.object().keys({
-    HIRO_CLIENT_ID: Joi.string().required(),
+    HIRO_CLIENT_ID: Joi.string()
+    .required(),
     HIRO_CLIENT_SECRET: Joi.string().required(),
     HIRO_GRAPH_URL: Joi.string()
         .uri()
@@ -26,7 +27,7 @@ const userSchema = Joi.object({
 });
 
 const configSchema = Joi.object({
-    populate: Joi.array()
+    orgs: Joi.array()
         .items(
             Joi.object({
                 admins: Joi.array()
@@ -46,8 +47,14 @@ const getOrm = async () => {
     const { parsed: envConfig } = dotenv.config();
     const result = envSchema.validate(envConfig);
 
-    if (result.error || !envConfig) {
-        shell.echo(chalk.red(result.error.message));
+    if (!envConfig) {
+        shell.echo(chalk.red("Enivronmental variables missing!"));
+        shell.exit(1);
+        return;
+    }
+
+    if (result.error) {
+        shell.echo(chalk.red(result.error.annotate()));
         shell.exit(1);
         return;
     }
@@ -125,21 +132,27 @@ const populate = async (orm: ORM<MappedTypes>, values: IPopulateValue[]) => {
 (async () => {
     // Load configs
     const search = await explorer.search();
-    const result = configSchema.validate(search);
 
     // Exit if populate config missing
-    if (result.error || !search) {
-        shell.echo(chalk.red(result.error.message));
+    if (!search) {
+        shell.echo(chalk.red("Config missing!"));
         shell.exit(1);
         return;
     }
 
     // Get config value
-    const { module: config } = search.config;
+    const config = search.config.module as IConfig;
+
+    const result = configSchema.validate(config);
+    if (result.error) {
+        shell.echo(chalk.red(result.error.annotate()));
+        shell.exit(1);
+        return;
+    }
 
     const orm = await getOrm();
 
     if (orm) {
-        await populate(orm, config.populate);
+        await populate(orm, config.orgs);
     }
 })();

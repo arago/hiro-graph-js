@@ -1,5 +1,5 @@
 interface IConfig {
-    populate: Array<IPopulateValue>;
+    orgs: Array<IPopulateValue>;
 }
 
 interface IPopulateValue {
