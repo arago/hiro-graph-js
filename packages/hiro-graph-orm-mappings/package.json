@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/orm-mappings",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "main": "lib/index.js",
     "typings": "lib/typings.d.ts",
     "description": "Automatic generation of ORM mapping based on OGIT",
