@@ -5,7 +5,7 @@
     "repository": "arago/hiro-graph-js",
     "main": "lib/index.js",
     "scripts": {
-        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib",
         "prepublish": "yarn build",
         "test": "jest --silent"
     },
