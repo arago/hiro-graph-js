@@ -2,6 +2,7 @@
 .gitignore
 .rpt2_cache
 .vscode
+config.json
 node_modules/
 src
 tsconfig.json
