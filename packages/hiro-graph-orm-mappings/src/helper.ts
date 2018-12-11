@@ -67,25 +67,26 @@ const generateOutputs = (output: IOutput) => {
 };
 
 export const createTypings = (output: IOutput) => {
-    const { exports, names } = generateOutputs(output);
-    return `declare module "hiro-graph-orm-mappings" {
-    export interface IEntity {
-        name: string;
-        ogit: string;
-        required?: IData;
-        optional?: IData;
-        relations?: IData;
-    }
+    const { names } = generateOutputs(output);
+    return `declare const mapping: Array<IDefinition>;
+export default mapping;
 
-    export type MappedTypes =
-${names.map(n => `        | "${n}"`).join("\n")};
-
-${names.map(n => `    export const ${n}: IEntity;`).join("\n")}
-
-    export default [
-${names.map(n => `        ${n},`).join("\n")}
-    ];
+export interface IDefinitionData {
+    [index: string]: string;
 }
+
+export interface IDefinition {
+    name: string;
+    ogit: string;
+    required?: IDefinitionData;
+    optional?: IDefinitionData;
+    relations?: IDefinitionData;
+}
+
+export type MappedTypes =
+${names.map(n => `    | "${n}"`).join("\n")};
+
+${names.map(n => `export const ${n}: IDefinition;`).join("\n")}
 `;
 };
 
