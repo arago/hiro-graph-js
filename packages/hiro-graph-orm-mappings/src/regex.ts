@@ -21,18 +21,14 @@ export function getData(regex: RegExp, input: string): string[] {
 
 function getAttributes(regex: RegExp, input: string) {
     const data = getData(regex, input);
-    const output: IData = {};
+    const output: IDefinitionData = {};
 
     for (const v of data) {
         const name = v.split("/").pop();
         if (!name) {
-            return;
+            continue;
         }
         output[name] = v;
-    }
-
-    if (Object.keys(output).length === 0) {
-        return;
     }
 
     return output;
@@ -41,11 +37,11 @@ function getAttributes(regex: RegExp, input: string) {
 export function getRelations(
     input: string,
     ogit: string,
-    startValue: IData = {},
+    startValue: IDefinitionData = {},
     addRelation: (v: string[], from: string) => void
 ) {
     const data = getData(relationsRegex, input);
-    const output: IData = startValue;
+    const output: IDefinitionData = startValue;
 
     let i = 0;
     for (const v of data) {
@@ -79,10 +75,6 @@ export function getRelations(
 
         output[relationshipKey] = relationship;
         i += 1;
-    }
-
-    if (Object.keys(output).length === 0) {
-        return;
     }
 
     return output;

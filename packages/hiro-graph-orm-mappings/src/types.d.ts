@@ -1,4 +1,4 @@
-interface IData {
+interface IDefinitionData {
     [index: string]: string;
 }
 
@@ -6,16 +6,16 @@ interface IMapping {
     [index: string]: string;
 }
 
-interface IEntity {
+interface IDefinition {
     name: string;
     ogit: string;
-    required?: IData;
-    optional?: IData;
-    relations?: IData;
+    required?: IDefinitionData;
+    optional?: IDefinitionData;
+    relations?: IDefinitionData;
 }
 
 interface IOutput {
-    [index: string]: IEntity;
+    [index: string]: IDefinition;
 }
 
 interface IToBeDone {

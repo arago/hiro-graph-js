@@ -10,7 +10,8 @@ import {
     getName,
     createIndex,
     flipRelationshipName,
-    createTypings
+    createTypings,
+    createExport
 } from "./helper";
 import { mapRelationship } from "./relations";
 
@@ -47,7 +48,7 @@ const addRelation = (v: string[], from: string) => {
     ] = relationship;
 };
 
-const createMapping = (namespace: string, name: string) => {
+const createMapping = (namespace: string, name: string): IDefinition => {
     const filePath = namespace
         ? join(
               config.OGIT,
@@ -61,10 +62,6 @@ const createMapping = (namespace: string, name: string) => {
 
     const safeNamespace = namespace.replace(/-/g, "");
     const ogit = namespace ? `ogit/${namespace}/${name}` : `ogit/${name}`;
-    const mapping: IEntity = {
-        name: safeNamespace + name,
-        ogit
-    };
 
     const currentValue = output[ogit];
     const required = getRequiredAttributes(data);
@@ -76,17 +73,13 @@ const createMapping = (namespace: string, name: string) => {
         addRelation
     );
 
-    if (required) {
-        mapping.required = required;
-    }
-    if (optional) {
-        mapping.optional = optional;
-    }
-    if (relations) {
-        mapping.relations = relations;
-    }
-
-    return mapping;
+    return {
+        name: safeNamespace + name,
+        ogit,
+        required,
+        optional,
+        relations
+    };
 };
 
 const output: IOutput = {};
@@ -179,7 +172,7 @@ const output: IOutput = {};
             .replace(/\//g, "-");
         fs.writeFileSync(
             config.OUTPUT_DIR + "/" + name + ".js",
-            `exports.module = ${JSON.stringify(output[key], null, 2)};`
+            createExport(output[key])
         );
     });
 

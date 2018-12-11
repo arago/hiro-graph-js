@@ -58,8 +58,10 @@ const generateOutputs = (output: IOutput) => {
             .replace(/\//g, "-");
 
         imports += `const ${safeName} = require("./${fileName}");\n`;
-        exports += `    ${safeName}${i === keys.length - 1 ? "" : ",\n"}`;
-        singleExports += `exports.${safeName} = ${safeName};`;
+        exports += `    ${safeName}.default${
+            i === keys.length - 1 ? "" : ",\n"
+        }`;
+        singleExports += `exports.${safeName} = ${safeName}.default;`;
         names.push(safeName);
     });
 
@@ -105,6 +107,17 @@ ${exports}
 ];
 
 ${singleExports}
+`;
+};
+
+export const createExport = (output: IDefinition) => {
+    return `"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+exports.default = ${JSON.stringify(output, null, 2)}
 `;
 };
 
