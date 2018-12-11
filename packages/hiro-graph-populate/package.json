@@ -9,15 +9,16 @@
     "description": "Populate a graph with data for tests",
     "scripts": {
         "start": "node lib/index.js",
-        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build": "rm -rf lib/* && tsc",
         "prepublish": "yarn build",
         "test": "jest --silent"
     },
     "devDependencies": {
-        "babel-cli": "^6.6.5",
-        "babel-jest": "^23.4.2",
-        "babel-preset-hiro": "^0.4.0",
-        "jest": "^23.5.0"
+        "@types/cosmiconfig": "^5.0.3",
+        "@types/dotenv": "^6.1.0",
+        "@types/node-fetch": "^2.1.4",
+        "jest": "^23.5.0",
+        "typescript": "^3.2.2"
     },
     "babel": {
         "presets": [
@@ -30,11 +31,13 @@
         ]
     },
     "dependencies": {
+        "@hiro-graph/orm": "^1.0.5",
+        "@hiro-graph/orm-mappings": "^2.0.0",
+        "@types/joi": "^14.0.0",
         "chalk": "^2.4.1",
         "cosmiconfig": "^5.0.7",
         "dotenv": "^6.1.0",
-        "hiro-graph-orm": "^1.0.4",
-        "hiro-graph-orm-mappings": "^1.0.1",
+        "joi": "^14.3.0",
         "node-fetch": "^2.3.0",
         "shelljs": "^0.8.3"
     }

@@ -32,11 +32,11 @@ The config will be used to populate a graph using the details given in the envir
 Environment variables must be set in-order to retrieve a token, a `.env.` file can be used for this:
 
 ```env
-CLIENT_ID=[application client id]
-CLIENT_SECRET=[application secret]
-URL=https://stagegraph.arago.co
-USER_NAME=[username]
-USER_PASSWORD=[password]
+HIRO_CLIENT_ID=[application client id]
+HIRO_CLIENT_SECRET=[application secret]
+HIRO_GRAPH_URL=https://stagegraph.arago.co
+HIRO_GRAPH_USER_NAME=[username]
+HIRO_GRAPH_USER_PASSWORD=[password]
 ```
 
 ### Config
