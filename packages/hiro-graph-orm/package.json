@@ -1,6 +1,6 @@
 {
-    "name": "hiro-graph-orm",
-    "version": "1.0.4",
+    "name": "@hiro-graph/orm",
+    "version": "1.0.5",
     "description": "OGIT ontology to sane application mappings",
     "repository": "arago/hiro-graph-js",
     "main": "lib/index.js",
@@ -9,6 +9,7 @@
         "prepublish": "yarn build",
         "test": "jest --silent"
     },
+    "types": "typings.d.ts",
     "license": "MIT",
     "dependencies": {
         "hiro-graph-client": "^1.0.1",
