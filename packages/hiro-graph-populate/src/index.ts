@@ -1,64 +1,16 @@
 #!/usr/bin/env node
-import chalk from "chalk";
-import cosmiconfig from "cosmiconfig";
-import dotenv from "dotenv";
 import HiroGraphOrm, { ORM } from "hiro-graph-orm";
 import mappings, { MappedTypes } from "hiro-graph-orm-mappings";
-import Joi from "joi";
+
 import fetch from "node-fetch";
-import shell from "shelljs";
 
-const explorer = cosmiconfig("hiro-graph-populate");
+import { createOrg, createUser } from "./auth";
+import { configsSingleton } from "./config";
 
-const envSchema = Joi.object().keys({
-    HIRO_CLIENT_ID: Joi.string()
-    .required(),
-    HIRO_CLIENT_SECRET: Joi.string().required(),
-    HIRO_GRAPH_URL: Joi.string()
-        .uri()
-        .required(),
-    HIRO_GRAPH_USER_NAME: Joi.string().required(),
-    HIRO_GRAPH_USER_PASSWORD: Joi.string().required()
-});
+// @ts-ignore
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
-const userSchema = Joi.object({
-    email: Joi.string().required(),
-    name: Joi.string().required()
-});
-
-const configSchema = Joi.object({
-    orgs: Joi.array()
-        .items(
-            Joi.object({
-                admins: Joi.array()
-                    .items(userSchema)
-                    .required(),
-                name: Joi.string().required(),
-                users: Joi.array()
-                    .items(userSchema)
-                    .required()
-            }).required()
-        )
-        .required()
-});
-
-const getOrm = async () => {
-    // Load env
-    const { parsed: envConfig } = dotenv.config();
-    const result = envSchema.validate(envConfig);
-
-    if (!envConfig) {
-        shell.echo(chalk.red("Enivronmental variables missing!"));
-        shell.exit(1);
-        return;
-    }
-
-    if (result.error) {
-        shell.echo(chalk.red(result.error.annotate()));
-        shell.exit(1);
-        return;
-    }
-
+const login = async (envConfig: IEnv) => {
     // Get token
     const token = await fetch(`${envConfig.HIRO_GRAPH_URL}/api/6/auth/app`, {
         body: JSON.stringify({
@@ -74,13 +26,16 @@ const getOrm = async () => {
         .then(res => res._TOKEN);
 
     // Get orm
-    return new HiroGraphOrm(
-        {
-            endpoint: envConfig.URL,
-            token
-        },
-        mappings
-    ) as ORM<MappedTypes>;
+    return {
+        orm: new HiroGraphOrm(
+            {
+                endpoint: envConfig.HIRO_GRAPH_URL,
+                token
+            },
+            mappings
+        ) as ORM<MappedTypes>,
+        token
+    };
 };
 
 const populate = async (orm: ORM<MappedTypes>, values: IPopulateValue[]) => {
@@ -131,28 +86,34 @@ const populate = async (orm: ORM<MappedTypes>, values: IPopulateValue[]) => {
 
 (async () => {
     // Load configs
-    const search = await explorer.search();
+    const configs = await configsSingleton;
 
-    // Exit if populate config missing
-    if (!search) {
-        shell.echo(chalk.red("Config missing!"));
-        shell.exit(1);
-        return;
-    }
+    const { orm, token } = await login(configs!.env);
 
-    // Get config value
-    const config = search.config.module as IConfig;
-
-    const result = configSchema.validate(config);
-    if (result.error) {
-        shell.echo(chalk.red(result.error.annotate()));
-        shell.exit(1);
-        return;
-    }
-
-    const orm = await getOrm();
-
+    /*
     if (orm) {
-        await populate(orm, config.orgs);
+        await populate(orm, configs!.config.orgs);
     }
+    */
+
+    // await createUser(token, "test2", "password", "test2@tabtab.co");
+
+    /*
+    const users = (await Promise.all([
+        createUser(token, "user1", "password", "user1@tabtab.co"),
+        createUser(token, "user2", "password", "user2@tabtab.co")
+    ])).map(a => (a ? a.account["ogit/_id"] : ""));
+*/
+
+    configs!.config.orgs.map(async o => {
+        const admins = (await Promise.all(
+            o.admins.map(a => createUser(token, a))
+        )).map(a => (a ? a.account["ogit/_id"] : ""));
+
+        const users = (await Promise.all(
+            o.users.map(a => createUser(token, a))
+        )).map(a => (a ? a.account["ogit/_id"] : ""));
+
+        await createOrg(token, o.name, users, admins);
+    });
 })();
