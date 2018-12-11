@@ -16,8 +16,8 @@ import { createVertex, isVertex } from "../vertex/graph";
 const identity = val => val;
 
 // Convenience method based on user options
-const convertVerticesToPlain = mapIfArray(
-    input => (typeof input.plain === "function" ? input.plain() : input)
+const convertVerticesToPlain = mapIfArray(input =>
+    typeof input.plain === "function" ? input.plain() : input
 );
 
 export const naiveDetectRaw = input => input["ogit/_id"] && input["ogit/_type"];
