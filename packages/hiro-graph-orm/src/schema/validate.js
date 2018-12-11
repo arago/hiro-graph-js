@@ -35,19 +35,17 @@ export default function validate(schema, ontologyLocation) {
         };
     }
     //schema.names has the application name of each entity.
-    return schema.names
-        .map(name => schema.get(name))
-        .reduce(
-            (output, entity) => {
-                const errors = validateEntity(entity, ontology);
-                if (errors.length) {
-                    output.errors += errors.length;
-                    output.detail[entity.name] = errors;
-                }
-                return output;
-            },
-            { errors: 0, detail: {} }
-        );
+    return schema.names.map(name => schema.get(name)).reduce(
+        (output, entity) => {
+            const errors = validateEntity(entity, ontology);
+            if (errors.length) {
+                output.errors += errors.length;
+                output.detail[entity.name] = errors;
+            }
+            return output;
+        },
+        { errors: 0, detail: {} }
+    );
 }
 
 //load an ontology.
