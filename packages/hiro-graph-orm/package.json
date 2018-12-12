@@ -12,7 +12,7 @@
     "types": "typings.d.ts",
     "license": "MIT",
     "dependencies": {
-        "hiro-graph-client": "^1.0.1",
+        "@hiro-graph/client": "^1.0.1",
         "hiro-graph-codecs": "^1.0.0",
         "hiro-graph-gremlin": "^1.0.1",
         "hiro-graph-lucene": "^1.0.0",

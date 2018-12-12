@@ -1,3 +1,5 @@
+import Client from "hiro-graph-client";
+
 export type OneOrMoreVertices = GraphVertex | Array<GraphVertex>;
 export interface IDefinitionData {
     [index: string]: string;
@@ -15,8 +17,6 @@ export interface IDefinition {
     optional?: IDefinitionData;
     relations?: IDefinitionData;
 }
-
-export class Client {}
 
 export class BaseContext {
     find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices>;
@@ -94,6 +94,8 @@ export class Vertex {
 }
 
 export class GraphVertex extends Vertex {
+    private _ctx: Context;
+
     constructor(data: object, context: Context, guardSymbol: Symbol);
     save(options?: object): Promise<GraphVertex>;
     connect(
@@ -123,6 +125,12 @@ export class Schema {
     constructor(params: IClientArgs, options?: object);
 }
 
+export type IClientServlets = {
+    [index: string]: {
+        [index: string]: (data?: any) => Promise<any>;
+    };
+};
+
 export class Context extends BaseContext {
     constructor(
         clientSpec: Client | IClientArgs,
@@ -132,7 +140,7 @@ export class Context extends BaseContext {
 
     me(): Promise<GraphVertex>;
     person(): Promise<GraphVertex>;
-    getClient(): Client;
+    getClient<T extends IClientServlets>(): Client & T;
     setCache(cache: Map<string, object>): void;
 
     delete(vertexId: string, options?: object): Promise<GraphVertex>;
