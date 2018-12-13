@@ -72,7 +72,12 @@ export class Entity extends BaseContext {
     hasRelation(id: string, relation: string, test: any): boolean;
 }
 
-export class GremlinQueryBuilder {}
+export class GremlinQueryBuilder {
+    order(): GremlinQueryBuilder;
+    by(prop: string): GremlinQueryBuilder;
+    range(from: number, to: number): GremlinQueryBuilder;
+    execute<T>(id: string, options?: { raw: boolean }): Promise<T>;
+}
 
 export class LuceneQuery {}
 
@@ -132,6 +137,10 @@ export type IClientServlets = {
 };
 
 export class Context extends BaseContext {
+    private _cache: Map<string, object>;
+    private _client: Client;
+    private _log: string[];
+
     constructor(
         clientSpec: Client | IClientArgs,
         schemaSpec: Schema | Array<IDefinition>,
@@ -142,6 +151,7 @@ export class Context extends BaseContext {
     person(): Promise<GraphVertex>;
     getClient<T extends IClientServlets>(): Client & T;
     setCache(cache: Map<string, object>): void;
+    deleteFromCache(key: string): boolean;
 
     delete(vertexId: string, options?: object): Promise<GraphVertex>;
     gremlin(initialQuery?: string): GremlinQueryBuilder;
