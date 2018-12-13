@@ -1,3 +1,5 @@
+import Client from "hiro-graph-client";
+
 export type OneOrMoreVertices = GraphVertex | Array<GraphVertex>;
 export interface IDefinitionData {
     [index: string]: string;
@@ -15,8 +17,6 @@ export interface IDefinition {
     optional?: IDefinitionData;
     relations?: IDefinitionData;
 }
-
-export class Client {}
 
 export class BaseContext {
     find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices>;
@@ -72,7 +72,12 @@ export class Entity extends BaseContext {
     hasRelation(id: string, relation: string, test: any): boolean;
 }
 
-export class GremlinQueryBuilder {}
+export class GremlinQueryBuilder {
+    order(): GremlinQueryBuilder;
+    by(prop: string): GremlinQueryBuilder;
+    range(from: number, to: number): GremlinQueryBuilder;
+    execute<T>(id: string, options?: { raw: boolean }): Promise<T>;
+}
 
 export class LuceneQuery {}
 
@@ -94,6 +99,8 @@ export class Vertex {
 }
 
 export class GraphVertex extends Vertex {
+    private _ctx: Context;
+
     constructor(data: object, context: Context, guardSymbol: Symbol);
     save(options?: object): Promise<GraphVertex>;
     connect(
@@ -123,7 +130,17 @@ export class Schema {
     constructor(params: IClientArgs, options?: object);
 }
 
+export type IClientServlets = {
+    [index: string]: {
+        [index: string]: (data?: any) => Promise<any>;
+    };
+};
+
 export class Context extends BaseContext {
+    private _cache: Map<string, object>;
+    private _client: Client;
+    private _log: string[];
+
     constructor(
         clientSpec: Client | IClientArgs,
         schemaSpec: Schema | Array<IDefinition>,
@@ -132,8 +149,9 @@ export class Context extends BaseContext {
 
     me(): Promise<GraphVertex>;
     person(): Promise<GraphVertex>;
-    getClient(): Client;
+    getClient<T extends IClientServlets>(): Client & T;
     setCache(cache: Map<string, object>): void;
+    deleteFromCache(key: string): boolean;
 
     delete(vertexId: string, options?: object): Promise<GraphVertex>;
     gremlin(initialQuery?: string): GremlinQueryBuilder;

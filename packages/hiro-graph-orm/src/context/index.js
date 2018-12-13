@@ -162,6 +162,17 @@ export default class Context {
     }
 
     /**
+     * Delete key from cache.
+     *
+     * Cache is private and should only expose limited funtions.
+     *
+     * @param {string} key
+     */
+    deleteFromCache(key) {
+        return this._cache.delete(key);
+    }
+
+    /**
      *  On the Context itself, this is an `un-typed` query for a single vertex.
      *
      *  i.e. will search all entity types and return any one of them.
