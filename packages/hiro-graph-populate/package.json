@@ -44,21 +44,5 @@
         "node-fetch": "^2.3.0",
         "ora": "^3.0.0",
         "shelljs": "^0.8.3"
-    },
-    "hiro-graph-populate": {
-        "generate": {
-            "orgs": {
-                "name": "arago-demo.com",
-                "count": 18
-            },
-            "users": {
-                "perOrg": 5,
-                "password": "test123"
-            },
-            "admins": {
-                "perOrg": 1,
-                "password": "test123"
-            }
-        }
     }
 }
