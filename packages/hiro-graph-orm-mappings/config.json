@@ -18,6 +18,13 @@
         "oslc-rddl",
         "oslc-reqman"
     ],
+    "extras": {
+        "ogit/Auth/AccountProfile": {
+            "profileSet": "/profileSet",
+            "profilePicture": "/profilePicture",
+            "jobRole": "/jobRole"
+        }
+    },
     "mapping": {
         "ogit/Auth/belongs -> ogit/Auth/Account": "account",
         "ogit/Auth/belongs -> ogit/Auth/Organization": "parentOrg",

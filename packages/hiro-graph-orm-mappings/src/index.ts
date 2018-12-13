@@ -66,7 +66,10 @@ const createMapping = (namespace: string, name: string): IDefinition => {
 
     const currentValue = output[ogit];
     const required = getRequiredAttributes(data);
-    const optional = getOptionalAttributes(data);
+
+    // @ts-ignore
+    const additionalData = config.extras[ogit] || {};
+    const optional = { ...getOptionalAttributes(data), ...additionalData };
     const relations = getRelations(
         data,
         ogit,

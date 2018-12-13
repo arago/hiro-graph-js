@@ -81,7 +81,10 @@ export interface IDefinition {
     name: string;
     ogit: string;
     required?: IDefinitionData;
-    optional?: IDefinitionData;
+    optional?: IDefinitionData & {
+      _id?: string;
+      "_modified-on"?: string;
+    };
     relations?: IDefinitionData;
 }
 
