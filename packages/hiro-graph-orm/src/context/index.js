@@ -28,7 +28,7 @@ import {
 } from "./relations";
 import isPlainObject from "lodash.isplainobject";
 import Schema from "../schema";
-import Client from "hiro-graph-client";
+import Client from "@hiro-graph/client";
 
 //shorthand for creating the getCount/Ids/Vertices fetching functions
 const relationFetch = (ctx, method, relations, options = {}) =>

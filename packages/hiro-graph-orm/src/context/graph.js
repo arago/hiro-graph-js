@@ -5,7 +5,7 @@
  *  the context and entity definitions to produce Vertex objects
  *  from queries.
  */
-import { notFound, badRequest } from "hiro-graph-client/lib/errors";
+import { notFound, badRequest } from "@hiro-graph/client/lib/errors";
 import parseLucene from "hiro-graph-lucene";
 
 import { decodeResults, filter, mapIfArray } from "../utils";
