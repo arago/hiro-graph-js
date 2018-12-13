@@ -1,4 +1,4 @@
-import Client from "hiro-graph-client";
+import Client from "@hiro-graph/client";
 
 export type OneOrMoreVertices = GraphVertex | Array<GraphVertex>;
 export interface IDefinitionData {
