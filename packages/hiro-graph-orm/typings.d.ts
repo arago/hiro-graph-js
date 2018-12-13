@@ -35,18 +35,6 @@ export class BaseContext<T extends IDefinition> {
         filter: LuceneQuery,
         options?: object
     ): Promise<OneOrMoreVertices<T>>;
-    fetchCount(
-        relations: Array<string>,
-        options?: object
-    ): (items: OneOrMoreVertices<T>) => Promise<OneOrMoreVertices<T>>;
-    fetchIds(
-        relations: Array<string>,
-        options?: object
-    ): (items: OneOrMoreVertices<T>) => Promise<OneOrMoreVertices<T>>;
-    fetchVertices(
-        relations: Array<GetRelations<T>>,
-        options?: object
-    ): (items: OneOrMoreVertices<T>) => Promise<OneOrMoreVertices<T>>;
 }
 
 export class Entity<T extends IDefinition> extends BaseContext<T> {
@@ -81,6 +69,18 @@ export class Entity<T extends IDefinition> extends BaseContext<T> {
         relations: Array<string>
     ): Promise<GraphVertex<T>>;
     hasRelation(id: string, relation: string, test: any): boolean;
+    fetchCount(
+        relations: Array<string>,
+        options?: object
+    ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
+    fetchIds(
+        relations: Array<string>,
+        options?: object
+    ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
+    fetchVertices(
+        relations: Array<GetRelations<T>>,
+        options?: object
+    ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
 }
 
 export class GremlinQueryBuilder {
@@ -178,6 +178,20 @@ export class Context<
     remove(vertexId: string): undefined;
     insertRaw<N extends IDefinition>(rawData: object): GraphVertex<N>;
     insert<N extends IDefinition>(appData: object): GraphVertex<N>;
+
+    // Fetch
+    fetchCount<N extends IDefinition>(
+        relations: Array<string>,
+        options?: object
+    ): (items: OneOrMoreVertices<N>) => Promise<OneOrMoreVertices<N>>;
+    fetchIds<N extends IDefinition>(
+        relations: Array<string>,
+        options?: object
+    ): (items: OneOrMoreVertices<N>) => Promise<OneOrMoreVertices<N>>;
+    fetchVertices<N extends IDefinition>(
+        relations: Array<string>,
+        options?: object
+    ): (items: OneOrMoreVertices<N>) => Promise<OneOrMoreVertices<N>>;
 }
 
 export type ORM<
