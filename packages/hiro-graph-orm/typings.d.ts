@@ -1,6 +1,8 @@
 import Client from "@hiro-graph/client";
 
-export type OneOrMoreVertices = GraphVertex | Array<GraphVertex>;
+export type OneOrMoreVertices<T extends IDefinition> =
+    | GraphVertex<T>
+    | Array<GraphVertex<T>>;
 export interface IDefinitionData {
     [index: string]: string;
 }
@@ -18,57 +20,66 @@ export interface IDefinition {
     relations?: IDefinitionData;
 }
 
-export class BaseContext {
-    find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices>;
+type GetRelations<T extends IDefinition> = keyof T["relations"];
+
+export class BaseContext<T extends IDefinition> {
+    find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices<T>>;
     findById(
         idOrIds: string | Array<string>,
         options?: object
-    ): Promise<OneOrMoreVertices>;
-    findOne(query: any, options?: object): Promise<GraphVertex>;
+    ): Promise<OneOrMoreVertices<T>>;
+    findOne(query: any, options?: object): Promise<GraphVertex<T>>;
     findCount(query: LuceneQuery, options?: object): Promise<number>;
     search(
         query: string | object,
         filter: LuceneQuery,
         options?: object
-    ): Promise<OneOrMoreVertices>;
+    ): Promise<OneOrMoreVertices<T>>;
     fetchCount(
         relations: Array<string>,
         options?: object
-    ): (items: OneOrMoreVertices) => Promise<OneOrMoreVertices>;
+    ): (items: OneOrMoreVertices<T>) => Promise<OneOrMoreVertices<T>>;
     fetchIds(
         relations: Array<string>,
         options?: object
-    ): (items: OneOrMoreVertices) => Promise<OneOrMoreVertices>;
+    ): (items: OneOrMoreVertices<T>) => Promise<OneOrMoreVertices<T>>;
     fetchVertices(
-        relations: Array<string>,
+        relations: Array<GetRelations<T>>,
         options?: object
-    ): (items: OneOrMoreVertices) => Promise<OneOrMoreVertices>;
+    ): (items: OneOrMoreVertices<T>) => Promise<OneOrMoreVertices<T>>;
 }
 
-export class Entity extends BaseContext {
-    create(data: object, options?: object): Promise<GraphVertex>;
+export class Entity<T extends IDefinition> extends BaseContext<T> {
+    create(data: object, options?: object): Promise<GraphVertex<T>>;
     connect(
         relation: string,
         vertexOrId: string | Vertex
-    ): Promise<GraphVertex>;
+    ): Promise<GraphVertex<T>>;
     disconnect(
         relation: string,
         vertexOrId: string | Vertex
-    ): Promise<GraphVertex>;
-    update(vertexId: string, appData: object, options?: object): GraphVertex;
-    replace(vertexId: string, appData: object, options?: object): GraphVertex;
+    ): Promise<GraphVertex<T>>;
+    update(vertexId: string, appData: object, options?: object): GraphVertex<T>;
+    replace(
+        vertexId: string,
+        appData: object,
+        options?: object
+    ): GraphVertex<T>;
     encode(appData: object): object;
     decode(graphData: object): object;
     relationQuery(relation: string): object;
     findRelationVertices(
         id: string,
         relations: Array<string>
-    ): Promise<GraphVertex>;
-    findRelationIds(id: string, relations: Array<string>): Promise<GraphVertex>;
+    ): Promise<GraphVertex<T>>;
+    findRelationIds(
+        id: string,
+        relations: Array<string>
+    ): Promise<GraphVertex<T>>;
     findRelationCount(
         id: string,
         relations: Array<string>
-    ): Promise<GraphVertex>;
+    ): Promise<GraphVertex<T>>;
     hasRelation(id: string, relation: string, test: any): boolean;
 }
 
@@ -98,30 +109,33 @@ export class Vertex {
     setCount(relation: string, count: number): Vertex;
 }
 
-export class GraphVertex extends Vertex {
+export class GraphVertex<T extends IDefinition> extends Vertex {
     private _ctx: Context;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
-    save(options?: object): Promise<GraphVertex>;
+    save(options?: object): Promise<GraphVertex<T>>;
     connect(
         relation: string,
         vertexOrId: string | Vertex
-    ): Promise<GraphVertex>;
+    ): Promise<GraphVertex<T>>;
     disconnect(
         relation: string,
         vertexOrId: string | Vertex
-    ): Promise<GraphVertex>;
+    ): Promise<GraphVertex<T>>;
     fetchCount(
         relations: Array<string>,
         options?: object
-    ): Promise<GraphVertex>;
-    fetchIds(relations: Array<string>, options?: object): Promise<GraphVertex>;
-    fetchVertices(
+    ): Promise<GraphVertex<T>>;
+    fetchIds(
         relations: Array<string>,
         options?: object
-    ): Promise<GraphVertex>;
+    ): Promise<GraphVertex<T>>;
+    fetchVertices(
+        relations: Array<GetRelations<T>>,
+        options?: object
+    ): Promise<GraphVertex<T>>;
     delete(options?: object): Promise<undefined>;
-    getVertices(relation: string): Array<GraphVertex>;
+    getVertices(relation: string): Array<GraphVertex<T>>;
     hasVertices(relation: string): boolean;
     canWrite(): Promise<boolean>;
 }
@@ -136,7 +150,9 @@ export type IClientServlets = {
     };
 };
 
-export class Context extends BaseContext {
+export class Context<
+    C extends IDefinition = { name: ""; ogit: "" }
+> extends BaseContext<C> {
     private _cache: Map<string, object>;
     private _client: Client;
     private _log: string[];
@@ -147,20 +163,26 @@ export class Context extends BaseContext {
         cache?: Map<string, object>
     );
 
-    me(): Promise<GraphVertex>;
-    person(): Promise<GraphVertex>;
+    me<N extends IDefinition>(): Promise<GraphVertex<N>>;
+    person<N extends IDefinition>(): Promise<GraphVertex<N>>;
     getClient<T extends IClientServlets>(): Client & T;
     setCache(cache: Map<string, object>): void;
     deleteFromCache(key: string): boolean;
 
-    delete(vertexId: string, options?: object): Promise<GraphVertex>;
+    delete<N extends IDefinition>(
+        vertexId: string,
+        options?: object
+    ): Promise<GraphVertex<N>>;
     gremlin(initialQuery?: string): GremlinQueryBuilder;
-    getEntity(name: string): Entity | undefined;
+    getEntity<N extends IDefinition>(name: string): Entity<N> | undefined;
     remove(vertexId: string): undefined;
-    insertRaw(rawData: object): GraphVertex;
-    insert(appData: object): GraphVertex;
+    insertRaw<N extends IDefinition>(rawData: object): GraphVertex<N>;
+    insert<N extends IDefinition>(appData: object): GraphVertex<N>;
 }
 
-export type ORM<T extends string> = Context & { [k in T]: Entity };
+export type ORM<
+    T extends string,
+    M extends { [index: string]: IDefinition }
+> = Context & { [k in T]: Entity<M[k]> };
 
 export default Context;

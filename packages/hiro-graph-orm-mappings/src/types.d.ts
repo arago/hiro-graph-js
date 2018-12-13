@@ -12,6 +12,7 @@ interface IDefinition {
     required?: IDefinitionData;
     optional?: IDefinitionData;
     relations?: IDefinitionData;
+    [name: string]: string | IDefinitionData | undefined;
 }
 
 interface IOutput {

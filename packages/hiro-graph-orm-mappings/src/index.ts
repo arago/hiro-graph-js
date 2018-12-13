@@ -11,7 +11,8 @@ import {
     createIndex,
     flipRelationshipName,
     createTypings,
-    createExport
+    createExport,
+    createExportTypes
 } from "./helper";
 import { mapRelationship } from "./relations";
 
@@ -173,6 +174,10 @@ const output: IOutput = {};
         fs.writeFileSync(
             config.OUTPUT_DIR + "/" + name + ".js",
             createExport(output[key])
+        );
+        fs.writeFileSync(
+            config.OUTPUT_DIR + "/" + name + ".d.ts",
+            createExportTypes(output[key])
         );
     });
 

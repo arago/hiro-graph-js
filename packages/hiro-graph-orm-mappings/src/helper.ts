@@ -39,7 +39,7 @@ const generateOutputs = (output: IOutput) => {
     let imports = "";
     let exports = "";
     let singleExports = "";
-    const names: string[] = [];
+    const names: Array<{ name: string; fileName: string }> = [];
     const keys = Object.keys(output).sort((a, b) => {
         if (a === b) {
             return 0;
@@ -62,7 +62,7 @@ const generateOutputs = (output: IOutput) => {
             i === keys.length - 1 ? "" : ",\n"
         }`;
         singleExports += `exports.${safeName} = ${safeName}.default;`;
-        names.push(safeName);
+        names.push({ name: safeName, fileName });
     });
 
     return { imports, exports, singleExports, names };
@@ -85,10 +85,19 @@ export interface IDefinition {
     relations?: IDefinitionData;
 }
 
-export type MappedTypes =
-${names.map(n => `    | "${n}"`).join("\n")};
+${names
+        .map(({ name: n, fileName: f }) => `import { I${n} } from "./${f}";`)
+        .join("\n")}
 
-${names.map(n => `export const ${n}: IDefinition;`).join("\n")}
+export type MappedTypes = keyof typeof Definitions;
+
+export namespace Definitions {
+${names.map(({ name: n }) => `    export const ${n}: I${n};`).join("\n")}
+}
+
+${names.map(({ name: n }) => `export const ${n}: I${n};`).join("\n")}
+
+${names.map(({ name: n }) => `export type I${n} = typeof ${n};`).join("\n")}
 `;
 };
 
@@ -121,4 +130,31 @@ exports.default = ${JSON.stringify(output, null, 2)}
 `;
 };
 
-// \nexport default [\n${exports}\n];
+export const createExportTypes = (output: IDefinition) => {
+    return `import { IDefinition } from "./typings";
+
+export interface I${output.name.replace(/-|\//g, "")} extends IDefinition{
+${Object.keys(output)
+        .map(key => valueToType(key, output[key]))
+        .join("\n")}
+}`;
+};
+
+const valueToType = (
+    key: string,
+    value?: string | IDefinitionData
+): string | undefined => {
+    const valueType = typeof value;
+
+    if (valueType === "string") {
+        return `${key}: string;`;
+    } else if (value && valueType === "object") {
+        return `${key}: {
+        ${Object.keys(value)
+            .map(k => valueToType(k, (value as IDefinitionData)[k]))
+            .join("\n")}
+    }`;
+    }
+
+    return;
+};
