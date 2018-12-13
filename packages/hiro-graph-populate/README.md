@@ -54,11 +54,23 @@ exports.module = {
         {
             name: "a.arago-demo.com",
             admins: [
-                { name: "Lydia Mason", email: "lydia.mason@a.arago-demo.com" }
+                {
+                    name: "Lydia Mason",
+                    email: "lydia.mason@a.arago-demo.com",
+                    password: "test"
+                }
             ],
             users: [
-                { name: "Nyah Cross", email: "nyah.cross@a.arago-demo.com" },
-                { name: "Mia Rose", email: "mia-rose.irving@a.arago-demo.com" }
+                {
+                    name: "Nyah Cross",
+                    email: "nyah.cross@a.arago-demo.com",
+                    password: "test"
+                },
+                {
+                    name: "Mia Rose",
+                    email: "mia-rose.irving@a.arago-demo.com",
+                    password: "test"
+                }
             ]
         }
     ]
