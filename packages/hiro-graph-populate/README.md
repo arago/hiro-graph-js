@@ -50,7 +50,7 @@ Config is required and can be stored as:
 
 ```js
 exports.module = {
-    populate: [
+    orgs: [
         {
             name: "a.arago-demo.com",
             admins: [
