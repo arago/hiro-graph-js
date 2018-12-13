@@ -48,9 +48,11 @@ Config is required and can be stored as:
 -   `.hiro-graph-populaterc.{json|yaml|yml|js}`
 -   `hiro-graph-populate.config.js`
 
+#### Populate
+
 ```js
 exports.module = {
-    orgs: [
+    Populate: [
         {
             name: "a.arago-demo.com",
             admins: [
@@ -74,5 +76,26 @@ exports.module = {
             ]
         }
     ]
+};
+```
+
+#### Generate
+
+```js
+exports.module = {
+    generate: {
+        orgs: {
+            name: "arago-demo.com",
+            count: 18
+        },
+        users: {
+            perOrg: 5,
+            password: "test123"
+        },
+        admins: {
+            perOrg: 1,
+            password: "test123"
+        }
+    }
 };
 ```

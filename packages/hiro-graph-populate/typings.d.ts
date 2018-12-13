@@ -7,7 +7,22 @@ interface IEnv {
 }
 
 interface IConfig {
-    orgs: Array<IPopulateValue>;
+    populate?: Array<IPopulateValue>;
+    generate?: IGenerate;
+}
+
+interface IGenerate {
+    orgs: {
+        name: string;
+        count: number;
+    };
+    users: IGeneratePerson;
+    admins: IGeneratePerson;
+}
+
+interface IGeneratePerson {
+    perOrg: number;
+    password: string;
 }
 
 interface IPopulateValue {

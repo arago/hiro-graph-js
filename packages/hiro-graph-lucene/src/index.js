@@ -335,11 +335,10 @@ function luceneTerm(context, field, values) {
     return values
         .map(v => prop.encode(v)) // encode for graphit with our mapping
         .map(v => (typeof v === "string" ? quote(v) : v)) //quote if needed
-        .map(
-            term =>
-                term === null
-                    ? luceneMissing(context, field) //if term is null, that means the field should be missing.
-                    : `${context.op}${slashForward(prop.src)}:${term}`
+        .map(term =>
+            term === null
+                ? luceneMissing(context, field) //if term is null, that means the field should be missing.
+                : `${context.op}${slashForward(prop.src)}:${term}`
         ) //create querystring
         .join(" "); //join terms
 }

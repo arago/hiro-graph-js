@@ -1,8 +1,11 @@
 import chalk from "chalk";
 import cosmiconfig = require("cosmiconfig");
 import dotenv from "dotenv";
+import { writeFileSync } from "fs";
 import Joi from "joi";
 import shell from "shelljs";
+
+import { generate } from "./generate";
 
 const envSchema = Joi.object().keys({
     HIRO_CLIENT_ID: Joi.string().required(),
@@ -20,21 +23,37 @@ const userSchema = Joi.object({
     password: Joi.string().required()
 });
 
-const configSchema = Joi.object({
-    orgs: Joi.array()
-        .items(
-            Joi.object({
-                admins: Joi.array()
-                    .items(userSchema)
-                    .required(),
-                name: Joi.string().required(),
-                users: Joi.array()
-                    .items(userSchema)
-                    .required()
-            }).required()
-        )
-        .required()
+const configGenerateSchema = Joi.object({
+    admins: Joi.object({
+        password: Joi.string().required(),
+        perOrg: Joi.number().required()
+    }),
+    orgs: Joi.object({
+        count: Joi.number().required(),
+        name: Joi.string().required()
+    }),
+    users: Joi.object({
+        password: Joi.string().required(),
+        perOrg: Joi.number().required()
+    })
 });
+
+const configPopulateSchema = Joi.array().items(
+    Joi.object({
+        admins: Joi.array()
+            .items(userSchema)
+            .required(),
+        name: Joi.string().required(),
+        users: Joi.array()
+            .items(userSchema)
+            .required()
+    }).required()
+);
+
+const configSchema = Joi.object({
+    generate: configGenerateSchema,
+    populate: configPopulateSchema
+}).xor("populate", "generate");
 
 const explorer = cosmiconfig("hiro-graph-populate");
 
@@ -68,7 +87,7 @@ export const loadConfigs = async () => {
     }
 
     // Get config value
-    const config = search.config.module as IConfig;
+    const config = search.config as IConfig;
 
     result = configSchema.validate(config);
     if (result.error) {
@@ -77,8 +96,15 @@ export const loadConfigs = async () => {
         return;
     }
 
+    let finalConfig = config.populate as IPopulateValue[];
+
+    if (config.generate) {
+        finalConfig = generate(config.generate);
+        writeFileSync("generated.json", JSON.stringify(finalConfig, null, 2));
+    }
+
     return {
-        config,
+        config: finalConfig,
         env: (envConfig as any) as IEnv // Force to IEnv, Joi handles the checks
     };
 };

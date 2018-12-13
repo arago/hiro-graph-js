@@ -38,82 +38,31 @@ const login = async (envConfig: IEnv) => {
     };
 };
 
-const populate = async (orm: ORM<MappedTypes>, values: IPopulateValue[]) => {
-    let i = 0;
-    for (const org of values) {
-        console.group("Org #" + i);
-
-        // Create org
-        console.group("Creating org");
-        if (!(await orm.findById(org.name))) {
-            orm.AuthOrganization.create({ name: org.name });
-            console.log(`Org '${org.name}' created`);
-        } else {
-            console.log(`Org '${org.name}' already exists`);
-        }
-        console.groupEnd();
-
-        // Create admins
-        console.group("Creating admins");
-        for (const admin of org.admins) {
-            const { name, email } = admin;
-            if (!(await orm.findById(email))) {
-                orm.AuthOrganization.create({ name, email });
-                console.log(`Admin '${email}' created`);
-            } else {
-                console.log(`Admin '${email}' already exists`);
-            }
-        }
-        console.groupEnd();
-
-        // Create users
-        console.group("Creating users");
-        for (const user of org.users) {
-            const { name, email } = user;
-            if (!(await orm.findById(email))) {
-                orm.AuthAccount.create({ name, email });
-                console.log(`User '${email}' created`);
-            } else {
-                console.log(`User '${email}' already exists`);
-            }
-        }
-        console.groupEnd();
-
-        console.groupEnd();
-        i += 1;
-    }
-};
-
 (async () => {
     // Load configs
     const configs = await configsSingleton;
 
-    const { orm, token } = await login(configs!.env);
+    const { token } = await login(configs!.env);
 
-    /*
-    if (orm) {
-        await populate(orm, configs!.config.orgs);
-    }
-    */
-
-    // await createUser(token, "test2", "password", "test2@tabtab.co");
-
-    /*
-    const users = (await Promise.all([
-        createUser(token, "user1", "password", "user1@tabtab.co"),
-        createUser(token, "user2", "password", "user2@tabtab.co")
-    ])).map(a => (a ? a.account["ogit/_id"] : ""));
-*/
-
-    configs!.config.orgs.map(async o => {
+    for (const o of configs!.config) {
+        console.group("Creating org:", o.name);
         const res = await createOrg(token, o.name);
 
-        const admins = (await Promise.all(
-            o.admins.map(a => createUser(token, a, o.name))
-        )).map(a => (a ? a.account["ogit/_id"] : ""));
+        const admins = [];
 
-        await Promise.all(o.users.map(a => createUser(token, a, o.name)));
+        for (const a of o.admins) {
+            const user = await createUser(token, a, o.name);
+            if (user) {
+                admins.push(user.account["ogit/_id"]);
+            }
+        }
+
+        for (const a of o.users) {
+            await createUser(token, a, o.name);
+        }
 
         await res!.addAdmins(admins);
-    });
+
+        console.groupEnd();
+    }
 })();

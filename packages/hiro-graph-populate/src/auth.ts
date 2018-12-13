@@ -183,6 +183,7 @@ export const createOrg = async (token: string, name: string) => {
         const resCreate = await createOrganization(name);
 
         if (resCreate.error) {
+            console.warn(resCreate.error);
             throw new Error(resCreate.error.message);
         }
 
