@@ -23,7 +23,7 @@
         "ogit/Auth/belongs -> ogit/Auth/Organization": "parentOrg",
         "ogit/Auth/belongs <- ogit/Auth/AccountProfile": "profile",
         "ogit/Auth/isMemberOf -> ogit/Auth/Organization": "orgs",
-        "ogit/Auth/isMemberOf -> ogit/Auth/Team": "team",
+        "ogit/Auth/isMemberOf -> ogit/Auth/Team": "teams",
         "ogit/belongs -> ogit/Organization": "orgs",
         "ogit/belongs -> ogit/Person": "person",
         "ogit/belongs <- ogit/Person": "members",
