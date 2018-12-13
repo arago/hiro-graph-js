@@ -50,52 +50,52 @@ Config is required and can be stored as:
 
 #### Populate
 
-```js
-exports.module = {
-    Populate: [
+```json
+{
+    "populate": [
         {
-            name: "a.arago-demo.com",
-            admins: [
+            "name": "a.arago-demo.com",
+            "admins": [
                 {
-                    name: "Lydia Mason",
-                    email: "lydia.mason@a.arago-demo.com",
-                    password: "test"
+                    "name": "Lydia Mason",
+                    "email": "lydia.mason@a.arago-demo.com",
+                    "password": "test"
                 }
             ],
-            users: [
+            "users": [
                 {
-                    name: "Nyah Cross",
-                    email: "nyah.cross@a.arago-demo.com",
-                    password: "test"
+                    "name": "Nyah Cross",
+                    "email": "nyah.cross@a.arago-demo.com",
+                    "password": "test"
                 },
                 {
-                    name: "Mia Rose",
-                    email: "mia-rose.irving@a.arago-demo.com",
-                    password: "test"
+                    "name": "Mia Rose",
+                    "email": "mia-rose.irving@a.arago-demo.com",
+                    "password": "test"
                 }
             ]
         }
     ]
-};
+}
 ```
 
 #### Generate
 
-```js
-exports.module = {
-    generate: {
-        orgs: {
-            name: "arago-demo.com",
-            count: 18
+```json
+{
+    "generate": {
+        "orgs": {
+            "name": "arago-demo.com",
+            "count": 18
         },
-        users: {
-            perOrg: 5,
-            password: "test123"
+        "users": {
+            "perOrg": 5,
+            "password": "test123"
         },
-        admins: {
-            perOrg: 1,
-            password: "test123"
+        "admins": {
+            "perOrg": 1,
+            "password": "test123"
         }
     }
-};
+}
 ```

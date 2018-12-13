@@ -44,13 +44,13 @@ export const generate = (config: IGenerate): IPopulateValue[] => {
     for (let i = 0; i < config.orgs.count && i < alpha.length; i++) {
         const orgName = alpha[i] + "." + config.orgs.name;
         const org = {
-            admins: new Array(config.admins.perOrg).fill(
-                createUser(orgName, config.admins.password)
-            ),
+            admins: new Array(config.admins.perOrg)
+                .fill(null)
+                .map(() => createUser(orgName, config.admins.password)),
             name: orgName,
-            users: new Array(config.users.perOrg).fill(
-                createUser(orgName, config.users.password)
-            )
+            users: new Array(config.users.perOrg)
+                .fill(null)
+                .map(() => createUser(orgName, config.admins.password))
         };
 
         output.push(org);
