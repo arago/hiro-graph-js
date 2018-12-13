@@ -21,8 +21,9 @@ export interface IDefinition {
 }
 
 type GetRelations<T extends IDefinition> = keyof T["relations"];
-type GetValues<T extends IDefinition> = keyof T["optional"] &
-    keyof T["required"];
+type GetValues<T extends IDefinition> =
+    | keyof T["optional"]
+    | keyof T["required"];
 
 export class Entity<T extends IDefinition> {
     create(data: object, options?: object): Promise<GraphVertex<T>>;
