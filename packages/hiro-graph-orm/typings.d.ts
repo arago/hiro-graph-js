@@ -22,22 +22,7 @@ export interface IDefinition {
 
 type GetRelations<T extends IDefinition> = keyof T["relations"];
 
-export class BaseContext<T extends IDefinition> {
-    find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices<T>>;
-    findById(
-        idOrIds: string | Array<string>,
-        options?: object
-    ): Promise<OneOrMoreVertices<T>>;
-    findOne(query: any, options?: object): Promise<GraphVertex<T>>;
-    findCount(query: LuceneQuery, options?: object): Promise<number>;
-    search(
-        query: string | object,
-        filter: LuceneQuery,
-        options?: object
-    ): Promise<OneOrMoreVertices<T>>;
-}
-
-export class Entity<T extends IDefinition> extends BaseContext<T> {
+export class Entity<T extends IDefinition> {
     create(data: object, options?: object): Promise<GraphVertex<T>>;
     connect(
         relation: string,
@@ -81,6 +66,18 @@ export class Entity<T extends IDefinition> extends BaseContext<T> {
         relations: Array<GetRelations<T>>,
         options?: object
     ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
+    find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices<T>>;
+    findById(
+        idOrIds: string | Array<string>,
+        options?: object
+    ): Promise<OneOrMoreVertices<T>>;
+    findOne(query: any, options?: object): Promise<GraphVertex<T>>;
+    findCount(query: LuceneQuery, options?: object): Promise<number>;
+    search(
+        query: string | object,
+        filter: LuceneQuery,
+        options?: object
+    ): Promise<OneOrMoreVertices<T>>;
 }
 
 export class GremlinQueryBuilder {
@@ -150,9 +147,7 @@ export type IClientServlets = {
     };
 };
 
-export class Context<
-    C extends IDefinition = { name: ""; ogit: "" }
-> extends BaseContext<C> {
+export class Context {
     private _cache: Map<string, object>;
     private _client: Client;
     private _log: string[];
@@ -192,6 +187,27 @@ export class Context<
         relations: Array<string>,
         options?: object
     ): (items: OneOrMoreVertices<N>) => Promise<OneOrMoreVertices<N>>;
+    find<N extends IDefinition>(
+        query: LuceneQuery,
+        options?: object
+    ): Promise<OneOrMoreVertices<N>>;
+    findById<N extends IDefinition>(
+        idOrIds: string | Array<string>,
+        options?: object
+    ): Promise<OneOrMoreVertices<N>>;
+    findOne<N extends IDefinition>(
+        query: any,
+        options?: object
+    ): Promise<GraphVertex<N>>;
+    findCount<N extends IDefinition>(
+        query: LuceneQuery,
+        options?: object
+    ): Promise<number>;
+    search<N extends IDefinition>(
+        query: string | object,
+        filter: LuceneQuery,
+        options?: object
+    ): Promise<OneOrMoreVertices<N>>;
 }
 
 export type ORM<
