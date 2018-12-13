@@ -84,13 +84,13 @@ const createPopup = (url, popWidth, popHeight) => {
     const winWidth = window.innerWidth //eslint-disable-line no-nested-ternary
         ? window.innerWidth
         : document.documentElement.clientWidth
-        ? document.documentElement.clientWidth
-        : screen.width;
+            ? document.documentElement.clientWidth
+            : screen.width;
     const winHeight = window.innerHeight //eslint-disable-line no-nested-ternary
         ? window.innerHeight
         : document.documentElement.clientHeight
-        ? document.documentElement.clientHeight
-        : screen.height;
+            ? document.documentElement.clientHeight
+            : screen.height;
 
     const left = winWidth / 2 - popWidth / 2 + dualScreenLeft;
     const top = winHeight / 2 - popHeight / 2 + dualScreenTop;
