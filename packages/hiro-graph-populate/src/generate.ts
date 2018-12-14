@@ -32,7 +32,13 @@ const createUser = (org: string, password: string) => {
     const name = faker.fake("{{name.firstName}} {{name.lastName}}");
 
     return {
-        email: name.toLowerCase().replace(" ", ".") + "@" + org,
+        email:
+            name
+                .toLowerCase()
+                .replace(" ", ".")
+                .replace("'", "") +
+            "@" +
+            org,
         name,
         password
     };

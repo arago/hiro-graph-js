@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import HiroGraphOrm, { ORM } from "@hiro-graph/orm";
-import mappings, { MappedTypes } from "@hiro-graph/orm-mappings";
+import HiroGraphOrm from "@hiro-graph/orm";
+import mappings from "@hiro-graph/orm-mappings";
+import delay from "delay";
 
 import fetch from "node-fetch";
 
@@ -33,7 +34,7 @@ const login = async (envConfig: IEnv) => {
                 token
             },
             mappings
-        ) as ORM<MappedTypes>,
+        ),
         token
     };
 };
@@ -47,18 +48,19 @@ const login = async (envConfig: IEnv) => {
     for (const o of configs!.config) {
         console.group("Creating org:", o.name);
         const res = await createOrg(token, o.name);
+        const orgId = res!.org["ogit/_id"] || "";
 
         const admins = [];
 
         for (const a of o.admins) {
-            const user = await createUser(token, a, o.name);
+            const user = await createUser(token, a, orgId);
             if (user) {
                 admins.push(user.account["ogit/_id"]);
             }
         }
 
         for (const a of o.users) {
-            await createUser(token, a, o.name);
+            await createUser(token, a, orgId);
         }
 
         await res!.addAdmins(admins);
