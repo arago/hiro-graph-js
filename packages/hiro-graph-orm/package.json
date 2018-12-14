@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/orm",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "description": "OGIT ontology to sane application mappings",
     "repository": "arago/hiro-graph-js",
     "main": "lib/index.js",

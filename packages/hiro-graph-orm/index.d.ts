@@ -70,11 +70,12 @@ export class Entity<T extends IDefinition> {
         options?: object
     ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
     find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices<T>>;
+    findById(idOrIds: string, options?: object): Promise<GraphVertex<T>>;
     findById(
-        idOrIds: string | Array<string>,
+        idOrIds: Array<string>,
         options?: object
-    ): Promise<OneOrMoreVertices<T>>;
-    findOne(query: any, options?: object): Promise<GraphVertex<T>>;
+    ): Promise<Array<GraphVertex<T>>>;
+    findOne(query: LuceneQuery, options?: object): Promise<GraphVertex<T>>;
     findCount(query: LuceneQuery, options?: object): Promise<number>;
     search(
         query: string | object,
@@ -197,9 +198,13 @@ export default class Context {
         options?: object
     ): Promise<OneOrMoreVertices<N>>;
     findById<N extends IDefinition>(
-        idOrIds: string | Array<string>,
+        idOrIds: string,
         options?: object
-    ): Promise<OneOrMoreVertices<N>>;
+    ): Promise<GraphVertex<N>>;
+    findById<N extends IDefinition>(
+        idOrIds: Array<string>,
+        options?: object
+    ): Promise<Array<GraphVertex<N>>>;
     findOne<N extends IDefinition>(
         query: any,
         options?: object
