@@ -188,8 +188,5 @@ const output: IOutput = {};
     fs.writeFileSync(config.OUTPUT_DIR + "/index.js", createIndex(output));
 
     console.log("Generate typings");
-    fs.writeFileSync(
-        config.OUTPUT_DIR + "/typings.d.ts",
-        createTypings(output)
-    );
+    fs.writeFileSync(config.OUTPUT_DIR + "/index.d.ts", createTypings(output));
 })();

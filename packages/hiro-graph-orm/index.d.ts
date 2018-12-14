@@ -1,3 +1,5 @@
+/// <reference types="@hiro-graph/client" />
+
 import Client from "@hiro-graph/client";
 
 export type OneOrMoreVertices<T extends IDefinition> =
@@ -152,7 +154,7 @@ export type IClientServlets = {
     };
 };
 
-export class Context {
+export default class Context {
     private _cache: Map<string, object>;
     private _client: Client;
     private _log: string[];
@@ -219,5 +221,3 @@ export type ORM<
     T extends string,
     M extends { [index: string]: IDefinition }
 > = Context & { [k in T]: Entity<M[k]> };
-
-export default Context;

@@ -1,6 +1,7 @@
-import { w3cwebsocket as WS } from "websocket";
-
 // Auth API
+
+import { w3cwebsocket as WS } from "websocket";
+import fetch, { Response } from "node-fetch";
 
 interface IAuth {
     organizationTeams: (id: string) => Promise<IOrganizationTeamsResponse>;
@@ -104,7 +105,7 @@ export interface IServletMethods {
     ) => void;
 }
 
-declare class Client {
+export default class Client {
     endpoint: string;
     token: string;
     http: HttpTransport;
@@ -121,5 +122,3 @@ declare class Client {
     getToken(): string;
     addServlet(prefix: string, servletMethods: IServletMethods): Client;
 }
-
-export default Client;
