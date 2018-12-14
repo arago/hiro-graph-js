@@ -1,4 +1,4 @@
-# hiro-graph-populate
+# @hiro-grap/populate
 
 Tool for populating graph with data.
 
@@ -8,11 +8,11 @@ The tool is executable and can be installed locally, or globally.
 
 ### Local
 
-`yarn add -D hiro-graph-populate`
+`yarn add -D @hiro/graph-populate`
 
 ### Global
 
-`yarn global add hiro-graph-populate`
+`yarn global add @hiro/graph-populate`
 
 ## Usage
 
