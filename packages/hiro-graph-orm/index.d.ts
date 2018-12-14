@@ -1,5 +1,3 @@
-/// <reference types="@hiro-graph/client" />
-
 import Client from "@hiro-graph/client";
 
 export type OneOrMoreVertices<T extends IDefinition> =
