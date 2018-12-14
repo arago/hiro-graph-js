@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import HiroGraphOrm from "@hiro-graph/orm";
 import mappings from "@hiro-graph/orm-mappings";
-import delay from "delay";
 
 import fetch from "node-fetch";
 
