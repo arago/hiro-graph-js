@@ -143,7 +143,7 @@ exports.default = ${JSON.stringify(output, null, 2)}
 };
 
 export const createExportTypes = (output: IDefinition) => {
-    return `import { IDefinition } from "./typings";
+    return `import { IDefinition } from ".";
 
 export interface I${output.name.replace(/-|\//g, "")} extends IDefinition{
 ${Object.keys(output)
