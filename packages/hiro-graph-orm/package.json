@@ -4,12 +4,12 @@
     "description": "OGIT ontology to sane application mappings",
     "repository": "arago/hiro-graph-js",
     "main": "lib/index.js",
+    "types": "typings.d.ts",
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib",
         "prepublish": "yarn build",
         "test": "jest --silent"
     },
-    "types": "typings.d.ts",
     "license": "MIT",
     "dependencies": {
         "@hiro-graph/client": "^1.0.1",
