@@ -77,14 +77,18 @@ export interface IDefinitionData {
     [index: string]: string;
 }
 
+export interface ICoreAttributes {
+    optional?: {
+      _id?: string;
+      "_modified-on"?: string;
+    }
+}
+
 export interface IDefinition {
     name: string;
     ogit: string;
     required?: IDefinitionData;
-    optional?: IDefinitionData & {
-      _id?: string;
-      "_modified-on"?: string;
-    };
+    optional?: IDefinitionData;
     relations?: IDefinitionData;
 }
 
@@ -100,7 +104,12 @@ ${names.map(({ name: n }) => `    export const ${n}: I${n};`).join("\n")}
 
 ${names.map(({ name: n }) => `export const ${n}: I${n};`).join("\n")}
 
-${names.map(({ name: n }) => `export type I${n} = typeof ${n};`).join("\n")}
+${names
+        .map(
+            ({ name: n }) =>
+                `export type I${n} = (typeof ${n}) & ICoreAttributes;`
+        )
+        .join("\n")}
 `;
 };
 
