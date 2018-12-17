@@ -80,7 +80,7 @@ export class Vertex<RelationTypes = string, Props = string> {
     setCount(relation: RelationTypes, count: number): Vertex;
 }
 
-declare type defaultProps = "_id" | "_modified-on" | "_organization";
+declare type defaultProps = "_id" | "_modified-on" | "_organization" | "_owner";
 
 export class GraphVertex<RelationTypes = string, Props = string> extends Vertex<
     RelationTypes,
@@ -90,6 +90,7 @@ export class GraphVertex<RelationTypes = string, Props = string> extends Vertex<
     _id: string;
     "_modified-on": Date;
     "_organization": string;
+    "_owner": string;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
     save(options?: object): Promise<GraphVertex>;
