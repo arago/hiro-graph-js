@@ -126,7 +126,7 @@ export default class Context {
         //this is a bit different.
         return fetchMe(this)
             .then(me => me.fetchVertices(["profile"]))
-            .then(me => me.getVertices("profile"));
+            .then(me => me.getVertices("profile").pop());
     }
 
     /**
