@@ -63,7 +63,9 @@ export class GremlinQueryBuilder {
 
 export class LuceneQuery {}
 
-export class Vertex<RelationTypes = string, Props = string> {
+type SetterObject<Props extends string> = Partial<{ [k in Props]: any }>;
+
+export class Vertex<RelationTypes = string, Props extends string = string> {
     constructor(data: object);
     toJSON(): object;
     plain(): object;
@@ -74,18 +76,28 @@ export class Vertex<RelationTypes = string, Props = string> {
     hasCount(relation: RelationTypes): boolean;
     getIds(relation: RelationTypes): Array<string>;
     hasIds(relation: RelationTypes): boolean;
-    set(prop: Props, value: any): Vertex;
-    setVertices(relation: RelationTypes, nodes: Array<Vertex>): Vertex;
-    setIds(relation: RelationTypes, ids: Array<string>): Vertex;
-    setCount(relation: RelationTypes, count: number): Vertex;
+    set(values: SetterObject<Props>): Vertex<RelationTypes, Props>;
+    set(prop: Props, value: any): Vertex<RelationTypes, Props>;
+    setVertices(
+        relation: RelationTypes,
+        nodes: Array<Vertex<RelationTypes, Props>>
+    ): Vertex<RelationTypes, Props>;
+    setIds(
+        relation: RelationTypes,
+        ids: Array<string>
+    ): Vertex<RelationTypes, Props>;
+    setCount(
+        relation: RelationTypes,
+        count: number
+    ): Vertex<RelationTypes, Props>;
 }
 
 declare type defaultProps = "_id" | "_modified-on" | "_organization" | "_owner";
 
-export class GraphVertex<RelationTypes = string, Props = string> extends Vertex<
-    RelationTypes,
-    Props | defaultProps
-> {
+export class GraphVertex<
+    RelationTypes = string,
+    Props extends string = string
+> extends Vertex<RelationTypes, Props | defaultProps> {
     private _ctx: Context;
     _id: string;
     "_modified-on": Date;
