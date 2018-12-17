@@ -8,13 +8,7 @@ import {
     getOptionalAttributes,
     getRelations
 } from "./regex";
-import {
-    getName,
-    flipRelationshipName,
-    getDefinitionTypings,
-    toTypes,
-    toProp
-} from "./helper";
+import { getName, flipRelationshipName, toTypes, toProp } from "./helper";
 import { mapRelationship } from "./relations";
 
 import config from "../config.json";
@@ -180,36 +174,43 @@ const output: IOutput = {};
     };
     const exports: Array<{ name: string; fileName: string }> = [];
 
-    // Object.keys(output).map(key => {
-    const key = "ogit/Auth/Account";
-    const fileName = key
-        .toLowerCase()
-        .replace("ogit/", "")
-        .replace(/\//g, "-");
-    const name = output[key].name.replace(/-|\//g, "");
+    Object.keys(output).map(key => {
+        const fileName = key
+            .toLowerCase()
+            .replace("ogit/", "")
+            .replace(/\//g, "-");
+        const name = output[key].name.replace(/-|\//g, "");
 
-    // Export js
-    fs.writeFileSync(
-        join(config.OUTPUT_DIR, `${fileName}.js`),
-        Mustache.render(templates.mapping, {
-            mapping: JSON.stringify(output[key])
-        })
-    );
+        // Export js
+        fs.writeFileSync(
+            join(config.OUTPUT_DIR, `${fileName}.js`),
+            Mustache.render(templates.mapping, {
+                mapping: JSON.stringify(output[key])
+            })
+        );
 
-    // Export types
-    fs.writeFileSync(
-        join(config.OUTPUT_DIR, `${fileName}.d.ts`),
-        Mustache.render(templates.mappingTypes, {
-            name,
-            required: output[key].required,
-            optional: output[key].optional,
-            relations: output[key].relations,
-            toTypes,
-            toProp
-        })
-    );
-    exports.push({ name, fileName });
-    // }
+        // Export types
+        const props = [
+            ...Object.keys(output[key].optional || {}),
+            ...Object.keys(output[key].required || {})
+        ]
+            .map(k => `"${k}"`)
+            .join("|");
+
+        fs.writeFileSync(
+            join(config.OUTPUT_DIR, `${fileName}.d.ts`),
+            Mustache.render(templates.mappingTypes, {
+                name,
+                required: output[key].required,
+                optional: output[key].optional,
+                relations: output[key].relations,
+                props: props || `""`,
+                toTypes,
+                toProp
+            })
+        );
+        exports.push({ name, fileName });
+    });
 
     // Create index.js
     fs.writeFileSync(
@@ -226,28 +227,4 @@ const output: IOutput = {};
             exports
         })
     );
-
-    /*
-    console.log("Generate library files");
-    Object.keys(output).map(key => {
-        const name = key
-            .toLowerCase()
-            .replace("ogit/", "")
-            .replace(/\//g, "-");
-        fs.writeFileSync(
-            config.OUTPUT_DIR + "/" + name + ".js",
-            createExport(output[key])
-        );
-        fs.writeFileSync(
-            config.OUTPUT_DIR + "/" + name + ".d.ts",
-            createExportTypes(output[key])
-        );
-    });
-
-    console.log("Generate index.js");
-    fs.writeFileSync(config.OUTPUT_DIR + "/index.js", createIndex(output));
-
-    console.log("Generate typings");
-    fs.writeFileSync(config.OUTPUT_DIR + "/index.d.ts", createTypings(output));
-    */
 })();

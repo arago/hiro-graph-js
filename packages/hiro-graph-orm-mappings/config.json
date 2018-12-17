@@ -20,9 +20,10 @@
     ],
     "extras": {
         "ogit/Auth/AccountProfile": {
-            "profileSet": "/profileSet",
+            "defaultOrg": "/defaultOrg",
+            "jobRole": "/jobRole",
             "profilePicture": "/profilePicture",
-            "jobRole": "/jobRole"
+            "profileSet": "/profileSet"
         }
     },
     "mapping": {

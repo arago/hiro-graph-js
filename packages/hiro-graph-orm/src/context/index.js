@@ -122,11 +122,11 @@ export default class Context {
      *  This returns the vertex from the owner of the access token in use.
      *  @return {Promise<GraphVertex>}
      */
-    person() {
+    profile() {
         //this is a bit different.
         return fetchMe(this)
-            .then(this.fetchVertices(["person"]))
-            .then(me => me.getVertices("person").pop());
+            .then(me => me.fetchVertices(["profile"]))
+            .then(me => me.getVertices("profile"));
     }
 
     /**

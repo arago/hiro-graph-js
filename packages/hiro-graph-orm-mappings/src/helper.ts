@@ -68,109 +68,6 @@ export const generateOutputs = (output: IOutput) => {
     return { imports, exports, singleExports, names };
 };
 
-export const createTypings = (output: IOutput) => {
-    const { names } = generateOutputs(output);
-    return `declare const mapping: Array<IDefinition>;
-export default mapping;
-
-export interface IDefinitionData {
-    [index: string]: string;
-}
-
-export interface ICoreAttributes {
-    optional?: {
-      _id?: string;
-      "_modified-on"?: string;
-    }
-}
-
-export interface IDefinition {
-    name: string;
-    ogit: string;
-    required?: IDefinitionData;
-    optional?: IDefinitionData;
-    relations?: IDefinitionData;
-}
-
-${names
-        .map(({ name: n, fileName: f }) => `import { I${n} } from "./${f}";`)
-        .join("\n")}
-
-export type MappedTypes = keyof typeof Definitions;
-
-export namespace Definitions {
-${names.map(({ name: n }) => `    export const ${n}: I${n};`).join("\n")}
-}
-
-${names.map(({ name: n }) => `export const ${n}: I${n};`).join("\n")}
-
-${names
-        .map(
-            ({ name: n }) =>
-                `export type I${n} = (typeof ${n}) & ICoreAttributes;`
-        )
-        .join("\n")}
-`;
-};
-
-export const createIndex = (output: IOutput) => {
-    const { imports, exports, singleExports } = generateOutputs(output);
-    return `"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-${imports}
-
-exports.default = [
-${exports}
-];
-
-${singleExports}
-`;
-};
-
-export const createExport = (output: IDefinition) => {
-    return `"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-exports.default = ${JSON.stringify(output, null, 2)}
-`;
-};
-
-export const createExportTypes = (output: IDefinition) => {
-    return `import { IDefinition } from ".";
-
-export interface I${output.name.replace(/-|\//g, "")} extends IDefinition{
-${Object.keys(output)
-        .map(key => valueToType(key, output[key]))
-        .join("\n")}
-}`;
-};
-
-const valueToType = (
-    key: string,
-    value?: string | IDefinitionData
-): string | undefined => {
-    const valueType = typeof value;
-
-    if (valueType === "string") {
-        return `${key}: string;`;
-    } else if (value && valueType === "object") {
-        return `${key}: {
-        ${Object.keys(value)
-            .map(k => valueToType(k, (value as IDefinitionData)[k]))
-            .join("\n")}
-    }`;
-    }
-
-    return;
-};
-
 const replaceAll = (o?: IDefinitionData, value = "string") =>
     !o ? o : Object.assign({}, ...Object.keys(o).map(k => ({ [k]: value })));
 
@@ -200,6 +97,7 @@ export function toProp() {
         }
 
         return Object.keys(value)
+            .filter(k => k !== "type")
             .map(k => `${k}${text !== "required" ? "?" : ""}:any;`)
             .join("\n");
     };

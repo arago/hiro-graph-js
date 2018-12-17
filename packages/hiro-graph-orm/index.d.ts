@@ -80,11 +80,15 @@ export class Vertex<RelationTypes = string, Props = string> {
     setCount(relation: RelationTypes, count: number): Vertex;
 }
 
+declare type defaultProps = "_id" | "_modified-on";
+
 export class GraphVertex<RelationTypes = string, Props = string> extends Vertex<
     RelationTypes,
-    Props
+    Props | defaultProps
 > {
     private _ctx: Context;
+    _id: string;
+    "_modified-on": Date;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
     save(options?: object): Promise<GraphVertex>;
@@ -109,7 +113,7 @@ export class GraphVertex<RelationTypes = string, Props = string> extends Vertex<
         options?: object
     ): Promise<GraphVertex>;
     delete(options?: object): Promise<undefined>;
-    getVertices<N extends GraphVertex>(relation: string): Array<N>;
+    getVertices<N extends GraphVertex>(relation: RelationTypes): Array<N>;
     hasVertices(relation: RelationTypes): boolean;
     canWrite(): Promise<boolean>;
 }
@@ -136,7 +140,7 @@ export default class Context {
     );
 
     me<T extends GraphVertex>(): Promise<T>;
-    person<T extends GraphVertex>(): Promise<T>;
+    profile<T extends GraphVertex>(): Promise<T>;
     getClient<T extends IClientServlets>(): Client & T;
     setCache(cache: Map<string, object>): void;
     deleteFromCache(key: string): boolean;
@@ -191,4 +195,4 @@ export default class Context {
 export type ORM<
     T extends string, // Union of mapping names
     M extends { [index: string]: GraphVertex } // Map from mapping name -> class
-> = Context & { [k in T]: M[k] };
+> = Context & { [k in T]: Entity<M[k]> };
