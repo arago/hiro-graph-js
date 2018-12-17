@@ -1,27 +1,27 @@
 {
-  "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
-  "linterOptions": {
-    "exclude": ["./src/index.ts", "./src/template"]
-  },
-  "jsRules": {},
-  "rules": {
-    "member-access": false,
-    "arrow-parens": false,
-    "trailing-comma": false,
-    "semicolon": [true, "always", "ignore-bound-class-methods"],
-    "no-empty-interface": false,
-    "no-console": false,
-    "max-line-length": false,
-    "ordered-imports": {
-      "options": {
-        "grouped-imports": true,
-        "import-sources-order": "case-insensitive",
-        "module-source-path": "full",
-        "named-imports-order": "case-insensitive"
-      }
+    "defaultSeverity": "error",
+    "extends": ["tslint:recommended"],
+    "linterOptions": {
+        "exclude": ["./src/index.ts", "./src/templates/*"]
     },
-    "object-literal-key-quotes": false
-  },
-  "rulesDirectory": []
+    "jsRules": {},
+    "rules": {
+        "member-access": false,
+        "arrow-parens": false,
+        "trailing-comma": false,
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "no-empty-interface": false,
+        "no-console": false,
+        "max-line-length": false,
+        "ordered-imports": {
+            "options": {
+                "grouped-imports": true,
+                "import-sources-order": "case-insensitive",
+                "module-source-path": "full",
+                "named-imports-order": "case-insensitive"
+            }
+        },
+        "object-literal-key-quotes": false
+    },
+    "rulesDirectory": []
 }

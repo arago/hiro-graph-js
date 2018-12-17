@@ -1,0 +1,31 @@
+import { IDefinition } from "@hiro-graph/orm";
+{{#exports}}
+import { I{{name}}, {{name}}Vertex } from "./{{fileName}}";
+{{/exports}}
+
+declare const mapping: Array<IDefinition>;
+export default mapping;
+
+export interface IDefinitionData {
+    [index: string]: string;
+}
+
+export interface IDefinition {
+    name: string;
+    ogit: string;
+    required?: IDefinitionData;
+    optional?: IDefinitionData;
+    relations?: IDefinitionData;
+}
+
+export type MappedTypes = keyof typeof VertexLookup;
+
+{{#exports}}
+export const {{name}}: I{{name}},
+{{/exports}}
+
+export namespace VertexLookup {
+{{#exports}}
+    export const {{name}}: {{name}}Vertex;
+{{/exports}}
+}

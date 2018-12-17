@@ -1,8 +1,5 @@
 import Client from "@hiro-graph/client";
 
-export type OneOrMoreVertices<T extends IDefinition> =
-    | GraphVertex<T>
-    | Array<GraphVertex<T>>;
 export interface IDefinitionData {
     [index: string]: string;
 }
@@ -20,68 +17,41 @@ export interface IDefinition {
     relations?: IDefinitionData;
 }
 
-type GetRelations<T extends IDefinition> = keyof T["relations"];
-type GetValues<T extends IDefinition> =
-    | keyof T["optional"]
-    | keyof T["required"];
-
-export class Entity<T extends IDefinition> {
-    create(data: object, options?: object): Promise<GraphVertex<T>>;
-    connect(
-        relation: string,
-        vertexOrId: string | Vertex<T>
-    ): Promise<GraphVertex<T>>;
-    disconnect(
-        relation: string,
-        vertexOrId: string | Vertex<T>
-    ): Promise<GraphVertex<T>>;
-    update(vertexId: string, appData: object, options?: object): GraphVertex<T>;
-    replace(
-        vertexId: string,
-        appData: object,
-        options?: object
-    ): GraphVertex<T>;
+export class Entity<T extends GraphVertex> {
+    create(data: object, options?: object): Promise<T>;
+    connect(relation: string, vertexOrId: string | Vertex): Promise<T>;
+    disconnect(relation: string, vertexOrId: string | Vertex): Promise<T>;
+    update(vertexId: string, appData: object, options?: object): T;
+    replace(vertexId: string, appData: object, options?: object): T;
     encode(appData: object): object;
     decode(graphData: object): object;
     relationQuery(relation: string): object;
-    findRelationVertices(
-        id: string,
-        relations: Array<string>
-    ): Promise<GraphVertex<T>>;
-    findRelationIds(
-        id: string,
-        relations: Array<string>
-    ): Promise<GraphVertex<T>>;
-    findRelationCount(
-        id: string,
-        relations: Array<string>
-    ): Promise<GraphVertex<T>>;
+    findRelationVertices(id: string, relations: Array<string>): Promise<T>;
+    findRelationIds(id: string, relations: Array<string>): Promise<T>;
+    findRelationCount(id: string, relations: Array<string>): Promise<T>;
     hasRelation(id: string, relation: string, test: any): boolean;
     fetchCount(
-        relations: Array<GetRelations<T>>,
+        relations: Array<string>,
         options?: object
-    ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
+    ): (items: T) => Promise<T>;
     fetchIds(
-        relations: Array<GetRelations<T>>,
+        relations: Array<string>,
         options?: object
-    ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
+    ): (items: T) => Promise<T>;
     fetchVertices(
-        relations: Array<GetRelations<T>>,
+        relations: Array<string>,
         options?: object
-    ): (items: GraphVertex<T>) => Promise<GraphVertex<T>>;
-    find(query: LuceneQuery, options?: object): Promise<OneOrMoreVertices<T>>;
-    findById(idOrIds: string, options?: object): Promise<GraphVertex<T>>;
-    findById(
-        idOrIds: Array<string>,
-        options?: object
-    ): Promise<Array<GraphVertex<T>>>;
-    findOne(query: LuceneQuery, options?: object): Promise<GraphVertex<T>>;
+    ): (items: T) => Promise<T>;
+    find(query: LuceneQuery, options?: object): Promise<T | T[]>;
+    findById(idOrIds: string, options?: object): Promise<T>;
+    findById(idOrIds: Array<string>, options?: object): Promise<T[]>;
+    findOne(query: LuceneQuery, options?: object): Promise<T>;
     findCount(query: LuceneQuery, options?: object): Promise<number>;
     search(
         query: string | object,
         filter: LuceneQuery,
         options?: object
-    ): Promise<OneOrMoreVertices<T>>;
+    ): Promise<T | T[]>;
 }
 
 export class GremlinQueryBuilder {
@@ -93,53 +63,54 @@ export class GremlinQueryBuilder {
 
 export class LuceneQuery {}
 
-export class Vertex<T extends IDefinition> {
+export class Vertex<RelationTypes = string, Props = string> {
     constructor(data: object);
     toJSON(): object;
     plain(): object;
     type(): string;
-    get<V = any>(prop: GetValues<T>): V;
+    get<V = any>(prop: Props): V;
     getFree(): object;
-    getCount(relation: string): number;
-    hasCount(relation: string): boolean;
-    getIds(relation: string): Array<string>;
-    hasIds(relation: string): boolean;
-    set(prop: GetValues<T>, value: any): Vertex<T>;
-    setVertices(relation: string, nodes: Array<Vertex<T>>): Vertex<T>;
-    setIds(relation: string, ids: Array<string>): Vertex<T>;
-    setCount(relation: string, count: number): Vertex<T>;
+    getCount(relation: RelationTypes): number;
+    hasCount(relation: RelationTypes): boolean;
+    getIds(relation: RelationTypes): Array<string>;
+    hasIds(relation: RelationTypes): boolean;
+    set(prop: Props, value: any): Vertex;
+    setVertices(relation: RelationTypes, nodes: Array<Vertex>): Vertex;
+    setIds(relation: RelationTypes, ids: Array<string>): Vertex;
+    setCount(relation: RelationTypes, count: number): Vertex;
 }
 
-export class GraphVertex<T extends IDefinition> extends Vertex<T> {
+export class GraphVertex<RelationTypes = string, Props = string> extends Vertex<
+    RelationTypes,
+    Props
+> {
     private _ctx: Context;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
-    save(options?: object): Promise<GraphVertex<T>>;
+    save(options?: object): Promise<GraphVertex>;
     connect(
-        relation: string,
-        vertexOrId: string | Vertex<T>
-    ): Promise<GraphVertex<T>>;
+        relation: RelationTypes,
+        vertexOrId: string | Vertex
+    ): Promise<GraphVertex>;
     disconnect(
-        relation: string,
-        vertexOrId: string | Vertex<T>
-    ): Promise<GraphVertex<T>>;
+        relation: RelationTypes,
+        vertexOrId: string | Vertex
+    ): Promise<GraphVertex>;
     fetchCount(
-        relations: Array<GetRelations<T>>,
+        relations: Array<RelationTypes>,
         options?: object
-    ): Promise<GraphVertex<T>>;
+    ): Promise<GraphVertex>;
     fetchIds(
-        relations: Array<GetRelations<T>>,
+        relations: Array<RelationTypes>,
         options?: object
-    ): Promise<GraphVertex<T>>;
+    ): Promise<GraphVertex>;
     fetchVertices(
-        relations: Array<GetRelations<T>>,
+        relations: Array<RelationTypes>,
         options?: object
-    ): Promise<GraphVertex<T>>;
+    ): Promise<GraphVertex>;
     delete(options?: object): Promise<undefined>;
-    getVertices<N extends IDefinition>(
-        relation: GetRelations<T>
-    ): Array<GraphVertex<N>>;
-    hasVertices(relation: string): boolean;
+    getVertices<N extends GraphVertex>(relation: string): Array<N>;
+    hasVertices(relation: RelationTypes): boolean;
     canWrite(): Promise<boolean>;
 }
 
@@ -164,63 +135,60 @@ export default class Context {
         cache?: Map<string, object>
     );
 
-    me<N extends IDefinition>(): Promise<GraphVertex<N>>;
-    person<N extends IDefinition>(): Promise<GraphVertex<N>>;
+    me<T extends GraphVertex>(): Promise<T>;
+    person<T extends GraphVertex>(): Promise<T>;
     getClient<T extends IClientServlets>(): Client & T;
     setCache(cache: Map<string, object>): void;
     deleteFromCache(key: string): boolean;
 
-    delete<N extends IDefinition>(
+    delete<T extends GraphVertex>(
         vertexId: string,
         options?: object
-    ): Promise<GraphVertex<N>>;
+    ): Promise<T>;
     gremlin(initialQuery?: string): GremlinQueryBuilder;
-    getEntity<N extends IDefinition>(name: string): Entity<N> | undefined;
+    getEntity<T extends GraphVertex>(name: string): Entity<T> | undefined;
     remove(vertexId: string): undefined;
-    insertRaw<N extends IDefinition>(rawData: object): GraphVertex<N>;
-    insert<N extends IDefinition>(appData: object): GraphVertex<N>;
+    insertRaw<T extends GraphVertex>(rawData: object): T;
+    insert<T extends GraphVertex>(appData: object): T;
 
     // Fetch
-    fetchCount<N extends IDefinition>(
+    fetchCount<T extends GraphVertex>(
         relations: Array<string>,
         options?: object
-    ): (items: OneOrMoreVertices<N>) => Promise<OneOrMoreVertices<N>>;
-    fetchIds<N extends IDefinition>(
+    ): (items: T | T[]) => Promise<T | T[]>;
+    fetchIds<T extends GraphVertex>(
         relations: Array<string>,
         options?: object
-    ): (items: OneOrMoreVertices<N>) => Promise<OneOrMoreVertices<N>>;
-    fetchVertices<N extends IDefinition>(
+    ): (items: T | T[]) => Promise<T | T[]>;
+    fetchVertices<T extends GraphVertex>(
         relations: Array<string>,
         options?: object
-    ): (items: OneOrMoreVertices<N>) => Promise<OneOrMoreVertices<N>>;
-    find<N extends IDefinition>(
+    ): (items: T | T[]) => Promise<T | T[]>;
+    find<T extends GraphVertex>(
         query: LuceneQuery,
         options?: object
-    ): Promise<OneOrMoreVertices<N>>;
-    findById<N extends IDefinition>(
+    ): Promise<T | T[]>;
+    findById<T extends GraphVertex>(
         idOrIds: string,
         options?: object
-    ): Promise<GraphVertex<N>>;
-    findById<N extends IDefinition>(
+    ): Promise<T>;
+    findById<T extends GraphVertex>(
         idOrIds: Array<string>,
         options?: object
-    ): Promise<Array<GraphVertex<N>>>;
-    findOne<N extends IDefinition>(
-        query: any,
-        options?: object
-    ): Promise<GraphVertex<N>>;
-    findCount<N extends IDefinition>(
+    ): Promise<Array<T>>;
+    findOne<T extends GraphVertex>(query: any, options?: object): Promise<T>;
+    findCount<T extends GraphVertex>(
         query: LuceneQuery,
         options?: object
     ): Promise<number>;
-    search<N extends IDefinition>(
+    search<T extends GraphVertex>(
         query: string | object,
         filter: LuceneQuery,
         options?: object
-    ): Promise<OneOrMoreVertices<N>>;
+    ): Promise<T | T[]>;
 }
 
 export type ORM<
-    T extends string,
-    M extends { [index: string]: IDefinition }
-> = Context & { [k in T]: Entity<M[k]> };
+    T extends string, // Union of mapping names
+    M extends { [index: string]: GraphVertex } // Map from mapping name -> class
+> = Context & { [k in T]: M[k] };

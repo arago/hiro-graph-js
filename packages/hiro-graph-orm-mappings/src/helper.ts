@@ -35,7 +35,7 @@ export const flipRelationshipName = (value: string) => {
     return value;
 };
 
-const generateOutputs = (output: IOutput) => {
+export const generateOutputs = (output: IOutput) => {
     let imports = "";
     let exports = "";
     let singleExports = "";
@@ -170,3 +170,37 @@ const valueToType = (
 
     return;
 };
+
+const replaceAll = (o?: IDefinitionData, value = "string") =>
+    !o ? o : Object.assign({}, ...Object.keys(o).map(k => ({ [k]: value })));
+
+export const getDefinitionTypings = (o?: IDefinitionData) =>
+    !o ? "" : JSON.stringify(replaceAll(o)).replace(/"/g, "");
+
+export function toTypes() {
+    return (text: string) => {
+        // @ts-ignore
+        const value = this[text];
+
+        if (!value || !text) {
+            return "";
+        }
+
+        return text + ": " + getDefinitionTypings(value as IDefinitionData);
+    };
+}
+
+export function toProp() {
+    return (text: string) => {
+        // @ts-ignore
+        const value = this[text] as object;
+
+        if (!value || !text) {
+            return "";
+        }
+
+        return Object.keys(value)
+            .map(k => `${k}${text !== "required" ? "?" : ""}:any;`)
+            .join("\n");
+    };
+}

@@ -1,0 +1,18 @@
+import { GraphVertex, IDefinition } from "@hiro-graph/orm";
+
+export interface I{{name}} extends IDefinition {
+{{#toTypes}}required{{/toTypes}}
+{{#toTypes}}optional{{/toTypes}}
+{{#toTypes}}relations{{/toTypes}}
+}
+
+declare type Relations = keyof I{{name}}["relations"];
+declare type Props =
+    | keyof I{{name}}["optional"]
+    | keyof I{{name}}["required"];
+
+export class {{name}}Vertex extends GraphVertex<Relations, Props> {
+{{#toProp}}required{{/toProp}}
+{{#toProp}}optional{{/toProp}}
+{{#toProp}}relations{{/toProp}}
+}

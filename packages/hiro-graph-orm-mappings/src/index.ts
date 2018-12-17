@@ -1,6 +1,8 @@
 import fs from "fs";
 import { join } from "path";
 import shell from "shelljs";
+import Mustache from "mustache";
+
 import {
     getRequiredAttributes,
     getOptionalAttributes,
@@ -8,11 +10,10 @@ import {
 } from "./regex";
 import {
     getName,
-    createIndex,
     flipRelationshipName,
-    createTypings,
-    createExport,
-    createExportTypes
+    getDefinitionTypings,
+    toTypes,
+    toProp
 } from "./helper";
 import { mapRelationship } from "./relations";
 
@@ -168,6 +169,65 @@ const output: IOutput = {};
     console.log("Create build dir:", config.OUTPUT_DIR);
     fs.mkdirSync(config.OUTPUT_DIR);
 
+    // Write each mapping to a mapping file, typings and GraphVertex
+    const templates = {
+        mapping: fs.readFileSync("./src/templates/mapping.mustache").toString(),
+        mappingTypes: fs
+            .readFileSync("./src/templates/mappingTypes.mustache")
+            .toString(),
+        index: fs.readFileSync("./src/templates/index.mustache").toString(),
+        typings: fs.readFileSync("./src/templates/typings.mustache").toString()
+    };
+    const exports: Array<{ name: string; fileName: string }> = [];
+
+    // Object.keys(output).map(key => {
+    const key = "ogit/Auth/Account";
+    const fileName = key
+        .toLowerCase()
+        .replace("ogit/", "")
+        .replace(/\//g, "-");
+    const name = output[key].name.replace(/-|\//g, "");
+
+    // Export js
+    fs.writeFileSync(
+        join(config.OUTPUT_DIR, `${fileName}.js`),
+        Mustache.render(templates.mapping, {
+            mapping: JSON.stringify(output[key])
+        })
+    );
+
+    // Export types
+    fs.writeFileSync(
+        join(config.OUTPUT_DIR, `${fileName}.d.ts`),
+        Mustache.render(templates.mappingTypes, {
+            name,
+            required: output[key].required,
+            optional: output[key].optional,
+            relations: output[key].relations,
+            toTypes,
+            toProp
+        })
+    );
+    exports.push({ name, fileName });
+    // }
+
+    // Create index.js
+    fs.writeFileSync(
+        join(config.OUTPUT_DIR, `index.js`),
+        Mustache.render(templates.index, {
+            exports
+        })
+    );
+
+    // Create index.d.ts
+    fs.writeFileSync(
+        join(config.OUTPUT_DIR, `index.d.ts`),
+        Mustache.render(templates.typings, {
+            exports
+        })
+    );
+
+    /*
     console.log("Generate library files");
     Object.keys(output).map(key => {
         const name = key
@@ -189,4 +249,5 @@ const output: IOutput = {};
 
     console.log("Generate typings");
     fs.writeFileSync(config.OUTPUT_DIR + "/index.d.ts", createTypings(output));
+    */
 })();
