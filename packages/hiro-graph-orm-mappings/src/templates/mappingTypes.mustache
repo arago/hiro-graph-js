@@ -10,6 +10,5 @@ declare type Relations = keyof I{{name}}["relations"];
 declare type Props = {{{props}}};
 
 export class {{name}}Vertex extends GraphVertex<Relations, Props> {
-{{#toProp}}required{{/toProp}}
-{{#toProp}}optional{{/toProp}}
+
 }
