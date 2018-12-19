@@ -7,6 +7,7 @@ interface IAuth {
     organizationTeams: (id: string) => Promise<OrganizationTeamsResponse>;
     updateMeProfile: (data: object) => Promise<object>;
     updateAccountProfile: (id: string, data: object) => Promise<object>;
+    getAvatar: (id: string) => Promise<any>;
 }
 
 type OrganizationTeamsResponse = ITeam[];

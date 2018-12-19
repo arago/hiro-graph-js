@@ -10,27 +10,23 @@ export const auth = {
     organizationTeams: (fetch, options, id) =>
         fetch(`/api/6.1/iam/organization/${id}/teams`, options),
     updateMeProfile: (fetch, options, data) => {
-        delete options.headers["Content-Type"];
-
-        const formData = new FormData();
         const payload = filterUndef(data);
-        Object.keys(payload).forEach(k => formData.append(k, payload[k]));
 
         options.method = "POST";
-        options.body = formData;
+        options.body = JSON.stringify(payload);
+        options.headers["Content-Type"] = "application/json";
 
         return fetch(`/api/6.1/iam/me/profile`, options);
     },
     updateAccountProfile: (fetch, options, id, data) => {
-        delete options.headers["Content-Type"];
-
-        const formData = new FormData();
         const payload = filterUndef(data);
-        Object.keys(payload).forEach(k => formData.append(k, payload[k]));
 
         options.method = "POST";
-        options.body = formData;
+        options.body = JSON.stringify(payload);
+        options.headers["Content-Type"] = "application/json";
 
         return fetch(`/api/6.1/iam/accounts/profile/${id}`, options);
-    }
+    },
+    getAvatar: (fetch, options, id) =>
+        fetch(`api/6.1/iam/accounts/${id}/avatar`, options)
 };
