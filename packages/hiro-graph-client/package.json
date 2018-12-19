@@ -8,6 +8,7 @@
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "yarn build",
+        "postpublish": "git add -A . && git push && git push --tags",
         "test": "jest --silent"
     },
     "license": "MIT",
