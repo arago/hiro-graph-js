@@ -4,12 +4,10 @@ import { w3cwebsocket as WS } from "websocket";
 import fetch, { Response } from "node-fetch";
 
 interface IAuth {
-    organizationTeams: (id: string) => Promise<IOrganizationTeamsResponse>;
+    organizationTeams: (id: string) => Promise<OrganizationTeamsResponse>;
 }
 
-interface IOrganizationTeamsResponse {
-    items: ITeam[];
-}
+type OrganizationTeamsResponse = ITeam[];
 
 interface ITeam {
     "ogit/_created-on": number;
