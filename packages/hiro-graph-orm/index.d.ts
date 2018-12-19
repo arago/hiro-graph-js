@@ -86,7 +86,7 @@ export class Vertex<RelationTypes = string, Props extends string = string> {
     setCount(relation: RelationTypes, count: number): this;
 }
 
-declare type defaultProps = "_id";
+declare type defaultProps = "_id" | "_modified-on" | "_organization" | "_owner";
 
 export class GraphVertex<
     RelationTypes = string,
