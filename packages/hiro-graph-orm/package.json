@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/orm",
-    "version": "1.0.20",
+    "version": "1.0.22",
     "description": "OGIT ontology to sane application mappings",
     "repository": "arago/hiro-graph-js",
     "main": "lib/index.js",
@@ -8,7 +8,6 @@
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib",
         "prepublish": "yarn build",
-        "postpublish": "git add -A . && git push && git push --tags",
         "test": "jest --silent"
     },
     "license": "MIT",
