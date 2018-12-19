@@ -76,20 +76,14 @@ export class Vertex<RelationTypes = string, Props extends string = string> {
     hasCount(relation: RelationTypes): boolean;
     getIds(relation: RelationTypes): Array<string>;
     hasIds(relation: RelationTypes): boolean;
-    set(values: SetterObject<Props>): Vertex<RelationTypes, Props>;
-    set(prop: Props, value: any): Vertex<RelationTypes, Props>;
+    set(values: SetterObject<Props>): this;
+    set(prop: Props, value: any): this;
     setVertices(
         relation: RelationTypes,
         nodes: Array<Vertex<RelationTypes, Props>>
-    ): Vertex<RelationTypes, Props>;
-    setIds(
-        relation: RelationTypes,
-        ids: Array<string>
-    ): Vertex<RelationTypes, Props>;
-    setCount(
-        relation: RelationTypes,
-        count: number
-    ): Vertex<RelationTypes, Props>;
+    ): this;
+    setIds(relation: RelationTypes, ids: Array<string>): this;
+    setCount(relation: RelationTypes, count: number): this;
 }
 
 declare type defaultProps = "_id" | "_modified-on" | "_organization" | "_owner";
@@ -105,27 +99,12 @@ export class GraphVertex<
     "_owner": string;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
-    save(options?: object): Promise<GraphVertex>;
-    connect(
-        relation: RelationTypes,
-        vertexOrId: string | Vertex
-    ): Promise<GraphVertex>;
-    disconnect(
-        relation: RelationTypes,
-        vertexOrId: string | Vertex
-    ): Promise<GraphVertex>;
-    fetchCount(
-        relations: Array<RelationTypes>,
-        options?: object
-    ): Promise<GraphVertex>;
-    fetchIds(
-        relations: Array<RelationTypes>,
-        options?: object
-    ): Promise<GraphVertex>;
-    fetchVertices(
-        relations: Array<RelationTypes>,
-        options?: object
-    ): Promise<GraphVertex>;
+    save(options?: object): this;
+    connect(relation: RelationTypes, vertexOrId: string | Vertex): this;
+    disconnect(relation: RelationTypes, vertexOrId: string | Vertex): this;
+    fetchCount(relations: Array<RelationTypes>, options?: object): this;
+    fetchIds(relations: Array<RelationTypes>, options?: object): this;
+    fetchVertices(relations: Array<RelationTypes>, options?: object): this;
     delete(options?: object): Promise<undefined>;
     getVertices<N extends GraphVertex>(relation: RelationTypes): Array<N>;
     hasVertices(relation: RelationTypes): boolean;
