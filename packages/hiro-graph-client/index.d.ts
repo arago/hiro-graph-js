@@ -5,6 +5,8 @@ import fetch, { Response } from "node-fetch";
 
 interface IAuth {
     organizationTeams: (id: string) => Promise<OrganizationTeamsResponse>;
+    updateMeProfile: (data: object) => Promise<object>;
+    updateAccountProfile: (id: string, data: object) => Promise<object>;
 }
 
 type OrganizationTeamsResponse = ITeam[];
