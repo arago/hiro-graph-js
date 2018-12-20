@@ -146,30 +146,30 @@ export default class Context {
     insert<T extends GraphVertex>(appData: object): T;
 
     // Fetch
-    fetchCount<T extends GraphVertex>(
+    fetchCount<T extends GraphVertex[]>(
         relations: Array<string>,
         options?: object
     ): (items: T) => Promise<T>;
     fetchCount<T extends GraphVertex>(
         relations: Array<string>,
         options?: object
-    ): (items: T[]) => Promise<T[]>;
-    fetchIds<T extends GraphVertex>(
+    ): (items: T) => Promise<T>;
+    fetchIds<T extends GraphVertex[]>(
         relations: Array<string>,
         options?: object
     ): (items: T) => Promise<T>;
     fetchIds<T extends GraphVertex>(
         relations: Array<string>,
         options?: object
-    ): (items: T[]) => Promise<T[]>;
-    fetchVertices<T extends GraphVertex>(
+    ): (items: T) => Promise<T>;
+    fetchVertices<T extends GraphVertex[]>(
         relations: Array<string>,
         options?: object
     ): (items: T) => Promise<T>;
     fetchVertices<T extends GraphVertex>(
         relations: Array<string>,
         options?: object
-    ): (items: T[]) => Promise<T[]>;
+    ): (items: T) => Promise<T>;
     find<T extends GraphVertex>(
         query: LuceneQuery,
         options?: object
