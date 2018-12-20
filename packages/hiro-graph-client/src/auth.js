@@ -28,5 +28,5 @@ export const auth = {
         return fetch(`/api/6.1/iam/accounts/profile/${id}`, options);
     },
     getAvatar: (fetch, options, id) =>
-        fetch(`/api/6.1/iam/accounts/${id}/avatar`, options)
+        fetch(`/api/6.1/iam/accounts/${id}/avatar`, { ...options, raw: true })
 };
