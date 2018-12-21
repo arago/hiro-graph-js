@@ -96,12 +96,24 @@ export class GraphVertex<
     _id: string;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
-    save(options?: object): this;
-    connect(relation: RelationTypes, vertexOrId: string | Vertex): this;
-    disconnect(relation: RelationTypes, vertexOrId: string | Vertex): this;
-    fetchCount(relations: Array<RelationTypes>, options?: object): this;
-    fetchIds(relations: Array<RelationTypes>, options?: object): this;
-    fetchVertices(relations: Array<RelationTypes>, options?: object): this;
+    save(options?: object): Promise<this>;
+    connect(
+        relation: RelationTypes,
+        vertexOrId: string | Vertex
+    ): Promise<this>;
+    disconnect(
+        relation: RelationTypes,
+        vertexOrId: string | Vertex
+    ): Promise<this>;
+    fetchCount(
+        relations: Array<RelationTypes>,
+        options?: object
+    ): Promise<this>;
+    fetchIds(relations: Array<RelationTypes>, options?: object): Promise<this>;
+    fetchVertices(
+        relations: Array<RelationTypes>,
+        options?: object
+    ): Promise<this>;
     delete(options?: object): Promise<undefined>;
     getVertices<N extends GraphVertex>(relation: RelationTypes): Array<N>;
     hasVertices(relation: RelationTypes): boolean;
