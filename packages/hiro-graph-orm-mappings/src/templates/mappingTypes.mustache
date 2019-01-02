@@ -1,4 +1,4 @@
-import { GraphVertex, IDefinition } from "@hiro-graph/orm";
+import { GraphVertex, IDefinition, defaultProps } from "@hiro-graph/orm";
 
 export interface I{{name}} extends IDefinition {
 {{#toTypes}}required{{/toTypes}}
@@ -6,9 +6,24 @@ export interface I{{name}} extends IDefinition {
 {{#toTypes}}relations{{/toTypes}}
 }
 
-declare type Relations = keyof I{{name}}["relations"];
-declare type Props = {{{props}}};
+type {{name}}Relations = keyof I{{name}}["relations"];
+type {{name}}Props = {{{props}}};
 
-export class {{name}}Vertex extends GraphVertex<Relations, Props> {
+export type {{name}}Plain = { [K in defaultProps]: any } &
+    { [K in keyof I{{name}}["optional"]]?: any } &
+    { [K in keyof I{{name}}["required"]]: any } & {
+        _rel: {
+          {{#relationKeys}}
+            {{.}}Ids?: string[];
+          {{/relationKeys}}
+          {{#relationKeys}}
+            {{.}}Count?: number;
+          {{/relationKeys}}
+        };
+    };
 
+export class {{name}}Vertex extends GraphVertex<{{name}}Relations, {{name}}Props> {
+    plain(): {{name}}Plain;
+    toJSON(): {{name}}Plain;
 }
+

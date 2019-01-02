@@ -204,6 +204,7 @@ const output: IOutput = {};
                 required: output[key].required,
                 optional: output[key].optional,
                 relations: output[key].relations,
+                relationKeys: Object.keys(output[key].relations || {}),
                 props: props || `""`,
                 toTypes,
                 toProp

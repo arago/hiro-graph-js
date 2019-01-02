@@ -65,10 +65,13 @@ export class LuceneQuery {}
 
 type SetterObject<Props extends string> = Partial<{ [k in Props]: any }>;
 
-export class Vertex<RelationTypes = string, Props extends string = string> {
+export class Vertex<
+    RelationTypes extends string = string,
+    Props extends string = string
+> {
     constructor(data: object);
-    toJSON(): object;
-    plain(): object;
+    toJSON(): any;
+    plain(): any;
     type(): string;
     get<V = any>(prop: Props): V;
     getFree(): object;
@@ -86,10 +89,18 @@ export class Vertex<RelationTypes = string, Props extends string = string> {
     setCount(relation: RelationTypes, count: number): this;
 }
 
-declare type defaultProps = "_id" | "_modified-on" | "_organization" | "_owner";
+declare type defaultProps =
+    | "_created-on"
+    | "_fetched"
+    | "_id"
+    | "_modified-by"
+    | "_modified-on"
+    | "_organization"
+    | "_owner"
+    | "_type";
 
 export class GraphVertex<
-    RelationTypes = string,
+    RelationTypes extends string = string,
     Props extends string = string
 > extends Vertex<RelationTypes, Props | defaultProps> {
     private _ctx: Context;
