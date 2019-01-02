@@ -99,6 +99,12 @@ declare type defaultProps =
     | "_owner"
     | "_type";
 
+export type PlainVertex<Required = {}, Optional = {}, Relations = {}> = {
+    [K in defaultProps]: any
+} &
+    { [K in keyof Required]: any } &
+    { [K in keyof Optional]?: any } & { _rel: Relations };
+
 export class GraphVertex<
     RelationTypes extends string = string,
     Props extends string = string
