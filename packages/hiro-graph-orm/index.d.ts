@@ -111,6 +111,10 @@ export class GraphVertex<
 > extends Vertex<RelationTypes, Props | defaultProps> {
     private _ctx: Context;
     _id: string;
+    _counts: { [K in RelationTypes]?: number };
+    _ids: { [K in RelationTypes]?: string[] };
+    _clean: boolean;
+    _before: object;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
     save(options?: object): Promise<this>;
