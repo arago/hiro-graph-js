@@ -103,7 +103,10 @@ export type PlainVertex<Required = {}, Optional = {}, Relations = {}> = {
     [K in defaultProps]: any
 } &
     { [K in keyof Required]: any } &
-    { [K in keyof Optional]?: any } & { _rel: Relations };
+    { [K in keyof Optional]?: any } & {
+        _rel: Relations;
+        _free: { [index: string]: any };
+    };
 
 export class GraphVertex<
     RelationTypes extends string = string,
