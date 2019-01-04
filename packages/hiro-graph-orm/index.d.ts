@@ -17,6 +17,14 @@ export interface IDefinition {
     relations?: IDefinitionData;
 }
 
+interface IQueryOptions {
+    raw?: boolean;
+    plain?: boolean;
+    order?: string;
+    offset?: number;
+    limit?: number;
+}
+
 export class Entity<T extends GraphVertex> {
     create(data: object, options?: object): Promise<T>;
     connect(relation: string, vertexOrId: string | Vertex): Promise<T>;
@@ -42,7 +50,7 @@ export class Entity<T extends GraphVertex> {
         relations: Array<string>,
         options?: object
     ): (items: T) => Promise<T>;
-    find(query: LuceneQuery, options?: object): Promise<T | T[]>;
+    find(query: LuceneQuery, options?: IQueryOptions): Promise<T | T[]>;
     findById(idOrIds: string, options?: object): Promise<T>;
     findById(idOrIds: Array<string>, options?: object): Promise<T[]>;
     findOne(query: LuceneQuery, options?: object): Promise<T>;
@@ -61,7 +69,24 @@ export class GremlinQueryBuilder {
     execute<T>(id: string, options?: { raw: boolean }): Promise<T>;
 }
 
-export class LuceneQuery {}
+type LuceneOptions<T> = "$not" | "$or" | "$must" | "$and" | "$missing" | T;
+
+type LucenseBase<T extends string> = {
+    [K in LuceneOptions<T>]?: string | string[] | LucenseBase<T>
+};
+type LuceneSpecial = {
+    $search?:
+        | { type: "ngram" | "prefix"; term: string; field?: string }
+        | string;
+    $range?: { [index: string]: [number, number] };
+};
+type LucenseAny = {
+    [index: string]: string | string[] | LucenseAny;
+};
+
+export type LuceneQuery<T extends string = defaultProps> = LucenseBase<T> &
+    LuceneSpecial &
+    LucenseAny;
 
 type SetterObject<Props extends string> = Partial<{ [k in Props]: any }>;
 
