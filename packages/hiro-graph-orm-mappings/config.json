@@ -28,6 +28,7 @@
     },
     "mapping": {
         "ogit/Auth/belongs -> ogit/Auth/Account": "account",
+        "ogit/Auth/isMemberOf <- ogit/Auth/Account": "members",
         "ogit/Auth/belongs -> ogit/Auth/Organization": "parentOrg",
         "ogit/Auth/belongs <- ogit/Auth/AccountProfile": "profile",
         "ogit/Auth/isMemberOf -> ogit/Auth/Organization": "orgs",
