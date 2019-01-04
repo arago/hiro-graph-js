@@ -26,11 +26,11 @@ interface IQueryOptions {
 }
 
 export class Entity<T extends GraphVertex> {
-    create(data: object, options?: object): Promise<T>;
+    create(data: object, options?: IQueryOptions): Promise<T>;
     connect(relation: string, vertexOrId: string | Vertex): Promise<T>;
     disconnect(relation: string, vertexOrId: string | Vertex): Promise<T>;
-    update(vertexId: string, appData: object, options?: object): T;
-    replace(vertexId: string, appData: object, options?: object): T;
+    update(vertexId: string, appData: object, options?: IQueryOptions): T;
+    replace(vertexId: string, appData: object, options?: IQueryOptions): T;
     encode(appData: object): object;
     decode(graphData: object): object;
     relationQuery(relation: string): object;
@@ -40,25 +40,25 @@ export class Entity<T extends GraphVertex> {
     hasRelation(id: string, relation: string, test: any): boolean;
     fetchCount(
         relations: Array<string>,
-        options?: object
+        options?: IQueryOptions
     ): (items: T) => Promise<T>;
     fetchIds(
         relations: Array<string>,
-        options?: object
+        options?: IQueryOptions
     ): (items: T) => Promise<T>;
     fetchVertices(
         relations: Array<string>,
-        options?: object
+        options?: IQueryOptions
     ): (items: T) => Promise<T>;
     find(query: LuceneQuery, options?: IQueryOptions): Promise<T | T[]>;
-    findById(idOrIds: string, options?: object): Promise<T>;
-    findById(idOrIds: Array<string>, options?: object): Promise<T[]>;
-    findOne(query: LuceneQuery, options?: object): Promise<T>;
-    findCount(query: LuceneQuery, options?: object): Promise<number>;
+    findById(idOrIds: string, options?: IQueryOptions): Promise<T>;
+    findById(idOrIds: Array<string>, options?: IQueryOptions): Promise<T[]>;
+    findOne(query: LuceneQuery, options?: IQueryOptions): Promise<T>;
+    findCount(query: LuceneQuery, options?: IQueryOptions): Promise<number>;
     search(
         query: string | object,
         filter: LuceneQuery,
-        options?: object
+        options?: IQueryOptions
     ): Promise<T | T[]>;
 }
 
@@ -145,7 +145,7 @@ export class GraphVertex<
     _before: object;
 
     constructor(data: object, context: Context, guardSymbol: Symbol);
-    save(options?: object): Promise<this>;
+    save(options?: IQueryOptions): Promise<this>;
     connect(
         relation: RelationTypes,
         vertexOrId: string | Vertex
@@ -156,21 +156,24 @@ export class GraphVertex<
     ): Promise<this>;
     fetchCount(
         relations: Array<RelationTypes>,
-        options?: object
+        options?: IQueryOptions
     ): Promise<this>;
-    fetchIds(relations: Array<RelationTypes>, options?: object): Promise<this>;
+    fetchIds(
+        relations: Array<RelationTypes>,
+        options?: IQueryOptions
+    ): Promise<this>;
     fetchVertices(
         relations: Array<RelationTypes>,
-        options?: object
+        options?: IQueryOptions
     ): Promise<this>;
-    delete(options?: object): Promise<undefined>;
+    delete(options?: IQueryOptions): Promise<undefined>;
     getVertices<N extends GraphVertex>(relation: RelationTypes): Array<N>;
     hasVertices(relation: RelationTypes): boolean;
     canWrite(): Promise<boolean>;
 }
 
 export class Schema {
-    constructor(params: IClientArgs, options?: object);
+    constructor(params: IClientArgs, options?: IQueryOptions);
 }
 
 export type IClientServlets = {
@@ -202,7 +205,7 @@ export default class Context {
 
     delete<T extends GraphVertex>(
         vertexId: string,
-        options?: object
+        options?: IQueryOptions
     ): Promise<T>;
     gremlin(initialQuery?: string): GremlinQueryBuilder;
     getEntity<T extends GraphVertex>(name: string): Entity<T> | undefined;
@@ -212,30 +215,36 @@ export default class Context {
 
     // Fetch
 
-    fetchCount(relations: Array<string>, options?: object): FetchReturn;
-    fetchIds(relations: Array<string>, options?: object): FetchReturn;
-    fetchVertices(relations: Array<string>, options?: object): FetchReturn;
+    fetchCount(relations: Array<string>, options?: IQueryOptions): FetchReturn;
+    fetchIds(relations: Array<string>, options?: IQueryOptions): FetchReturn;
+    fetchVertices(
+        relations: Array<string>,
+        options?: IQueryOptions
+    ): FetchReturn;
     find<T extends GraphVertex>(
         query: LuceneQuery,
-        options?: object
+        options?: IQueryOptions
     ): Promise<T | T[]>;
     findById<T extends GraphVertex>(
         idOrIds: string,
-        options?: object
+        options?: IQueryOptions
     ): Promise<T>;
     findById<T extends GraphVertex>(
         idOrIds: Array<string>,
-        options?: object
+        options?: IQueryOptions
     ): Promise<Array<T>>;
-    findOne<T extends GraphVertex>(query: any, options?: object): Promise<T>;
+    findOne<T extends GraphVertex>(
+        query: any,
+        options?: IQueryOptions
+    ): Promise<T>;
     findCount<T extends GraphVertex>(
         query: LuceneQuery,
-        options?: object
+        options?: IQueryOptions
     ): Promise<number>;
     search<T extends GraphVertex>(
         query: string | object,
         filter: LuceneQuery,
-        options?: object
+        options?: IQueryOptions
     ): Promise<T | T[]>;
 }
 
