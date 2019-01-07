@@ -1,8 +1,8 @@
 export type ITaskShape<T = any> = {
-    error?: Error | false | string;
-    loading: boolean;
+    error?: Error | false | string | null;
+    loading?: boolean;
     result: T;
-    start: number;
+    start?: number;
 };
 
 export const graphReducer: () => void;
@@ -32,7 +32,7 @@ interface IWhenTaskOptions<T, R> {
     loading?: () => R;
     reloading?: () => R;
     ok?: (res: T) => R;
-    error?: () => R;
+    error?: (err: Error) => R;
     ignoreReloadingIfOK?: boolean;
     ignoreReloadingIfError?: boolean;
 }
