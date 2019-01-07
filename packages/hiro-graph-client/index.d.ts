@@ -5,6 +5,7 @@ import fetch, { Response } from "node-fetch";
 
 interface IAuth {
     organizationTeams: (id: string) => Promise<OrganizationTeamsResponse>;
+    mePassword: (oldPassword: string, newPassword: string) => Promise<object>;
     updateMeProfile: (data: object) => Promise<object>;
     updateAccountProfile: (id: string, data: object) => Promise<object>;
     getAvatar: (id: string) => Promise<any>;

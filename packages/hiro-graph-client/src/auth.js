@@ -18,6 +18,16 @@ export const auth = {
 
         return fetch(`/api/6.1/iam/me/profile`, options);
     },
+    mePassword: (fetch, options, oldPassword, newPassword) => {
+        options.method = "POST";
+        options.body = JSON.stringify({
+            oldPassword,
+            newPassword
+        });
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(`/api/6.1/iam/me/password`, options);
+    },
     updateAccountProfile: (fetch, options, id, data) => {
         const payload = filterUndef(data);
 
