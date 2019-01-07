@@ -4,6 +4,7 @@
     "repository": "arago/hiro-graph-js",
     "description": "Redux awareness for the `hiro-graph-orm` package",
     "main": "lib/index.js",
+    "types": "index.d.ts",
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "yarn build",
