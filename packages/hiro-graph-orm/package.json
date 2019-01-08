@@ -7,7 +7,8 @@
     "types": "index.d.ts",
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib",
-        "prepublish": "yarn build",
+        "preversion": "yarn test && yarn build",
+        "postversion": "git add -A . && git push && git push --tags",
         "test": "jest --silent"
     },
     "license": "MIT",

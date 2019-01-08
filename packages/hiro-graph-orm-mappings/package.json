@@ -9,7 +9,8 @@
         "build": "yarn lint && TS_NODE_FILES=true ts-node ./src/index && yarn format",
         "lint": "tslint ./src/**/*.{ts,tsx} --fix",
         "format": "prettier --tab-width=4 'lib/*.d.ts' 'lib/*.js' --write",
-        "prepublish": "yarn build",
+        "preversion": "yarn test && yarn build",
+        "postversion": "git add -A . && git push && git push --tags",
         "test": "echo no tests"
     },
     "devDependencies": {
