@@ -1,6 +1,6 @@
 # Features
 
-The package provides the `Schema` and `Context` objects. These combined with a GraphIT [`Client`](https://github.com/arago/hiro-graph-js/hiro-graph-client) provide a powerful abstraction over the GraphIT API and data.
+The package provides the `Schema` and `Context` objects. These combined with a GraphIT [`Client`](https://github.com/arago/hiro-graph-js/@hiro-graph/client) provide a powerful abstraction over the GraphIT API and data.
 
  - A mapping between the "string-only" GraphIT attributes and rich in-app attributes.
  - Management complex multi/single hop relationships between vertices and the Gremlin queries required to perform them.

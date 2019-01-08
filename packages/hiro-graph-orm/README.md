@@ -16,7 +16,7 @@ $ npm install hiro-graph-orm hiro-graph-orm-mappings
 ## Example usage:
 ```javascript
 import HiroGraphOrm from "hiro-graph-orm";
-import { Token } from "hiro-graph-client";
+import { Token } from "@hiro-graph/client";
 import mappings from "hiro-graph-orm-mappings";
 
 const token = new Token({ getToken: () => "some access token" });

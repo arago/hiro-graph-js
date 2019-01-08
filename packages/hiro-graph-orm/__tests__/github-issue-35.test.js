@@ -9,7 +9,7 @@ But in the network panel there is no sign of these being applied.
 
 I briefly looked into it:
 We use http and I followed the request until here:
-https://github.com/arago/hiro-graph-js/blob/5c3d734496aa457746538d336f5d80903aa75a54/packages/hiro-graph-client/src/transport-http.js#L15
+https://github.com/arago/hiro-graph-js/blob/5c3d734496aa457746538d336f5d80903aa75a54/packages/@hiro-graph/client/src/transport-http.js#L15
 
 It seems the reqOptions is not used.
 
@@ -26,7 +26,7 @@ But first a test to verify
 
 import schema from "../__mocks__/schema";
 import Context from "../src/index";
-import createMockClient from "hiro-graph-client/lib/mock";
+import createMockClient from "@hiro-graph/client/lib/mock";
 
 const client = createMockClient();
 const ctx = new Context(client, schema);

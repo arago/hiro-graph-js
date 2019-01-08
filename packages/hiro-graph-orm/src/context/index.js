@@ -73,7 +73,7 @@ const noEntity = "_no_entity";
  */
 export default class Context {
     /**
-     *  @param {Client|object} clientSpec - This should be an `hiro-graph-client` `Client` object,
+     *  @param {Client|object} clientSpec - This should be an `@hiro-graph/client` `Client` object,
      *                                              or the constructor args to create one.
      *  @param {Schema|Array} schemaSpec - This should be a {@link Schema} or the constructor args to create one.
      *  @param {?Map} [cache=new&nbsp;Map()] - The vertex cache. Any object satisfying the `Map` interface should be OK.
