@@ -39,12 +39,9 @@ export const auth = {
     },
     getAvatar: (fetch, options, id) =>
         fetch(`/api/6.1/iam/accounts/${id}/avatar`, { ...options, raw: true }),
-    createTeam: (fetch, options, parent, data) => {
+    createTeam: (fetch, options, data) => {
         options.method = "POST";
-        options.body = JSON.stringify({
-            ...data,
-            parent
-        });
+        options.body = JSON.stringify(data);
         options.headers["Content-Type"] = "application/json";
 
         return fetch(`/api/6.1/iam/team`, options);

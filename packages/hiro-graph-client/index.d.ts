@@ -9,7 +9,7 @@ interface IAuth {
     updateMeProfile: (data: object) => Promise<object>;
     updateAccountProfile: (id: string, data: object) => Promise<object>;
     getAvatar: (id: string) => Promise<any>;
-    createTeam: (parent: string, data: object) => Promise<object>;
+    createTeam: (data: object) => Promise<object>;
     updateTeam: (id: string, data: object) => Promise<object>;
     deleteTeam: (id: string) => Promise<object>;
 }
