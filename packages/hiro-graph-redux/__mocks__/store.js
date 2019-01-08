@@ -11,7 +11,7 @@ global.window = {
     location: { origin: "mock://app", hash: "#", search: "?", href: "" }
 };
 
-import createMockClient from "hiro-graph-client/lib/mock";
+import createMockClient from "@hiro-graph/client/lib/mock";
 import mappings, { createPerson } from "./mappings";
 import {
     createToken,

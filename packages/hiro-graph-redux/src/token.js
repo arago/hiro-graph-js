@@ -1,7 +1,7 @@
 /**
  *  This is a redux aware token.
  */
-import { Token } from "hiro-graph-client";
+import { Token } from "@hiro-graph/client";
 import { setToken } from "./actions";
 import { getTokenState } from "./reducer";
 
