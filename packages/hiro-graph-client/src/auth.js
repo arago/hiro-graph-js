@@ -38,5 +38,28 @@ export const auth = {
         return fetch(`/api/6.1/iam/accounts/profile/${id}`, options);
     },
     getAvatar: (fetch, options, id) =>
-        fetch(`/api/6.1/iam/accounts/${id}/avatar`, { ...options, raw: true })
+        fetch(`/api/6.1/iam/accounts/${id}/avatar`, { ...options, raw: true }),
+    createTeam: (fetch, options, parent, data) => {
+        options.method = "POST";
+        options.body = JSON.stringify({
+            ...data,
+            parent
+        });
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(`/api/6.1/iam/team`, options);
+    },
+    updateTeam: (fetch, options, id, data) => {
+        options.method = "PUT";
+        options.body = JSON.stringify(data);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(`/api/6.1/iam/team/${id}`, options);
+    },
+    deleteTeam: (fetch, options, id) => {
+        options.method = "DELETE";
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(`/api/6.1/iam/team/${id}`, options);
+    }
 };
