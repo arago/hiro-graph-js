@@ -313,7 +313,7 @@ Array [
 
 exports[`transport-http should create the right options for: me 1`] = `
 Array [
-  "https://graphit/api/6.1/iam/me/account",
+  "https://graphit/me/account",
   Object {
     "headers": Object {
       "Accept": "application/json",
