@@ -5,13 +5,21 @@ import fetch, { Response } from "node-fetch";
 
 interface IAuth {
     organizationTeams: (id: string) => Promise<OrganizationTeamsResponse>;
-    mePassword: (oldPassword: string, newPassword: string) => Promise<object>;
-    updateMeProfile: (data: object) => Promise<object>;
     updateAccountProfile: (id: string, data: object) => Promise<object>;
     getAvatar: (id: string) => Promise<any>;
     createTeam: (data: object) => Promise<object>;
     updateTeam: (id: string, data: object) => Promise<object>;
     deleteTeam: (id: string) => Promise<object>;
+}
+
+interface IAPI {
+    getMeProfile: () => Promise<object>;
+    updateMeProfile: (data: object) => Promise<object>;
+    getMeAvatar: () => Promise<object>;
+    meAccount: () => Promise<object>;
+    mePassword: (oldPassword: string, newPassword: string) => Promise<object>;
+    meTeams: () => Promise<object>;
+    updateMeAvatar: (data: object) => Promise<object>;
 }
 
 type OrganizationTeamsResponse = ITeam[];
@@ -116,6 +124,7 @@ export default class Client {
     http: HttpTransport;
     transport: WebSocketTransport | HttpTransport;
     auth: IAuth;
+    api: IAPI;
     fetch: (
         url: string,
         options: object,

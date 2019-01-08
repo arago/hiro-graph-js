@@ -6,28 +6,9 @@ const filterUndef = obj =>
         return ret;
     }, {});
 
-export const auth = {
+export default {
     organizationTeams: (fetch, options, id) =>
         fetch(`/api/6.1/iam/organization/${id}/teams`, options),
-    updateMeProfile: (fetch, options, data) => {
-        const payload = filterUndef(data);
-
-        options.method = "POST";
-        options.body = JSON.stringify(payload);
-        options.headers["Content-Type"] = "application/json";
-
-        return fetch(`/api/6.1/iam/me/profile`, options);
-    },
-    mePassword: (fetch, options, oldPassword, newPassword) => {
-        options.method = "POST";
-        options.body = JSON.stringify({
-            oldPassword,
-            newPassword
-        });
-        options.headers["Content-Type"] = "application/json";
-
-        return fetch(`/api/6.1/iam/me/password`, options);
-    },
     updateAccountProfile: (fetch, options, id, data) => {
         const payload = filterUndef(data);
 

@@ -20,7 +20,9 @@ import { fixedToken } from "./token";
 import EventStream from "./eventstream";
 import subscriberFanout from "./subscriber-fanout";
 import timer from "./timer";
-import { auth } from "./auth";
+
+import authServlet from "./servlets/auth";
+import apiServlet from "./servlets/api";
 
 const passthru = fn => [
     r => (fn(), r),
@@ -82,7 +84,10 @@ export default class Client {
         this._pubsub = subscriberFanout();
 
         // Auth API
-        this.addServlet("auth", auth);
+        this.addServlet("auth", authServlet);
+
+        // Global API
+        this.addServlet("api", apiServlet);
     }
 
     // NB this is not held anywhere in this instance, but returned
