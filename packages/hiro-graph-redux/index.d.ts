@@ -3,6 +3,7 @@ export type ITaskShape<T = any> = {
     loading?: boolean;
     result: T;
     start?: number;
+    finish?: number;
 };
 
 export const graphReducer: () => void;
@@ -11,10 +12,11 @@ export const createTaskSelector: () => void;
 export const createAction: () => void;
 export const createTask: <T = any>(
     action: any,
-    selector: any
+    selector?: any
 ) => {
     action: (...args: any) => void;
     selector: (...args: any) => ITaskShape<T>;
+    update: (...args: any) => void;
 };
 export const createTaskFactory: () => void;
 export const createTaskAction: () => void;
