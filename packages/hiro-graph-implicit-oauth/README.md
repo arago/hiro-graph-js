@@ -1,18 +1,18 @@
-# `hiro-graph-implicit-oauth`: Implicit OAuth flow helper
+# `@hiro-graph/implicit-oauth`: Implicit OAuth flow helper
 
 A simple oauth implicit flow, with options for a Popup or a Redirect based
 
 ## installation
 
 ```bash
-$ npm install hiro-graph-implicit-oauth
+$ npm install @hiro-graph/implicit-oauth
 ```
 
 ## Usage example
 
 ```javascript
 
-import { Popup } from "hiro-graph-implicit-oauth"
+import { Popup } from "@hiro-graph/implicit-oauth"
 
 const config = {
     url: "https://your/authorize/url...",

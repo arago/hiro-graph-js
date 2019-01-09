@@ -1,5 +1,5 @@
 {
-    "name": "hiro-graph-implicit-oauth",
+    "name": "@hiro-graph/implicit-oauth",
     "version": "1.1.1",
     "description": "Customisable Implicit Oauth",
     "main": "./lib/index.js",

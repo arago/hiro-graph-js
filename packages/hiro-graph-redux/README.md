@@ -31,7 +31,7 @@ import {
 } from "redux";
 
 const endpoint = "http://graph:8888";
-// hiro-graph-redux will use the hiro-graph-implicit-oauth,
+// hiro-graph-redux will use the @hiro-graph/implicit-oauth,
 // `createToken` instantiates a new token handler for the
 // redux application.
 const token = createToken();

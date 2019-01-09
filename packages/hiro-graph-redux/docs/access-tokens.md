@@ -7,7 +7,7 @@ Once you have created the store (see [middleware and reducers](./middleware-and-
 ```javascript
 
 import { implicitOauth } from "hiro-graph-redux";
-import popupStrategy from "hiro-graph-implicit-oauth/lib/popup";
+import popupStrategy from "@hiro-graph/implicit-oauth/lib/popup";
 
 const store = { /* redux store with `hiro-graph-redux` enhancement */ };
 
@@ -36,4 +36,4 @@ implicitOauth(
    - Pros: never disallowed like popups, does not require a user interaction to load the login page.
    - Cons: Much harder to retain page state, URL will be lost on return.
 
-You may build your own strategy as well, see [`hiro-graph-implicit-oauth`](/packages/hiro-graph-implicit-oauth/).
+You may build your own strategy as well, see [`@hiro-graph/implicit-oauth`](/packages/@hiro-graph/implicit-oauth/).

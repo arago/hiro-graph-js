@@ -1,10 +1,10 @@
 /**
  *  Helper functions for getting data from oauth implicit auth flow.
  */
-import { createStrategy } from "hiro-graph-implicit-oauth";
-import { popupStrategy } from "hiro-graph-implicit-oauth/lib/popup";
-import { iframeStrategy } from "hiro-graph-implicit-oauth/lib/iframe";
-import { redirectStrategy } from "hiro-graph-implicit-oauth/lib/redirect";
+import { createStrategy } from "@hiro-graph/implicit-oauth";
+import { popupStrategy } from "@hiro-graph/implicit-oauth/lib/popup";
+import { iframeStrategy } from "@hiro-graph/implicit-oauth/lib/iframe";
+import { redirectStrategy } from "@hiro-graph/implicit-oauth/lib/redirect";
 
 import {
     setToken,
@@ -73,7 +73,7 @@ const builtInStrategies = {
 };
 
 /**
- *  The "strategy" option is one of the exports from "hiro-graph-implicit-oauth"
+ *  The "strategy" option is one of the exports from "@hiro-graph/implicit-oauth"
  *  We provide a shorthand for the common ones, so you don't have to add the depenency explitictly
  */
 export default function setupImplicitOauth(
