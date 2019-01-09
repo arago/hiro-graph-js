@@ -3630,25 +3630,6 @@ has@^1.0.1, has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
-hiro-graph-client@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/hiro-graph-client/-/hiro-graph-client-1.0.1.tgz#552f777f6826f88436feb8ab6bdf8cabd7536417"
-  integrity sha512-5d6NRIG7g5ENPdiuwwjqELVjFT+0AJ5SXU+YfBNBI+zRg88zbNYMHTSGoLuuoG1/WSmuPGoZ7RvNZsqIccCQ1g==
-  dependencies:
-    isomorphic-fetch "^2.2.1"
-    websocket "^1.0.25"
-
-hiro-graph-orm@^1.0.2:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/hiro-graph-orm/-/hiro-graph-orm-1.0.4.tgz#40679c0ebc5dc30ac50b1aae094e13d256f3a7e8"
-  integrity sha512-vkzCLaVcB9umgSYiKoJ/ssD++o+HerpX6y/Rw0jkPNfnK6Ui5uF3mnSWj/MgRUAOJfDk+E9+jD2PWW7MEM5/wg==
-  dependencies:
-    hiro-graph-client "^1.0.1"
-    hiro-graph-codecs "^1.0.0"
-    hiro-graph-gremlin "^1.0.1"
-    hiro-graph-lucene "^1.0.0"
-    lodash.isplainobject "^4.0.6"
-
 hoek@6.x.x:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-6.1.2.tgz#99e6d070561839de74ee427b61aa476bd6bddfd6"
