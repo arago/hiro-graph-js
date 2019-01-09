@@ -1,6 +1,6 @@
 # `hiro-graph-redux`: Graph ORM redux middleware
 
-This is middleware/reducer combo, a custom `Token`, an action creator and some actions for redux that wraps the Graph ORM (`hiro-graph-orm`).
+This is middleware/reducer combo, a custom `Token`, an action creator and some actions for redux that wraps the Graph ORM (`@hiro-graph/orm`).
 
 ## installation
 
@@ -15,7 +15,7 @@ Please see [`./docs`](/packages/hiro-graph-redux/docs/README.md)
 ## Example
 
 ```javascript
-import HiroGraphORM from "hiro-graph-orm";
+import HiroGraphORM from "@hiro-graph/orm";
 import schema from "path/to/schema/mappings";
 
 import {
@@ -25,10 +25,7 @@ import {
     createToken
 } from "hiro-graph-redux";
 
-import {
-    createStore,
-    combineReducers
-} from "redux";
+import { createStore, combineReducers } from "redux";
 
 const endpoint = "http://graph:8888";
 // hiro-graph-redux will use the @hiro-graph/implicit-oauth,
