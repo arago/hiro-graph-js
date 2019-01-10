@@ -2,6 +2,7 @@
 
 import { w3cwebsocket as WS } from "websocket";
 import fetch, { Response } from "node-fetch";
+import { ReduxToken } from "@hiro-graph/redux";
 
 interface IAuth {
     organizationTeams: (id: string) => Promise<OrganizationTeamsResponse>;
@@ -103,6 +104,19 @@ declare class WebSocketTransport {
 
 // Client
 
+export class Token {
+    constructor({
+        onInvalidate,
+        getMeta,
+        getToken
+    }: {
+        onInvalidate?: () => object;
+        getMeta?: () => object;
+        getToken: () => object;
+    });
+    get: () => Promise<string>;
+}
+
 interface IClientParams {
     endpoint: string;
     token: string;
@@ -120,7 +134,7 @@ export interface IServletMethods {
 
 export default class Client {
     endpoint: string;
-    token: string;
+    token: ReduxToken;
     http: HttpTransport;
     transport: WebSocketTransport | HttpTransport;
     auth: IAuth;
@@ -131,8 +145,8 @@ export default class Client {
         reqOptions: object
     ) => Promise<Response>;
 
-    constructor(params: IClientParams, transportOptions: object);
+    constructor(params: IClientParams, transportOptions?: object);
     me(): object;
-    getToken(): string;
+    getToken(): ReduxToken;
     addServlet(prefix: string, servletMethods: IServletMethods): Client;
 }
