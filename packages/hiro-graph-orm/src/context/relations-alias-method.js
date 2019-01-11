@@ -138,12 +138,12 @@ export function relationQueryGenerator(entity, { withAlias = false }) {
         const { alias, hops } = entity.relation(relation);
         let limiter = x => x;
         if (limit !== false) {
-            limiter = g => g.limit(offset, offset + limit);
+            limiter = g => g.range(offset, offset + limit);
         } else if (offset !== 0) {
             // this is a bit of a hack, there is no offset without limit
             // but Integer.MAX_VALUE is as big as we are allowed anyway.
             // Hopefully we won't get that many results!
-            limiter = g => g.limit(offset, "Integer.MAX_VALUE");
+            limiter = g => g.range(offset, "Integer.MAX_VALUE");
         }
         return gremlin => {
             hops.forEach(({ verb, direction, filter, vertices }) => {
