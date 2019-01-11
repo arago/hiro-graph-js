@@ -49,17 +49,17 @@ describe("github issue 35", () => {
         {
             name: "offset and limit",
             options: { offset: 1, limit: 2 },
-            match: /\[1\.\.3\]/
+            match: /range\(1, 3\)/
         },
         {
             name: "limit only",
             options: { limit: 5 },
-            match: /\[0\.\.5\]/
+            match: /range\(0, 5\)/
         },
         {
             name: "offset only",
             options: { offset: 10 },
-            match: /\[10\.\.Integer.MAX_VALUE\]/
+            match: /range\(10, Integer.MAX_VALUE\)/
         }
     ];
 
