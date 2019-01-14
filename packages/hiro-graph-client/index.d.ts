@@ -5,12 +5,24 @@ import fetch, { Response } from "node-fetch";
 import { ReduxToken } from "@hiro-graph/redux";
 
 interface IAuth {
-    organizationTeams: (id: string) => Promise<OrganizationTeamsResponse>;
-    updateAccountProfile: (id: string, data: object) => Promise<object>;
     getAvatar: (id: string) => Promise<any>;
+    getAccount: (id: string) => Promise<object>;
+    updateAccountProfile: (id: string, data: object) => Promise<object>;
+    getAccountProfile: (id: string) => Promise<object>;
+    getAccountProfileByAccountId: (id: string) => Promise<object>;
+    listRoles: (limit: number, offset: number, name: string) => Promise<object>;
+    updatePassword: (id: string, password: string) => Promise<object>;
+    activateAccount: (id: string) => Promise<object>;
+
     createTeam: (data: object) => Promise<object>;
     updateTeam: (id: string, data: object) => Promise<object>;
+    getTeam: (id: string) => Promise<object>;
     deleteTeam: (id: string) => Promise<object>;
+    addMembers: (id: string, ...accounts: string[]) => Promise<object>;
+    removeMembers: (id: string, ...accounts: string[]) => Promise<object>;
+    getTeamMembers: (id: string) => Promise<object[]>;
+    getOrganizationMembers: (id: string) => Promise<object[]>;
+    organizationTeams: (id: string) => Promise<object[]>;
 }
 
 interface IAPI {
@@ -19,28 +31,8 @@ interface IAPI {
     getMeAvatar: () => Promise<object>;
     meAccount: () => Promise<object>;
     mePassword: (oldPassword: string, newPassword: string) => Promise<object>;
-    meTeams: () => Promise<object>;
+    meTeams: () => Promise<object[]>;
     updateMeAvatar: (data: object) => Promise<object>;
-}
-
-type OrganizationTeamsResponse = ITeam[];
-
-interface ITeam {
-    "ogit/_created-on": number;
-    "ogit/_xid": string;
-    "ogit/_organization": string;
-    "ogit/name": string;
-    "ogit/_modified-on": number;
-    "ogit/_id": string;
-    "ogit/_creator": string;
-    "ogit/description": string;
-    "ogit/_graphtype": string;
-    "ogit/_owner": string;
-    "ogit/_v-id": string;
-    "ogit/_v": number;
-    "ogit/_is-deleted": boolean;
-    "ogit/_scope": string;
-    "ogit/_type": string;
 }
 
 // HttpTransport
@@ -145,8 +137,16 @@ export default class Client {
         reqOptions: object
     ) => Promise<Response>;
 
-    constructor(params: IClientParams, transportOptions?: object);
+    constructor(
+        params: IClientParams,
+        transportOptions?: object,
+        proxies?: string[]
+    );
     me(): object;
     getToken(): ReduxToken;
-    addServlet(prefix: string, servletMethods: IServletMethods): Client;
+    addServlet(
+        prefix: string,
+        servletMethods: IServletMethods,
+        proxy?: string
+    ): Client;
 }

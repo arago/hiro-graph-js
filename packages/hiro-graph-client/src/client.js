@@ -45,7 +45,7 @@ const dereference = obj => {
 };
 
 export default class Client {
-    constructor({ endpoint, token }, transportOptions = {}) {
+    constructor({ endpoint, token }, transportOptions = {}, proxies = []) {
         this.endpoint = endpoint;
 
         //we hold on to the token for ease of access/manual invalidation
@@ -75,6 +75,8 @@ export default class Client {
 
         // Bind our fetch for extension servlets.
         this.fetch = (...args) => this.http.fetch(this.token, ...args);
+        this.proxyFetch = proxy => (url, ...args) =>
+            this.fetch(`${proxy}${url}`, ...args);
 
         this._dedup = Object.create(null);
 
@@ -84,10 +86,18 @@ export default class Client {
         this._pubsub = subscriberFanout();
 
         // Auth API
-        this.addServlet("auth", authServlet);
+        this.addServlet(
+            "auth",
+            authServlet,
+            proxies.length >= 1 ? proxies[0] : ""
+        );
 
         // Global API
-        this.addServlet("api", apiServlet);
+        this.addServlet(
+            "api",
+            apiServlet,
+            proxies.length >= 2 ? proxies[1] : ""
+        );
     }
 
     // NB this is not held anywhere in this instance, but returned
@@ -610,7 +620,7 @@ export default class Client {
      *  - `options` the default fetch options you can override
      *  - `...args` the rest of the args passed in by the user for that method
      */
-    addServlet(prefix, servletMethods) {
+    addServlet(prefix, servletMethods, proxy) {
         if (!prefix) {
             throw new Error("[GRAPH] Must give prefix for servlet");
         }
@@ -621,6 +631,9 @@ export default class Client {
                     "`"
             );
         }
+
+        const f = proxy ? this.proxyFetch(proxy) : this.fetch;
+
         //create namespace.
         this[prefix] = {};
         //add servlet methods
@@ -630,36 +643,34 @@ export default class Client {
                 return this.wrapTimedEvent(
                     "servlet-" + method,
                     { args },
-                    call(this.fetch, this.http.defaultOptions(), ...args).catch(
-                        err => {
-                            //these are the special cases.
-                            //regular errors end up with code === undefined, so not retryable.
-                            switch (true) {
-                                case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
-                                    this.token.invalidate();
-                                    err.isRetryable = true;
-                                    break;
-                                case isTransactionFail(err): //error persisting transaction. retryable.
-                                    err.isRetryable = true;
-                                    break;
-                                //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
-                                default:
-                                    if ("isRetryable" in err === false) {
-                                        err.isRetryable = false;
-                                    }
-                                    break;
-                            }
-                            //a chance to retry - only once.
-                            if (err.isRetryable) {
-                                return servletMethods[method](
-                                    this.fetch,
-                                    this.http.defaultOptions(),
-                                    ...args
-                                );
-                            }
-                            throw err;
+                    call(f, this.http.defaultOptions(), ...args).catch(err => {
+                        //these are the special cases.
+                        //regular errors end up with code === undefined, so not retryable.
+                        switch (true) {
+                            case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
+                                this.token.invalidate();
+                                err.isRetryable = true;
+                                break;
+                            case isTransactionFail(err): //error persisting transaction. retryable.
+                                err.isRetryable = true;
+                                break;
+                            //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
+                            default:
+                                if ("isRetryable" in err === false) {
+                                    err.isRetryable = false;
+                                }
+                                break;
                         }
-                    )
+                        //a chance to retry - only once.
+                        if (err.isRetryable) {
+                            return servletMethods[method](
+                                fetch,
+                                this.http.defaultOptions(),
+                                ...args
+                            );
+                        }
+                        throw err;
+                    })
                 );
             };
             return acc;
