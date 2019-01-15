@@ -10,6 +10,10 @@ export type ITaskShape<T = any> = {
     finish?: number;
 };
 
+interface ITokenState {
+    accessToken: string;
+}
+
 export const graphReducer: () => void;
 export const createVertexSelector: () => void;
 export const createTaskSelector: () => void;
@@ -26,15 +30,15 @@ export const createTaskFactory: () => void;
 export const createTaskAction: () => void;
 export const createToken: () => string;
 export const cancelTask: () => void;
-export const resetTask: () => void;
+export const resetTask: (key: string) => void;
 export const createStoreEnhancer: (
     ctx: Context
 ) => <T = {}>(a: T) => StoreEnhancerStoreCreator;
 export const setToken: () => void;
-export const getTaskState: () => void;
-export const getMyId: () => void;
-export const getMyRoles: () => void;
-export const getTokenState: () => void;
+export const getTaskState: (state: any) => any;
+export const getMyId: (state: any) => string;
+export const getMyRoles: (state: any) => any;
+export const getTokenState: (state: any) => ITokenState;
 
 interface IWhenTaskOptions<T, R> {
     pre?: () => R;
@@ -69,7 +73,7 @@ export const implicitOauth: (
     oauth: IOAuthOptions,
     strategy: AuthStrategy
 ) => void;
-export const loginTaskSelector: () => void;
+export const loginTaskSelector: (state: any) => ITaskShape;
 export const doLogin: () => void;
 export const doLogout: () => void;
 export const setOnLogoutHook: () => void;
