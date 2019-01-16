@@ -102,7 +102,7 @@ export default {
         options.method = "DELETE";
         options.headers["Content-Type"] = "application/json";
 
-        return fetch(`${PATH}/${URL_PATH_TEAM}/${id}`, options);
+        return fetch(toPath(URL_PATH_TEAM, id), options);
     },
     // createRole
     // updateRole
@@ -134,7 +134,7 @@ export default {
     getOrganizationMembers: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_MEMBERS), options),
     organizationTeams: (fetch, options, id) =>
-        fetch(`${PATH}/organization/${id}/${URL_PATH_TEAMS}`, options)
+        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
     // createRoleAssignment
     // getRoleAssignment
     // deleteRoleAssignment
@@ -142,11 +142,28 @@ export default {
     // getFromPath
     // createFromPath
     // updateFromPath
-    // createDomain
-    // getDomain
-    // deleteDomain
-    // organizationDomains
-    // getDomainOrganization
+    createDomain: (fetch, options, name, organization) => {
+        options.method = "POST";
+        options.body = JSON.stringify({
+            name,
+            organization
+        });
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_ORG_DOMAIN), options);
+    },
+    getDomain: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ORG_DOMAIN, id), options),
+    deleteDomain: (fetch, options, id) => {
+        options.method = "DELETE";
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_ORG_DOMAIN, id), options);
+    },
+    organizationDomains: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_ORG_DOMAINS), options),
+    getDomainOrganization: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ORG_DOMAIN, id, URL_PATH_ORGANIZATION), options)
     // createDataScope
     // updateDataScope
     // getDataScope

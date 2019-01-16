@@ -23,6 +23,11 @@ interface IAuth {
     getTeamMembers: (id: string) => Promise<object[]>;
     getOrganizationMembers: (id: string) => Promise<object[]>;
     organizationTeams: (id: string) => Promise<object[]>;
+    createDomain: (name: string, organization: string) => Promise<object>;
+    getDomain: (id: string) => Promise<object>;
+    deleteDomain: (id: string) => Promise<object>;
+    organizationDomains: (id: string) => Promise<object[]>;
+    getDomainOrganization: (id: string) => Promise<object>;
 }
 
 interface IAPI {
