@@ -29,7 +29,7 @@ export const createTask: <T = any>(
 export const createTaskFactory: () => void;
 export const createTaskAction: () => void;
 export const createToken: () => string;
-export const cancelTask: () => void;
+export const cancelTask: (task: ITaskShape) => void;
 export const resetTask: (key: string) => void;
 export const createStoreEnhancer: (
     ctx: Context
