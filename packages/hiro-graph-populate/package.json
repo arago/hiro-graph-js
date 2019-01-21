@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/populate",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "main": "lib/index.js",
     "bin": {
         "hiro-graph-populate": "lib/index.js"
@@ -20,16 +20,6 @@
         "@types/node-fetch": "^2.1.4",
         "jest": "^23.5.0",
         "typescript": "^3.2.2"
-    },
-    "babel": {
-        "presets": [
-            [
-                "hiro",
-                {
-                    "library": true
-                }
-            ]
-        ]
     },
     "dependencies": {
         "@hiro-graph/orm": "^1.0.5",
