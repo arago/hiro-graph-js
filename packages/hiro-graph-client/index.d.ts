@@ -5,6 +5,9 @@ import fetch, { Response } from "node-fetch";
 import { ReduxToken } from "@hiro-graph/redux";
 
 interface IAuth {
+    createAccount: (
+        data: object
+    ) => Promise<{ account: object; profile: object }>;
     getAvatar: (id: string) => Promise<any>;
     getAccount: (id: string) => Promise<object>;
     updateAccountProfile: (id: string, data: object) => Promise<object>;
@@ -18,6 +21,7 @@ interface IAuth {
     updateTeam: (id: string, data: object) => Promise<object>;
     getTeam: (id: string) => Promise<object>;
     deleteTeam: (id: string) => Promise<object>;
+    createOrganization: (data: object) => Promise<object>;
     addMembers: (id: string, ...accounts: string[]) => Promise<object>;
     removeMembers: (id: string, ...accounts: string[]) => Promise<object>;
     getTeamMembers: (id: string) => Promise<object[]>;

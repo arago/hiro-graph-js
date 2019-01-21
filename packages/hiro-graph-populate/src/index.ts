@@ -4,6 +4,8 @@ import mappings from "@hiro-graph/orm-mappings";
 
 import fetch from "node-fetch";
 
+import { IEnv, Orm } from "../typings";
+
 import { createOrg, createUser } from "./auth";
 import { configsSingleton } from "./config";
 
@@ -33,7 +35,7 @@ const login = async (envConfig: IEnv) => {
                 token
             },
             mappings
-        ),
+        ) as Orm,
         token
     };
 };
@@ -42,24 +44,24 @@ const login = async (envConfig: IEnv) => {
     // Load configs
     const configs = await configsSingleton;
 
-    const { token } = await login(configs!.env);
+    const { orm } = await login(configs!.env);
 
     for (const o of configs!.config) {
         console.group("Creating org:", o.name);
-        const res = await createOrg(token, o.name);
+        const res = await createOrg(orm, o.name);
         const orgId = res!.org["ogit/_id"] || "";
 
         const admins = [];
 
         for (const a of o.admins) {
-            const user = await createUser(token, a, orgId);
+            const user = await createUser(orm, a, orgId);
             if (user) {
                 admins.push(user.account["ogit/_id"]);
             }
         }
 
         for (const a of o.users) {
-            await createUser(token, a, orgId);
+            await createUser(orm, a, orgId);
         }
 
         await res!.addAdmins(admins);

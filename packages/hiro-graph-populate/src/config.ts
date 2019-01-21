@@ -5,6 +5,8 @@ import { writeFileSync } from "fs";
 import Joi from "joi";
 import shell from "shelljs";
 
+import { IConfig, IEnv, IPopulateValue } from "../typings";
+
 import { generate } from "./generate";
 
 const envSchema = Joi.object().keys({

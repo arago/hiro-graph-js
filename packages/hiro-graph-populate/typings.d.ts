@@ -1,3 +1,18 @@
+import { ORM, IClientServlets, GraphVertex } from "@hiro-graph/orm";
+import {
+    MappedTypes,
+    VertexLookup,
+    AuthAccountVertex,
+    AuthAccountProfileVertex,
+    AuthAccountPlain,
+    AuthAccountProfilePlain
+} from "@hiro-graph/orm-mappings";
+
+type Orm = {
+    me(): Promise<AuthAccountVertex>;
+    profile(): Promise<AuthAccountProfileVertex>;
+} & ORM<MappedTypes, typeof VertexLookup>;
+
 interface IEnv {
     HIRO_CLIENT_ID: string;
     HIRO_CLIENT_SECRET: string;

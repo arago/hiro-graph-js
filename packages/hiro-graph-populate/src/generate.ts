@@ -1,4 +1,7 @@
 import faker from "faker";
+
+import { IGenerate, IPopulateValue } from "../typings";
+
 const alpha = [
     "a",
     "b",

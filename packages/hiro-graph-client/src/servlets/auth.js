@@ -37,6 +37,15 @@ const toPath = (...paths) => `${PATH}/${paths.join("/")}`;
 
 export default {
     // createAccount
+    createAccount: (fetch, options, data) => {
+        const payload = filterUndef(data);
+
+        options.method = "POST";
+        options.body = JSON.stringify(payload);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_ACCOUNTS), options);
+    },
     // deactivateAccount
     getAvatar: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR), {
@@ -108,7 +117,15 @@ export default {
     // updateRole
     // getRole
     // deleteRole
-    // createOrganization
+    createOrganization: (fetch, options, data) => {
+        const payload = filterUndef(data);
+
+        options.method = "POST";
+        options.body = JSON.stringify(payload);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_ORGANIZATION), options);
+    },
     addMembers: (fetch, options, id, ...accounts) => {
         options.method = "POST";
         options.body = JSON.stringify({ accounts: accounts.join(",") });
