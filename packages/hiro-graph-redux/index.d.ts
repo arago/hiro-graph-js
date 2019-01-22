@@ -14,16 +14,20 @@ interface ITokenState {
     accessToken: string;
 }
 
+type getPromiseType<T> = T extends Promise<infer U> ? U : T;
+
 export const graphReducer: () => void;
 export const createVertexSelector: () => void;
 export const createTaskSelector: () => void;
 export const createAction: () => void;
-export const createTask: <T = any>(
-    action: any,
+export const createTask: <
+    T extends (...args: any[]) => any = (...args: any[]) => any
+>(
+    action: T,
     selector?: any
 ) => {
     action: (...args: any) => AnyAction;
-    selector: (...args: any) => ITaskShape<T>;
+    selector: (...args: any) => ITaskShape<getPromiseType<ReturnType<T>>>;
     update: (...args: any) => void;
 };
 export const createTaskFactory: () => void;
