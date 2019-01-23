@@ -52,7 +52,14 @@ export default {
             ...options,
             raw: true
         }),
-    // setAvatar
+    setAvatar: (fetch, options, id, avatar) => {
+        options.method = "PUT";
+        options.body = avatar;
+        options.headers["Content-Type"] = null;
+        options.raw = true;
+
+        return fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR), options);
+    },
     // updateAccount
     getAccount: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ACCOUNTS, id), options),
