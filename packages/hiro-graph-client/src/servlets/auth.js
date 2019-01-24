@@ -35,6 +35,19 @@ const URL_PATH_DEACTIVATE = "deactivate";
 
 const toPath = (...paths) => `${PATH}/${paths.join("/")}`;
 
+function putBinary(fetch, options, path, body) {
+    return fetch(path, {
+        ...options,
+        method: "PUT",
+        body,
+        headers: {
+            ...options.headers,
+            ["Content-Type"]: null
+        },
+        raw: true
+    });
+}
+
 export default {
     // createAccount
     createAccount: (fetch, options, data) => {
@@ -52,14 +65,20 @@ export default {
             ...options,
             raw: true
         }),
-    setAvatar: (fetch, options, id, avatar) => {
-        options.method = "PUT";
-        options.body = avatar;
-        options.headers["Content-Type"] = null;
-        options.raw = true;
-
-        return fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR), options);
-    },
+    setAvatar: (fetch, options, id, avatar) =>
+        putBinary(
+            fetch,
+            options,
+            toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR),
+            avatar
+        ),
+    setOrgAvatar: (fetch, options, id, avatar) =>
+        putBinary(
+            fetch,
+            options,
+            toPath(URL_PATH_ORGANIZATION, id, URL_PATH_AVATAR),
+            avatar
+        ),
     // updateAccount
     getAccount: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ACCOUNTS, id), options),

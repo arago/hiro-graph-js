@@ -9,6 +9,7 @@ interface IAuth {
         data: object
     ) => Promise<{ account: object; profile: object }>;
     setAvatar: (id: string, avatar?: File) => Promise<any>;
+    setOrgAvatar: (id: string, avatar?: File) => Promise<any>;
     getAvatar: (id: string) => Promise<any>;
     getAccount: (id: string) => Promise<object>;
     updateAccountProfile: (id: string, data: object) => Promise<object>;
