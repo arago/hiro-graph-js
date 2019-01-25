@@ -65,6 +65,11 @@ export default {
             ...options,
             raw: true
         }),
+    getOrgAvatar: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_AVATAR), {
+            ...options,
+            raw: true
+        }),
     setAvatar: (fetch, options, id, avatar) =>
         putBinary(
             fetch,
