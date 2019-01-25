@@ -82,12 +82,7 @@ describe("testing test setup", () => {
                 {}, // it is actually irrelevant as long as it isn't an error.
                 [createPerson("person3")] // this one is the new "relation" query result
             );
-            return orm.me().then(me =>
-                me.connect(
-                    rel,
-                    "person3"
-                )
-            );
+            return orm.me().then(me => me.connect(rel, "person3"));
         });
 
         let res, v;
