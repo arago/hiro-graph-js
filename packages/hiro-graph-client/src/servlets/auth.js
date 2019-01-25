@@ -42,7 +42,7 @@ function putBinary(fetch, options, path, body) {
         body,
         headers: {
             ...options.headers,
-            ["Content-Type"]: null
+            ["Content-Type"]: body.type
         },
         raw: true
     });

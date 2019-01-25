@@ -32,9 +32,10 @@ export default {
     },
     meTeams: (fetch, options) => fetch(`/me/teams`, options),
     updateMeAvatar: (fetch, options, data) => {
-        options.method = "POST";
+        options.method = "PUT";
         options.body = data;
-        options.headers["Content-Type"] = null;
+        options.headers["Content-Type"] = data.type;
+        options.raw = true;
 
         return fetch(`/me/avatar`, options);
     }
