@@ -86,7 +86,7 @@ export default {
         ),
     // updateAccount
     getAccount: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ACCOUNTS, id), options),
+        fetch(toPath(URL_PATH_ACCOUNTS, id) + "?profile=true", options),
     updateAccountProfile: (fetch, options, id, data) => {
         const payload = filterUndef(data);
 
@@ -178,9 +178,16 @@ export default {
         );
     },
     getTeamMembers: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS), options),
+        fetch(
+            toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS) + "?profile=true",
+            options
+        ),
     getOrganizationMembers: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_MEMBERS), options),
+        fetch(
+            toPath(URL_PATH_ORGANIZATION, id, URL_PATH_MEMBERS) +
+                "?profile=true",
+            options
+        ),
     organizationTeams: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
     // createRoleAssignment

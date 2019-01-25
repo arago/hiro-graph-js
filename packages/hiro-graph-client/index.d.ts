@@ -4,6 +4,12 @@ import { w3cwebsocket as WS } from "websocket";
 import fetch, { Response } from "node-fetch";
 import { ReduxToken } from "@hiro-graph/redux";
 
+interface IAccountData {
+    account: object;
+    avatar: string;
+    profile: object;
+}
+
 interface IAuth {
     createAccount: (
         data: object
@@ -12,7 +18,7 @@ interface IAuth {
     setOrgAvatar: (id: string, avatar?: File) => Promise<any>;
     getAvatar: (id: string) => Promise<any>;
     getOrgAvatar: (id: string) => Promise<any>;
-    getAccount: (id: string) => Promise<object>;
+    getAccount: (id: string) => Promise<IAccountData>;
     updateAccountProfile: (id: string, data: object) => Promise<object>;
     getAccountProfile: (id: string) => Promise<object>;
     getAccountProfileByAccountId: (id: string) => Promise<object>;
@@ -27,8 +33,8 @@ interface IAuth {
     createOrganization: (data: object) => Promise<object>;
     addMembers: (id: string, ...accounts: string[]) => Promise<object>;
     removeMembers: (id: string, ...accounts: string[]) => Promise<object>;
-    getTeamMembers: (id: string) => Promise<object[]>;
-    getOrganizationMembers: (id: string) => Promise<object[]>;
+    getTeamMembers: (id: string) => Promise<IAccountData[]>;
+    getOrganizationMembers: (id: string) => Promise<IAccountData[]>;
     organizationTeams: (id: string) => Promise<object[]>;
     createDomain: (name: string, organization: string) => Promise<object>;
     getDomain: (id: string) => Promise<object>;
