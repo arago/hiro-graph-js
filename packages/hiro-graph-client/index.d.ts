@@ -22,7 +22,13 @@ interface IAuth {
     updateAccountProfile: (id: string, data: object) => Promise<object>;
     getAccountProfile: (id: string) => Promise<object>;
     getAccountProfileByAccountId: (id: string) => Promise<object>;
-    listRoles: (limit: number, offset: number, name: string) => Promise<object>;
+    listRoles: (
+        limit: number,
+        offset: number,
+        name: string
+    ) => Promise<object[]>;
+    getRoleAssignment: (id: string) => Promise<object[]>;
+    listAllRoles: () => Promise<object[]>;
     updatePassword: (id: string, password: string) => Promise<object>;
     activateAccount: (id: string) => Promise<object>;
 
@@ -41,6 +47,16 @@ interface IAuth {
     deleteDomain: (id: string) => Promise<object>;
     organizationDomains: (id: string) => Promise<object[]>;
     getDomainOrganization: (id: string) => Promise<object>;
+    organizationRoleAssignments: (
+        id: string
+    ) => Promise<
+        {
+            "ogit/Auth/DataSet": object;
+            "ogit/Auth/Role": object;
+            "ogit/Auth/Team": object;
+            "ogit/Auth/RoleAssignment": object;
+        }[]
+    >;
 }
 
 interface IAPI {

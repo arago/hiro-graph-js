@@ -24,6 +24,7 @@ const URL_PATH_TEAM = "team";
 const URL_PATH_ORGANIZATION = "organization";
 const URL_PATH_MEMBERS = "members";
 const URL_PATH_ROLE_ASSIGNMENT = "roleassignment";
+const URL_PATH_ROLE_ASSIGNMENTS = "roleassignments";
 const URL_PATH_ORG_DOMAIN = "domain";
 const URL_PATH_ORG_DOMAINS = "domains";
 const URL_PATH_ORG_SCOPE = "scope";
@@ -100,12 +101,6 @@ export default {
         fetch(toPath(URL_PATH_ACCOUNTS, URL_PATH_PROFILE, id), options),
     getAccountProfileByAccountId: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_PROFILE), options),
-    listRoles: (fetch, options, limit, offset, name) => {
-        options.body = JSON.stringify({ limit, offset, name });
-        options.headers["Content-Type"] = "application/json";
-
-        return fetch(toPath(URL_PATH_ROLE), options);
-    },
     updatePassword: (fetch, options, id, password) => {
         options.method = "PUT";
         options.body = JSON.stringify({ password });
@@ -191,7 +186,8 @@ export default {
     organizationTeams: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
     // createRoleAssignment
-    // getRoleAssignment
+    getRoleAssignment: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ROLE_ASSIGNMENT, id), options),
     // deleteRoleAssignment
     // deleteFromPth
     // getFromPath
@@ -217,12 +213,24 @@ export default {
     },
     organizationDomains: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_ORG_DOMAINS), options),
+    organizationRoleAssignments: (fetch, options, id) =>
+        fetch(
+            toPath(URL_PATH_ORGANIZATION, id, URL_PATH_ROLE_ASSIGNMENTS) +
+                "?detail=true",
+            options
+        ),
     getDomainOrganization: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORG_DOMAIN, id, URL_PATH_ORGANIZATION), options)
+        fetch(toPath(URL_PATH_ORG_DOMAIN, id, URL_PATH_ORGANIZATION), options),
     // createDataScope
     // updateDataScope
     // getDataScope
     // organizationDataSets
     // organizationDataScopes
-    // listRoles - no params
+    listAllRoles: (fetch, options) => fetch(toPath(URL_PATH_ROLES), options),
+    listRoles: (fetch, options, limit, offset, name) => {
+        options.body = JSON.stringify({ limit, offset, name });
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_ROLE), options);
+    }
 };
