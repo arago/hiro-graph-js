@@ -27,7 +27,7 @@ const URL_PATH_ROLE_ASSIGNMENT = "roleassignment";
 const URL_PATH_ROLE_ASSIGNMENTS = "roleassignments";
 const URL_PATH_ORG_DOMAIN = "domain";
 const URL_PATH_ORG_DOMAINS = "domains";
-const URL_PATH_ORG_SCOPE = "scope";
+const URL_PATH_DATA_SCOPE = "scope";
 const URL_PATH_ORG_SCOPES = "scopes";
 const URL_PATH_DATA_SETS = "datasets";
 const URL_PATH_ME = "me";
@@ -115,9 +115,27 @@ export default {
 
         return fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_ACTIVATE), options);
     },
-    // updateDataSet
-    // getDataSet
-    // deleteDataSet
+    createDataSet: (fetch, options, data) => {
+        options.method = "POST";
+        options.body = JSON.stringify(data);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_DATASET), options);
+    },
+    updateDataSet: (fetch, options, id, data) => {
+        options.method = "PUT";
+        options.body = JSON.stringify(data);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_DATASET, id), options);
+    },
+    getDataSet: (fetch, options, id) => fetch(toPath(URL_PATH_DATASET, id), options),
+    deleteDataSet: (fetch, options, id) => {
+        options.method = "DELETE";
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_DATASET, id), options);
+    },
     createTeam: (fetch, options, data) => {
         options.method = "POST";
         options.body = JSON.stringify(data);
@@ -185,10 +203,21 @@ export default {
         ),
     organizationTeams: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
-    // createRoleAssignment
+    createRoleAssignment: (fetch, options, data) => {
+        options.method = "POST";
+        options.body = JSON.stringify(data);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_ROLE_ASSIGNMENT), options)
+    },
     getRoleAssignment: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ROLE_ASSIGNMENT, id), options),
-    // deleteRoleAssignment
+    deleteRoleAssignment: (fetch, options, id) => {
+        options.method = "DELETE";
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_ORG_DOMAIN, id), options);
+    },
     // deleteFromPth
     // getFromPath
     // createFromPath
@@ -221,9 +250,22 @@ export default {
         ),
     getDomainOrganization: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ORG_DOMAIN, id, URL_PATH_ORGANIZATION), options),
-    // createDataScope
-    // updateDataScope
-    // getDataScope
+    createDataScope: (fetch, options, data) => {
+        options.method = "POST";
+        options.body = JSON.stringify(data);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_DATA_SCOPE), options);
+    },
+    updateDataScope: (fetch, options, id, data) => {
+        options.method = "PUT";
+        options.body = JSON.stringify(data);
+        options.headers["Content-Type"] = "application/json";
+
+        return fetch(toPath(URL_PATH_DATA_SCOPE, id), options);
+    },
+    getDataScope: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_DATA_SCOPE, id), options),
     // organizationDataSets
     // organizationDataScopes
     listAllRoles: (fetch, options) => fetch(toPath(URL_PATH_ROLES), options),
