@@ -129,7 +129,8 @@ export default {
 
         return fetch(toPath(URL_PATH_DATASET, id), options);
     },
-    getDataSet: (fetch, options, id) => fetch(toPath(URL_PATH_DATASET, id), options),
+    getDataSet: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_DATASET, id), options),
     deleteDataSet: (fetch, options, id) => {
         options.method = "DELETE";
         options.headers["Content-Type"] = "application/json";
@@ -208,7 +209,7 @@ export default {
         options.body = JSON.stringify(data);
         options.headers["Content-Type"] = "application/json";
 
-        return fetch(toPath(URL_PATH_ROLE_ASSIGNMENT), options)
+        return fetch(toPath(URL_PATH_ROLE_ASSIGNMENT), options);
     },
     getRoleAssignment: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ROLE_ASSIGNMENT, id), options),
@@ -266,7 +267,8 @@ export default {
     },
     getDataScope: (fetch, options, id) =>
         fetch(toPath(URL_PATH_DATA_SCOPE, id), options),
-    // organizationDataSets
+    organizationDataSets: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SETS), options),
     // organizationDataScopes
     listAllRoles: (fetch, options) => fetch(toPath(URL_PATH_ROLES), options),
     listRoles: (fetch, options, limit, offset, name) => {
