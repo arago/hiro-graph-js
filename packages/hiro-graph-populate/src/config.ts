@@ -10,14 +10,15 @@ import { IConfig, IEnv, IPopulateValue } from "../typings";
 import { generate } from "./generate";
 
 const envSchema = Joi.object().keys({
-    HIRO_CLIENT_ID: Joi.string().required(),
-    HIRO_CLIENT_SECRET: Joi.string().required(),
-    HIRO_GRAPH_URL: Joi.string()
-        .uri()
-        .required(),
-    HIRO_GRAPH_USER_NAME: Joi.string().required(),
-    HIRO_GRAPH_USER_PASSWORD: Joi.string().required()
-});
+    HIRO_GRAPH_URL: Joi.string().uri().required(),
+    HIRO_CLIENT_ID: Joi.string(),
+    HIRO_CLIENT_SECRET: Joi.string(),
+    HIRO_GRAPH_USER_NAME: Joi.string(),
+    HIRO_GRAPH_USER_PASSWORD: Joi.string(),
+    HIRO_GRAPH_TOKEN: Joi.string()
+  })
+  .and(["HIRO_GRAPH_TOKEN"])
+  .and(["HIRO_CLIENT_ID", "HIRO_CLIENT_SECRET", "HIRO_GRAPH_USER_NAME", "HIRO_GRAPH_USER_PASSWORD"]);
 
 const userSchema = Joi.object({
     email: Joi.string().required(),

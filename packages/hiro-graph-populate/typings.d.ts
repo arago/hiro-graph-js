@@ -19,6 +19,7 @@ interface IEnv {
     HIRO_GRAPH_URL: string;
     HIRO_GRAPH_USER_NAME: string;
     HIRO_GRAPH_USER_PASSWORD: string;
+    HIRO_GRAPH_TOKEN: string;
 }
 
 interface IConfig {

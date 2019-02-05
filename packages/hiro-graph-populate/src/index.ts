@@ -13,19 +13,23 @@ import { configsSingleton } from "./config";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 const login = async (envConfig: IEnv) => {
-    // Get token
-    const token = await fetch(`${envConfig.HIRO_GRAPH_URL}/api/6/auth/app`, {
-        body: JSON.stringify({
-            client_id: envConfig.HIRO_CLIENT_ID,
-            client_secret: envConfig.HIRO_CLIENT_SECRET,
-            password: envConfig.HIRO_GRAPH_USER_PASSWORD,
-            username: envConfig.HIRO_GRAPH_USER_NAME
-        }),
-        headers: { "Content-Type": "application/json" },
-        method: "POST"
-    })
+    let token = envConfig.HIRO_GRAPH_TOKEN || "";
+
+    if (token === "") {
+        // Get token
+        token = await fetch(`${envConfig.HIRO_GRAPH_URL}/api/6/auth/app`, {
+            body: JSON.stringify({
+                client_id: envConfig.HIRO_CLIENT_ID,
+                client_secret: envConfig.HIRO_CLIENT_SECRET,
+                password: envConfig.HIRO_GRAPH_USER_PASSWORD,
+                username: envConfig.HIRO_GRAPH_USER_NAME
+            }),
+            headers: {"Content-Type": "application/json"},
+            method: "POST"
+        })
         .then(res => res.json())
         .then(res => res._TOKEN);
+    }
 
     // Get orm
     return {
