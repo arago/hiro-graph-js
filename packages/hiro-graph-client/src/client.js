@@ -643,34 +643,36 @@ export default class Client {
                 return this.wrapTimedEvent(
                     "servlet-" + method,
                     { args },
-                    call(fetch, this.http.defaultOptions(), ...args).catch(err => {
-                        //these are the special cases.
-                        //regular errors end up with code === undefined, so not retryable.
-                        switch (true) {
-                            case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
-                                this.token.invalidate();
-                                err.isRetryable = true;
-                                break;
-                            case isTransactionFail(err): //error persisting transaction. retryable.
-                                err.isRetryable = true;
-                                break;
-                            //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
-                            default:
-                                if ("isRetryable" in err === false) {
-                                    err.isRetryable = false;
-                                }
-                                break;
+                    call(fetch, this.http.defaultOptions(), ...args).catch(
+                        err => {
+                            //these are the special cases.
+                            //regular errors end up with code === undefined, so not retryable.
+                            switch (true) {
+                                case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
+                                    this.token.invalidate();
+                                    err.isRetryable = true;
+                                    break;
+                                case isTransactionFail(err): //error persisting transaction. retryable.
+                                    err.isRetryable = true;
+                                    break;
+                                //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
+                                default:
+                                    if ("isRetryable" in err === false) {
+                                        err.isRetryable = false;
+                                    }
+                                    break;
+                            }
+                            //a chance to retry - only once.
+                            if (err.isRetryable) {
+                                return servletMethods[method](
+                                    fetch,
+                                    this.http.defaultOptions(),
+                                    ...args
+                                );
+                            }
+                            throw err;
                         }
-                        //a chance to retry - only once.
-                        if (err.isRetryable) {
-                            return servletMethods[method](
-                                fetch,
-                                this.http.defaultOptions(),
-                                ...args
-                            );
-                        }
-                        throw err;
-                    })
+                    )
                 );
             };
             return acc;
