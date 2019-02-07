@@ -48,6 +48,7 @@ interface IAuth {
     organizationDomains: (id: string) => Promise<object[]>;
     getDomainOrganization: (id: string) => Promise<object>;
     organizationDataSets: (id: string) => Promise<object[]>;
+    createRoleAssignment: (data: object) => Promise<object>;
     organizationRoleAssignments: (
         id: string
     ) => Promise<
