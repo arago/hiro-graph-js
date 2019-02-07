@@ -632,7 +632,7 @@ export default class Client {
             );
         }
 
-        const f = proxy ? this.proxyFetch(proxy) : this.fetch;
+        const fetch = proxy ? this.proxyFetch(proxy) : this.fetch;
 
         //create namespace.
         this[prefix] = {};
@@ -643,7 +643,7 @@ export default class Client {
                 return this.wrapTimedEvent(
                     "servlet-" + method,
                     { args },
-                    call(f, this.http.defaultOptions(), ...args).catch(err => {
+                    call(fetch, this.http.defaultOptions(), ...args).catch(err => {
                         //these are the special cases.
                         //regular errors end up with code === undefined, so not retryable.
                         switch (true) {
