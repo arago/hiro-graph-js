@@ -65,7 +65,12 @@ describe("mock transport test", () => {
                 expect(res.plain()._rel[relation + "Ids"]).toEqual([]);
                 return res;
             })
-            .then(res => res.connect(relation, "node-2"))
+            .then(res =>
+                res.connect(
+                    relation,
+                    "node-2"
+                )
+            )
             .then(res => {
                 expect(res.plain()._rel[relation + "Ids"]).toEqual(["node-3"]);
                 return res;
