@@ -1,11 +1,10 @@
 {
     "name": "@hiro-graph/implicit-oauth",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "Customisable Implicit Oauth",
     "main": "./lib/index.js",
     "scripts": {
-        "build":
-            "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "yarn build",
         "test": "echo no tests"
     },
