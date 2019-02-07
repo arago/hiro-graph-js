@@ -21,13 +21,18 @@ export const createVertexSelector: () => void;
 export const createTaskSelector: () => void;
 export const createAction: () => void;
 export const createTask: <
-    T extends (...args: any[]) => any = (...args: any[]) => any
+    T = undefined,
+    U extends (...args: any[]) => any = (...args: any[]) => any
 >(
-    action: T,
+    action: U,
     selector?: any
 ) => {
     action: (...args: any) => AnyAction;
-    selector: (...args: any) => ITaskShape<getPromiseType<ReturnType<T>>>;
+    selector: (
+        ...args: any
+    ) => T extends undefined
+        ? ITaskShape<getPromiseType<ReturnType<U>>>
+        : ITaskShape<T>;
     update: (...args: any) => void;
 };
 export const createTaskFactory: () => void;

@@ -29,8 +29,7 @@ const URL_PATH_ORG_DOMAIN = "domain";
 const URL_PATH_ORG_DOMAINS = "domains";
 const URL_PATH_DATA_SCOPE = "scope";
 // const URL_PATH_ORG_SCOPES = "scopes";
-// const URL_PATH_DATA_SETS = "datasets";
-// const URL_PATH_ME = "me";
+const URL_PATH_DATA_SETS = "datasets";
 const URL_PATH_ACTIVATE = "activate";
 // const URL_PATH_DEACTIVATE = "deactivate";
 
@@ -267,7 +266,8 @@ export default {
     },
     getDataScope: (fetch, options, id) =>
         fetch(toPath(URL_PATH_DATA_SCOPE, id), options),
-    // organizationDataSets
+    organizationDataSets: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SETS), options),
     // organizationDataScopes
     listAllRoles: (fetch, options) => fetch(toPath(URL_PATH_ROLES), options),
     listRoles: (fetch, options, limit, offset, name) => {
