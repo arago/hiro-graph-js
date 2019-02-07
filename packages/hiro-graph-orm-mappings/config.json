@@ -36,6 +36,8 @@
         "ogit/belongs -> ogit/Organization": "orgs",
         "ogit/belongs -> ogit/Person": "person",
         "ogit/belongs <- ogit/Person": "members",
+        "ogit/owns -> ogit/Certificate": "certificates",
+        "ogit/owns -> ogit/Asset": "assets",
         "ogit/complies -> ogit/Person": "owner",
         "ogit/complies -> ogit/Role": "roles",
         "ogit/connects -> ogit/Hyperlink": "links",
