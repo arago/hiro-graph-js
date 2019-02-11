@@ -7,7 +7,8 @@
         ],
         "nohoist": [
             "**/babel-jest",
-            "**/hiro-*"
+            "**/hiro-*",
+            "**/@arago/OGIT"
         ]
     },
     "devDependencies": {

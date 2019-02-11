@@ -1,5 +1,5 @@
 {
-    "OGIT": "../../../OGIT/NTO",
+    "OGIT": "./node_modules/@arago/OGIT/NTO",
     "OUTPUT_DIR": "lib",
     "blacklist": [
         "Factory",
