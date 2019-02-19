@@ -139,5 +139,31 @@ export default client => [
     {
         name: "history (with offset + limit)",
         fn: () => client.history("some-id", { limit: 5, offset: 100 })
+    },
+    {
+        name: "history (with from)",
+        fn: () => client.history("some-id", { from: 0 })
+    },
+    {
+        name: "history (with to)",
+        fn: () => client.history("some-id", { to: 1550597976759 })
+    },
+    {
+        name: "history (with from + to)",
+        fn: () => client.history("some-id", { from: 0, to: 1550597976759 })
+    },
+    {
+        name: "history (with from + to + offset + limit)",
+        fn: () =>
+            client.history("some-id", {
+                from: 0,
+                to: 1550597976759,
+                limit: 5,
+                offset: 100
+            })
+    },
+    {
+        name: "history (with version)",
+        fn: () => client.history("some-id", { limit: 500, version: 123 })
     }
 ];

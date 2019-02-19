@@ -92,11 +92,52 @@ Object {
 }
 `;
 
+exports[`Client Requests should call history (with from + to + offset + limit) correctly 1`] = `
+Object {
+  "body": Object {
+    "from": 0,
+    "limit": 5,
+    "offset": 100,
+    "to": 1550597976759,
+  },
+  "headers": Object {
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
+exports[`Client Requests should call history (with from + to) correctly 1`] = `
+Object {
+  "body": Object {
+    "from": 0,
+    "to": 1550597976759,
+  },
+  "headers": Object {
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
+exports[`Client Requests should call history (with from) correctly 1`] = `
+Object {
+  "body": Object {
+    "from": 0,
+  },
+  "headers": Object {
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
 exports[`Client Requests should call history (with limit) correctly 1`] = `
 Object {
-  "body": Object {},
-  "headers": Object {
+  "body": Object {
     "limit": 500,
+  },
+  "headers": Object {
     "ogit/_id": "some-id",
   },
   "type": "history",
@@ -105,10 +146,11 @@ Object {
 
 exports[`Client Requests should call history (with offset + limit) correctly 1`] = `
 Object {
-  "body": Object {},
-  "headers": Object {
+  "body": Object {
     "limit": 5,
     "offset": 100,
+  },
+  "headers": Object {
     "ogit/_id": "some-id",
   },
   "type": "history",
@@ -117,9 +159,35 @@ Object {
 
 exports[`Client Requests should call history (with offset) correctly 1`] = `
 Object {
-  "body": Object {},
-  "headers": Object {
+  "body": Object {
     "offset": 10,
+  },
+  "headers": Object {
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
+exports[`Client Requests should call history (with to) correctly 1`] = `
+Object {
+  "body": Object {
+    "to": 1550597976759,
+  },
+  "headers": Object {
+    "ogit/_id": "some-id",
+  },
+  "type": "history",
+}
+`;
+
+exports[`Client Requests should call history (with version) correctly 1`] = `
+Object {
+  "body": Object {
+    "limit": 500,
+    "version": 123,
+  },
+  "headers": Object {
     "ogit/_id": "some-id",
   },
   "type": "history",
