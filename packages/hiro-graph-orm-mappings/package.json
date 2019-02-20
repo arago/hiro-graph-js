@@ -12,10 +12,12 @@
         "prepublish": "yarn test && yarn build",
         "test": "echo no tests"
     },
+    "dependencies": {
+        "@hiro-graph/orm": "^1.0.37"
+    },
     "devDependencies": {
         "@arago/OGIT": "https://github.com/arago/OGIT.git",
         "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
-        "@hiro-graph/orm": "^1.0.37",
         "@types/mustache": "^0.8.32",
         "@types/shelljs": "^0.8.2",
         "lerna": "^3.10.8",
