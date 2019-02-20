@@ -2,10 +2,6 @@
     "OGIT": "./node_modules/@arago/OGIT/NTO",
     "OUTPUT_DIR": "lib",
     "blacklist": [
-        "Factory",
-        "Forum",
-        "MRP",
-        "Network",
         "oslc-arch",
         "oslc-asset",
         "oslc-automation",
@@ -66,6 +62,8 @@
         "ogit/uses <- ogit/Person": "people",
         "ogit/uses <- ogit/Person|ogit/Organization": "users",
         "ogit/versions <- ogit/Auth/Application": "parentVersion",
-        "ogit/versions -> ogit/Auth/Application": "appVersion"
+        "ogit/versions -> ogit/Auth/Application": "appVersion",
+        "ogit/consistsOf <- ogit/MRP/Part": "item",
+        "ogit/consistsOf -> ogit/MRP/Part": "parts"
     }
 }

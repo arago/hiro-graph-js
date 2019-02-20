@@ -33,8 +33,7 @@ const addRelation = (v: string[], from: string) => {
     const right = from.split("/").pop() || "";
 
     if (!left || !right) {
-        console.error(`Failed to add relation: ${v} [${from}]`);
-        return;
+        throw Error(`Failed to add relation: ${v} [${from}]`);
     }
 
     const relationship = v[0] + " <- " + from;
