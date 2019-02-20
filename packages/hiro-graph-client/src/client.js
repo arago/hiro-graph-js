@@ -593,20 +593,45 @@ export default class Client {
     /**
      *  Returns previous versions of a vertex
      */
-    history(id, { offset = false, limit = false } = {}) {
+    history(
+        id,
+        {
+            offset = false,
+            limit = false,
+            from = false,
+            to = false,
+            version = false,
+            type = false
+        } = {}
+    ) {
         const headers = { "ogit/_id": id };
+        const body = {};
         if (offset !== false) {
-            headers.offset = offset;
+            body.offset = offset;
         }
         if (limit !== false) {
-            headers.limit = limit;
+            body.limit = limit;
         }
+        if (from !== false) {
+            body.from = from;
+        }
+        if (to !== false) {
+            body.to = to;
+        }
+        if (version !== false) {
+            body.version = version;
+        }
+        if (type !== false) {
+            body.type = type;
+        }
+
         return this.wrapTimedEvent(
             "history",
-            { id, offset, limit },
+            { id, ...body },
             this.dedupedRequest({
                 type: "history",
-                headers: headers
+                headers: headers,
+                body
             })
         );
     }

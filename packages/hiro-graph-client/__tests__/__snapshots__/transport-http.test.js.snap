@@ -124,6 +124,51 @@ Array [
 ]
 `;
 
+exports[`transport-http should create the right options for: history (with from + to + offset + limit) 1`] = `
+Array [
+  "https://graphit/some-id/history?offset=100&limit=5&from=0&to=1550597976759",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Authorization": "Bearer <token>",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with from + to) 1`] = `
+Array [
+  "https://graphit/some-id/history?from=0&to=1550597976759",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Authorization": "Bearer <token>",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with from) 1`] = `
+Array [
+  "https://graphit/some-id/history?from=0",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Authorization": "Bearer <token>",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
 exports[`transport-http should create the right options for: history (with limit) 1`] = `
 Array [
   "https://graphit/some-id/history?limit=500",
@@ -157,6 +202,36 @@ Array [
 exports[`transport-http should create the right options for: history (with offset) 1`] = `
 Array [
   "https://graphit/some-id/history?offset=10",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Authorization": "Bearer <token>",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with to) 1`] = `
+Array [
+  "https://graphit/some-id/history?to=1550597976759",
+  Object {
+    "headers": Object {
+      "Accept": "application/json",
+      "Authorization": "Bearer <token>",
+      "Content-Type": "application/json",
+    },
+    "method": "GET",
+    "mode": "cors",
+  },
+]
+`;
+
+exports[`transport-http should create the right options for: history (with version) 1`] = `
+Array [
+  "https://graphit/some-id/history?limit=500&version=123",
   Object {
     "headers": Object {
       "Accept": "application/json",

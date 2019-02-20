@@ -168,7 +168,7 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 "/" +
                 encodeURIComponent(headers["ogit/_id"]) +
                 "/values" +
-                qsKeys(headers, "offset", "limit");
+                qsKeys(body, "offset", "limit");
             break;
         case "writets":
             url = "/" + encodeURIComponent(headers["ogit/_id"]) + "/values";
@@ -179,7 +179,15 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 "/" +
                 encodeURIComponent(headers["ogit/_id"]) +
                 "/history" +
-                qsKeys(headers, "offset", "limit");
+                qsKeys(
+                    body,
+                    "offset",
+                    "limit",
+                    "from",
+                    "to",
+                    "version",
+                    "type"
+                );
             break;
         case "meta":
             url = "/" + encodeURIComponent(headers["ogit/_id"]) + "/meta";
