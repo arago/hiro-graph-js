@@ -8,7 +8,10 @@
  *  and continue to emit events.
  */
 import { w3cwebsocket as WebSocket } from "websocket";
-import { ensureWebSocketsAvailable, GRAPH_API_PROTOCOL } from "./transport-websocket";
+import {
+    ensureWebSocketsAvailable,
+    GRAPH_API_PROTOCOL
+} from "./transport-websocket";
 import { channel } from "./subscriber-fanout";
 import qs from "querystring";
 import timer from "./timer";
