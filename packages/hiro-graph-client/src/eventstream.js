@@ -8,7 +8,7 @@
  *  and continue to emit events.
  */
 import { w3cwebsocket as WebSocket } from "websocket";
-import { ensureWebSocketsAvailable } from "./transport-websocket";
+import { ensureWebSocketsAvailable, GRAPH_API_PROTOCOL } from "./transport-websocket";
 import { channel } from "./subscriber-fanout";
 import qs from "querystring";
 import timer from "./timer";
@@ -37,7 +37,7 @@ export default class EventStream {
         if (offset) {
             query.offset = offset;
         }
-        this._endpoint += qs.stringify(query) + "&_TOKEN="; // this needs to be last...
+        this._endpoint += qs.stringify(query);
 
         this._groupId = groupId;
         this._offset = offset;
@@ -201,12 +201,15 @@ export default class EventStream {
      * and "emit" is the pubsub emitter passes to all hiro-graph-client components for
      * introspection
      */
-    __createWebSocket(intialToken, fanout, onClose, emit) {
+    __createWebSocket(initialToken, fanout, onClose, emit) {
         //we do all this in a promise, so the result is shared between
         //all requests that come in during connection.
         const t = timer();
         return new Promise((resolve, reject) => {
-            const ws = new WebSocket(this._endpoint + intialToken);
+            const ws = new WebSocket(
+                this._endpoint,
+                `${GRAPH_API_PROTOCOL}, token-${initialToken}`
+            );
 
             //this keeps track of whether we have resolved yet.
             let hasResolved = false;

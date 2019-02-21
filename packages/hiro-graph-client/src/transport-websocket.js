@@ -16,15 +16,14 @@ export const ensureWebSocketsAvailable = () => {
 };
 
 // The graph websocket api accepts a protocol
-const GRAPH_API_PROTOCOL = "graph-2.0.0";
+export const GRAPH_API_PROTOCOL = "graph-2.0.0";
 
 export default class WebSocketTransport {
-    constructor(endpoint, { useLegacyProtocol = false } = {}) {
+    constructor(endpoint) {
         ensureWebSocketsAvailable();
-        this.useLegacyProtocol = useLegacyProtocol;
         this.endpoint = endpoint
             .replace(/^http/, "ws") //replace http(s) with ws(s)
-            .replace(/\/?$/, "/_g/?_TOKEN="); // replace possible trailing slash with api endpoint
+            .replace(/\/?$/, "/_g/"); // replace possible trailing slash with api endpoint
     }
 
     /**
@@ -66,8 +65,8 @@ export default class WebSocketTransport {
                 //always try for the newer protocol. The older one is forwards compatible so
                 //we don't really care if we get the old one.
                 const ws = new WS(
-                    this.endpoint + initialTok,
-                    this.useLegacyProtocol ? undefined : GRAPH_API_PROTOCOL // we have to pass `undefined` explicitly to indicate no protocol specified
+                    this.endpoint,
+                    `${GRAPH_API_PROTOCOL}, token-${initialTok}`
                 );
 
                 //this is for our inflight messages
@@ -175,10 +174,7 @@ export default class WebSocketTransport {
                         return handle.callback(error);
                     }
 
-                    //in the old protocol, body was "result".
-                    const body = this.useLegacyProtocol
-                        ? object.result
-                        : object.body;
+                    const body = object.body;
 
                     if (!object.multi) {
                         emit({ name: "ws:single", data: { id } });
@@ -228,10 +224,7 @@ export default class WebSocketTransport {
                         data: { time: t(), protocol: ws.protocol }
                     });
                     this.protocol = ws.protocol;
-                    if (
-                        !this.useLegacyProtocol &&
-                        ws.protocol !== GRAPH_API_PROTOCOL
-                    ) {
+                    if (ws.protocol !== GRAPH_API_PROTOCOL) {
                         throw Object.assign(
                             new Error(
                                 `Expecting Graph API SubProtocol: '${GRAPH_API_PROTOCOL}', got: '${
