@@ -53,7 +53,7 @@ export default function createOauthStrategy(implementation) {
 
         const clear = () => window.localStorage.removeItem(TOKEN_KEY);
 
-        const logout = tok => {
+        const logout = () => {
             if (clearStorageOnLogout) {
                 clear();
             }
@@ -61,7 +61,6 @@ export default function createOauthStrategy(implementation) {
                 logoutUri +
                 "?" +
                 querystring.stringify({
-                    clientid_token: clientId + "." + tok,
                     return_url: logoutReturnUrl
                 })
             );
@@ -150,9 +149,6 @@ export default function createOauthStrategy(implementation) {
                 //do nothing.
             }
 
-            //keep hold of the current token, so we can log it out.
-            let currentToken = token && token.accessToken;
-
             return Object.assign(baseReturnValue, {
                 //local version of check, just grabs the already present values.
                 check(callback) {
@@ -161,14 +157,11 @@ export default function createOauthStrategy(implementation) {
                 //local version of request should trigger the oauth
                 request(callback) {
                     return strategy.requestToken((err, tok) => {
-                        //update our local knowledge of the token
-                        currentToken = tok && tok.accessToken;
                         return callback(err, tok);
                     });
                 },
                 logout() {
-                    // use the currentToken to logout.
-                    const uri = logout(currentToken);
+                    const uri = logout();
                     if (typeof strategy.logout === "function") {
                         strategy.logout(uri);
                     } else {
