@@ -209,10 +209,10 @@ export default class EventStream {
         //all requests that come in during connection.
         const t = timer();
         return new Promise((resolve, reject) => {
-            const ws = new WebSocket(
-                this._endpoint,
-                `${GRAPH_API_PROTOCOL}, token-${initialToken}`
-            );
+            const ws = new WebSocket(this._endpoint, [
+                GRAPH_API_PROTOCOL,
+                `token-${initialToken}`
+            ]);
 
             //this keeps track of whether we have resolved yet.
             let hasResolved = false;
