@@ -64,10 +64,10 @@ export default class WebSocketTransport {
             return new Promise((resolve, reject) => {
                 //always try for the newer protocol. The older one is forwards compatible so
                 //we don't really care if we get the old one.
-                const ws = new WS(
-                    this.endpoint,
-                    `${GRAPH_API_PROTOCOL}, token-${initialTok}`
-                );
+                const ws = new WS(this.endpoint, [
+                    GRAPH_API_PROTOCOL,
+                    `token-${initialTok}`
+                ]);
 
                 //this is for our inflight messages
                 const inflight = new Map();

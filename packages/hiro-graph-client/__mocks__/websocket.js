@@ -10,7 +10,7 @@ const onNextSocket = fn => sockEmitter.once("new", fn);
 const w3cwebsocket = function fakeWebsocket(endpoint, protocol) {
     const e = new EventEmitter();
     e.endpoint = endpoint;
-    e.protocol = protocol ? protocol.split(",")[0] : undefined;
+    e.protocol = protocol && protocol.length > 0 ? protocol[0] : undefined;
     e.readyState = w3cwebsocket.CONNECTING;
     e.on("open", () => {
         e.readyState = w3cwebsocket.OPEN;
