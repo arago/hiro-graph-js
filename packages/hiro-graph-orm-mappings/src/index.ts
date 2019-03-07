@@ -15,13 +15,13 @@ import config from "../config.json";
 
 const tbd: IToBeDone = {};
 
-const addRelation = (v: string[], from: string) => {
+const addRelation = (parentDir: string) => (v: string[], from: string) => {
     const to = v[1];
 
     if (!output[to]) {
         const name = getName(to);
         output[to] = { name: name.ns + name.name, ogit: to };
-        tbd[to] = name;
+        tbd[to] = { ...name, parentDir };
     }
 
     if (!output[to].relations) {
@@ -43,15 +43,23 @@ const addRelation = (v: string[], from: string) => {
     ] = relationship;
 };
 
-const createMapping = (namespace: string, name: string): IDefinition => {
-    const filePath = namespace
-        ? join(
-              config.OGIT,
-              namespace.includes("OSLC") ? namespace.toLowerCase() : namespace,
-              "entities",
-              `${name}.ttl`
-          )
-        : join(config.OGIT, "../SGO/sgo", "entities", `${name}.ttl`);
+const createMapping = (
+    namespace: string,
+    name: string,
+    parentDir: string
+): IDefinition => {
+    const filePath =
+        namespace && namespace !== "sgo"
+            ? join(
+                  parentDir,
+                  "../NTO",
+                  namespace.includes("OSLC")
+                      ? namespace.toLowerCase()
+                      : namespace,
+                  "entities",
+                  `${name}.ttl`
+              )
+            : join(parentDir, "../SGO/sgo", "entities", `${name}.ttl`);
 
     const data = fs.readFileSync(filePath).toString();
 
@@ -64,11 +72,12 @@ const createMapping = (namespace: string, name: string): IDefinition => {
     // @ts-ignore
     const additionalData = config.extras[ogit] || {};
     const optional = { ...getOptionalAttributes(data), ...additionalData };
+
     const relations = getRelations(
         data,
         ogit,
         currentValue ? currentValue.relations || {} : undefined,
-        addRelation
+        addRelation(parentDir)
     );
 
     return {
@@ -80,28 +89,37 @@ const createMapping = (namespace: string, name: string): IDefinition => {
     };
 };
 
-const output: IOutput = {};
-
-(async () => {
-    const topDir = fs
-        .readdirSync(config.OGIT)
+const getEntitiesInFolder = (
+    folder: string
+): { ns: string; parent: string }[] =>
+    fs
+        .readdirSync(folder)
         .map((v: string) => v.split(".").shift() || "")
         .filter(v => {
-            const dirPath = join(config.OGIT, v);
+            const dirPath = join(folder, v);
             return (
                 fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()
             );
         })
         .filter(v => {
-            const dirPath = join(config.OGIT, v);
+            const dirPath = join(folder, v);
             const d = fs.readdirSync(dirPath);
             return d.findIndex(f => f === "entities") > -1;
         })
-        .filter(v => !config.blacklist.includes(v));
+        .filter(v => !config.blacklist.includes(v))
+        .map(ns => ({ ns, parent: folder }));
+
+const output: IOutput = {};
+
+(async () => {
+    const topDir = [
+        ...getEntitiesInFolder(config.OGIT + "/NTO"),
+        { ns: "sgo", parent: config.OGIT + "/SGO" }
+    ];
 
     console.group("Build:", config.OGIT);
-    for (const ns of topDir) {
-        const dirPath = join(config.OGIT, ns, "entities");
+    for (const { ns, parent } of topDir) {
+        const dirPath = join(parent, ns, "entities");
         const dir = fs
             .readdirSync(dirPath)
             .map((v: string) => v.split(".").shift() || "")
@@ -117,13 +135,14 @@ const output: IOutput = {};
                 continue;
             }
 
-            const name = `ogit/${ns}/${entity}`;
+            const name =
+                ns === "sgo" ? `ogit/${entity}` : `ogit/${ns}/${entity}`;
 
             // Delete from TBD list
             delete tbd[name];
 
             console.log(name);
-            output[name] = createMapping(ns, entity);
+            output[name] = createMapping(ns, entity, parent);
         }
     }
     console.groupEnd();
@@ -147,7 +166,7 @@ const output: IOutput = {};
         // Handle mapping
         const data = tbd[key];
         console.log(key);
-        output[key] = createMapping(data.ns, data.name);
+        output[key] = createMapping(data.ns, data.name, data.parentDir);
 
         // Remove when done
         delete tbd[key];

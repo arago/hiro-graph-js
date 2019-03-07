@@ -1,5 +1,5 @@
 {
-    "OGIT": "./node_modules/@arago/OGIT/NTO",
+    "OGIT": "./node_modules/@arago/OGIT",
     "OUTPUT_DIR": "lib",
     "blacklist": [
         "oslc-arch",
