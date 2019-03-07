@@ -3,7 +3,7 @@
  *  convert database database results into application data and
  *  application queries into database format
  */
-import codec from "hiro-graph-codecs";
+import codec from "@hiro-graph/codecs";
 
 const stringCodec = codec.string;
 const listCodec = codec.list;

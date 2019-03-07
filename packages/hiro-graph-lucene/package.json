@@ -1,5 +1,5 @@
 {
-    "name": "hiro-graph-lucene",
+    "name": "@hiro-graph/lucene",
     "version": "1.0.0",
     "description": "Lucene Query helpers for HIRO Graph",
     "main": "lib/index.js",
@@ -7,8 +7,7 @@
         "lib": "lib"
     },
     "scripts": {
-        "build":
-            "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "yarn build",
         "test": "jest --silent"
     },
@@ -16,7 +15,12 @@
         "type": "git",
         "url": "git+https://github.com/arago/hiro-graph-js.git"
     },
-    "keywords": ["HIRO Graph", "HIRO", "lucene", "vertices"],
+    "keywords": [
+        "HIRO Graph",
+        "HIRO",
+        "lucene",
+        "vertices"
+    ],
     "author": "Chris Walker <cwalker@arago.de>",
     "license": "MIT",
     "bugs": {
@@ -40,7 +44,9 @@
         ]
     },
     "jest": {
-        "testPathIgnorePatterns": ["<rootDir>[/\\\\](lib|node_modules)[/\\\\]"],
+        "testPathIgnorePatterns": [
+            "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+        ],
         "testEnvironment": "node",
         "testURL": "http://localhost",
         "transform": {

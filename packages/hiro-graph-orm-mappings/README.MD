@@ -1,4 +1,4 @@
-# hiro-graph-orm-mappings
+# @hiro-graph/orm-mappings
 
 Automatic ORM mapping generation based on OGIT.
 Supports blacklisting of unwanted data and renaming of relationships for clarity.
