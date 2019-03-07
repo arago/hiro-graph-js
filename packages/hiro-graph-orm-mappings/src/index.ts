@@ -106,7 +106,7 @@ const getEntitiesInFolder = (
             const d = fs.readdirSync(dirPath);
             return d.findIndex(f => f === "entities") > -1;
         })
-        .filter(v => !config.blacklist.includes(v))
+        .filter(v => !(config.blacklist as string[]).includes(v))
         .map(ns => ({ ns, parent: folder }));
 
 const output: IOutput = {};
@@ -123,7 +123,9 @@ const output: IOutput = {};
         const dir = fs
             .readdirSync(dirPath)
             .map((v: string) => v.split(".").shift() || "")
-            .filter(v => !config.blacklist.includes(ns + "/" + v));
+            .filter(
+                v => !(config.blacklist as string[]).includes(ns + "/" + v)
+            );
 
         if (!dir) {
             console.error("Failed to parse namespace: " + ns);
