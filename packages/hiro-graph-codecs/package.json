@@ -46,5 +46,8 @@
         "transform": {
             "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
         }
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

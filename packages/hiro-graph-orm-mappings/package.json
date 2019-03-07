@@ -29,5 +29,8 @@
         "tslint": "^5.12.1",
         "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.3.3"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
