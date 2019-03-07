@@ -63,7 +63,17 @@ const createMapping = (
 
     const data = fs.readFileSync(filePath).toString();
 
-    const safeNamespace = namespace.replace(/-/g, "");
+    let finalNamespace;
+    if (namespace.startsWith("oslc-")) {
+        finalNamespace = namespace.split("-").pop() || "";
+        finalNamespace =
+            "OSLC" +
+            finalNamespace.charAt(0).toUpperCase() +
+            finalNamespace.slice(1);
+    } else {
+        finalNamespace = namespace.replace(/-/g, "");
+    }
+
     const ogit = namespace ? `ogit/${namespace}/${name}` : `ogit/${name}`;
 
     const currentValue = output[ogit];
@@ -81,7 +91,7 @@ const createMapping = (
     );
 
     return {
-        name: safeNamespace + name,
+        name: (finalNamespace + name).replace(/\//g, ""),
         ogit,
         required,
         optional,
