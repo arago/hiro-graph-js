@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/lucene",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Lucene Query helpers for HIRO Graph",
     "main": "lib/index.js",
     "directories": {
@@ -30,7 +30,7 @@
     "devDependencies": {
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
-        "babel-preset-hiro": "^0.4.0",
+        "babel-preset-hiro": "^0.4.1",
         "jest": "^23.5.0"
     },
     "babel": {

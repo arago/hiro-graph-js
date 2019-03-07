@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/populate",
-    "version": "1.1.8",
+    "version": "1.1.9",
     "main": "lib/index.js",
     "bin": {
         "hiro-graph-populate": "lib/index.js"
@@ -22,8 +22,8 @@
         "typescript": "^3.3.1"
     },
     "dependencies": {
-        "@hiro-graph/orm": "^1.0.39",
-        "@hiro-graph/orm-mappings": "^2.1.5",
+        "@hiro-graph/orm": "^1.0.40",
+        "@hiro-graph/orm-mappings": "^2.1.6",
         "@types/joi": "^14.0.0",
         "@types/ora": "^1.3.4",
         "chalk": "^2.4.1",
