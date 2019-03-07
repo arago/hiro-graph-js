@@ -1,73 +1,70 @@
-# `hiro-graph-orm`: a *more-than-just-string* type aware wrapper for HIRO Graph
+# `@hiro-graph/orm`: a _more-than-just-string_ type aware wrapper for HIRO Graph
 
 Define a schema, create a connection to HIRO Graph, and have a natural way to handle data.
 
 ## Installation
 
 ```bash
-$ npm install hiro-graph-orm
+$ npm install @hiro-graph/orm
 ```
+
 If you want some basic Schema mappings (otherwise you must define your own) use:
 
 ```bash
-$ npm install hiro-graph-orm hiro-graph-orm-mappings
+$ npm install @hiro-graph/orm @hiro-graph/orm-mappings
 ```
 
 ## Example usage:
+
 ```javascript
-import HiroGraphOrm from "hiro-graph-orm";
+import HiroGraphOrm from "@hiro-graph/orm";
 import { Token } from "@hiro-graph/client";
-import mappings from "hiro-graph-orm-mappings";
+import mappings from "@hiro-graph/orm-mappings";
 
 const token = new Token({ getToken: () => "some access token" });
 
 const orm = new HiroGraphOrm({ endpoint: "https://graphit/", token }, mappings);
 
 //fetch the user of this access token.
-orm.me().then(me => {
-	 // Log the property `username`
-    console.log(me.get("username"));
-})
-.catch(err => {
-    console.log("something bad happened", err.stack);
-});
+orm.me()
+    .then(me => {
+        // Log the property `username`
+        console.log(me.get("username"));
+    })
+    .catch(err => {
+        console.log("something bad happened", err.stack);
+    });
 ```
----
 
+---
 
 # `HiroGraphOrm`:
 
 ## Who am i?
 
-
 ### `orm.me()`
 
 `me()` will fetch the data for the owner of the access token (is most cases will return a `ogit/_type: Person`)
-
 
 ## Id lookups `findById(<String|Array> Id)`
 
 ```javascript
 // Find single id...
-orm.findById(id)
+orm.findById(id);
 
 // Find Array of ids...
-orm.findById([id1, id2, ...ids])
-
+orm.findById([id1, id2, ...ids]);
 
 // Using the schema types have slightly different behaviour
-orm.Person.findById(id) // "id" *must* belong to a Person otherwise it will throw 404
-orm.Person.findById([id1, id2, ...ids]) // all ids must belong to Person nodes otherwise it will throw 404
+orm.Person.findById(id); // "id" *must* belong to a Person otherwise it will throw 404
+orm.Person.findById([id1, id2, ...ids]); // all ids must belong to Person nodes otherwise it will throw 404
 ```
-
-
 
 ## Basic Querying (`find()` and `findOne()`)
 
 ### `orm.{Type}.find(<Object> query, <Object> options)`/`orm.{Type}.findOne(<Object> query, <Object> options)`
 
 `find()` is the primary method for querying the graph (via lucene). It returns a `Promise` that resolves to an array of `GraphVertex` ( in the case of `findOne` it will return a single item)
-
 
 `query` is an object with key values based on the schema definition (there are also some special keywords that before more advanced queries).
 
@@ -80,7 +77,6 @@ orm.Person.find({
 })
 .then(vertices => /* Do something with the vertices */)
 .catch(err => /* Handle error */)
-
 ```
 
 `options` is an optional object allowing things like pagination and more
@@ -202,24 +198,24 @@ orm.Person.findCount({ firstName: "Wes" })
 
 ```javascript
 // Simple search example
-orm.Profile.search("example.com") // Search for any people that might match the domain
+orm.Profile.search("example.com"); // Search for any people that might match the domain
 
 // Filtered search example
 orm.Profile.search("example.com", {
     firstName: "Jane"
-}) // Search for any people that might match the domain and have the firstName "Jane"
+}); // Search for any people that might match the domain and have the firstName "Jane"
 ```
 
 ## Advanced `find/findOne` Queries:
 
 To assist with the more complex lucene syntax we introduce some (mongodb inspired) special keys:
 
- - `$or`: switch to "one or more of these conditions".
- - `$and`: switch to "all of these conditions" (the default, but allows to switch back once in `$or` or `$not`) (aliased as `$must` as well).
- - `$not`: switch to "must not match these conditions".
- - `$range`: create a condition where matches must be in the given range.
- - `$missing`: create a condition which matches the presence of a field.
- - `$search`: helper for more complex matching
+-   `$or`: switch to "one or more of these conditions".
+-   `$and`: switch to "all of these conditions" (the default, but allows to switch back once in `$or` or `$not`) (aliased as `$must` as well).
+-   `$not`: switch to "must not match these conditions".
+-   `$range`: create a condition where matches must be in the given range.
+-   `$missing`: create a condition which matches the presence of a field.
+-   `$search`: helper for more complex matching
 
 A couple of these will need more explanation. Otherwise the test code is a good place to look.
 
@@ -231,7 +227,7 @@ orm.Person.find({
     $or: {
         firstName: ["Jane", "Joe"]
     }
-})
+});
 ```
 
 #### Example `$range` query
@@ -240,7 +236,7 @@ orm.Person.find({
 // find everything modified in the last day
 orm.Profile.find({
     $range: {
-        "modified_on": [Date.now() - (86400 * 1000), Date.now()]
+        modified_on: [Date.now() - 86400 * 1000, Date.now()]
     }
 });
 ```
@@ -249,41 +245,38 @@ orm.Profile.find({
 
 ### `orm.gremlin()`
 
-`gremlin()` is a chainable gremlin query generator that abstracts the `Gremlin` syntax away using the schema it is based on `hiro-graph-gremlin` with the `.execute(rootId)` method required in order to trigger the request.
+`gremlin()` is a chainable gremlin query generator that abstracts the `Gremlin` syntax away using the schema it is based on `@hiro-graph/gremlin` with the `.execute(rootId)` method required in order to trigger the request.
 
 #### Example `orm.gremlin()`
 
 ```javascript
 orm.gremlin()
-	.outE("ogit/belongs")
-	.inV()
-	.has("ogit/_type", "Organization")
-	.execute(rootId)
+    .outE("ogit/belongs")
+    .inV()
+    .has("ogit/_type", "Organization")
+    .execute(rootId);
 // -> Resolves to [GraphVertex]
 ```
 
-
 #### `.relation()` Sugar
 
- `.relation(<String> Type, <Array> relations)` generates the appropriate `outE(edgeName).inV().has("ogit/_type", Type)` or `inE(edgeName).outV().has("ogit/_type", Type)` equivalent based on the schema
+`.relation(<String> Type, <Array> relations)` generates the appropriate `outE(edgeName).inV().has("ogit/_type", Type)` or `inE(edgeName).outV().has("ogit/_type", Type)` equivalent based on the schema
 
 ```javascript
 // using `outE()/inV` etc
 orm.gremlin()
-	.outE("ogit/belongs")
-	.inV()
-	.has("ogit/_type", "Organization")
-	.execute(rootId)
+    .outE("ogit/belongs")
+    .inV()
+    .has("ogit/_type", "Organization")
+    .execute(rootId);
 // -> Resolves to [GraphVertex]
 
 // using `.relation()`
 orm.gremlin()
-	.relation("Person", ["orgs"])
-	.execute(rootId)
+    .relation("Person", ["orgs"])
+    .execute(rootId);
 // -> Resolves to [GraphVertex]
-
 ```
-
 
 ### `orm.fetchVertices()`, `orm.fetchIds()`, `orm.fetchCount()`
 
@@ -305,7 +298,6 @@ orm.Person.find({})
 // `fetchVertices` can be replaced with `fetchIds` and `fetchCount` in the above example
 ```
 
-
 ---
 
 # GraphVertex
@@ -320,26 +312,24 @@ Property access is restricted to `.get(propName)`. To update a property use `.se
 
 ```javascript
 orm.me().then(myVertex => {
-	myVertex.get("username"); // returns current value...
-	myVertex.set("username", "Foo");
-	const userName = myVertex.get("username"); // returns current "Foo"
-})
+    myVertex.get("username"); // returns current value...
+    myVertex.set("username", "Foo");
+    const userName = myVertex.get("username"); // returns current "Foo"
+});
 
 // `.set()` also accepts an object of changes
 orm.me().then(myVertex => {
+    myVertex.set({
+        firstName: "Foo",
+        lastName: "Bar"
+    });
 
-	myVertex.set({
-		"firstName": "Foo",
-		"lastName": "Bar"
-	});
-
-	const firstName = myVertex.get("firstName"); // returns current "Foo"
-	const lastName = myVertex.get("lastName"); // returns current "Bar"
-})
+    const firstName = myVertex.get("firstName"); // returns current "Foo"
+    const lastName = myVertex.get("lastName"); // returns current "Bar"
+});
 ```
 
 Using `.set()` only does not persist the changes to the graph. You have to use `.save()`
-
 
 ### Persisting changes to the Graph (`.save()`)
 
@@ -348,14 +338,18 @@ In order to persist the changes to the graph we need to call the `.save()` metho
 #### Example `.save()`
 
 ```javascript
-orm.me().then(myVertex => {
-	return myVertex.set({
-		"firstName": "Foo",
-		"lastName": "Bar"
-	}).save();
-}).then(updatedMyVertex => {
-	//...
-})
+orm.me()
+    .then(myVertex => {
+        return myVertex
+            .set({
+                firstName: "Foo",
+                lastName: "Bar"
+            })
+            .save();
+    })
+    .then(updatedMyVertex => {
+        //...
+    });
 ```
 
 ### Relations Methods (`fetchVertices(<Array> relations)`, `fetchIds(<Array> relations)`,`fetchCount(<Array> relations)`)
@@ -381,22 +375,21 @@ We can connect/disconnect a GraphVertex to/from any of its defined relations`
 
 ```javascript
 // Connecting a person to an org
-Promise.all([
-	orm.Person.findById(personId),
-	orm.Org.findById(orgId)
-]).then(([personVertex, orgVertex]) => {
-	return personVertex.connect("orgs", orgVertex)
-})
-
+Promise.all([orm.Person.findById(personId), orm.Org.findById(orgId)]).then(
+    ([personVertex, orgVertex]) => {
+        return personVertex.connect(
+            "orgs",
+            orgVertex
+        );
+    }
+);
 
 // disconnecting a person from an org (example using the org vertex instead)
-Promise.all([
-	orm.Person.findById(personId),
-	orm.Org.findById(orgId)
-]).then(([personVertex, orgVertex]) => {
-	return orgVertex.disconnect("members", personVertex)
-})
-
+Promise.all([orm.Person.findById(personId), orm.Org.findById(orgId)]).then(
+    ([personVertex, orgVertex]) => {
+        return orgVertex.disconnect("members", personVertex);
+    }
+);
 ```
 
 ### Deleting vertices
@@ -405,22 +398,19 @@ Deleting a `GraphVertex` is simply `vertex.delete()` Note: **Your token must hav
 
 ```javascript
 // Deleting a node
-orm.findById(id).then(v => v.delete())
+orm.findById(id).then(v => v.delete());
 ```
-
 
 ### Serialisation
 
-Converting a `GraphVertex` to a plain object is useful for accessing the data in a view layer of your application. The `hiro-graph-redux` library will do this by default using the `createVerticesSelector` and `createTask::selector()` helpers.
+Converting a `GraphVertex` to a plain object is useful for accessing the data in a view layer of your application. The `@hiro-graph/redux` library will do this by default using the `createVerticesSelector` and `createTask::selector()` helpers.
 
 ```javascript
 const personObj = personVertex.plain(); // Plain object. like `{ _id: "...", _type: "Person", ...}`
 
 // to JSON
-const pesonJson = JSON.stringify(personVertex) // .plain() is called internally to strip circular dependencies
+const pesonJson = JSON.stringify(personVertex); // .plain() is called internally to strip circular dependencies
 ```
-
-
 
 ## Validation
 
@@ -430,7 +420,7 @@ This package contains a library to verify an your local schema mappings match up
 
 ```javascript
 // NODE JS ONLY
-const { default: validate } = require("hiro-graph-orm/lib/schema/validate");
+const { default: validate } = require("@hiro-graph/orm/lib/schema/validate");
 
 const schema = require("/path/to/your/schema/mappings/array/module");
 

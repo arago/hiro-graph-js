@@ -1,16 +1,16 @@
-# `hiro-graph-redux`: Graph ORM redux middleware
+# `@hiro-graph/redux`: Graph ORM redux middleware
 
 This is middleware/reducer combo, a custom `Token`, an action creator and some actions for redux that wraps the Graph ORM (`@hiro-graph/orm`).
 
 ## installation
 
 ```bash
-$ npm install hiro-graph-redux
+$ npm install @hiro-graph/redux
 ```
 
 ## Documentation
 
-Please see [`./docs`](/packages/hiro-graph-redux/docs/README.md)
+Please see [`./docs`](/packages/@hiro-graph/redux/docs/README.md)
 
 ## Example
 
@@ -23,12 +23,12 @@ import {
     createStoreEnhancer,
     graphReducer,
     createToken
-} from "hiro-graph-redux";
+} from "@hiro-graph/redux";
 
 import { createStore, combineReducers } from "redux";
 
 const endpoint = "http://graph:8888";
-// hiro-graph-redux will use the @hiro-graph/implicit-oauth,
+// @hiro-graph/redux will use the @hiro-graph/implicit-oauth,
 // `createToken` instantiates a new token handler for the
 // redux application.
 const token = createToken();

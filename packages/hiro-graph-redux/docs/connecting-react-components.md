@@ -2,8 +2,8 @@
 
 `redux` provides a way to `connect` react components to the `redux` store, notifying them of changes. This is done with 2 functions:
 
- 1. `mapStateToProps` which converts your `redux` state to props for your component.
- 2. `mapDispatchToProps` which gives your component the ability to dispatch actions on the store.
+1.  `mapStateToProps` which converts your `redux` state to props for your component.
+2.  `mapDispatchToProps` which gives your component the ability to dispatch actions on the store.
 
 The first (`mapStateToProps`) is where we will focus here. This module provides helpers for plucking data out of the private internal state. This includes task status, vertex data, the access token information and "me" associated with that token.
 
@@ -23,7 +23,7 @@ This is used to get vertex data out of the store. The function takes an argument
 import React from "react";
 import { connect } from "redux";
 
-import { createVertexSelector } from "hiro-graph-redux";
+import { createVertexSelector } from "@hiro-graph/redux";
 
 //of course your own reducers are responsible for managing your state
 const myVertexSelector = createVertexSelector(state => state.myVertices);
@@ -54,9 +54,4 @@ This one is similar to the vertex selector but for tasks. It takes just the task
 
 Task data is described further in [Tasks in Detail](./tasks.md).
 
-- next: [Access Token handling (and implicit oauth)](./token-handling.md)
-
-
-
-
-
+-   next: [Access Token handling (and implicit oauth)](./token-handling.md)
