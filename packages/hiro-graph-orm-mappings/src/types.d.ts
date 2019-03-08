@@ -20,5 +20,5 @@ interface IOutput {
 }
 
 interface IToBeDone {
-    [index: string]: { ns: string; name: string };
+    [index: string]: { ns: string; name: string; parentDir: string };
 }

@@ -1,19 +1,7 @@
 {
-    "OGIT": "./node_modules/@arago/OGIT/NTO",
+    "OGIT": "./node_modules/@arago/OGIT",
     "OUTPUT_DIR": "lib",
-    "blacklist": [
-        "oslc-arch",
-        "oslc-asset",
-        "oslc-automation",
-        "oslc-change",
-        "oslc-core",
-        "oslc-crtv",
-        "oslc-ems",
-        "oslc-perfmon",
-        "oslc-qm",
-        "oslc-rddl",
-        "oslc-reqman"
-    ],
+    "blacklist": [],
     "extras": {
         "ogit/Auth/AccountProfile": {
             "defaultOrg": "/defaultOrg",
@@ -64,6 +52,8 @@
         "ogit/versions <- ogit/Auth/Application": "parentVersion",
         "ogit/versions -> ogit/Auth/Application": "appVersion",
         "ogit/consistsOf <- ogit/MRP/Part": "item",
-        "ogit/consistsOf -> ogit/MRP/Part": "parts"
+        "ogit/consistsOf -> ogit/MRP/Part": "parts",
+        "ogit/OSLC-ems/extendsScenario -> ogit/OSLC-ems/Scenario": "extends",
+        "ogit/OSLC-ems/extendsScenario <- ogit/OSLC-ems/Scenario": "extendedBy"
     }
 }
