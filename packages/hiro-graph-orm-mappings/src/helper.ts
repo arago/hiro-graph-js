@@ -1,3 +1,18 @@
+export const cleanName = (originalNs: string, safeNs: string, name: string) => {
+    let output = name;
+
+    if (safeNs.startsWith("oslc")) {
+        const ns = safeNs.slice(4);
+        output = "OSLC" + ns + name;
+    } else if (originalNs === "sgo") {
+        output = name;
+    } else {
+        output = safeNs + name;
+    }
+
+    return output.replace(/\//g, "");
+};
+
 export const getName = (value: string) => {
     const split = value.split("/");
     if (split.length === 2) {

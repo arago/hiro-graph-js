@@ -8,7 +8,13 @@ import {
     getOptionalAttributes,
     getRelations
 } from "./regex";
-import { getName, flipRelationshipName, toTypes, toProp } from "./helper";
+import {
+    getName,
+    flipRelationshipName,
+    toTypes,
+    toProp,
+    cleanName
+} from "./helper";
 import { mapRelationship } from "./relations";
 
 import config from "../config.json";
@@ -16,8 +22,7 @@ import config from "../config.json";
 const tbd: IToBeDone = {};
 
 const addRelation = (parentDir: string) => (v: string[], from: string) => {
-    const to = v[1];
-
+    const to = v[1].replace("oslc", "OSLC");
     if (!output[to]) {
         const name = getName(to);
         output[to] = { name: name.ns + name.name, ogit: to };
@@ -63,18 +68,11 @@ const createMapping = (
 
     const data = fs.readFileSync(filePath).toString();
 
-    let finalNamespace;
-    if (namespace.startsWith("oslc-")) {
-        finalNamespace = namespace.split("-").pop() || "";
-        finalNamespace =
-            "OSLC" +
-            finalNamespace.charAt(0).toUpperCase() +
-            finalNamespace.slice(1);
-    } else {
-        finalNamespace = namespace.replace(/-/g, "");
-    }
-
-    const ogit = namespace ? `ogit/${namespace}/${name}` : `ogit/${name}`;
+    const finalNamespace = namespace.replace(/-/g, "");
+    const ogit =
+        namespace && namespace !== "sgo"
+            ? `ogit/${namespace}/${name}`
+            : `ogit/${name}`;
 
     const currentValue = output[ogit];
     const required = getRequiredAttributes(data);
@@ -91,7 +89,7 @@ const createMapping = (
     );
 
     return {
-        name: (finalNamespace + name).replace(/\//g, ""),
+        name: cleanName(namespace, finalNamespace, name),
         ogit,
         required,
         optional,
@@ -147,8 +145,10 @@ const output: IOutput = {};
                 continue;
             }
 
-            const name =
-                ns === "sgo" ? `ogit/${entity}` : `ogit/${ns}/${entity}`;
+            const name = (ns === "sgo"
+                ? `ogit/${entity}`
+                : `ogit/${ns}/${entity}`
+            ).replace("oslc", "OSLC");
 
             // Delete from TBD list
             delete tbd[name];
@@ -209,7 +209,9 @@ const output: IOutput = {};
             .toLowerCase()
             .replace("ogit/", "")
             .replace(/\//g, "-");
-        const name = output[key].name.replace(/-|\//g, "");
+        const name = output[key].name
+            .replace(/-|\//g, "")
+            .replace("oslc", "OSLC");
 
         // Export js
         fs.writeFileSync(
