@@ -30,6 +30,7 @@ export default class HttpTransport {
                 url.indexOf("http") === 0 ? url : this.endpoint + url;
             options.headers = {
                 ...(options.headers || {}),
+                ...(reqOptions.customHeaders || {}),
                 Authorization: "Bearer " + tok
             };
             const t = timer();
