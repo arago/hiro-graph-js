@@ -35,7 +35,18 @@ export default class WebSocketTransport {
             token,
             reqOptions.emit
         ).then(client =>
-            client.send(token, { type, headers, body }, reqOptions)
+            client.send(
+                token,
+                {
+                    type,
+                    headers: {
+                        ...headers,
+                        ...(reqOptions.headers || {})
+                    },
+                    body
+                },
+                reqOptions
+            )
         );
     }
 
