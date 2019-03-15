@@ -41,7 +41,7 @@ export default class WebSocketTransport {
                     type,
                     headers: {
                         ...headers,
-                        ...(reqOptions.customHeaders || {})
+                        ...(reqOptions.headers || {})
                     },
                     body
                 },
