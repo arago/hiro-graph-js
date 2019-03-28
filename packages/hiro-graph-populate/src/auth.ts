@@ -1,6 +1,5 @@
 import chalk from "chalk";
-import fetch from "node-fetch";
-import Ora from "ora";
+import ora from "ora";
 
 import { IPerson, Orm } from "../typings";
 
@@ -98,7 +97,7 @@ export const createOrg = async (orm: Orm, name: string) => {
         return;
     }
 
-    let o = new Ora(`Creating organization ${chalk.blue(name)}`).start();
+    let o = ora(`Creating organization ${chalk.blue(name)}`).start();
     try {
         const resCreate = (await orm
             .getClient()
@@ -108,7 +107,7 @@ export const createOrg = async (orm: Orm, name: string) => {
             `Created organization ${chalk.blue(name)}: ${resCreate["ogit/_id"]}`
         );
 
-        o = new Ora(`Getting teams for '${resCreate["ogit/_id"]}'`);
+        o = ora(`Getting teams for '${resCreate["ogit/_id"]}'`);
         const resTeams = (await orm
             .getClient()
             .auth.organizationTeams(resCreate["ogit/_id"])) as ITeam[];
@@ -121,7 +120,7 @@ export const createOrg = async (orm: Orm, name: string) => {
 
         const addAdmins = async (admins: string[]) => {
             if (admins && admins.length > 0) {
-                o = new Ora(`Adding admins`);
+                o = ora(`Adding admins`);
                 const adminTeam = resTeams
                     .filter(t => t["ogit/name"] === "admin")
                     .pop();
@@ -162,7 +161,7 @@ export const createUser = async (orm: Orm, user: IPerson, org: string) => {
         return;
     }
 
-    let o = new Ora(`Creating account '${user.email}'`).start();
+    let o = ora(`Creating account '${user.email}'`).start();
     try {
         const resCreate = (await orm.getClient().auth.createAccount({
             "ogit/Auth/Account/type": user.email ? "person" : "application",
@@ -177,7 +176,7 @@ export const createUser = async (orm: Orm, user: IPerson, org: string) => {
             }, ${chalk.blue("profile")}: ${resCreate.profile["ogit/_id"]}]`
         );
 
-        o = new Ora(`Activating account '${resCreate.account["ogit/_id"]}'`);
+        o = ora(`Activating account '${resCreate.account["ogit/_id"]}'`);
 
         const resActivate = (await orm
             .getClient()
@@ -185,9 +184,7 @@ export const createUser = async (orm: Orm, user: IPerson, org: string) => {
 
         o.succeed(`Activated account: ${resActivate["ogit/_id"]}`);
 
-        o = new Ora(
-            `Updating account profile '${resCreate.profile["ogit/_id"]}'`
-        );
+        o = ora(`Updating account profile '${resCreate.profile["ogit/_id"]}'`);
         const resProfile = await orm
             .getClient()
             .auth.updateAccountProfile(resCreate.profile["ogit/_id"], {
@@ -196,9 +193,7 @@ export const createUser = async (orm: Orm, user: IPerson, org: string) => {
 
         o.succeed(`Updated account profile: ${resCreate.profile["ogit/_id"]}`);
 
-        o = new Ora(
-            `Setting password for account '${resActivate["ogit/_id"]}'`
-        );
+        o = ora(`Setting password for account '${resActivate["ogit/_id"]}'`);
         await orm
             .getClient()
             .auth.updatePassword(resActivate["ogit/_id"], user.password);
