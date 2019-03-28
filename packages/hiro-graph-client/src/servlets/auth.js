@@ -6,7 +6,7 @@ const filterUndef = obj =>
         return ret;
     }, {});
 
-const PATH = "/api/6.1/iam";
+const PATH = "/iam";
 // const QUERY_PARAM_NAME = "name";
 // const QUERY_PARAM_ACTIVE = "active";
 // const QUERY_PARAM_CONTENT = "content";
