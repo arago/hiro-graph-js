@@ -55,15 +55,7 @@ const createMapping = (
 ): IDefinition => {
     const filePath =
         namespace && namespace !== "sgo"
-            ? join(
-                  parentDir,
-                  "../NTO",
-                  namespace.includes("OSLC")
-                      ? namespace.toLowerCase()
-                      : namespace,
-                  "entities",
-                  `${name}.ttl`
-              )
+            ? join(parentDir, "../NTO", namespace, "entities", `${name}.ttl`)
             : join(parentDir, "../SGO/sgo", "entities", `${name}.ttl`);
 
     const data = fs.readFileSync(filePath).toString();

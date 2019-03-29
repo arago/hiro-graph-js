@@ -16,7 +16,7 @@ This is a client which performs the API calls against the HIRO Graph API for you
 import Client from "@hiro-graph/client";
 
 const client = new Client({
-    endpoint: "http://localhost:8888",
+    endpoint: "http://localhost:8888/api/6.1",
     token: someTokenInstance
 });
 ```
@@ -27,7 +27,7 @@ The second argument to Client can be a `Transport` if you have a custom one, or 
 import Client from "@hiro-graph/client";
 
 const client = new Client({
-        endpoint: "http://localhost:8888",
+        endpoint: "http://localhost:8888/api/6.1",
         token: someTokenInstance
     }, {
         poolSize: 10
