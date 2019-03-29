@@ -23,7 +23,7 @@ export default class WebSocketTransport {
         ensureWebSocketsAvailable();
         this.endpoint = endpoint
             .replace(/^http/, "ws") //replace http(s) with ws(s)
-            .replace(/\/?$/, "/graph-ws/"); // replace possible trailing slash with api endpoint
+            .replace(/\/?$/, "/api/6.1/graph-ws/"); // replace possible trailing slash with api endpoint
     }
 
     /**
