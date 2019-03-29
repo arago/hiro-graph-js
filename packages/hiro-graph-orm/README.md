@@ -23,7 +23,7 @@ import mappings from "@hiro-graph/orm-mappings";
 
 const token = new Token({ getToken: () => "some access token" });
 
-const orm = new HiroGraphOrm({ endpoint: "https://graphit/api/6.1", token }, mappings);
+const orm = new HiroGraphOrm({ endpoint: "https://graphit/", token }, mappings);
 
 //fetch the user of this access token.
 orm.me()
