@@ -85,8 +85,8 @@ declare class HttpTransport {
     fetch(
         token: string,
         url: string,
-        options: object,
-        reqOptions: object
+        options?: object,
+        reqOptions?: object
     ): Promise<Response>;
     request(
         token: string,
@@ -169,8 +169,8 @@ export default class Client {
     api: IAPI;
     fetch: (
         url: string,
-        options: object,
-        reqOptions: object
+        options?: object,
+        reqOptions?: object
     ) => Promise<Response>;
 
     constructor(
