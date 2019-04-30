@@ -20,7 +20,7 @@
         "@types/joi": "^14.0.0",
         "@types/node-fetch": "^2.1.4",
         "jest": "^23.5.0",
-        "typescript": "^3.3.1"
+        "typescript": "^3.4.5"
     },
     "dependencies": {
         "@hiro-graph/orm": "^1.1.1",

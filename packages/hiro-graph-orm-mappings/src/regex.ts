@@ -24,10 +24,16 @@ function getAttributes(regex: RegExp, input: string) {
     const output: IDefinitionData = {};
 
     for (const v of data) {
-        const name = v.split("/").pop();
+        let name = v.split("/").pop();
         if (!name) {
             continue;
         }
+
+        // Fix bug in ogit/AutomationVariable (defines ogit/_id in attributes)
+        if (name === "_id") {
+            name = "__id";
+        }
+
         output[name] = v;
     }
 
