@@ -105,8 +105,6 @@ const noRecurseKeys = ["$search", "$range", "$missing"];
 const normaliseQuery = queryObject => {
     return Object.keys(queryObject).map(key => {
         const value = queryObject[key];
-        // console.log("key:", key);
-        // console.log("value:", value);
         if (key[0] === "$" && noRecurseKeys.indexOf(key) === -1) {
             //we should recurse
             return { key, values: normaliseQuery(value) };
@@ -323,6 +321,14 @@ const findQuotedTerms = function(str) {
     return terms.filter(Boolean);
 };
 
+const pipe = (...fns) => value => fns.reduce((acc, fn) => fn(acc), value);
+
+const checkTermForQuoting = term =>
+    typeof term === "string" ? quote(term) : term;
+
+const replaceTermToPlaceholder = placeholders => term =>
+    createPlaceholder(placeholders, term);
+
 //create a term query with an operator and many possible values.
 function luceneTerm(context, field, values) {
     //console.log("term", context, field, values);
@@ -332,24 +338,29 @@ function luceneTerm(context, field, values) {
             `Cannot find '${field}' of type '${context.entity.name}'`
         );
     }
-    return values
-        .map(v => prop.encode(v)) // encode for graphit with our mapping
-        .map(v => (typeof v === "string" ? quote(v) : v)) //quote if needed
-        .map(
-            term =>
-                term === null
-                    ? luceneMissing(context, field) //if term is null, that means the field should be missing.
-                    : `${context.op}${slashForward(prop.src)}:${term}`
-        ) //create querystring
-        .join(" "); //join terms
+    return values.reduce((acc, v) => {
+        const term = pipe(
+            prop.encode,
+            checkTermForQuoting,
+            replaceTermToPlaceholder(context.placeholders)
+        )(v);
+        const finalTerm =
+            term === null
+                ? luceneMissing(context, field) //if term is null, that means the field should be missing.
+                : `${context.op}${slashForward(prop.src)}:${term} `;
+        return `${acc}${finalTerm}`;
+    }, "");
 }
 
 //create a range query term
 function luceneRange(context, field, lower, higher) {
     const prop = context.entity.prop(field);
-    const [low, high] = [lower, higher]
-        .map(v => prop.encode(v))
-        .map(v => (typeof v === "string" ? quote(v) : v));
+    const [low, high] = [lower, higher].map(v =>
+        pipe(
+            prop.encode,
+            checkTermForQuoting
+        )(v)
+    );
     return `${context.op}${slashForward(prop.src)}:[${low} TO ${high}]`;
 }
 
