@@ -321,13 +321,8 @@ const findQuotedTerms = function(str) {
     return terms.filter(Boolean);
 };
 
-const pipe = (...fns) => value => fns.reduce((acc, fn) => fn(acc), value);
-
 const checkTermForQuoting = term =>
     typeof term === "string" ? quote(term) : term;
-
-const replaceTermToPlaceholder = placeholders => term =>
-    createPlaceholder(placeholders, term);
 
 //create a term query with an operator and many possible values.
 function luceneTerm(context, field, values) {
@@ -338,29 +333,25 @@ function luceneTerm(context, field, values) {
             `Cannot find '${field}' of type '${context.entity.name}'`
         );
     }
-    return values.reduce((acc, v) => {
-        const term = pipe(
-            prop.encode,
-            checkTermForQuoting,
-            replaceTermToPlaceholder(context.placeholders)
-        )(v);
-        const finalTerm =
-            term === null
-                ? luceneMissing(context, field) //if term is null, that means the field should be missing.
-                : `${context.op}${slashForward(prop.src)}:${term} `;
-        return `${acc}${finalTerm}`;
-    }, "");
+    return values
+        .map(prop.encode) // encode for graphit with our mapping
+        .map(checkTermForQuoting) //quote if needed
+        .map(term => createPlaceholder(context.placeholders, term))
+        .map(
+            term =>
+                term === null
+                    ? luceneMissing(context, field) //if term is null, that means the field should be missing.
+                    : `${context.op}${slashForward(prop.src)}:${term}`
+        ) //create querystring
+        .join(" "); //join terms
 }
 
 //create a range query term
 function luceneRange(context, field, lower, higher) {
     const prop = context.entity.prop(field);
-    const [low, high] = [lower, higher].map(v =>
-        pipe(
-            prop.encode,
-            checkTermForQuoting
-        )(v)
-    );
+    const [low, high] = [lower, higher]
+        .map(prop.encode)
+        .map(checkTermForQuoting);
     return `${context.op}${slashForward(prop.src)}:[${low} TO ${high}]`;
 }
 
