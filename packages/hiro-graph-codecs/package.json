@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/codecs",
-    "version": "1.0.1",
+    "version": "6.0.0",
     "description": "Coercion utilities for working with the *mostly* string values in HIRO Graph",
     "main": "lib/index.js",
     "directories": {
