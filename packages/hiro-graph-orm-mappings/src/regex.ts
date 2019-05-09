@@ -19,22 +19,21 @@ export function getData(regex: RegExp, input: string): string[] {
         .map(v => v.replace(/\./g, "/").replace(/:/g, "/"));
 }
 
+function cleanName(name: string) {
+    return name.replace(/-/g, "_");
+}
+
 function getAttributes(regex: RegExp, input: string) {
     const data = getData(regex, input);
     const output: IDefinitionData = {};
 
     for (const v of data) {
-        let name = v.split("/").pop();
+        const name = v.split("/").pop();
         if (!name) {
             continue;
         }
 
-        // Fix bug in ogit/AutomationVariable (defines ogit/_id in attributes)
-        if (name === "_id") {
-            name = "__id";
-        }
-
-        output[name] = v;
+        output[cleanName(name)] = v;
     }
 
     return output;
