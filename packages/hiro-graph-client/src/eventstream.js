@@ -32,7 +32,7 @@ export default class EventStream {
         this._token = token;
         this._endpoint = endpoint
             .replace(/^http/, "ws") //replace http(s) with ws(s)
-            .replace(/\/?$/, "/_events/?"); // replace possible trailing slash with api endpoint
+            .replace(/\/?$/, "/api/6.1/events-ws/?"); // replace possible trailing slash with api endpoint
         const query = {};
         if (groupId) {
             query.groupId = groupId;

@@ -1,0 +1,2037 @@
+# http://swagger.io/specification/
+swagger: '2.0'
+info:
+  title: HIRO Graph IAM API
+  description: |
+    The IAM API for the HIRO Graph semantic datastore platform
+  version: "6.1.0"
+
+# the domain of the service
+host: localhost:443
+# array of all schemes that your API supports
+schemes:
+- https
+basePath: /api/6.1/iam/
+produces:
+- application/json
+consumes:
+- application/json
+
+paths:
+  /accounts:
+    post:
+      summary: create an account
+      description: |
+        creates an account
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the account
+        required: true
+        schema:
+          $ref: '#/definitions/Account'
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: Account created
+          schema:
+            $ref: '#/definitions/Account'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /dataset:
+    post:
+      summary: create a dataset
+      description: |
+        creates a dataset
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the Dataset
+        required: true
+        schema:
+          $ref: '#/definitions/DataSetContent'
+      tags:
+      - "[Management] Dataset"
+      responses:
+        200:
+          description: Dataset created
+          schema:
+            $ref: '#/definitions/Dataset'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /dataset/{id}:
+    put:
+      summary: update a dataset
+      description: |
+        updates a dataset
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Dataset
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the Dataset
+        required: true
+        schema:
+          $ref: '#/definitions/DataSetContent'
+      tags:
+      - "[Management] Dataset"
+      responses:
+        200:
+          description: Dataset created
+          schema:
+            $ref: '#/definitions/Dataset'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: retrieve a Dataset
+      description: |
+        retrieves a Dataset
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Dataset
+        required: true
+        type: string
+      tags:
+      - "[Management] Dataset"
+      responses:
+        200:
+          description: A Dataset
+          schema:
+            $ref: '#/definitions/Dataset'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: delete a Dataset
+      description: |
+        deletes a Dataset
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Dataset
+        required: true
+        type: string
+      tags:
+      - "[Management] Dataset"
+      responses:
+        200:
+          description: A Dataset
+          schema:
+            $ref: '#/definitions/Dataset'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /team:
+    post:
+      summary: create an Auth Team
+      description: |
+        creates an Auth Team
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the an Auth Team
+        required: true
+        schema:
+          $ref: '#/definitions/TeamContent'
+      tags:
+      - "[Management] Auth Team"
+      responses:
+        200:
+          description: Auth Team created
+          schema:
+            $ref: '#/definitions/Team'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /team/{id}:
+    put:
+      summary: update an Auth Team
+      description: |
+        updates an Auth Team
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Team
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the Auth Team
+        required: true
+        schema:
+          $ref: '#/definitions/TeamContent'
+      tags:
+      - "[Management] Auth Team"
+      responses:
+        200:
+          description: Auth Team created
+          schema:
+            $ref: '#/definitions/Team'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: retrieve an Auth Team
+      description: |
+        retrieves an Auth Team
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Team
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Team"
+      responses:
+        200:
+          description: An Auth Team
+          schema:
+            $ref: '#/definitions/Team'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: delete an Auth Team
+      description: |
+        deletes an Auth Team
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Team
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Team"
+      responses:
+        200:
+          description: An Auth Team
+          schema:
+            $ref: '#/definitions/Team'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /team/{id}/members:
+    get:
+      summary: get members of an Auth Team
+      description: |
+        gets members of an Auth Team
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Team
+        required: true
+        type: string
+      - name: profile
+        in: query
+        description: should return profile
+        required: false
+        default: false
+        type: boolean
+      tags:
+      - "[Management] Auth Team"
+      responses:
+        200:
+          description: Members rerieved
+          schema:
+            $ref: '#/definitions/ReturnListIdentities'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /team/{id}/members/add:
+    post:
+      summary: add members to an Auth Team
+      description: |
+        adds members to an Auth Team
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Team
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the Auth Team
+        required: true
+        schema:
+          $ref: '#/definitions/AssignAccounts'
+      tags:
+      - "[Management] Auth Team"
+      responses:
+        200:
+          description: Members added
+          schema:
+            $ref: '#/definitions/ReturnListIdentities'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /team/{id}/members/remove:
+    post:
+      summary: remove members from an Auth Team
+      description: |
+        remove members from an Auth Team
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Team
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the Auth Team
+        required: true
+        schema:
+          $ref: '#/definitions/AssignAccounts'
+      tags:
+      - "[Management] Auth Team"
+      responses:
+        200:
+          description: Members removed
+          schema:
+            $ref: '#/definitions/ReturnListIdentities'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /role:
+    post:
+      summary: create a Role
+      description: |
+        creates a Role
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the Role
+        required: true
+        schema:
+          $ref: '#/definitions/RoleCreateBody'
+      tags:
+      - "[Management] Auth Role"
+      responses:
+        200:
+          description: Created Role
+          schema:
+            $ref: '#/definitions/Role'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /role/{id}:
+    put:
+      summary: update an Role
+      description: |
+        updates an Role
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Role
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the Role
+        required: true
+        schema:
+          $ref: '#/definitions/RoleUpdateBody'
+      tags:
+      - "[Management] Auth Role"
+      responses:
+        200:
+          description: Updated Role
+          schema:
+            $ref: '#/definitions/Role'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: retrieve a Role
+      description: |
+        retrieves a Role
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Role
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Role"
+      responses:
+        200:
+          description: A Role
+          schema:
+            $ref: '#/definitions/Role'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Deleted Role
+      description: |
+        deletes a Role
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Role
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Role"
+      responses:
+        200:
+          description: A Role
+          schema:
+            $ref: '#/definitions/Role'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /roles:
+    get:
+      summary: retrieves pulic roles
+      description: |
+        retrieves pulic roles
+      tags:
+      - "[Management] Auth Role"
+      responses:
+        200:
+          description: A Role
+          schema:
+            $ref: '#/definitions/ReturnListRoles'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /roleassignment:
+    post:
+      summary: create a RoleAssignment
+      description: |
+        creates a RoleAssignment
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the RoleAssignment
+        required: true
+        schema:
+          $ref: '#/definitions/RoleAssignmentBody'
+      tags:
+      - "[Management] Auth RoleAssignment"
+      responses:
+        200:
+          description: Created RoleAssignment
+          schema:
+            $ref: '#/definitions/RoleAssignment'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /roleassignment/{id}:
+    get:
+      summary: retrieve a RoleAssignment
+      description: |
+        retrieves a RoleAssignment
+      parameters:
+      - name: id
+        in: path
+        description: the id of the RoleAssignment
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth RoleAssignment"
+      responses:
+        200:
+          description: A RoleAssignment
+          schema:
+            $ref: '#/definitions/RoleAssignment'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Deleted RoleAssignment
+      description: |
+        deletes a RoleAssignment
+      parameters:
+      - name: id
+        in: path
+        description: the id of the RoleAssignment
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth RoleAssignment"
+      responses:
+        200:
+          description: A RoleAssignment
+          schema:
+            $ref: '#/definitions/RoleAssignment'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /domain:
+    post:
+      summary: create a OrgDomain
+      description: |
+        creates a OrgDomain
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the OrgDomain
+        required: true
+        schema:
+          $ref: '#/definitions/DomainCreateBody'
+      tags:
+      - "[Management] Auth OrgDomain"
+      responses:
+        200:
+          description: Created Role
+          schema:
+            $ref: '#/definitions/OrgDomain'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /domain/{id}:
+    get:
+      summary: retrieve a OrgDomain
+      description: |
+        retrieves a OrgDomain
+      parameters:
+      - name: id
+        in: path
+        description: the id of the OrgDomain
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth OrgDomain"
+      responses:
+        200:
+          description: A OrgDomain
+          schema:
+            $ref: '#/definitions/OrgDomain'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete OrgDomain
+      description: |
+        deletes a OrgDomain
+      parameters:
+      - name: id
+        in: path
+        description: the id of the OrgDomain
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth OrgDomain"
+      responses:
+        200:
+          description: A Role
+          schema:
+            $ref: '#/definitions/OrgDomain'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /domain/{id}/organization:
+    get:
+      summary: retrieve Organization of OrgDomain
+      description: |
+        retrieves a Organization of OrgDomain
+      parameters:
+      - name: id
+        in: path
+        description: the id of the OrgDomain
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth OrgDomain"
+      responses:
+        200:
+          description: A OrgDomain
+          schema:
+            $ref: '#/definitions/Organization'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization:
+    post:
+      summary: create an Auth Organization
+      description: |
+        creates an Auth Organization
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the an Auth Organization
+        required: true
+        schema:
+          $ref: '#/definitions/OrganizationContent'
+      tags:
+      - "[Management] Auth Organization"
+      responses:
+        200:
+          description: Auth Team created
+          schema:
+            $ref: '#/definitions/Organization'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}/teams:
+    get:
+      summary: get teams of an Auth Organization
+      description: |
+        gets teams of an Auth Organization
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Organization
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Organization"
+      responses:
+        200:
+          description: Teams retrieved
+          schema:
+            $ref: '#/definitions/ReturnListTeams'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}/domains:
+    get:
+      summary: get domains of an Auth Organization
+      description: |
+        gets domains of an Auth Organization
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Organization
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Organization"
+      responses:
+        200:
+          description: Domains retrieved
+          schema:
+            $ref: '#/definitions/ReturnListDomains'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}/scopes:
+    get:
+      summary: get scopes of an Auth Organization
+      description: |
+        gets scopes of an Auth Organization
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Organization
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Organization"
+      responses:
+        200:
+          description: Domains retrieved
+          schema:
+            $ref: '#/definitions/ReturnListScopes'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}/datasets:
+    get:
+      summary: get datasets of an Auth Organization
+      description: |
+        gets datasets of an Auth Organization
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Organization
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Organization"
+      responses:
+        200:
+          description: Domains retrieved
+          schema:
+            $ref: '#/definitions/ReturnListDatasets'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}/roleassignments:
+    get:
+      summary: get role assignments of an Auth Organization
+      description: |
+        gets ole assignments of an Auth Organization
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Organization
+        required: true
+        type: string
+      tags:
+      - "[Management] Auth Organization"
+      responses:
+        200:
+          description: Domains retrieved
+          schema:
+            $ref: '#/definitions/ReturnListRoleAssignments'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}/members:
+    get:
+      summary: get members of an Auth Organization
+      description: |
+        gets members of an Auth Organization
+      parameters:
+      - name: id
+        in: path
+        description: the id of the Auth Organization
+        required: true
+        type: string
+      - name: profile
+        in: query
+        description: should return profile
+        required: false
+        default: false
+        type: boolean
+      tags:
+      - "[Management] Auth Organization"
+      responses:
+        200:
+          description: Members rerieved
+          schema:
+            $ref: '#/definitions/ReturnListIdentities'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}/avatar:
+    get:
+      summary: get avatar of organization
+      description: |
+        gets avatar of organization
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the organization"
+        required: true
+        type: string
+      tags:
+      - "[Management] Organization"
+      responses:
+        200:
+          description: Binary content of the avatar
+          schema:
+            type: string
+            format: binary
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: set avatar of organization
+      description: |
+        sets the avatar of organization
+      consumes:
+      - application/octet-stream
+      tags:
+      - "[Management] Organization"
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the organization"
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: content of the avatar
+        required: true
+        schema:
+          type: string
+          format: binary
+      responses:
+        200:
+          description: The avatar size
+          schema:
+            type: integer
+            format: int64
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{id}:
+    post:
+      summary: update an account
+      description: |
+        updates an account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the Account
+        required: true
+        schema:
+          $ref: '#/definitions/Generic'
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The updated account
+          schema:
+            $ref: '#/definitions/Account'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    patch:
+      summary: activate an account
+      description: |
+        activates an account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The updated account
+          schema:
+            $ref: '#/definitions/Account'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: get an account
+      description: |
+        gets an account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      - name: profile
+        in: query
+        description: should return profile
+        required: false
+        default: false
+        type: boolean
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The account
+          schema:
+            $ref: '#/definitions/Account'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: deactivate an account
+      description: |
+        deactivates an account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: body containing reason of deavtivation
+        required: true
+        schema:
+          $ref: '#/definitions/AccountDeactivateBody'
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The updated account
+          schema:
+            $ref: '#/definitions/Account'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /accounts/{id}/activate:
+    patch:
+      summary: activate an account
+      description: |
+        activates an account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The updated account
+          schema:
+            $ref: '#/definitions/Account'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /accounts/{id}/deactivate:
+    patch:
+      summary: deactivate an account
+      description: |
+        deactivates an account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: body containing reason of deavtivation
+        required: true
+        schema:
+          $ref: '#/definitions/AccountDeactivateBody'
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The updated account
+          schema:
+            $ref: '#/definitions/Account'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /accounts/{id}/password:
+    put:
+      summary: set password of account
+      description: |
+        set password of account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The new password
+        required: true
+        schema:
+          $ref: '#/definitions/PasswordNew'
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: Success message
+          schema:
+            $ref: '#/definitions/PasswordSuccess'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /accounts/profile/{profileId}:
+    get:
+      summary: get profile of id profileId
+      description: |
+        get profile of id profileId
+      parameters:
+      - name: profileId
+        in: path
+        description: "`ogit/_id` of the account profile"
+        required: true
+        type: string
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The account profile
+          schema:
+            $ref: '#/definitions/AccountProfile'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: update an account profile
+      description: |
+        updates an account profile
+      parameters:
+      - name: profileId
+        in: path
+        description: the id of the account profile
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the account profile
+        required: true
+        schema:
+          $ref: '#/definitions/AccountProfile'
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: Updated Account Profile
+          schema:
+            $ref: '#/definitions/AccountProfile'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /accounts/{id}/profile:
+    get:
+      summary: get profile of account with id accountId
+      description: |
+        get profile of account with id accountId
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The account profile
+          schema:
+            $ref: '#/definitions/AccountProfile'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /accounts/{id}/avatar:
+    get:
+      summary: get avatar of account
+      description: |
+        gets avatar of account
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: Binary content of the avatar
+          schema:
+            type: string
+            format: binary
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: set avatar of account
+      description: |
+        sets the avatar of account
+      consumes:
+      - application/octet-stream
+      tags:
+      - "[Management] Account"
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: content of the avatar
+        required: true
+        schema:
+          type: string
+          format: binary
+      responses:
+        200:
+          description: The avatar size
+          schema:
+            type: integer
+            format: int64
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /accounts/{id}/teams:
+    get:
+      summary: get teams of account with id accountId
+      description: |
+        get teams of account with id accountId
+      parameters:
+      - name: id
+        in: path
+        description: "`ogit/_id` of the account"
+        required: true
+        type: string
+      tags:
+      - "[Management] Account"
+      responses:
+        200:
+          description: The account profile
+          schema:
+            $ref: '#/definitions/ReturnListTeams'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+  /scope:
+    post:
+      summary: create a DataScope
+      description: |
+        creates a DataScope
+      parameters:
+      - name: body
+        in: body
+        description: The attributes of the DataScope
+        required: true
+        schema:
+          $ref: '#/definitions/DataScopeCreateBody'
+      tags:
+      - "[Management] Auth DataScope"
+      responses:
+        200:
+          description: Created Role
+          schema:
+            $ref: '#/definitions/DataScope'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+  /scope/{id}:
+    get:
+      summary: retrieve a DataScope
+      description: |
+        retrieves a DataScope
+      parameters:
+      - name: id
+        in: path
+        description: the id of the DataScope
+        required: true
+        type: string
+
+      tags:
+      - "[Management] Auth DataScope"
+      responses:
+        200:
+          description: A DataScope
+          schema:
+            $ref: '#/definitions/DataScope'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update DataScope
+      description: |
+        deletes a DataScope
+      parameters:
+      - name: id
+        in: path
+        description: the id of the DataScope
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: The attributes of the DataScope
+        required: true
+        schema:
+          $ref: '#/definitions/DataScopeCreateBody'
+      tags:
+      - "[Management] Auth DataScope"
+      responses:
+        200:
+          description: A DataScope
+          schema:
+            $ref: '#/definitions/DataScope'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: Token is missing or invalid
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Access Denied
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Generic:
+    type: object
+    additionalProperties:
+      type: string
+
+  Account:
+    type: object
+    required:
+    - ogit/_xid
+    - ogit/status
+    - ogit/Auth/Account/type
+    - ogit/_id
+    - ogit/_type
+    - ogit/_graphtype
+    properties:
+      ogit/_xid:
+        type: string
+        description: locaol unique identifier
+      ogit/status:
+        type: string
+        description: activation status
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/_graphtype:
+        type: string
+        description: The graph type (vertex or edge)
+    additionalProperties:
+      type: string
+
+
+
+  AccountDeactivateBody:
+    type: object
+    properties:
+      ogit/Auth/Account/statusReason:
+        type: string
+        description: reason for account deactivation
+        enum:
+        - UserDeactivated
+        - AdminDeactivated
+        - PasswordExpired
+        - AutoDeactivated
+        - None
+
+  AccountProfile:
+    type: object
+    required:
+    - ogit/_id
+    - ogit/Auth/displayName
+    - ogit/_type
+    - ogit/_graphtype
+    properties:
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/Auth/displayName:
+        type: string
+        description: Unique identifier
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/_graphtype:
+        type: string
+        description: The graph type (vertex or edge)
+    additionalProperties:
+      type: string
+
+
+  ReturnListIdentities:
+    type: object
+    properties:
+      items:
+        description: search result
+        type: array
+        items:
+          $ref: '#/definitions/Account'
+  ReturnListTeams:
+    type: object
+    properties:
+      items:
+        description: list of teams
+        type: array
+        items:
+          $ref: '#/definitions/Team'
+  ReturnListDomains:
+    type: object
+    properties:
+      items:
+        description: search result
+        type: array
+        items:
+          $ref: '#/definitions/OrgDomain'
+  ReturnListScopes:
+    type: object
+    properties:
+      items:
+        description: search result
+        type: array
+        items:
+          $ref: '#/definitions/DataScope'
+  ReturnListDatasets:
+    type: object
+    properties:
+      items:
+        description: search result
+        type: array
+        items:
+          $ref: '#/definitions/Dataset'
+  ReturnListRoles:
+    type: object
+    properties:
+      items:
+        description: search result
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+  ReturnListRoleAssignments:
+    type: object
+    properties:
+      items:
+        description: search result
+        type: array
+        items:
+          $ref: '#/definitions/RoleAssignment'
+  AssignAccounts:
+    type: object
+    required:
+    - accounts
+    properties:
+      accounts:
+        type: string
+        description: comma seperated list of accounts
+        example: "id1,id2,id3,..."
+
+
+  PasswordNew:
+    type: object
+    required:
+    - password
+    properties:
+      password:
+        description: new password
+        type: string
+
+  PasswordSuccess:
+    type: object
+    required:
+    - success
+    properties:
+      success:
+        description: result status
+        default: true
+        type: boolean
+
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        description: the error code
+      message:
+        type: string
+        description: the error message
+
+  Dataset:
+    type: object
+    required:
+    - ogit/content
+    - ogit/_id
+    - ogit/_type
+    - ogit/_graphtype
+    properties:
+      ogit/content:
+        type: string
+        description: content of dataset
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/_graphtype:
+        type: string
+        description: The graph type (vertex or edge)
+    additionalProperties:
+      type: string
+  DataSetContent:
+    type: object
+    required:
+    - parent
+    - ogit/name
+    properties:
+      ogit/name:
+        description: name of DataSet
+        type: string
+      ogit/description:
+        description: description of DataSet
+        type: string
+      ogit/Auth/vertexRule:
+        description: vertex-rule of DataSet
+        type: string
+      ogit/Auth/edgeRule:
+        description: edge-rule of DataSet
+        type: string
+  TeamContent:
+    type: object
+    required:
+    - parent
+    - ogit/name
+    properties:
+      parent:
+        description: ogit/_id of Auth/Organization or Auth/Team
+        type: string
+      ogit/name:
+        description: name of Auth/Team
+        type: string
+  OrganizationContent:
+    type: object
+    required:
+    - ogit/name
+    properties:
+      ogit/name:
+        description: name of Auth/Organization
+        type: string
+  Team:
+    type: object
+    required:
+    - ogit/name
+    - ogit/_id
+    - ogit/_type
+    - ogit/_graphtype
+    properties:
+      ogit/name:
+        type: string
+        description: name of Team
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/_graphtype:
+        type: string
+        description: The graph type (vertex or edge)
+    additionalProperties:
+      type: string
+  OrgDomain:
+    type: object
+    required:
+    - ogit/name
+    - ogit/_id
+    - ogit/_xid
+    - ogit/_type
+    - ogit/_graphtype
+    properties:
+      ogit/name:
+        type: string
+        description: name of Team
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_xid:
+        type: string
+        description: Unique identifier
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/_graphtype:
+        type: string
+        description: The graph type (vertex or edge)
+    additionalProperties:
+      type: string
+  DataScope:
+    type: object
+    required:
+    - ogit/name
+    - ogit/_id
+    - ogit/_xid
+    - ogit/_type
+    - ogit/_graphtype
+    properties:
+      ogit/name:
+        type: string
+        description: name of DataScope
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_xid:
+        type: string
+        description: Unique identifier
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/_graphtype:
+        type: string
+        description: The graph type (vertex or edge)
+    additionalProperties:
+      type: string
+  Organization:
+    type: object
+    required:
+    - ogit/name
+    - ogit/_id
+    - ogit/_type
+    - ogit/_graphtype
+    properties:
+      ogit/name:
+        type: string
+        description: name of Organization
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/_graphtype:
+        type: string
+        description: The graph type (vertex or edge)
+    additionalProperties:
+      type: string
+
+  Role:
+    type: object
+    required:
+    - ogit/_id
+    - ogit/_xid
+    - ogit/_type
+    - ogit/name
+    - ogit/Auth/vertexRule
+    - ogit/Auth/edgeRule
+    properties:
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_xid:
+        type: string
+        description: The xid of the Role, which is ogit/Auth/Role:\<orgId\>:\<ogit/name\>
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+      ogit/name:
+        type: string
+        description: name of Role
+      ogit/Auth/vertexRule:
+        type: string
+        description: jfilter expression defining rule to access vertices
+      ogit/Auth/edgeRule:
+        type: string
+        description: jfilter expression defining rule to access edges and out/in vertices
+      ogit/description:
+        type: string
+        description: description of Role
+    additionalProperties:
+      type: string
+  RoleCreateBody:
+    type: object
+    required:
+    - ogit/name
+    - ogit/Auth/vertexRule
+    - ogit/Auth/edgeRule
+    properties:
+      ogit/name:
+        description: name of Role
+        type: string
+      ogit/Auth/vertexRule:
+        type: string
+        description: jfilter expression defining rule to access vertices
+      ogit/Auth/edgeRule:
+        type: string
+        description: jfilter expression defining rule to access edges and out/in vertices
+      ogit/description:
+        type: string
+        description: description of Role
+  DomainCreateBody:
+    type: object
+    required:
+    - ogit/name
+    properties:
+      ogit/name:
+        description: name of Domain
+        type: string
+  DataScopeCreateBody:
+    type: object
+    required:
+    - ogit/name
+    properties:
+      ogit/name:
+        description: name of DataScope
+        type: string
+  RoleUpdateBody:
+    type: object
+    properties:
+      ogit/Auth/vertexRule:
+        type: string
+        description: jfilter expression defining rule to access vertices
+      ogit/Auth/edgeRule:
+        type: string
+        description: jfilter expression defining rule to access edges and out/in vertices
+      ogit/description:
+        type: string
+        description: description of Role
+  RoleAssignment:
+    type: object
+    required:
+    - ogit/_id
+    - ogit/_xid
+    - ogit/_type
+    properties:
+      ogit/_id:
+        type: string
+        description: Unique identifier
+      ogit/_xid:
+        type: string
+        description: The xid of the RoleAssignment, which is \<roleId\>\_\<teamId\>\_\<dataSetId\>
+      ogit/_type:
+        type: string
+        description: The type of the entity/verb
+    additionalProperties:
+      type: string
+  RoleAssignmentBody:
+    type: object
+    required:
+    - roleId
+    - teamId
+    - dataSetId
+    properties:
+      roleId:
+        description: id of the Auth Role
+        type: string
+      teamId:
+        description: id of the Auth Team
+        type: string
+      dataSetId:
+        description: id of the Auth DataSet
+        type: string
