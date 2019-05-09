@@ -50,7 +50,7 @@ export class Entity<T extends GraphVertex> {
         relations: Array<string>,
         options?: IQueryOptions
     ): (items: T) => Promise<T>;
-    find(query: LuceneQuery, options?: IQueryOptions): Promise<T | T[]>;
+    find(query: LuceneQuery, options?: IQueryOptions): Promise<T[]>;
     findById(idOrIds: string, options?: IQueryOptions): Promise<T>;
     findById(idOrIds: Array<string>, options?: IQueryOptions): Promise<T[]>;
     findOne(query: LuceneQuery, options?: IQueryOptions): Promise<T>;
