@@ -3,7 +3,7 @@
  *  Testing the Lucene Query Generator
  */
 import schema from "../__mocks__/schema.js";
-import parse, { getPlaceholderKeyForIndex } from "../../hiro-graph-lucene/src";
+import parse, { getPlaceholderKeyForIndex } from "@hiro-graph/lucene";
 
 describe("Lucene Query Generator:", function() {
     const simple = schema.get("Simple");
@@ -125,7 +125,7 @@ describe("Lucene Query Generator:", function() {
                 `ogit\\/_content.ngram:$ph_13) +_missing_:"/key13" +_missing_:"/key14"`,
                 `+ogit\\/_content.ngram:$ph_14`
             ].join(" "),
-            placeholders: ["\"value\"", "\"multi\""]
+            placeholders: ['"value"', '"multi"']
         },
         {
             name: "strings with quotes",
