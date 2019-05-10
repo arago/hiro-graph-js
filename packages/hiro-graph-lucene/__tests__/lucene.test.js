@@ -2,7 +2,7 @@
 /**
  *  Testing the Lucene Query Generator
  */
-import parse, { getPlaceholderKeyForIndex } from "@hiro-graph/lucene";
+import parse, { getPlaceholderKeyForIndex } from "../src";
 
 describe("Lucene Query Generator:", function() {
     const tests = [
