@@ -15,57 +15,57 @@ describe("Lucene Query Generator:", function() {
         {
             name: "simple id query (no entity type)",
             input: [{ _id: "xyz" }, internal],
-            output: `+ogit\\/_id:"xyz"`
+            output: `+ogit\\/_id:$ph_0`
         },
         {
             name: "simple id query",
             input: [{ _id: "xyz" }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/_id:"xyz"`
+            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/_id:$ph_0`
         },
         {
             name: "no entity, but _type query",
             input: [{ $or: { _type: ["Simple", "Minimal"] } }, internal],
-            output: `+(ogit\\/_type:"ogit/Simple" ogit\\/_type:"ogit/Minimal")`
+            output: `+(ogit\\/_type:$ph_0 ogit\\/_type:$ph_1)`
         },
         {
             name: "should convert key/values to persistence forms",
             input: [{ prop: "test" }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:"test"`
+            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:$ph_0`
         },
         {
             name: "multiple fields",
             input: [{ prop: "string", anotherProp: "second" }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:"string" +ogit\\/someOtherProp:"second"`
+            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:$ph_0 +ogit\\/someOtherProp:$ph_1`
         },
         {
             name: "multiple values (as and)",
             input: [{ prop: ["string", "value"] }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:"string" +ogit\\/requiredProp:"value"`
+            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:$ph_0 +ogit\\/requiredProp:$ph_1`
         },
         {
             name: "$not",
             input: [{ $not: { prop: "test" } }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +(-ogit\\/requiredProp:"test")`
+            output: `+ogit\\/_type:"ogit/Simple" +(-ogit\\/requiredProp:$ph_0)`
         },
         {
             name: "$not (multi value)",
             input: [{ $not: { prop: ["test", "not"] } }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +(-ogit\\/requiredProp:"test" -ogit\\/requiredProp:"not")`
+            output: `+ogit\\/_type:"ogit/Simple" +(-ogit\\/requiredProp:$ph_0 -ogit\\/requiredProp:$ph_1)`
         },
         {
             name: "$or (single value, trick question!)",
             input: [{ $or: { prop: "test" } }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +(+ogit\\/requiredProp:"test")`
+            output: `+ogit\\/_type:"ogit/Simple" +(+ogit\\/requiredProp:$ph_0)`
         },
         {
             name: "$or (multiple. same key)",
             input: [{ $or: { prop: ["test", "value"] } }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +(ogit\\/requiredProp:"test" ogit\\/requiredProp:"value")`
+            output: `+ogit\\/_type:"ogit/Simple" +(ogit\\/requiredProp:$ph_0 ogit\\/requiredProp:$ph_1)`
         },
         {
             name: "$or (multiple. diff key)",
             input: [{ $or: { prop: "test", anotherProp: "this too" } }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +(ogit\\/requiredProp:"test" ogit\\/someOtherProp:"this too")`
+            output: `+ogit\\/_type:"ogit/Simple" +(ogit\\/requiredProp:$ph_0 ogit\\/someOtherProp:$ph_1)`
         },
         {
             name: "$missing (single)",
@@ -118,29 +118,29 @@ describe("Lucene Query Generator:", function() {
                 extreme
             ],
             output: [
-                `+ogit\\/_type:"ogit/Extreme" +\\/key1:"value" +\\/key2:"multi" +\\/key2:"value"`,
-                `+(-\\/key4:"not" -\\/key5:"not" -\\/key5:"multi" -\\/key6:["notFrom" TO "notTo"]`,
-                `-\\/key7:["second" TO "range"] -(\\/key8:"not" \\/key8:"or" \\/key8:"values"))`,
-                `+(\\/key9:"or this" \\/key10:"two" \\/key10:"terms" (-\\/key11:"nor this") _missing_:"/key12"`,
-                `ogit\\/_content.ngram:$ph_0) +_missing_:"/key13" +_missing_:"/key14"`,
-                `+ogit\\/_content.ngram:$ph_1`
+                `+ogit\\/_type:"ogit/Extreme" +\\/key1:$ph_0 +\\/key2:$ph_1 +\\/key2:$ph_2`,
+                `+(-\\/key4:$ph_3 -\\/key5:$ph_4 -\\/key5:$ph_5 -\\/key6:["notFrom" TO "notTo"]`,
+                `-\\/key7:["second" TO "range"] -(\\/key8:$ph_6 \\/key8:$ph_7 \\/key8:$ph_8))`,
+                `+(\\/key9:$ph_9 \\/key10:$ph_10 \\/key10:$ph_11 (-\\/key11:$ph_12) _missing_:"/key12"`,
+                `ogit\\/_content.ngram:$ph_13) +_missing_:"/key13" +_missing_:"/key14"`,
+                `+ogit\\/_content.ngram:$ph_14`
             ].join(" "),
-            placeholders: ["or search", "test quoted term"]
+            placeholders: ['"value"', '"multi"']
         },
         {
             name: "strings with quotes",
             input: [{ prop: 'test " quoted' }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:"test \\" quoted"`
+            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:$ph_0`
         },
         {
             name: "strings with existing slashes",
             input: [{ prop: "test \\ slashed" }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:"test \\\\ slashed"`
+            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:$ph_0`
         },
         {
             name: "strings with exsiting slashed quotes",
             input: [{ prop: 'test \\" slashquoted' }, simple],
-            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:"test \\\\\\" slashquoted"`
+            output: `+ogit\\/_type:"ogit/Simple" +ogit\\/requiredProp:$ph_0`
         }
     ];
 
