@@ -32,7 +32,7 @@ describe("mock transport test", () => {
                 type: "query",
                 headers: { type: "vertices" },
                 body: {
-                    query: `+ogit\\/_type:"ogit/Simple" +ogit\\/_id:"test-id"`
+                    query: `+ogit\\/_type:"ogit/Simple" +ogit\\/_id:$ph_0`
                 }
             });
         });
