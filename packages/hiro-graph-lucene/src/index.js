@@ -105,8 +105,6 @@ const noRecurseKeys = ["$search", "$range", "$missing"];
 const normaliseQuery = queryObject => {
     return Object.keys(queryObject).map(key => {
         const value = queryObject[key];
-        // console.log("key:", key);
-        // console.log("value:", value);
         if (key[0] === "$" && noRecurseKeys.indexOf(key) === -1) {
             //we should recurse
             return { key, values: normaliseQuery(value) };
@@ -323,6 +321,9 @@ const findQuotedTerms = function(str) {
     return terms.filter(Boolean);
 };
 
+const checkTermForQuoting = term =>
+    typeof term === "string" ? quote(term) : term;
+
 //create a term query with an operator and many possible values.
 function luceneTerm(context, field, values) {
     //console.log("term", context, field, values);
@@ -333,8 +334,9 @@ function luceneTerm(context, field, values) {
         );
     }
     return values
-        .map(v => prop.encode(v)) // encode for graphit with our mapping
-        .map(v => (typeof v === "string" ? quote(v) : v)) //quote if needed
+        .map(prop.encode) // encode for graphit with our mapping
+        .map(checkTermForQuoting) //quote if needed
+        .map(term => createPlaceholder(context.placeholders, term))
         .map(
             term =>
                 term === null
@@ -348,8 +350,8 @@ function luceneTerm(context, field, values) {
 function luceneRange(context, field, lower, higher) {
     const prop = context.entity.prop(field);
     const [low, high] = [lower, higher]
-        .map(v => prop.encode(v))
-        .map(v => (typeof v === "string" ? quote(v) : v));
+        .map(prop.encode)
+        .map(checkTermForQuoting);
     return `${context.op}${slashForward(prop.src)}:[${low} TO ${high}]`;
 }
 
