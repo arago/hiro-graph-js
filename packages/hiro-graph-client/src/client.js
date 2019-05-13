@@ -324,9 +324,16 @@ export default class Client {
      */
     me(reqOptions = {}) {
         return this.wrapTimedEvent(
-            "me",
+            "getme",
             {},
-            this.dedupedRequest({ type: "me" }, reqOptions)
+            this.dedupedRequest(
+                {
+                    type: "getme",
+                    body: { "me-type": "account" },
+                    headers: { addProfile: true }
+                },
+                reqOptions
+            )
         );
     }
 
