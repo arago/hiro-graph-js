@@ -136,11 +136,20 @@ const cacheCheck = (
  * @ignore
  */
 export function fetchMe(ctx) {
-    const entity = ctx.getEntity("ogit/Auth/Account");
+    const accountEntity = ctx.getEntity("ogit/Auth/Account");
+    const profileEntity = ctx.getEntity("ogit/Auth/AccountProfile");
+
     return ctx
         .getClient()
         .me()
-        .then(vertexize(ctx, entity))
+        .then(({ account, avatar, profile }) =>
+            Promise.all([
+                vertexize(ctx, accountEntity)(account),
+                vertexize(ctx, profileEntity)(profile),
+                Promise.resolve(avatar)
+            ])
+        )
+        .then(([account, profile, avatar]) => ({ account, avatar, profile }))
         .then(returnOneOrThrow);
 }
 

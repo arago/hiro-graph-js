@@ -314,9 +314,13 @@ Object {
 
 exports[`Client Requests should call me correctly 1`] = `
 Object {
-  "body": Object {},
-  "headers": Object {},
-  "type": "me",
+  "body": Object {
+    "me-type": "account",
+  },
+  "headers": Object {
+    "addProfile": true,
+  },
+  "type": "getme",
 }
 `;
 
