@@ -40,7 +40,7 @@ const fetchMeForToken = createAction(
                 { token: accessToken }
             )
             .then(
-                me => {
+                ({ account: me }) => {
                     const myRoles = me["/roles"];
                     const myId = me["ogit/_id"];
                     const currentMe = getMyId(getState());
