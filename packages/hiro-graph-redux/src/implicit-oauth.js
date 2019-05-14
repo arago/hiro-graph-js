@@ -36,7 +36,7 @@ const fetchMeForToken = createAction(
             .http.request(
                 //force http transport.
                 null /* we don't use a token object here, but supply a fixed one - perhaps the api should update */,
-                { type: "me" },
+                { type: "getme" },
                 { token: accessToken }
             )
             .then(
