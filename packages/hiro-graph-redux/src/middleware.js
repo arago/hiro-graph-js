@@ -186,13 +186,9 @@ function middleware(ctxArgs, { dispatch: next, getState, subscribe }) {
     //also we proxy the `context.me` method to hook into
     //our store.
     const ormMe = orm.me.bind(orm);
-    orm.me = options => {
-        const id = getMyId(getState());
-        if (id) {
-            return orm.findById(id, options);
-        }
+    orm.me = () => {
         return ormMe().then(me => {
-            dispatch(setMe(me._id));
+            dispatch(setMe(me.account._id));
             return me;
         });
     };

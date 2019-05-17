@@ -1,36 +1,106 @@
 // this is just a tiny subset of the ontology
-const person = {
-    name: "Person",
-    ogit: "ogit/Person",
+const profile = {
+    name: "AuthAccountProfile",
+    ogit: "ogit/Auth/AccountProfile",
     required: {},
     optional: {
-        profileSet: {
-            src: "/profileSet",
-            type: "bool"
-        },
-        email: "ogit/email",
+        displayName: "ogit/Auth/Account/displayName",
+        acceptedEmails: "ogit/Auth/Account/acceptedEmails",
         firstName: "ogit/firstName",
         lastName: "ogit/lastName",
-        username: "ogit/alternativeName",
-        status: "ogit/status"
+        defaultOrg: "/defaultOrg",
+        jobRole: "/jobRole",
+        profilePicture: "/profilePicture",
+        profileSet: "/profileSet"
     },
     relations: {
-        orgs: "ogit/belongs -> ogit/Organization",
-        subordinates: "ogit/reports <- ogit/Person",
-        emails: "ogit/connects <- ogit/Email"
+        account: "ogit/Auth/belongs -> ogit/Auth/Account",
+        ownsAttachment: "ogit/belongs <- ogit/Attachment"
     }
 };
-export function createPerson(id) {
+
+const account = {
+    name: "AuthAccount",
+    ogit: "ogit/Auth/Account",
+    required: {
+        name: "ogit/name",
+        status: "ogit/status",
+        type: "ogit/Auth/Account/type"
+    },
+    optional: {
+        email: "ogit/email",
+        acceptedPrivacy: "ogit/Auth/Account/acceptedPrivacy",
+        acceptedTerms: "ogit/Auth/Account/acceptedTerms",
+        acceptedProjectTerms: "ogit/Auth/Account/acceptedProjectTerms",
+        allowCookies: "ogit/Auth/Account/allowCookies",
+        statusReason: "ogit/Auth/Account/statusReason"
+    },
+    relations: {
+        managesSubscription: "ogit/manages -> ogit/Subscription",
+        createsApplicationReview: "ogit/creates -> ogit/Auth/ApplicationReview",
+        acceptsTermsAndConditions: "ogit/accepts -> ogit/TermsAndConditions",
+        person: "ogit/belongs -> ogit/Person",
+        providesRating: "ogit/provides -> ogit/Rating",
+        assumesRole: "ogit/Auth/assumes -> ogit/Auth/Role",
+        usesApplication: "ogit/Auth/uses -> ogit/Auth/Application",
+        consentsApplication: "ogit/Auth/consents -> ogit/Auth/Application",
+        orgs: "ogit/Auth/isMemberOf -> ogit/Auth/Organization",
+        teams: "ogit/Auth/isMemberOf -> ogit/Auth/Team",
+        consumesMilestone: "ogit/consumes -> ogit/Project/Milestone",
+        consumesProject: "ogit/consumes -> ogit/Project/Project",
+        supervisesProject: "ogit/supervises -> ogit/Project/Project",
+        supervisesContract: "ogit/supervises -> ogit/Contract",
+        producesMilestone: "ogit/produces -> ogit/Project/Milestone",
+        producesProject: "ogit/produces -> ogit/Project/Project",
+        supportsMilestone: "ogit/supports -> ogit/Project/Milestone",
+        supportsProject: "ogit/supports -> ogit/Project/Project",
+        definesFilter: "ogit/defines -> ogit/UserMeta/Filter",
+        repliedWithReply: "ogit/repliedWith -> ogit/Survey/Reply",
+        profile: "ogit/Auth/belongs <- ogit/Auth/AccountProfile",
+        alertedByEvent: "ogit/alerts <- ogit/Event"
+    }
+};
+
+export function createProfile(id) {
     return {
-        "ogit/_id": id,
-        "ogit/_type": "ogit/Person",
-        "/profileSet": "true",
+        "ogit/_id": `${id}-profile`,
+        "ogit/_type": "ogit/Auth/AccountProfile",
         "ogit/firstName": `Jane (${id})`,
         "ogit/lastName": `Doe (${id})`,
-        "ogit/alternativeName": `jane-doe-${id}`,
-        "ogit/status": "active"
+        "ogit/displayName": `jane-doe-${id}`
     };
 }
+
+export function createAccount(id) {
+    return {
+        "ogit/_id": `${id}-account`,
+        "ogit/_type": "ogit/Auth/Account",
+        "ogit/email": `jane.${id}@doe`
+    };
+}
+
+export function createTeam(id) {
+    return {
+        "ogit/_id": id,
+        "ogit/_type": "ogit/Auth/Team",
+        "ogit/name": id
+    };
+}
+
+const team = {
+    name: "AuthTeam",
+    ogit: "ogit/Auth/Team",
+    required: { name: "ogit/name" },
+    optional: { description: "ogit/description" },
+    relations: {
+        members: "ogit/Auth/isMemberOf <- ogit/Auth/Account",
+        assignedByRoleAssignment:
+            "ogit/Auth/assigns <- ogit/Auth/RoleAssignment",
+        ownsTeam: "ogit/Auth/belongs <- ogit/Auth/Team",
+        belongsTeam: "ogit/Auth/belongs -> ogit/Auth/Team",
+        parentOrg: "ogit/Auth/belongs -> ogit/Auth/Organization"
+    }
+};
 
 const org = {
     name: "Org",
@@ -79,4 +149,4 @@ export function createEmail(id) {
         "ogit/status": "verified"
     };
 }
-export default [person, org, email];
+export default [account, profile, team, org, email];
