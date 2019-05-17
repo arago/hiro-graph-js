@@ -335,7 +335,6 @@ function luceneTerm(context, field, values) {
     }
     return values
         .map(prop.encode) // encode for graphit with our mapping
-        .map(checkTermForQuoting) //quote if needed
         .map(term => createPlaceholder(context.placeholders, term))
         .map(
             term =>
