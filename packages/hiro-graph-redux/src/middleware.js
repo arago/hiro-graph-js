@@ -14,7 +14,7 @@ import {
     TOKEN_INVALIDATION_HOOK,
     TASK_UPDATE
 } from "./actions";
-import { getMyId, $inflateVertex } from "./reducer";
+import { $inflateVertex } from "./reducer";
 import ReduxToken from "./token";
 import { cancelablePromise } from "./utils";
 import { isUnknown } from "@hiro-graph/client/lib/errors";
