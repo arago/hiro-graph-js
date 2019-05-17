@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/redux",
-    "version": "7.0.3",
+    "version": "7.0.4",
     "repository": "arago/hiro-graph-js",
     "description": "Redux awareness for the `@hiro-graph/orm` package",
     "main": "lib/index.js",

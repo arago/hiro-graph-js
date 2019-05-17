@@ -1,7 +1,11 @@
 /* eslint-env jest */
 // this is going to be crazy complex
 import createReduxStoreAndClient from "../__mocks__/store";
-import { createPerson } from "../__mocks__/mappings";
+import {
+    createTeam,
+    createAccount,
+    createProfile
+} from "../__mocks__/mappings";
 import {
     createTask,
     whenTask,
@@ -34,6 +38,7 @@ describe("testing test setup", () => {
                     ok: () => {
                         const myId = getMyId(store.getState());
                         expect(myId).toBeTruthy();
+                        expect(myId).toBe("me-account");
                         unsub();
                         unsub = undefined;
                         resolve();
@@ -49,18 +54,28 @@ describe("testing test setup", () => {
     });
 
     it("Verify Bug: fetch relation (1 result), disconnect (0 results), connect (still 0 results)", async () => {
-        const rel = "subordinates";
+        const rel = "teams";
         const relIds = rel + "Ids";
 
         const relationTask = createTask(orm => {
             // the "me" should be cached and not hit the client at all...
             // so we just need the gremlin response.
-            client.enqueueMockResponse([
-                createPerson("person1")
-                //createPerson("person2")
-            ]);
-            return orm.me().then(orm.fetchVertices([rel]));
+            client.enqueueMockResponse({
+                account: createAccount("me"),
+                profile: createProfile("me"),
+                avatar: ""
+            });
+
+            return orm.me().then(({ account: me }) => {
+                expect(me).toBeTruthy();
+                expect(me._id).toBe("me-account");
+
+                client.enqueueMockResponse([createTeam("team1")]);
+
+                return orm.fetchVertices([rel])(me);
+            });
         });
+
         const emptyArray = [];
         const relationVertexSelector = createVertexSelector(state => {
             const relTask = relationTask.selector(state);
@@ -71,23 +86,40 @@ describe("testing test setup", () => {
         });
 
         const disconnectTask = createTask(orm => {
+            client.enqueueMockResponse({
+                account: createAccount("me"),
+                profile: createProfile("me"),
+                avatar: ""
+            });
+
             client.enqueueMockResponse(
                 {}, // it is actually irrelevant as long as it isn't an error.
                 [] // this one is the new "relation" query result
             );
-            return orm.me().then(me => me.disconnect(rel, "person1"));
+
+            return orm
+                .me()
+                .then(({ account: me }) => me.disconnect(rel, "me-account"));
         });
+
         const connectTask = createTask(orm => {
-            client.enqueueMockResponse(
-                {}, // it is actually irrelevant as long as it isn't an error.
-                [createPerson("person3")] // this one is the new "relation" query result
-            );
-            return orm.me().then(me =>
-                me.connect(
+            client.enqueueMockResponse({
+                account: createAccount("me"),
+                profile: createProfile("me"),
+                avatar: ""
+            });
+
+            return orm.me().then(({ account: me }) => {
+                client.enqueueMockResponse(
+                    {}, // it is actually irrelevant as long as it isn't an error.
+                    [createTeam("team3")] // this one is the new "relation" query result
+                );
+
+                return me.connect(
                     rel,
-                    "person3"
-                )
-            );
+                    "team3"
+                );
+            });
         });
 
         let res, v;
@@ -98,11 +130,11 @@ describe("testing test setup", () => {
         //now we have finished, we should be able to select the result.
         res = relationTask.selector(store.getState());
         expect(whenTask(res, { ok: () => true })).toBe(true);
-        expect(res.result._rel[relIds]).toEqual(["person1"]);
+        expect(res.result._rel[relIds]).toEqual(["team1"]);
 
         v = relationVertexSelector(store.getState());
         expect(v.length).toEqual(1);
-        expect(v.map(n => n._id)).toEqual(["person1"]);
+        expect(v.map(n => n._id)).toEqual(["team1"]);
 
         // now we dispatch the disconnect.
         await store.dispatch(disconnectTask.action());
@@ -123,10 +155,10 @@ describe("testing test setup", () => {
 
         // THIS IS WHERE THE BUG WAS
 
-        expect(res.result._rel[relIds]).toEqual(["person3"]);
+        expect(res.result._rel[relIds]).toEqual(["team3"]);
 
         v = relationVertexSelector(store.getState());
         expect(v.length).toEqual(1);
-        expect(v.map(n => n._id)).toEqual(["person3"]);
+        expect(v.map(n => n._id)).toEqual(["team3"]);
     });
 });

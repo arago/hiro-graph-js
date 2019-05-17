@@ -12,7 +12,7 @@ global.window = {
 };
 
 import createMockClient from "@hiro-graph/client/lib/mock";
-import mappings, { createPerson } from "./mappings";
+import mappings, { createProfile, createAccount } from "./mappings";
 import {
     createToken,
     graphReducer,
@@ -63,7 +63,10 @@ const createReduxStoreAndClient = () => {
                 // don't do anything
                 setTimeout(() => {
                     // the orm will make a request to "me" immediately. we need to be ready for that.
-                    client.enqueueMockResponse(createPerson("me"));
+                    client.enqueueMockResponse({
+                        account: createAccount("me"),
+                        profile: createProfile("me")
+                    });
                     callback(null, {
                         accessToken: "redux-token",
                         meta: { expiry: Date.now() + 3600e3 }
