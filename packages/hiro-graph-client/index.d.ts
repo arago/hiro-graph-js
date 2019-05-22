@@ -2,7 +2,6 @@
 
 import { w3cwebsocket as WS } from "websocket";
 import fetch, { Response } from "node-fetch";
-import { ReduxToken } from "@hiro-graph/redux";
 
 // HttpTransport
 
@@ -95,7 +94,7 @@ export interface IServletMethods {
 
 export default class Client {
     endpoint: string;
-    token: ReduxToken;
+    token: Token;
     http: HttpTransport;
     transport: WebSocketTransport | HttpTransport;
     fetch: (
@@ -110,7 +109,7 @@ export default class Client {
         proxies?: string[]
     );
     me(): object;
-    getToken(): ReduxToken;
+    getToken<T extends Token = Token>(): T;
     addServlet(
         prefix: string,
         servletMethods: IServletMethods,
