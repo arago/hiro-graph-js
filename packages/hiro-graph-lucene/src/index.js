@@ -102,14 +102,14 @@ const noRecurseKeys = ["$search", "$range", "$missing"];
 
 //forces all properties to be arrays.
 //knows how to recurse and when not to.
-const normaliseQuery = queryObject => {
+const normaliseQuery = (queryObject, isAnyOperator = false) => {
     return Object.keys(queryObject).map(key => {
         const value = queryObject[key];
         if (key[0] === "$" && noRecurseKeys.indexOf(key) === -1) {
             //we should recurse
-            return { key, values: normaliseQuery(value) };
+            return { key, values: normaliseQuery(value, true) };
         }
-        return { key, values: ensureArray(value) };
+        return { key, values: ensureArray(value), isAnyOperator };
     });
 };
 
@@ -117,23 +117,34 @@ const normaliseQuery = queryObject => {
  *  This is the recursive part that constructs the querystring from the
  *  query given.
  */
-function createQuerySegment(context, query) {
-    //    console.log("segment", query);
+function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
+    // console.log("segment", query);
     return query
-        .map(({ key, values }) => {
+        .map(({ key, values, isAnyOperator }) => {
             //always make value an array
             if (key[0] === "$") {
                 //special case!
                 return operators[key](context, values);
             }
+            if (!isAnyOperator && values.length > 1) {
+                return createQuerySegmentForMultiValues(context, key, values);
+            }
             //default prop => values
-            return luceneTerm(context, key, values);
+            return luceneTerm(context, key, values, isPlaceholdersNeeded);
         })
         .join(" ");
 }
 
 //helper to flatten an array of arrays
 //const doubleFlatten = arrayOfArrays => arrayOfArrays.map().join(" ");
+
+// create segment with OR rule if we have array of values without any operator
+const createQuerySegmentForMultiValues = (context, key, values) =>
+    `+(${values
+        .map(slashString)
+        .map(term => createPlaceholder(context.placeholders, term))
+        .map(term => `${slashForward(key)}:${term}`)
+        .join(" ")})`;
 
 /**
  *  So all of the "special" props are held here with how they work.
@@ -220,7 +231,11 @@ const mapOperator = (context, op, values) => {
             : op;
     //set the inner context's op
     context.op = nextOp;
-    const segment = `${currentOp}(${createQuerySegment(context, values)})`;
+    const segment = `${currentOp}(${createQuerySegment(
+        context,
+        values,
+        true
+    )})`;
     //return the context's op to the previous
     context.op = currentOp;
     return segment;
@@ -241,18 +256,19 @@ const quote = function(string) {
 
 const SOLIDUS = "/";
 const SLASH = "\\"; // two because it has to be escaped.
-const QUOTE = `"`; // just to make the code more readable
+const QUOTE = `"`;
+const SINGLE_QUOTE = `'`; // just to make the code more readable
 
 const slashForward = input => input.replace(/[/]/g, SLASH + SOLIDUS);
 
 // this escapes quotes and slashes
 const slashString = function(input) {
-    return input.replace(/([\\"])/g, function(i, slashOrQuote) {
+    return input.replace(/([\\"'])/g, function(i, slashOrQuote) {
         switch (slashOrQuote) {
             case SLASH:
                 return SLASH + SLASH;
-            case QUOTE:
-                return SLASH + QUOTE;
+            case QUOTE || SINGLE_QUOTE:
+                return `'`;
             default:
                 break;
         }
@@ -325,7 +341,7 @@ const checkTermForQuoting = term =>
     typeof term === "string" ? quote(term) : term;
 
 //create a term query with an operator and many possible values.
-function luceneTerm(context, field, values) {
+function luceneTerm(context, field, values, isPlaceholdersNeeded) {
     //console.log("term", context, field, values);
     const prop = context.entity.prop(field);
     if (!prop) {
@@ -335,7 +351,12 @@ function luceneTerm(context, field, values) {
     }
     return values
         .map(prop.encode) // encode for graphit with our mapping
-        .map(term => createPlaceholder(context.placeholders, term))
+        .map(
+            term =>
+                isPlaceholdersNeeded
+                    ? createPlaceholder(context.placeholders, slashString(term))
+                    : quote(term)
+        ) // add placeholders only for $and, $or, $must, $not sections
         .map(
             term =>
                 term === null
