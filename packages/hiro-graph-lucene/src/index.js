@@ -131,7 +131,7 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
  *  This is the recursive part that constructs the querystring from the
  *  query given.
  */
-function createQuerySegment(context, query) {
+function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
     // console.log("segment", query);
     return query
         .map(({ key, values, isAnyOperator }) => {
@@ -144,7 +144,7 @@ function createQuerySegment(context, query) {
                 return createQuerySegmentForMultiValues(context, key, values);
             }
             //default prop => values
-            return luceneTerm(context, key, values);
+            return luceneTerm(context, key, values, isPlaceholdersNeeded);
         })
         .join(" ");
 }
@@ -344,18 +344,26 @@ function checkTermForQuoting(term) {
     return typeof term === "string" ? quote(term) : term;
 }
 //create a term query with an operator and many possible values.
-function luceneTerm(context, field, values) {
-    //console.log("term", context, field, values);
+function luceneTerm(context, field, values, isPlaceholdersNeeded) {
+    // TODO: remove force reassign after fixing BE issues according to escaping
+    // eslint-disable-next-line no-param-reassign
+    isPlaceholdersNeeded = false;
     const prop = context.entity.prop(field);
     if (!prop) {
         throw new TypeError(
             `Cannot find '${field}' of type '${context.entity.name}'`
         );
     }
-    // TODO: add placeholders replacement after fixing BE issues according to escaping
+
     return values
         .map(prop.encode) // encode for graphit with our mapping
         .map(checkTermForQuoting)
+        .map(
+            term =>
+                isPlaceholdersNeeded
+                    ? createPlaceholder(context.placeholders, slashString(term))
+                    : term
+        ) // add placeholders only for $and, $or, $must, $not sections for preventing breaking changes
         .map(
             term =>
                 term === null
