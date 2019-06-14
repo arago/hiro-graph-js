@@ -109,6 +109,20 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
             //we should recurse
             return { key, values: normaliseQuery(value, true) };
         }
+        if (key.match(/\.ngram$/)) {
+            // ngram search doesn't work with quoted phrases, like a "Single value", "Run machine".
+            // Because of that we need to split our value by whitespace
+            if (!Array.isArray(value)) {
+                return { key, values: value.split(" "), isAnyOperator };
+            } else {
+                const values = value.reduce(
+                    (acc, val) => acc.concat(val.split(" ")),
+                    []
+                );
+                return { key, values, isAnyOperator };
+            }
+        }
+
         return { key, values: ensureArray(value), isAnyOperator };
     });
 };
@@ -117,7 +131,7 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
  *  This is the recursive part that constructs the querystring from the
  *  query given.
  */
-function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
+function createQuerySegment(context, query) {
     // console.log("segment", query);
     return query
         .map(({ key, values, isAnyOperator }) => {
@@ -130,7 +144,7 @@ function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
                 return createQuerySegmentForMultiValues(context, key, values);
             }
             //default prop => values
-            return luceneTerm(context, key, values, isPlaceholdersNeeded);
+            return luceneTerm(context, key, values);
         })
         .join(" ");
 }
@@ -141,10 +155,11 @@ function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
 // create segment with OR rule if we have array of values without any operator
 const createQuerySegmentForMultiValues = (context, key, values) =>
     `+(${values
-        .map(slashString)
-        .map(term => createPlaceholder(context.placeholders, term))
+        .map(checkTermForQuoting)
         .map(term => `${slashForward(key)}:${term}`)
         .join(" ")})`;
+
+// TODO: add placeholders replacement after fixing BE issues according to escaping
 
 /**
  *  So all of the "special" props are held here with how they work.
@@ -257,23 +272,11 @@ const quote = function(string) {
 const SOLIDUS = "/";
 const SLASH = "\\"; // two because it has to be escaped.
 const QUOTE = `"`;
-const SINGLE_QUOTE = `'`; // just to make the code more readable
 
 const slashForward = input => input.replace(/[/]/g, SLASH + SOLIDUS);
 
 // this escapes quotes and slashes
-const slashString = function(input) {
-    return input.replace(/([\\"'])/g, function(i, slashOrQuote) {
-        switch (slashOrQuote) {
-            case SLASH:
-                return SLASH + SLASH;
-            case QUOTE || SINGLE_QUOTE:
-                return `'`;
-            default:
-                break;
-        }
-    });
-};
+const slashString = input => input.replace(/[\\"]/g, char => SLASH + char);
 
 //run through the term string and pull out terms.
 //if there are any quotes, this becomes complex...
@@ -337,11 +340,11 @@ const findQuotedTerms = function(str) {
     return terms.filter(Boolean);
 };
 
-const checkTermForQuoting = term =>
-    typeof term === "string" ? quote(term) : term;
-
+function checkTermForQuoting(term) {
+    return typeof term === "string" ? quote(term) : term;
+}
 //create a term query with an operator and many possible values.
-function luceneTerm(context, field, values, isPlaceholdersNeeded) {
+function luceneTerm(context, field, values) {
     //console.log("term", context, field, values);
     const prop = context.entity.prop(field);
     if (!prop) {
@@ -349,14 +352,10 @@ function luceneTerm(context, field, values, isPlaceholdersNeeded) {
             `Cannot find '${field}' of type '${context.entity.name}'`
         );
     }
+    // TODO: add placeholders replacement after fixing BE issues according to escaping
     return values
         .map(prop.encode) // encode for graphit with our mapping
-        .map(
-            term =>
-                isPlaceholdersNeeded
-                    ? createPlaceholder(context.placeholders, slashString(term))
-                    : quote(term)
-        ) // add placeholders only for $and, $or, $must, $not sections
+        .map(checkTermForQuoting)
         .map(
             term =>
                 term === null
