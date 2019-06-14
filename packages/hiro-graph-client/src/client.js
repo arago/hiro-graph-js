@@ -21,6 +21,9 @@ import EventStream from "./eventstream";
 import subscriberFanout from "./subscriber-fanout";
 import timer from "./timer";
 
+import authServlet from "./servlets/auth";
+import apiServlet from "./servlets/api";
+
 const passthru = fn => [
     r => (fn(), r),
     e => {
@@ -42,7 +45,7 @@ const dereference = obj => {
 };
 
 export default class Client {
-    constructor({ endpoint, token }, transportOptions = {}) {
+    constructor({ endpoint, token }, transportOptions = {}, proxies = []) {
         this.endpoint = endpoint;
 
         //we hold on to the token for ease of access/manual invalidation
@@ -81,6 +84,20 @@ export default class Client {
         this._servlets = [];
 
         this._pubsub = subscriberFanout();
+
+        // Auth API
+        this.addServlet(
+            "auth",
+            authServlet,
+            proxies.length >= 1 ? proxies[0] : ""
+        );
+
+        // Global API
+        this.addServlet(
+            "api",
+            apiServlet,
+            proxies.length >= 2 ? proxies[1] : ""
+        );
     }
 
     // NB this is not held anywhere in this instance, but returned
@@ -307,9 +324,16 @@ export default class Client {
      */
     me(reqOptions = {}) {
         return this.wrapTimedEvent(
-            "me",
+            "getme",
             {},
-            this.dedupedRequest({ type: "me" }, reqOptions)
+            this.dedupedRequest(
+                {
+                    type: "getme",
+                    body: { "me-type": "account" },
+                    headers: { addProfile: true }
+                },
+                reqOptions
+            )
         );
     }
 

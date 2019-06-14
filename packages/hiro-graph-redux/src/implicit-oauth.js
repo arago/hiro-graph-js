@@ -36,19 +36,23 @@ const fetchMeForToken = createAction(
             .http.request(
                 //force http transport.
                 null /* we don't use a token object here, but supply a fixed one - perhaps the api should update */,
-                { type: "me" },
+                { type: "getme" },
                 { token: accessToken }
             )
             .then(
-                me => {
+                ({ account: me, profile }) => {
                     const myRoles = me["/roles"];
                     const myId = me["ogit/_id"];
                     const currentMe = getMyId(getState());
+
                     if (currentMe && currentMe !== myId) {
                         window.location.reload(); // a hard refresh is best.
                     }
+
                     //put vertex into ORM cache
                     orm.insertRaw(me, orm);
+                    orm.insertRaw(profile, orm);
+
                     //when it is in, continue
                     orm._notifyCacheFlush(() => {
                         dispatch(setToken(accessToken, meta, myId, myRoles));
