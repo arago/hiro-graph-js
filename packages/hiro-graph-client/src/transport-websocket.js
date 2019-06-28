@@ -212,8 +212,11 @@ export default class WebSocketTransport {
 
                     if (object.more === true) {
                         emit({
-                            name: "ws:more",
-                            data: { id, count: handle.result.length }
+                            name: "ws:data",
+                            data: {
+                                data: body
+                            },
+                            more: object.more
                         });
                         return;
                     }
@@ -221,10 +224,7 @@ export default class WebSocketTransport {
                     //remove object from inflight immediately.
                     inflight.delete(id);
                     //ok, we should have an array in handle.result
-                    emit({
-                        name: "ws:multi",
-                        data: { id, count: handle.result.length }
-                    });
+
                     handle.callback(null, handle.result);
                 };
 
@@ -292,12 +292,8 @@ export default class WebSocketTransport {
                                             return connectionClosedBeforeSend;
                                         }
                                         ref();
-                                        let called = false;
+
                                         const callback = (err, data) => {
-                                            if (called) {
-                                                return;
-                                            }
-                                            called = true;
                                             unref();
                                             emit({
                                                 name: "ws:complete",

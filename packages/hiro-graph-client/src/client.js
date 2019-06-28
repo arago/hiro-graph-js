@@ -149,9 +149,13 @@ export default class Client {
             .request(
                 this.token,
                 { type, headers, body },
-                Object.assign({ debug: this._debug_requests }, reqOptions, {
-                    emit: this._pubsub.fanout
-                })
+                Object.assign(
+                    { debug: this._debug_requests },
+                    {
+                        emit: this._pubsub.fanout
+                    },
+                    reqOptions
+                )
             )
             .catch(err => {
                 this._pubsub.fanout({ name: "client:error", data: err });
@@ -417,6 +421,7 @@ export default class Client {
                 ? fields.join(",")
                 : String(fields);
         }
+
         return this.wrapTimedEvent(
             "lucene",
             body,
