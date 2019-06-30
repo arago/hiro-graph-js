@@ -189,7 +189,9 @@ export default class WebSocketTransport {
 
                     if (!object.multi) {
                         emit({ name: "ws:single", data: { id } });
-                        handle.sub.next(body);
+                        if (handle.sub && handle.sub.next) {
+                            handle.sub.next(body);
+                        }
                         //This is a single packet response.
                         handle.callback(null, body);
                         inflight.delete(id);
@@ -216,7 +218,9 @@ export default class WebSocketTransport {
                             name: "ws:more",
                             data: { id, count: handle.result.length }
                         });
-                        handle.sub.next(body);
+                        if (handle.sub && handle.sub.next) {
+                            handle.sub.next(body);
+                        }
                         return;
                     }
                     //final response
@@ -227,7 +231,9 @@ export default class WebSocketTransport {
                         name: "ws:multi",
                         data: { id, count: handle.result.length }
                     });
-                    handle.sub.next(body);
+                    if (handle.sub && handle.sub.next) {
+                        handle.sub.next(body);
+                    }
                     handle.callback(null, handle.result);
                 };
 
