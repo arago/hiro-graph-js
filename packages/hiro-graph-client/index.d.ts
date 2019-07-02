@@ -11,6 +11,25 @@ interface IRequestParams {
     body?: object;
 }
 
+interface EmitMessage {
+    name: "string";
+    data?: object;
+}
+
+interface Subscriber<T> {
+    next?: (value?: T) => void;
+    error?: (err?: any) => void;
+    complete?: () => void;
+}
+
+interface ReqOptions<T = any> {
+    waitForIndex?: boolean;
+    headers?: object;
+    token?: string;
+    emit?: (message: EmitMessage) => void;
+    sub?: Subscriber<T>;
+}
+
 declare class HttpTransport {
     endpoint: string;
     constructor(endpoint: string);
@@ -18,12 +37,12 @@ declare class HttpTransport {
         token: string,
         url: string,
         options?: object,
-        reqOptions?: object
+        reqOptions?: ReqOptions
     ): Promise<Response>;
     request(
         token: string,
         params?: IRequestParams,
-        reqOptions?: object
+        reqOptions?: ReqOptions
     ): Promise<Response>;
     defaultFetchOptions(): {
         method: "GET";
@@ -62,6 +81,38 @@ declare class WebSocketTransport {
     };
 }
 
+// EventStream
+
+interface EventStreamOptions {
+    groupId?: number;
+    offset?: number;
+}
+
+interface Event<T = any> {
+    id: string;
+    identity: string;
+    type: "CREATE" | "READ" | "UPDATE" | "DELETE" | "WRITETIMESERIES";
+    timestamp: number;
+    nanotime: number;
+    body: T;
+}
+
+type Unsubscribe = () => void;
+
+type EventHandler = <T = any>(event: Event<T>) => void;
+
+declare class EventStream {
+    constructor(
+        clientParams: IClientParams,
+        options?: EventStreamOptions & { filters?: string[] },
+        emit?: (message: EmitMessage) => void
+    );
+
+    subscribe: <T = any>(handler: EventHandler) => Unsubscribe;
+    register: (filter: string) => void;
+    unregister: (filter: string) => void;
+}
+
 // Client
 
 export class Token {
@@ -97,22 +148,38 @@ export default class Client {
     token: Token;
     http: HttpTransport;
     transport: WebSocketTransport | HttpTransport;
-    fetch: (
-        url: string,
-        options?: object,
-        reqOptions?: object
-    ) => Promise<Response>;
 
     constructor(
         params: IClientParams,
         transportOptions?: object,
         proxies?: string[]
     );
+
+    private _pubsub: {
+        subscribe: (message: EmitMessage) => void;
+    };
+
     me(): object;
-    getToken<T extends Token = Token>(): T;
+    eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
     addServlet(
         prefix: string,
         servletMethods: IServletMethods,
         proxy?: string
     ): Client;
+    fetch: (
+        url: string,
+        options?: object,
+        reqOptions?: object
+    ) => Promise<Response>;
+    gremlin: <T>(
+        root: string,
+        query: string,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T>;
+    lucene: <T>(
+        query: string,
+        options?: object,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T>;
+    getToken<T extends Token = Token>(): T;
 }
