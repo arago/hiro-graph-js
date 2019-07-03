@@ -1,7 +1,7 @@
 // Auth API
 
 import { w3cwebsocket as WS } from "websocket";
-import fetch, { Response } from "node-fetch";
+import fetch, { Response, RequestInit } from "node-fetch";
 
 // HttpTransport
 
@@ -36,7 +36,7 @@ declare class HttpTransport {
     fetch(
         token: string,
         url: string,
-        options?: object,
+        init?: RequestInit,
         reqOptions?: ReqOptions
     ): Promise<Response>;
     request(
@@ -166,7 +166,7 @@ export default class Client {
     ): Client;
     fetch: (
         url: string,
-        options?: object,
+        init?: RequestInit,
         reqOptions?: object
     ) => Promise<Response>;
     gremlin: <T>(
