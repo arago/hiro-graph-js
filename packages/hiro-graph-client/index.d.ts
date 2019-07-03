@@ -133,13 +133,15 @@ interface IClientParams {
 
 export type IServletFetchType = typeof fetch;
 
-export interface IServletMethods {
-    [index: string]: (
-        fetch: IServletFetchType,
-        options?: object,
-        data?: any
-    ) => void;
+export interface Servlet {
+    [index: string]: ServletFunction;
 }
+
+export type ServletFunction<Data = any, Response = any> = (
+    fetch: Client["fetch"],
+    init?: RequestInit,
+    data?: Data
+) => Promise<Response>;
 
 export default class Client {
     endpoint: string;
@@ -159,16 +161,12 @@ export default class Client {
 
     me(): object;
     eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
-    addServlet(
-        prefix: string,
-        servletMethods: IServletMethods,
-        proxy?: string
-    ): Client;
-    fetch: (
+    addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
+    fetch: <T = object>(
         url: string,
         init?: RequestInit,
         reqOptions?: object
-    ) => Promise<Response>;
+    ) => Promise<T>;
     gremlin: <T>(
         root: string,
         query: string,
@@ -181,3 +179,7 @@ export default class Client {
     ) => Promise<T>;
     getToken<T extends Token = Token>(): T;
 }
+
+export type ClientWithServlets<
+    Servlets extends { [index: string]: Servlet }
+> = Client & Servlets;
