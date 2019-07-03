@@ -12,8 +12,8 @@ interface IRequestParams {
 }
 
 interface EmitMessage {
-    name: "string";
-    data?: object;
+    name: string;
+    data?: any;
 }
 
 interface Subscriber<T> {
@@ -56,9 +56,7 @@ declare class HttpTransport {
 
 // WebSocketTransport
 
-type EmitFunctionType = (
-    { name, data }: { name: string; data: object }
-) => void;
+type EmitHandler = (message: EmitMessage) => void;
 
 declare class WebSocketTransport {
     endpoint: string;
@@ -69,8 +67,8 @@ declare class WebSocketTransport {
         params?: IRequestParams,
         reqOptions?: object
     ): Promise<WS>;
-    connect(token: string, emit: EmitFunctionType): Promise<WS>;
-    createWebSocket(initialToken: string, emit: EmitFunctionType): Promise<WS>;
+    connect(token: string, emit: EmitHandler): Promise<WS>;
+    createWebSocket(initialToken: string, emit: EmitHandler): Promise<WS>;
     defaultFetchOptions(): {
         method: "GET";
         headers: {
@@ -88,7 +86,7 @@ interface EventStreamOptions {
     offset?: number;
 }
 
-interface Event<T = any> {
+declare interface HiroEvent<T = any> {
     id: string;
     identity: string;
     type: "CREATE" | "READ" | "UPDATE" | "DELETE" | "WRITETIMESERIES";
@@ -97,9 +95,9 @@ interface Event<T = any> {
     body: T;
 }
 
-type Unsubscribe = () => void;
+type EventUnsubscribe = () => void;
 
-type EventHandler = <T = any>(event: Event<T>) => void;
+type EventHandler = <T = any>(event: HiroEvent<T>) => void;
 
 declare class EventStream {
     constructor(
@@ -108,7 +106,7 @@ declare class EventStream {
         emit?: (message: EmitMessage) => void
     );
 
-    subscribe: <T = any>(handler: EventHandler) => Unsubscribe;
+    subscribe: <T = any>(handler: EventHandler) => EventUnsubscribe;
     register: (filter: string) => void;
     unregister: (filter: string) => void;
 }
@@ -130,7 +128,7 @@ export class Token {
 
 interface IClientParams {
     endpoint: string;
-    token: string;
+    token: string | Token;
 }
 
 export type IServletFetchType = typeof fetch;
@@ -139,7 +137,7 @@ export interface IServletMethods {
     [index: string]: (
         fetch: IServletFetchType,
         options?: object,
-        data?: object
+        data?: any
     ) => void;
 }
 
@@ -156,7 +154,7 @@ export default class Client {
     );
 
     private _pubsub: {
-        subscribe: (message: EmitMessage) => void;
+        subscribe: (emit: EmitHandler) => void;
     };
 
     me(): object;
