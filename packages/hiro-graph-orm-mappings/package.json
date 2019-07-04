@@ -13,16 +13,13 @@
         "test": "echo no tests"
     },
     "dependencies": {
-        "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
-        "@hiro-graph/orm": "^6.0.8",
+        "@hiro-graph/orm": "^6.0.8"
+    },
+    "devDependencies": {
         "babel-eslint": "^10.0.2",
         "eslint": "^6.0.1",
         "husky": "^3.0.0",
-        "lerna": "^3.10.8",
         "lint-staged": "^9.0.2",
-        "prettier": "1.18.2"
-    },
-    "devDependencies": {
         "@arago/OGIT": "https://github.com/arago/OGIT.git#master",
         "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "@types/mustache": "^0.8.32",
