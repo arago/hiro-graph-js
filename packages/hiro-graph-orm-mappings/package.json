@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/orm-mappings",
-    "version": "6.0.13",
+    "version": "6.0.14",
     "main": "lib/index.js",
     "typings": "lib/index.d.ts",
     "description": "Automatic generation of ORM mapping based on OGIT",
@@ -16,15 +16,15 @@
         "@hiro-graph/orm": "^6.0.8"
     },
     "devDependencies": {
-        "babel-eslint": "^10.0.2",
-        "eslint": "^6.0.1",
-        "husky": "^3.0.0",
-        "lint-staged": "^9.0.2",
         "@arago/OGIT": "https://github.com/arago/OGIT.git#master",
         "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "@types/mustache": "^0.8.32",
         "@types/shelljs": "^0.8.2",
+        "babel-eslint": "^10.0.2",
+        "eslint": "^6.0.1",
+        "husky": "^3.0.0",
         "lerna": "^3.10.8",
+        "lint-staged": "^9.0.2",
         "mustache": "^3.0.1",
         "prettier": "^1.16.4",
         "shelljs": "^0.8.3",
