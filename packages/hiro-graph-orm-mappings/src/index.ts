@@ -200,7 +200,7 @@ const output: IOutput = {};
         const fileName = key
             .toLowerCase()
             .replace("ogit/", "")
-            .replace(/\//g, "-").trim();
+            .replace(/\//g, "-");
         const name = output[key].name
             .replace(/-|\//g, "")
             .replace("oslc", "OSLC");
