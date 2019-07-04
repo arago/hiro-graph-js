@@ -1,7 +1,7 @@
 {
     "name": "@hiro-graph/client",
     "repository": "arago/hiro-graph-js",
-    "version": "6.0.5",
+    "version": "6.0.6",
     "types": "index.d.ts",
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
@@ -19,11 +19,11 @@
         "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "@types/node-fetch": "*",
         "@types/websocket": "*",
-        "eslint": "^5.3.0",
-        "husky": "^1.1.2",
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
         "babel-preset-hiro": "^0.4.1",
+        "eslint": "^5.3.0",
+        "husky": "^1.1.2",
         "jest": "^23.5.0"
     },
     "babel": {
