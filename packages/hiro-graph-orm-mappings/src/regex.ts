@@ -29,7 +29,7 @@ function getAttributes(regex: RegExp, input: string) {
 
     for (const v of data) {
         const name = v.split("/").pop();
-        if (!name || name === "_id") {
+        if (!name || name === "_id" || name === "_tags") {
             continue;
         }
 
