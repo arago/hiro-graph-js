@@ -1,4 +1,4 @@
-import Client from "@hiro-graph/client";
+type Client = typeof import("@hiro-graph/client").default;
 
 export interface IDefinitionData {
     [index: string]: string;

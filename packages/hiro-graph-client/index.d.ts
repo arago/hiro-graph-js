@@ -1,7 +1,9 @@
 // Auth API
 
-import { w3cwebsocket as WS } from "websocket";
-import fetch, { Response, RequestInit } from "node-fetch";
+type WS = import("websocket").w3cwebsocket;
+type fetch = typeof import("node-fetch").default;
+type Response = import("node-fetch").Response;
+type RequestInit = import("node-fetch").RequestInit;
 
 // HttpTransport
 
@@ -131,7 +133,7 @@ interface IClientParams {
     token: string | Token;
 }
 
-export type IServletFetchType = typeof fetch;
+export type IServletFetchType = fetch;
 
 export interface Servlet {
     [index: string]: ServletFunction;
