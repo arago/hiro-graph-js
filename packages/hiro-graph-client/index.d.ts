@@ -1,10 +1,3 @@
-// Auth API
-
-type WS = import("websocket").w3cwebsocket;
-type fetch = typeof import("node-fetch").default;
-type Response = import("node-fetch").Response;
-type RequestInit = import("node-fetch").RequestInit;
-
 // HttpTransport
 
 interface IRequestParams {
@@ -38,14 +31,14 @@ declare class HttpTransport {
     fetch(
         token: string,
         url: string,
-        init?: RequestInit,
+        init?: import("node-fetch").RequestInit,
         reqOptions?: ReqOptions
-    ): Promise<Response>;
+    ): Promise<import("node-fetch").Response>;
     request(
         token: string,
         params?: IRequestParams,
         reqOptions?: ReqOptions
-    ): Promise<Response>;
+    ): Promise<import("node-fetch").Response>;
     defaultFetchOptions(): {
         method: "GET";
         headers: {
@@ -68,9 +61,15 @@ declare class WebSocketTransport {
         token: string,
         params?: IRequestParams,
         reqOptions?: object
-    ): Promise<WS>;
-    connect(token: string, emit: EmitHandler): Promise<WS>;
-    createWebSocket(initialToken: string, emit: EmitHandler): Promise<WS>;
+    ): Promise<import("websocket").w3cwebsocket>;
+    connect(
+        token: string,
+        emit: EmitHandler
+    ): Promise<import("websocket").w3cwebsocket>;
+    createWebSocket(
+        initialToken: string,
+        emit: EmitHandler
+    ): Promise<import("websocket").w3cwebsocket>;
     defaultFetchOptions(): {
         method: "GET";
         headers: {
@@ -133,7 +132,7 @@ interface IClientParams {
     token: string | Token;
 }
 
-export type IServletFetchType = fetch;
+export type IServletFetchType = typeof import("node-fetch").default;
 
 export interface Servlet {
     [index: string]: ServletFunction;
@@ -141,7 +140,7 @@ export interface Servlet {
 
 export type ServletFunction<Data = any, Response = any> = (
     fetch: Client["fetch"],
-    init?: RequestInit,
+    init?: import("node-fetch").RequestInit,
     data?: Data
 ) => Promise<Response>;
 
@@ -166,7 +165,7 @@ export default class Client {
     addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
     fetch: <T = object>(
         url: string,
-        init?: RequestInit,
+        init?: import("node-fetch").RequestInit,
         reqOptions?: object
     ) => Promise<T>;
     gremlin: <T>(

@@ -1,5 +1,3 @@
-type Client = import("@hiro-graph/client").default;
-
 export interface IDefinitionData {
     [index: string]: string;
 }
@@ -188,18 +186,20 @@ type FetchReturn = <T extends GraphVertex | GraphVertex[]>(
 
 export default class Context {
     private _cache: Map<string, object>;
-    private _client: Client;
+    private _client: import("@hiro-graph/client").default;
     private _log: string[];
 
     constructor(
-        clientSpec: Client | IClientArgs,
+        clientSpec: import("@hiro-graph/client").default | IClientArgs,
         schemaSpec: Schema | Array<IDefinition>,
         cache?: Map<string, object>
     );
 
     me<T extends GraphVertex>(): Promise<T>;
     profile<T extends GraphVertex>(): Promise<T>;
-    getClient<T extends IClientServlets>(): Client & T;
+    getClient<
+        T extends IClientServlets
+    >(): import("@hiro-graph/client").default & T;
     setCache(cache: Map<string, object>): void;
     deleteFromCache(key: string): boolean;
 
