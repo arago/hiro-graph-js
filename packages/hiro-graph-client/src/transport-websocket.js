@@ -167,6 +167,10 @@ export default class WebSocketTransport {
                         emit({ name: "ws:unknown", data: id });
                         return;
                     }
+
+                    const hasSub =
+                        handle.sub && typeof handle.sub.next === "function";
+
                     // check for error response.
                     if (object.error) {
                         emit({
@@ -189,6 +193,9 @@ export default class WebSocketTransport {
 
                     if (!object.multi) {
                         emit({ name: "ws:single", data: { id } });
+                        if (hasSub) {
+                            handle.sub.next(body);
+                        }
                         //This is a single packet response.
                         handle.callback(null, body);
                         inflight.delete(id);
@@ -215,6 +222,9 @@ export default class WebSocketTransport {
                             name: "ws:more",
                             data: { id, count: handle.result.length }
                         });
+                        if (hasSub) {
+                            handle.sub.next(body);
+                        }
                         return;
                     }
                     //final response
@@ -225,6 +235,9 @@ export default class WebSocketTransport {
                         name: "ws:multi",
                         data: { id, count: handle.result.length }
                     });
+                    if (hasSub) {
+                        handle.sub.next(body);
+                    }
                     handle.callback(null, handle.result);
                 };
 
@@ -265,7 +278,17 @@ export default class WebSocketTransport {
                         emit({ name: "ws:connected", data: { time: t() } });
                         resolve({
                             //this is how we initiate a send and create the callback.
-                            send: (token, { type, headers, body }) => {
+                            send: (
+                                token,
+                                { type, headers, body },
+                                {
+                                    sub = {
+                                        next: noop,
+                                        error: noop,
+                                        complete: noop
+                                    }
+                                }
+                            ) => {
                                 //first we get the new Token.
                                 const reqtimer = timer();
                                 return token.get().then(tok => {
@@ -297,6 +320,13 @@ export default class WebSocketTransport {
                                             if (called) {
                                                 return;
                                             }
+
+                                            if (err) {
+                                                sub.error(err);
+                                            } else {
+                                                sub.complete();
+                                            }
+
                                             called = true;
                                             unref();
                                             emit({
@@ -313,7 +343,7 @@ export default class WebSocketTransport {
                                         };
 
                                         //create a callback for the inflight requests.
-                                        inflight.set(id, { callback });
+                                        inflight.set(id, { callback, sub });
                                         emit({
                                             name: "ws:send",
                                             data: { payload, time: reqtimer() }
