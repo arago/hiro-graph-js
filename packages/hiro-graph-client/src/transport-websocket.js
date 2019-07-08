@@ -167,6 +167,10 @@ export default class WebSocketTransport {
                         emit({ name: "ws:unknown", data: id });
                         return;
                     }
+
+                    const hasSub =
+                        handle.sub && typeof handle.sub.next === "function";
+
                     // check for error response.
                     if (object.error) {
                         emit({
@@ -189,7 +193,7 @@ export default class WebSocketTransport {
 
                     if (!object.multi) {
                         emit({ name: "ws:single", data: { id } });
-                        if (handle.sub && handle.sub.next) {
+                        if (hasSub) {
                             handle.sub.next(body);
                         }
                         //This is a single packet response.
@@ -218,7 +222,7 @@ export default class WebSocketTransport {
                             name: "ws:more",
                             data: { id, count: handle.result.length }
                         });
-                        if (handle.sub && handle.sub.next) {
+                        if (hasSub) {
                             handle.sub.next(body);
                         }
                         return;
@@ -231,7 +235,7 @@ export default class WebSocketTransport {
                         name: "ws:multi",
                         data: { id, count: handle.result.length }
                     });
-                    if (handle.sub && handle.sub.next) {
+                    if (hasSub) {
                         handle.sub.next(body);
                     }
                     handle.callback(null, handle.result);
