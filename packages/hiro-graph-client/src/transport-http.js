@@ -119,7 +119,7 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
     const options = defaultFetchOptions();
     switch (type) {
         case "getme":
-            url = "/me/account?profile=true";
+            url = "/api/7.0/graph/me/account?profile=true";
             break;
         case "info":
             url = "/info";

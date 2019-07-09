@@ -7,7 +7,8 @@ const filterUndef = obj =>
     }, {});
 
 export default {
-    getMeProfile: (fetch, options) => fetch(`/me/profile`, options),
+    getMeProfile: (fetch, options) =>
+        fetch(`/api/7.0/graph/me/profile`, options),
     updateMeProfile: (fetch, options, data) => {
         const payload = filterUndef(data);
 
@@ -15,11 +16,11 @@ export default {
         options.body = JSON.stringify(payload);
         options.headers["Content-Type"] = "application/json";
 
-        return fetch(`/me/profile`, options);
+        return fetch(`/api/7.0/graph/me/profile`, options);
     },
     getMeAvatar: (fetch, options) =>
-        fetch(`/me/avatar`, { ...options, raw: true }),
-    meAccount: (fetch, options) => fetch(`/me/account`, options),
+        fetch(`/api/7.0/graph/me/avatar`, { ...options, raw: true }),
+    meAccount: (fetch, options) => fetch(`/api/7.0/graph/me/account`, options),
     mePassword: (fetch, options, oldPassword, newPassword) => {
         options.method = "POST";
         options.body = JSON.stringify({
@@ -28,15 +29,15 @@ export default {
         });
         options.headers["Content-Type"] = "application/json";
 
-        return fetch(`/me/password`, options);
+        return fetch(`/api/7.0/graph/me/password`, options);
     },
-    meTeams: (fetch, options) => fetch(`/me/teams`, options),
+    meTeams: (fetch, options) => fetch(`/api/7.0/graph/me/teams`, options),
     updateMeAvatar: (fetch, options, data) => {
         options.method = "PUT";
         options.body = data;
         options.headers["Content-Type"] = data.type;
         options.raw = true;
 
-        return fetch(`/me/avatar`, options);
+        return fetch(`/api/7.0/graph/me/avatar`, options);
     }
 };
