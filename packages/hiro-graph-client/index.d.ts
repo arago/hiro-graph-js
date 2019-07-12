@@ -144,6 +144,11 @@ export type ServletFunction<Data = any, Response = any> = (
     data?: Data
 ) => Promise<Response>;
 
+interface BaseOptions {
+    offset?: number;
+    limit?: number;
+}
+
 export default class Client {
     endpoint: string;
     token: Token;
@@ -160,13 +165,13 @@ export default class Client {
         subscribe: (emit: EmitHandler) => void;
     };
 
-    me(): object;
     eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
-    addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
+    getToken<T extends Token = Token>(): T;
+    me(): object;
     fetch: <T = object>(
         url: string,
         init?: import("node-fetch").RequestInit,
-        reqOptions?: object
+        reqOptions?: ReqOptions<T>
     ) => Promise<T>;
     gremlin: <T>(
         root: string,
@@ -175,10 +180,26 @@ export default class Client {
     ) => Promise<T>;
     lucene: <T>(
         query: string,
-        options?: object,
+        options?: BaseOptions & {
+            order?: string;
+            fields?: string[];
+            count?: number;
+            [index: string]: any;
+        },
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
-    getToken<T extends Token = Token>(): T;
+    history: <T>(
+        id: string,
+        options?: {
+            offset?: number;
+            limit?: number;
+            from?: number;
+            to?: number;
+            version?: number;
+            type?: string;
+        }
+    ) => Promise<T>;
+    addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
 }
 
 export type ClientWithServlets<

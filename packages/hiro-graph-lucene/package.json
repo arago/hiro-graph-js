@@ -3,6 +3,7 @@
     "version": "6.0.3",
     "description": "Lucene Query helpers for HIRO Graph",
     "main": "lib/index.js",
+    "types": "./index.d.ts",
     "directories": {
         "lib": "lib"
     },
