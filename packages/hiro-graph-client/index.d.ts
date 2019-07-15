@@ -23,7 +23,7 @@ export interface NodeHistory<T extends OGIT.Node = OGIT.Node> {
 
 // HttpTransport
 
-interface IRequestParams {
+interface RequestParams {
     type: string;
     headers?: object;
     body?: object;
@@ -59,7 +59,7 @@ declare class HttpTransport {
     ): Promise<import("node-fetch").Response>;
     request(
         token: string,
-        params?: IRequestParams,
+        params?: RequestParams,
         reqOptions?: ReqOptions
     ): Promise<import("node-fetch").Response>;
     defaultFetchOptions(): {
@@ -82,7 +82,7 @@ declare class WebSocketTransport {
     constructor(endpoint: string);
     request(
         token: string,
-        params?: IRequestParams,
+        params?: RequestParams,
         reqOptions?: object
     ): Promise<import("websocket").w3cwebsocket>;
     connect(
@@ -125,7 +125,7 @@ type EventHandler = <T = any>(event: HiroEvent<T>) => void;
 
 declare class EventStream {
     constructor(
-        clientParams: IClientParams,
+        clientParams: ClientParams,
         options?: EventStreamOptions & { filters?: string[] },
         emit?: (message: EmitMessage) => void
     );
@@ -150,7 +150,7 @@ export class Token {
     get: () => Promise<string>;
 }
 
-interface IClientParams {
+interface ClientParams {
     endpoint: string;
     token: string | Token;
 }
@@ -179,7 +179,7 @@ export default class Client {
     transport: WebSocketTransport | HttpTransport;
 
     constructor(
-        params: IClientParams,
+        params: ClientParams,
         transportOptions?: object,
         proxies?: string[]
     );

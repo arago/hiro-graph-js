@@ -6,3 +6,7 @@ packages/**/lib
 
 # any node modules default only ignores /node_modules/*
 packages/**/node_modules
+
+# all typings
+
+packages/**/index.d.ts
