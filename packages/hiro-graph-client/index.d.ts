@@ -1,3 +1,26 @@
+// Data
+
+export namespace OGIT {
+    export interface Node {
+        "ogit/_id": string;
+        "ogit/_type": string;
+        [index: string]: string | number;
+    }
+}
+
+export interface NodeHistory<T extends OGIT.Node = OGIT.Node> {
+    action: string;
+    identity: string;
+    data: T;
+    meta: {
+        id: string;
+        nanotime: number;
+        timestamp: number;
+        version: number;
+        vid: string;
+    };
+}
+
 // HttpTransport
 
 interface IRequestParams {
@@ -173,12 +196,12 @@ export default class Client {
         init?: import("node-fetch").RequestInit,
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
-    gremlin: <T>(
+    gremlin: <T extends OGIT.Node = OGIT.Node>(
         root: string,
         query: string,
         reqOptions?: ReqOptions<T>
-    ) => Promise<T>;
-    lucene: <T>(
+    ) => Promise<T[]>;
+    lucene: <T extends OGIT.Node = OGIT.Node>(
         query: string,
         options?: BaseOptions & {
             order?: string;
@@ -187,8 +210,8 @@ export default class Client {
             [index: string]: any;
         },
         reqOptions?: ReqOptions<T>
-    ) => Promise<T>;
-    history: <T>(
+    ) => Promise<T[]>;
+    history: <T extends OGIT.Node = OGIT.Node>(
         id: string,
         options?: {
             offset?: number;
@@ -198,7 +221,7 @@ export default class Client {
             version?: number;
             type?: string;
         }
-    ) => Promise<T>;
+    ) => Promise<NodeHistory<T>[]>;
     addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
 }
 
