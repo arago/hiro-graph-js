@@ -223,16 +223,8 @@ export default class Client {
         }
     ) => Promise<NodeHistory<T>[]>;
     addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
-    create(
-      type: string,
-      data: any,
-      reqOptions: ReqOptions
-    ): Promise<OGIT.Node>;
-    update(
-      id: string,
-      data: any,
-      reqOptions: ReqOptions
-    ): Promise<OGIT.Node>
+    create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+    update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
 }
 
 export type ClientWithServlets<
