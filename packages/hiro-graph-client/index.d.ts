@@ -4,7 +4,7 @@ export namespace OGIT {
     export interface Node {
         "ogit/_id": string;
         "ogit/_type": string;
-        [index: string]: string | number;
+        [index: string]: string;
     }
 }
 
