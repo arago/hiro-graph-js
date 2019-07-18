@@ -206,7 +206,7 @@ export default class Client {
         options?: BaseOptions & {
             order?: string;
             fields?: string[];
-            count?: number;
+            count?: boolean;
             [index: string]: any;
         },
         reqOptions?: ReqOptions<T>
