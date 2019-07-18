@@ -13,7 +13,7 @@ interface LucenseAny {
     [index: string]: string | string[] | LucenseAny;
 }
 
-export type LuceneQuery<T extends string> = LucenseBase<T> &
+export type LuceneQuery<T extends string = string> = LucenseBase<T> &
     LuceneSpecial &
     LucenseAny;
 

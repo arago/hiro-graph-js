@@ -20,7 +20,7 @@ export class GremlinQueryBuilder {
     order(): GremlinQueryBuilder;
     by(field: string): GremlinQueryBuilder;
     range(from: number, to: number): GremlinQueryBuilder;
-    values(target): GremlinQueryBuilder;
+    values(target: string): GremlinQueryBuilder;
     filter(condition: string): GremlinQueryBuilder;
     addTempProp(name: string, value: string): GremlinQueryBuilder;
     addComputedProp(
