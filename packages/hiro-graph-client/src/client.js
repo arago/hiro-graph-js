@@ -552,7 +552,12 @@ export default class Client {
         }
         return this.wrapTimedEvent(
             "streamts",
-            { id: timeseriesId, from, to, limit },
+            {
+                id: timeseriesId,
+                from: from.toString(),
+                to: to.toString(),
+                limit: limit.toString()
+            },
             this.dedupedRequest({
                 type: "streamts",
                 headers,
