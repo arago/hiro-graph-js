@@ -545,10 +545,13 @@ export default class Client {
         };
         const body = {};
         if (from !== false) {
-            body.from = from;
+            body.from = from.toString();
         }
         if (to !== false) {
-            body.to = to;
+            body.to = to.toString();
+        }
+        if (limit !== false) {
+            body.limit = limit.toString();
         }
         return this.wrapTimedEvent(
             "streamts",

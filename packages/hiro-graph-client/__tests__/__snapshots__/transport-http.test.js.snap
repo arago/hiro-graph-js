@@ -451,7 +451,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts (from only) 1`] = `
 Array [
-  "https://graphit/ts-id/values",
+  "https://graphit/ts-id/values?limit=50",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -466,7 +466,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts (to + from) 1`] = `
 Array [
-  "https://graphit/ts-id/values",
+  "https://graphit/ts-id/values?limit=50",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -481,7 +481,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts (to only) 1`] = `
 Array [
-  "https://graphit/ts-id/values",
+  "https://graphit/ts-id/values?limit=50",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -496,7 +496,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts 1`] = `
 Array [
-  "https://graphit/ts-id/values",
+  "https://graphit/ts-id/values?limit=50",
   Object {
     "headers": Object {
       "Accept": "application/json",
