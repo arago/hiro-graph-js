@@ -135,6 +135,66 @@ declare class EventStream {
     unregister: (filter: string) => void;
 }
 
+// Timeseries
+
+export namespace TimeSeries {
+    export interface Value {
+        Entries: Entry[];
+        Type: "start" | "execute" | "move" | "finish";
+
+        Alternatives?: Alternatives;
+        Changes?: any[];
+        ContextHash?: string;
+        Count?: number;
+        Fingerprints?: Fingerprints;
+        KIID?: string;
+        KIVersion?: string;
+        NodeID?: string;
+        Stats?: Stats;
+
+        [index: string]: any;
+    }
+
+    export interface Alternatives {
+        [index: string]: string;
+    }
+
+    export interface Entry {
+        LogLevel: string;
+        Message: string;
+
+        Command?: string;
+        TimeStamp?: number;
+    }
+
+    export interface Fingerprints {
+        [index: string]: string;
+    }
+
+    export interface Stats {
+        backoffs?: number;
+        bind_node?: number;
+        commit_time?: number;
+        ctxs?: number;
+        exec_time?: number;
+        kis?: number;
+        match_time?: number;
+        overall?: number;
+        route_time?: number;
+        routed?: number;
+    }
+}
+
+export interface TimeseriesObject {
+    timestamp: number;
+    value: TimeSeries.Value;
+}
+
+export interface TimeseriesResponse {
+    timestamp: number;
+    value: string;
+}
+
 // Client
 
 export class Token {
@@ -211,6 +271,14 @@ export default class Client {
         },
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
+    streamts: <T extends OGIT.Node = OGIT.Node>(
+        timeseriesId: string,
+        options?: {
+            from?: number;
+            to?: number;
+            limit?: number;
+        }
+    ) => Promise<TimeseriesResponse[]>;
     history: <T extends OGIT.Node = OGIT.Node>(
         id: string,
         options?: {
