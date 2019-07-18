@@ -4,7 +4,7 @@ export namespace OGIT {
     export interface Node {
         "ogit/_id": string;
         "ogit/_type": string;
-        [index: string]: string | number;
+        [index: string]: string;
     }
 }
 
@@ -206,7 +206,7 @@ export default class Client {
         options?: BaseOptions & {
             order?: string;
             fields?: string[];
-            count?: number;
+            count?: boolean;
             [index: string]: any;
         },
         reqOptions?: ReqOptions<T>
@@ -223,6 +223,8 @@ export default class Client {
         }
     ) => Promise<NodeHistory<T>[]>;
     addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
+    create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+    update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
 }
 
 export type ClientWithServlets<
