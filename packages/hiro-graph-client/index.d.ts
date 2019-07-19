@@ -4,7 +4,10 @@ export namespace OGIT {
     export interface Node {
         "ogit/_id": string;
         "ogit/_type": string;
-        [index: string]: string | number;
+        "ogit/_modified-on": number;
+        "ogit/_created-on": number;
+        "ogit/_is-deleted": boolean;
+        [key: string]: string | number | boolean;
     }
 }
 
