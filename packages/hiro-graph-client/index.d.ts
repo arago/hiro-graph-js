@@ -141,12 +141,12 @@ declare class EventStream {
 // Timeseries
 
 export namespace TimeSeries {
-    export interface Value {
+    export interface Value<VariableNames extends string = string> {
         Entries: Entry[];
         Type: "start" | "execute" | "move" | "finish";
 
         Alternatives?: Alternatives;
-        Changes?: any[];
+        Changes?: Change<VariableNames>[];
         ContextHash?: string;
         Count?: number;
         Fingerprints?: Fingerprints;
@@ -161,6 +161,26 @@ export namespace TimeSeries {
     export interface Alternatives {
         [index: string]: string;
     }
+
+    export interface ChangeValue {
+        created: number;
+        created_on: string;
+        implicit: boolean;
+        key: string;
+        value: any;
+    }
+
+    export type ChangeVariables<VariableNames extends string = string> = {
+        [key in VariableNames]: ChangeValue
+    };
+
+    export interface ChangeMeta {
+        Action: "add" | "delete";
+        NodeID: string;
+    }
+
+    export type Change<VariableNames extends string = string> = ChangeMeta &
+        ChangeVariables<VariableNames>;
 
     export interface Entry {
         LogLevel: string;
