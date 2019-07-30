@@ -290,6 +290,12 @@ export default class Client {
         outId: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
+    disconnect: <T extends OGIT.Node = OGIT.Node>(
+        type: string,
+        inId: string,
+        outId: string,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T[]>;
     lucene: <T extends OGIT.Node = OGIT.Node>(
         query: string,
         options?: BaseOptions & {
