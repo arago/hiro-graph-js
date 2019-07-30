@@ -284,6 +284,12 @@ export default class Client {
         query: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
+    connect: <T extends OGIT.Node = OGIT.Node>(
+        type: string,
+        inId: string,
+        outId: string,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T[]>;
     lucene: <T extends OGIT.Node = OGIT.Node>(
         query: string,
         options?: BaseOptions & {
