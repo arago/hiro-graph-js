@@ -11,7 +11,7 @@ export namespace OGIT {
     }
 }
 
-export interface NodeHistory<T extends OGIT.Node = OGIT.Node> {
+export interface NodeHistory<T = OGIT.Node> {
     action: string;
     identity: string;
     data: T;
@@ -274,29 +274,29 @@ export default class Client {
     eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
     getToken<T extends Token = Token>(): T;
     me(): object;
-    fetch: <T = object>(
+    fetch: <T = import("node-fetch").Response>(
         url: string,
         init?: import("node-fetch").RequestInit,
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
-    gremlin: <T extends OGIT.Node = OGIT.Node>(
+    gremlin: <T = OGIT.Node>(
         root: string,
         query: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    connect: <T extends OGIT.Node = OGIT.Node>(
+    connect: <T = OGIT.Node>(
         type: string,
         inId: string,
         outId: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    disconnect: <T extends OGIT.Node = OGIT.Node>(
+    disconnect: <T = OGIT.Node>(
         type: string,
         inId: string,
         outId: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    lucene: <T extends OGIT.Node = OGIT.Node>(
+    lucene: <T = OGIT.Node>(
         query: string,
         options?: BaseOptions & {
             order?: string;
@@ -306,7 +306,7 @@ export default class Client {
         },
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    streamts: <T extends OGIT.Node = OGIT.Node>(
+    streamts: <T = OGIT.Node>(
         timeseriesId: string,
         options?: {
             from?: number;
@@ -314,7 +314,7 @@ export default class Client {
             limit?: number;
         }
     ) => Promise<TimeseriesResponse[]>;
-    history: <T extends OGIT.Node = OGIT.Node>(
+    history: <T = OGIT.Node>(
         id: string,
         options?: {
             offset?: number;
