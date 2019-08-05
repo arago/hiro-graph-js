@@ -1,17 +1,59 @@
 // Data
 
 export namespace OGIT {
-    export interface Node {
+    export interface SafeNode {
         "ogit/_id": string;
         "ogit/_type": string;
         "ogit/_modified-on": number;
+        "ogit/_modified-by": string;
+        "ogit/_creator": string;
         "ogit/_created-on": number;
         "ogit/_is-deleted": boolean;
+    }
+
+    export interface Node extends SafeNode {
         [key: string]: string | number | boolean;
+    }
+
+    export interface Issue extends SafeNode {
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/subject"?: string;
+        "ogit/status"?: string;
+        "ogit/Automation/processingNode"?: string;
+        "ogit/Automation/originNode"?: string;
+    }
+
+    export interface KnowledgeItem extends SafeNode {
+        "ogit/Automation/knowledgeItemFormalRepresentation": string;
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/description"?: string;
+        "ogit/isValid"?: string;
+        "ogit/name"?: string;
+    }
+
+    export interface KnowledgePool extends SafeNode {
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_is-deleted": boolean;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/name"?: string;
     }
 }
 
-export interface NodeHistory<T = OGIT.Node> {
+export interface NodeHistory<T extends OGIT.SafeNode = OGIT.Node> {
     action: string;
     identity: string;
     data: T;
@@ -279,24 +321,24 @@ export default class Client {
         init?: import("node-fetch").RequestInit,
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
-    gremlin: <T = OGIT.Node>(
+    gremlin: <T extends OGIT.SafeNode = OGIT.Node>(
         root: string,
         query: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    connect: <T = OGIT.Node>(
+    connect: <T extends OGIT.SafeNode = OGIT.Node>(
         type: string,
         inId: string,
         outId: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    disconnect: <T = OGIT.Node>(
+    disconnect: <T extends OGIT.SafeNode = OGIT.Node>(
         type: string,
         inId: string,
         outId: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    lucene: <T = OGIT.Node>(
+    lucene: <T extends OGIT.SafeNode = OGIT.Node>(
         query: string,
         options?: BaseOptions & {
             order?: string;
@@ -306,7 +348,7 @@ export default class Client {
         },
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    streamts: <T = OGIT.Node>(
+    streamts: <T extends OGIT.SafeNode = OGIT.Node>(
         timeseriesId: string,
         options?: {
             from?: number;
@@ -314,7 +356,7 @@ export default class Client {
             limit?: number;
         }
     ) => Promise<TimeseriesResponse[]>;
-    history: <T = OGIT.Node>(
+    history: <T extends OGIT.SafeNode = OGIT.Node>(
         id: string,
         options?: {
             offset?: number;
