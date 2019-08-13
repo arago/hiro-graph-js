@@ -203,6 +203,8 @@ export default {
         ),
     organizationTeams: (fetch, options, id) =>
         fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
+    accountTeams: (fetch, options, id) =>
+        fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_TEAMS), options),
     createRoleAssignment: (fetch, options, data) => {
         options.method = "POST";
         options.body = JSON.stringify(data);
