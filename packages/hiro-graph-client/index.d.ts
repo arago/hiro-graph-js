@@ -192,9 +192,11 @@ export namespace TimeSeries {
         ContextHash?: string;
         Count?: number;
         Fingerprints?: Fingerprints;
+        IssueVersion?: string;
         KIID?: string;
         KIVersion?: string;
         NodeID?: string;
+        NodeVersion?: string;
         Stats?: Stats;
 
         [index: string]: any;
