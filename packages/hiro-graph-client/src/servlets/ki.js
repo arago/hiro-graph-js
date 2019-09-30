@@ -3,13 +3,13 @@
  */
 
 export default {
-    validate(fetch, options, { ki = '', ...rest }) {
-        options.method = 'POST';
+    validate(fetch, options, { ki = "", ...rest }) {
+        options.method = "POST";
         options.body = JSON.stringify({
             ki,
-            ...rest,
+            ...rest
         });
 
-        return fetch('/api/6/ki/check', options)
-    },
+        return fetch("/api/6/ki/check", options);
+    }
 };
