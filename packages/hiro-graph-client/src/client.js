@@ -544,20 +544,28 @@ export default class Client {
     /**
      *  Read timeseries values (only ogit/Timeseries vertices)
      */
-    streamts(timeseriesId, { from = false, to = false } = {}) {
+    streamts(timeseriesId, { from = false, to = false, limit = 50 } = {}) {
         const headers = {
             "ogit/_id": timeseriesId
         };
         const body = {};
         if (from !== false) {
-            body.from = from;
+            body.from = from.toString();
         }
         if (to !== false) {
-            body.to = to;
+            body.to = to.toString();
+        }
+        if (limit !== false) {
+            body.limit = limit.toString();
         }
         return this.wrapTimedEvent(
             "streamts",
-            { id: timeseriesId, from, to },
+            {
+                id: timeseriesId,
+                from: from.toString(),
+                to: to.toString(),
+                limit: limit.toString()
+            },
             this.dedupedRequest({
                 type: "streamts",
                 headers,

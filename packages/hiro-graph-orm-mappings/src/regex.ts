@@ -25,7 +25,7 @@ function getAttributes(regex: RegExp, input: string) {
 
     for (const v of data) {
         const name = v.split("/").pop();
-        if (!name) {
+        if (!name || name === "_id" || name === "_tags") {
             continue;
         }
 
@@ -54,7 +54,7 @@ export function getRelations(
         const newV = v
             .substr(1, v.length - 2)
             .trim()
-            .split("  ");
+            .split(/\s+/);
 
         if (!newV || !newV[0] || !newV[1]) {
             console.log("No relations for " + ogit);

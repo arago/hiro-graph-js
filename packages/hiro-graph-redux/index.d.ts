@@ -1,6 +1,9 @@
-import Context from "@hiro-graph/orm";
-import { StoreEnhancerStoreCreator, Store, Dispatch, AnyAction } from "redux";
-import { Token } from "@hiro-graph/client";
+type StoreEnhancerStoreCreator = import("redux").StoreEnhancerStoreCreator;
+type Store = import("redux").Store;
+type Dispatch = import("redux").Dispatch;
+type AnyAction = import("redux").AnyAction;
+type Context = import("@hiro-graph/orm").default;
+type Token = import("@hiro-graph/client").Token;
 
 export type ITaskShape<T = any> = {
     error?: Error | false | string | null;

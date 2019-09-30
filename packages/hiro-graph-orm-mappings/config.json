@@ -11,6 +11,10 @@
         }
     },
     "mapping": {
+        "ogit/defines -> ogit/Automation/KnowledgeItem": "kis",
+        "ogit/defines -> ogit/Knowledge/Step": "steps",
+        "ogit/relates <- ogit/Automation/AutomationIssue": "issue",
+        "ogit/relates -> ogit/Knowledge/AcquisitionSession": "session",
         "ogit/Auth/belongs -> ogit/Auth/Account": "account",
         "ogit/Auth/isMemberOf <- ogit/Auth/Account": "members",
         "ogit/Auth/belongs -> ogit/Auth/Organization": "parentOrg",

@@ -12,19 +12,19 @@
     },
     "license": "MIT",
     "dependencies": {
-        "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "@hiro-graph/client": "^7.0.4",
         "@hiro-graph/implicit-oauth": "^7.0.0",
         "@hiro-graph/orm": "^7.0.7",
-        "eslint": "^5.3.0",
         "lodash.isplainobject": "^4.0.6",
         "redux": "^4.0.0",
         "reselect": "^4.0.0"
     },
     "devDependencies": {
+        "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
         "babel-preset-hiro": "^0.4.1",
+        "eslint": "^5.3.0",
         "jest": "^23.5.0"
     },
     "babel": {

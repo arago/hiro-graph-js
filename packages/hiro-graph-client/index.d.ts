@@ -1,81 +1,96 @@
-// Auth API
+// Data
 
-import { w3cwebsocket as WS } from "websocket";
-import fetch, { Response } from "node-fetch";
+export namespace OGIT {
+    export interface SafeNode {
+        "ogit/_id": string;
+        "ogit/_type": string;
+        "ogit/_modified-on": number;
+        "ogit/_modified-by": string;
+        "ogit/_creator": string;
+        "ogit/_created-on": number;
+        "ogit/_is-deleted": boolean;
+    }
 
-interface IAccountData {
-    account: object;
-    avatar: string;
-    profile: object;
+    export interface Node extends SafeNode {
+        [key: string]: string | number | boolean;
+    }
+
+    export interface Issue extends SafeNode {
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/subject"?: string;
+        "ogit/status"?: string;
+        "ogit/Automation/processingNode"?: string;
+        "ogit/Automation/originNode"?: string;
+    }
+
+    export interface KnowledgeItem extends SafeNode {
+        "ogit/Automation/knowledgeItemFormalRepresentation": string;
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/description"?: string;
+        "ogit/isValid"?: string;
+        "ogit/name"?: string;
+    }
+
+    export interface KnowledgePool extends SafeNode {
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_is-deleted": boolean;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/name"?: string;
+    }
 }
 
-interface IAuth {
-    createAccount: (
-        data: object
-    ) => Promise<{ account: object; profile: object }>;
-    setAvatar: (id: string, avatar?: File) => Promise<any>;
-    setOrgAvatar: (id: string, avatar?: File) => Promise<any>;
-    getAvatar: (id: string) => Promise<any>;
-    getOrgAvatar: (id: string) => Promise<any>;
-    getAccount: (id: string) => Promise<IAccountData>;
-    updateAccountProfile: (id: string, data: object) => Promise<object>;
-    getAccountProfile: (id: string) => Promise<object>;
-    getAccountProfileByAccountId: (id: string) => Promise<object>;
-    listRoles: (
-        limit: number,
-        offset: number,
-        name: string
-    ) => Promise<object[]>;
-    getRoleAssignment: (id: string) => Promise<object[]>;
-    listAllRoles: () => Promise<object[]>;
-    updatePassword: (id: string, password: string) => Promise<object>;
-    activateAccount: (id: string) => Promise<object>;
-
-    createTeam: (data: object) => Promise<object>;
-    updateTeam: (id: string, data: object) => Promise<object>;
-    getTeam: (id: string) => Promise<object>;
-    deleteTeam: (id: string) => Promise<object>;
-    createOrganization: (data: object) => Promise<object>;
-    addMembers: (id: string, ...accounts: string[]) => Promise<object>;
-    removeMembers: (id: string, ...accounts: string[]) => Promise<object>;
-    getTeamMembers: (id: string) => Promise<IAccountData[]>;
-    getOrganizationMembers: (id: string) => Promise<IAccountData[]>;
-    organizationTeams: (id: string) => Promise<object[]>;
-    createDomain: (name: string, organization: string) => Promise<object>;
-    getDomain: (id: string) => Promise<object>;
-    deleteDomain: (id: string) => Promise<object>;
-    organizationDomains: (id: string) => Promise<object[]>;
-    getDomainOrganization: (id: string) => Promise<object>;
-    organizationDataSets: (id: string) => Promise<object[]>;
-    createRoleAssignment: (data: object) => Promise<object>;
-    organizationRoleAssignments: (
-        id: string
-    ) => Promise<
-        {
-            "ogit/Auth/DataSet": object;
-            "ogit/Auth/Role": object;
-            "ogit/Auth/Team": object;
-            "ogit/Auth/RoleAssignment": object;
-        }[]
-    >;
-}
-
-interface IAPI {
-    getMeProfile: () => Promise<object>;
-    updateMeProfile: (data: object) => Promise<object>;
-    getMeAvatar: () => Promise<object>;
-    meAccount: () => Promise<object>;
-    mePassword: (oldPassword: string, newPassword: string) => Promise<object>;
-    meTeams: () => Promise<object[]>;
-    updateMeAvatar: (data: object) => Promise<object>;
+export interface NodeHistory<T extends OGIT.SafeNode = OGIT.Node> {
+    action: string;
+    identity: string;
+    data: T;
+    meta: {
+        id: string;
+        nanotime: number;
+        timestamp: number;
+        version: number;
+        vid: string;
+    };
 }
 
 // HttpTransport
 
-interface IRequestParams {
+interface RequestParams {
     type: string;
     headers?: object;
     body?: object;
+}
+
+interface EmitMessage {
+    name: string;
+    data?: any;
+}
+
+interface Subscriber<T> {
+    next?: (value?: T) => void;
+    error?: (err?: any) => void;
+    complete?: () => void;
+}
+
+interface ReqOptions<T = any> {
+    waitForIndex?: boolean;
+    headers?: object;
+    token?: string;
+    emit?: (message: EmitMessage) => void;
+    sub?: Subscriber<T>;
 }
 
 declare class HttpTransport {
@@ -84,14 +99,14 @@ declare class HttpTransport {
     fetch(
         token: string,
         url: string,
-        options?: object,
-        reqOptions?: object
-    ): Promise<Response>;
+        init?: import("node-fetch").RequestInit,
+        reqOptions?: ReqOptions
+    ): Promise<import("node-fetch").Response>;
     request(
         token: string,
-        params?: IRequestParams,
-        reqOptions?: object
-    ): Promise<Response>;
+        params?: RequestParams,
+        reqOptions?: ReqOptions
+    ): Promise<import("node-fetch").Response>;
     defaultFetchOptions(): {
         method: "GET";
         headers: {
@@ -104,9 +119,7 @@ declare class HttpTransport {
 
 // WebSocketTransport
 
-type EmitFunctionType = (
-    { name, data }: { name: string; data: object }
-) => void;
+type EmitHandler = (message: EmitMessage) => void;
 
 declare class WebSocketTransport {
     endpoint: string;
@@ -114,11 +127,17 @@ declare class WebSocketTransport {
     constructor(endpoint: string);
     request(
         token: string,
-        params?: IRequestParams,
+        params?: RequestParams,
         reqOptions?: object
-    ): Promise<WS>;
-    connect(token: string, emit: EmitFunctionType): Promise<WS>;
-    createWebSocket(initialToken: string, emit: EmitFunctionType): Promise<WS>;
+    ): Promise<import("websocket").w3cwebsocket>;
+    connect(
+        token: string,
+        emit: EmitHandler
+    ): Promise<import("websocket").w3cwebsocket>;
+    createWebSocket(
+        initialToken: string,
+        emit: EmitHandler
+    ): Promise<import("websocket").w3cwebsocket>;
     defaultFetchOptions(): {
         method: "GET";
         headers: {
@@ -127,6 +146,120 @@ declare class WebSocketTransport {
         };
         mode: "cors";
     };
+}
+
+// EventStream
+
+interface EventStreamOptions {
+    groupId?: number;
+    offset?: number;
+}
+
+declare interface HiroEvent<T = any> {
+    id: string;
+    identity: string;
+    type: "CREATE" | "READ" | "UPDATE" | "DELETE" | "WRITETIMESERIES";
+    timestamp: number;
+    nanotime: number;
+    body: T;
+}
+
+type EventUnsubscribe = () => void;
+
+type EventHandler = <T = any>(event: HiroEvent<T>) => void;
+
+declare class EventStream {
+    constructor(
+        clientParams: ClientParams,
+        options?: EventStreamOptions & { filters?: string[] },
+        emit?: (message: EmitMessage) => void
+    );
+
+    subscribe: <T = any>(handler: EventHandler) => EventUnsubscribe;
+    register: (filter: string) => void;
+    unregister: (filter: string) => void;
+}
+
+// Timeseries
+
+export namespace TimeSeries {
+    export interface Value<VariableNames extends string = string> {
+        Entries: Entry[];
+        Type: "start" | "execute" | "move" | "finish";
+
+        Alternatives?: Alternatives;
+        Changes?: Change<VariableNames>[];
+        ContextHash?: string;
+        Count?: number;
+        Fingerprints?: Fingerprints;
+        IssueVersion?: string;
+        KIID?: string;
+        KIVersion?: string;
+        NodeID?: string;
+        NodeVersion?: string;
+        Stats?: Stats;
+
+        [index: string]: any;
+    }
+
+    export interface Alternatives {
+        [index: string]: string;
+    }
+
+    export interface ChangeValue {
+        created: number;
+        created_on: string;
+        implicit: boolean;
+        key: string;
+        value: any;
+    }
+
+    export type ChangeVariables<VariableNames extends string = string> = {
+        [key in VariableNames]: ChangeValue
+    };
+
+    export interface ChangeMeta {
+        Action: "add" | "delete";
+        NodeID: string;
+    }
+
+    export type Change<VariableNames extends string = string> = ChangeMeta &
+        ChangeVariables<VariableNames>;
+
+    export interface Entry {
+        LogLevel: string;
+        Message: string;
+
+        Command?: string;
+        TimeStamp?: number;
+    }
+
+    export interface Fingerprints {
+        [index: string]: string;
+    }
+
+    export interface Stats {
+        backoffs?: number;
+        bind_node?: number;
+        commit_time?: number;
+        ctxs?: number;
+        exec_time?: number;
+        kis?: number;
+        match_time?: number;
+        overall?: number;
+        route_time?: number;
+        routed?: number;
+    }
+}
+
+export interface TimeseriesObject {
+    timestamp: number;
+    value: TimeSeries.Value;
+}
+
+export interface TimeseriesResponse {
+    timestamp: number;
+    value: string;
 }
 
 // Client
@@ -144,19 +277,26 @@ export class Token {
     get: () => Promise<string>;
 }
 
-interface IClientParams {
+interface ClientParams {
     endpoint: string;
-    token: string;
+    token: string | Token;
 }
 
-export type IServletFetchType = typeof fetch;
+export type IServletFetchType = typeof import("node-fetch").default;
 
-export interface IServletMethods {
-    [index: string]: (
-        fetch: IServletFetchType,
-        options?: object,
-        data?: object
-    ) => void;
+export interface Servlet {
+    [index: string]: ServletFunction;
+}
+
+export type ServletFunction<Data = any, Response = any> = (
+    fetch: Client["fetch"],
+    init?: import("node-fetch").RequestInit,
+    data?: Data
+) => Promise<Response>;
+
+interface BaseOptions {
+    offset?: number;
+    limit?: number;
 }
 
 export default class Client {
@@ -164,24 +304,77 @@ export default class Client {
     token: Token;
     http: HttpTransport;
     transport: WebSocketTransport | HttpTransport;
-    auth: IAuth;
-    api: IAPI;
-    fetch: (
-        url: string,
-        options?: object,
-        reqOptions?: object
-    ) => Promise<Response>;
 
     constructor(
-        params: IClientParams,
+        params: ClientParams,
         transportOptions?: object,
         proxies?: string[]
     );
-    me(): object;
+
+    private _pubsub: {
+        subscribe: (emit: EmitHandler) => void;
+    };
+
+    eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
     getToken<T extends Token = Token>(): T;
-    addServlet(
-        prefix: string,
-        servletMethods: IServletMethods,
-        proxy?: string
-    ): Client;
+    me(): object;
+    fetch: <T = import("node-fetch").Response>(
+        url: string,
+        init?: import("node-fetch").RequestInit,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T>;
+    gremlin: <T extends OGIT.SafeNode = OGIT.Node>(
+        root: string,
+        query: string,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T[]>;
+    connect: <T extends OGIT.SafeNode = OGIT.Node>(
+        type: string,
+        inId: string,
+        outId: string,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T[]>;
+    disconnect: <T extends OGIT.SafeNode = OGIT.Node>(
+        type: string,
+        inId: string,
+        outId: string,
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T[]>;
+    lucene: <T extends OGIT.SafeNode = OGIT.Node>(
+        query: string,
+        options?: BaseOptions & {
+            order?: string;
+            fields?: string[];
+            count?: boolean;
+            [index: string]: any;
+        },
+        reqOptions?: ReqOptions<T>
+    ) => Promise<T[]>;
+    streamts: <T extends OGIT.SafeNode = OGIT.Node>(
+        timeseriesId: string,
+        options?: {
+            from?: number;
+            to?: number;
+            limit?: number;
+        }
+    ) => Promise<TimeseriesResponse[]>;
+    history: <T extends OGIT.SafeNode = OGIT.Node>(
+        id: string,
+        options?: {
+            offset?: number;
+            limit?: number;
+            from?: number;
+            to?: number;
+            version?: number;
+            type?: string;
+        }
+    ) => Promise<NodeHistory<T>[]>;
+    addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
+    create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+    update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+    get(id: string): Promise<OGIT.Node>;
 }
+
+export type ClientWithServlets<
+    Servlets extends { [index: string]: Servlet }
+> = Client & Servlets;
