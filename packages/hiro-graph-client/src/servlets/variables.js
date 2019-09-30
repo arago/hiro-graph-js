@@ -4,12 +4,17 @@
 import { stringify } from "querystring";
 
 export default {
-    add(fetch, options, { name, description, todo, type = "any" } = {}) {
+    add(
+        fetch,
+        options,
+        { name, description, todo, type = "any", ...rest } = {}
+    ) {
         const data = {
             "ogit/name": name,
             "ogit/description": description,
             "ogit/Automation/todo": todo,
-            "ogit/subType": type
+            "ogit/subType": type,
+            ...rest
         };
 
         options.method = "PUT";
@@ -18,33 +23,24 @@ export default {
         return fetch("/_variables", options);
     },
 
-    get(fetch, options, name) {
-        const url = "/_variables/define?" + stringify({ name });
-
-        options.headers["Content-Type"] = "application/x-www-form-urlencoded";
-        return fetch(url, options);
-    },
-
-    suggest(fetch, options, name) {
-        const url = "/_variables/suggest?" + stringify({ name });
-        return fetch(url, options);
-    },
-
-    suggestFull(fetch, options, requestData) {
+    suggest(fetch, options, { name, full = true, ...rest }) {
         const url = encodeURI(
-            `/_variables/suggest?${stringify({
-                ...requestData,
-                full: true
-            })}`
+            "/_variables/suggest?" +
+                stringify({
+                    name,
+                    full,
+                    ...rest
+                })
         );
 
         return fetch(url, options);
     },
 
-    define(fetch, options, name) {
+    define(fetch, options, { name, ...rest }) {
         const url = encodeURI(
             `/_variables/define?${stringify({
-                name
+                name,
+                rest
             })}`
         );
 
