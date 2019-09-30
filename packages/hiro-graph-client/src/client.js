@@ -287,28 +287,9 @@ export default class Client {
      */
 
     /**
-     *  GraphIT Server Info
-     *  Info is an HTTP only endpoint, and an un-authenticated one.
-     */
-    info(reqOptions = {}) {
-        return this.wrapTimedEvent(
-            "info",
-            {},
-            this.http.request(
-                null, // no token here
-                { type: "info" },
-                { token: false, ...reqOptions } //no token here
-            )
-        );
-    }
-
-    /**
      *  Get a single item by ID
      */
-    get(id = "_me", reqOptions = {}) {
-        if (id === "_me") {
-            return this.me(reqOptions);
-        }
+    get(id, reqOptions = {}) {
         return this.wrapTimedEvent(
             "get",
             { id },
@@ -563,20 +544,28 @@ export default class Client {
     /**
      *  Read timeseries values (only ogit/Timeseries vertices)
      */
-    streamts(timeseriesId, { from = false, to = false } = {}) {
+    streamts(timeseriesId, { from = false, to = false, limit = 50 } = {}) {
         const headers = {
             "ogit/_id": timeseriesId
         };
         const body = {};
         if (from !== false) {
-            body.from = from;
+            body.from = from.toString();
         }
         if (to !== false) {
-            body.to = to;
+            body.to = to.toString();
+        }
+        if (limit !== false) {
+            body.limit = limit.toString();
         }
         return this.wrapTimedEvent(
             "streamts",
-            { id: timeseriesId, from, to },
+            {
+                id: timeseriesId,
+                from: from.toString(),
+                to: to.toString(),
+                limit: limit.toString()
+            },
             this.dedupedRequest({
                 type: "streamts",
                 headers,

@@ -3,6 +3,7 @@
     "version": "7.0.0",
     "description": "Gremlin Query builder for the HIRO Graph API",
     "main": "lib/gremlin.js",
+    "typings": "./index.d.ts",
     "directories": {
         "lib": "lib"
     },

@@ -113,7 +113,7 @@ export const defaultFetchOptions = () => ({
     mode: "cors"
 });
 
-const GRAPH_API_BASE = '/api/7.0/graph';
+const GRAPH_API_BASE = "/api/7.0/graph";
 
 //here are the mappings to fetch options from the websocket payloads.
 function createFetchOptions({ type, headers = {}, body = {} } = {}) {
@@ -124,7 +124,9 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
             url = "/api/7.0/graph/me/account?profile=true";
             break;
         case "get":
-            url = `${GRAPH_API_BASE}/${encodeURIComponent(headers["ogit/_id"])}`;
+            url = `${GRAPH_API_BASE}/${encodeURIComponent(
+                headers["ogit/_id"]
+            )}`;
             break;
         case "create":
             url =
@@ -150,11 +152,15 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
             sendJSON(options, body, "PUT");
             break;
         case "delete":
-            url = `${GRAPH_API_BASE}/${encodeURIComponent(headers["ogit/_id"])}`;
+            url = `${GRAPH_API_BASE}/${encodeURIComponent(
+                headers["ogit/_id"]
+            )}`;
             options.method = "DELETE";
             break;
         case "connect":
-            url = `${GRAPH_API_BASE}/connect/${encodeURIComponent(headers["ogit/_type"])}`;
+            url = `${GRAPH_API_BASE}/connect/${encodeURIComponent(
+                headers["ogit/_type"]
+            )}`;
             sendJSON(options, body);
             break;
         case "query":
@@ -169,7 +175,10 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 qsKeys(body, "offset", "limit");
             break;
         case "writets":
-            url = `${GRAPH_API_BASE}/` + encodeURIComponent(headers["ogit/_id"]) + "/values";
+            url =
+                `${GRAPH_API_BASE}/` +
+                encodeURIComponent(headers["ogit/_id"]) +
+                "/values";
             sendJSON(options, body);
             break;
         case "history":
@@ -188,7 +197,10 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 );
             break;
         case "meta":
-            url = `${GRAPH_API_BASE}/` + encodeURIComponent(headers["ogit/_id"]) + "/meta";
+            url =
+                `${GRAPH_API_BASE}/` +
+                encodeURIComponent(headers["ogit/_id"]) +
+                "/meta";
             break;
         default:
             throw new Error(`[HTTP] Unknown API call: ${type}`);
