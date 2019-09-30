@@ -216,14 +216,6 @@ Object {
 }
 `;
 
-exports[`Client Requests should call info correctly 1`] = `
-Object {
-  "body": undefined,
-  "headers": undefined,
-  "type": "info",
-}
-`;
-
 exports[`Client Requests should call lucene (basic) correctly 1`] = `
 Object {
   "body": Object {

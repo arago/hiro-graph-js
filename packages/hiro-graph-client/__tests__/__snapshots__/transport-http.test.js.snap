@@ -275,21 +275,6 @@ Array [
 ]
 `;
 
-exports[`transport-http should create the right options for: info 1`] = `
-Array [
-  "https://graphit/info",
-  Object {
-    "headers": Object {
-      "Accept": "application/json",
-      "Authorization": "Bearer false",
-      "Content-Type": "application/json",
-    },
-    "method": "GET",
-    "mode": "cors",
-  },
-]
-`;
-
 exports[`transport-http should create the right options for: lucene (basic) 1`] = `
 Array [
   "https://graphit/api/7.0/graph/query/vertices",
