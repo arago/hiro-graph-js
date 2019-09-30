@@ -7,7 +7,7 @@ import { combineReducers, createStore } from "redux";
 // but we need some globals that the implicit oauth uses.
 const noop = () => {};
 global.window = {
-    localStorage: { removeItem: noop, setItem: noop, getItem: noop },
+    sessionStorage: { removeItem: noop, setItem: noop, getItem: noop },
     location: { origin: "mock://app", hash: "#", search: "?", href: "" }
 };
 
