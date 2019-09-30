@@ -113,6 +113,8 @@ export const defaultFetchOptions = () => ({
     mode: "cors"
 });
 
+const GRAPH_API_BASE = '/api/7.0/graph';
+
 //here are the mappings to fetch options from the websocket payloads.
 function createFetchOptions({ type, headers = {}, body = {} } = {}) {
     let url;
@@ -121,23 +123,19 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
         case "getme":
             url = "/api/7.0/graph/me/account?profile=true";
             break;
-        case "info":
-            url = "/info";
-            break;
         case "get":
-            url = "/" + encodeURIComponent(headers["ogit/_id"]);
+            url = `${GRAPH_API_BASE}/${encodeURIComponent(headers["ogit/_id"])}`;
             break;
         case "create":
             url =
-                "/new/" +
+                `${GRAPH_API_BASE}/new/` +
                 encodeURIComponent(headers["ogit/_type"]) +
                 qsKeys(headers, "waitForIndex");
             sendJSON(options, body);
             break;
         case "update":
             url =
-                "/" +
-                encodeURIComponent(headers["ogit/_id"]) +
+                `${GRAPH_API_BASE}/${encodeURIComponent(headers["ogit/_id"])}` +
                 qsKeys(headers, "waitForIndex");
             sendJSON(options, body);
             break;
@@ -147,37 +145,36 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 : undefined;
             const obj = Object.assign({ "ogit/_type": t }, headers);
             url =
-                "/" +
-                encodeURIComponent(headers["ogit/_id"]) +
+                `${GRAPH_API_BASE}/${encodeURIComponent(headers["ogit/_id"])}` +
                 qsKeys(obj, "createIfNotExists", "ogit/_type", "waitForIndex");
             sendJSON(options, body, "PUT");
             break;
         case "delete":
-            url = "/" + encodeURIComponent(headers["ogit/_id"]);
+            url = `${GRAPH_API_BASE}/${encodeURIComponent(headers["ogit/_id"])}`;
             options.method = "DELETE";
             break;
         case "connect":
-            url = "/connect/" + encodeURIComponent(headers["ogit/_type"]);
+            url = `${GRAPH_API_BASE}/connect/${encodeURIComponent(headers["ogit/_type"])}`;
             sendJSON(options, body);
             break;
         case "query":
-            url = "/query/" + headers.type;
+            url = `${GRAPH_API_BASE}/query/` + headers.type;
             sendJSON(options, body);
             break;
         case "streamts":
             url =
-                "/" +
+                `${GRAPH_API_BASE}/` +
                 encodeURIComponent(headers["ogit/_id"]) +
                 "/values" +
                 qsKeys(body, "offset", "limit");
             break;
         case "writets":
-            url = "/" + encodeURIComponent(headers["ogit/_id"]) + "/values";
+            url = `${GRAPH_API_BASE}/` + encodeURIComponent(headers["ogit/_id"]) + "/values";
             sendJSON(options, body);
             break;
         case "history":
             url =
-                "/" +
+                `${GRAPH_API_BASE}/` +
                 encodeURIComponent(headers["ogit/_id"]) +
                 "/history" +
                 qsKeys(
@@ -191,7 +188,7 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 );
             break;
         case "meta":
-            url = "/" + encodeURIComponent(headers["ogit/_id"]) + "/meta";
+            url = `${GRAPH_API_BASE}/` + encodeURIComponent(headers["ogit/_id"]) + "/meta";
             break;
         default:
             throw new Error(`[HTTP] Unknown API call: ${type}`);
