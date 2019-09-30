@@ -287,28 +287,9 @@ export default class Client {
      */
 
     /**
-     *  GraphIT Server Info
-     *  Info is an HTTP only endpoint, and an un-authenticated one.
-     */
-    info(reqOptions = {}) {
-        return this.wrapTimedEvent(
-            "info",
-            {},
-            this.http.request(
-                null, // no token here
-                { type: "info" },
-                { token: false, ...reqOptions } //no token here
-            )
-        );
-    }
-
-    /**
      *  Get a single item by ID
      */
-    get(id = "_me", reqOptions = {}) {
-        if (id === "_me") {
-            return this.me(reqOptions);
-        }
+    get(id, reqOptions = {}) {
         return this.wrapTimedEvent(
             "get",
             { id },
