@@ -26,6 +26,20 @@ export namespace OGIT {
         "ogit/status"?: string;
         "ogit/Automation/processingNode"?: string;
         "ogit/Automation/originNode"?: string;
+        "ogit/_organization"?: string;
+        "ogit/_scope"?: string;
+    }
+
+    export interface Session extends SafeNode {
+      "ogit/_creator-app"?: string;
+      "ogit/_graphtype"?: string;
+      "ogit/_modified-by-app"?: string;
+      "ogit/_owner"?: string;
+      "ogit/_v"?: number;
+      "ogit/_v-id"?: string;
+      "ogit/title"?: string;
+      "ogit/_organization"?: string;
+      "ogit/_scope"?: string;
     }
 
     export interface KnowledgeItem extends SafeNode {
@@ -39,6 +53,8 @@ export namespace OGIT {
         "ogit/description"?: string;
         "ogit/isValid"?: string;
         "ogit/name"?: string;
+        "ogit/_organization"?: string;
+        "ogit/_scope"?: string;
     }
 
     export interface KnowledgePool extends SafeNode {
@@ -50,6 +66,8 @@ export namespace OGIT {
         "ogit/_v"?: number;
         "ogit/_v-id"?: string;
         "ogit/name"?: string;
+        "ogit/_organization"?: string;
+        "ogit/_scope"?: string;
     }
 }
 
