@@ -9,6 +9,7 @@ export namespace OGIT {
         "ogit/_creator": string;
         "ogit/_created-on": number;
         "ogit/_is-deleted": boolean;
+        "ogit/_xid": string;
     }
 
     export interface Node extends SafeNode {
@@ -31,15 +32,15 @@ export namespace OGIT {
     }
 
     export interface Session extends SafeNode {
-      "ogit/_creator-app"?: string;
-      "ogit/_graphtype"?: string;
-      "ogit/_modified-by-app"?: string;
-      "ogit/_owner"?: string;
-      "ogit/_v"?: number;
-      "ogit/_v-id"?: string;
-      "ogit/title"?: string;
-      "ogit/_organization"?: string;
-      "ogit/_scope"?: string;
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/title"?: string;
+        "ogit/_organization"?: string;
+        "ogit/_scope"?: string;
     }
 
     export interface KnowledgeItem extends SafeNode {
@@ -69,6 +70,45 @@ export namespace OGIT {
         "ogit/_organization"?: string;
         "ogit/_scope"?: string;
     }
+
+    export interface Account extends SafeNode {
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_is-deleted": boolean;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/name"?: string;
+        "ogit/_organization"?: string;
+        "ogit/_scope"?: string;
+        "ogit/status"?: string;
+        "ogit/email"?: string;
+    }
+
+    export interface AccountProfile extends SafeNode {
+        "ogit/_creator-app"?: string;
+        "ogit/_graphtype"?: string;
+        "ogit/_is-deleted": boolean;
+        "ogit/_modified-by-app"?: string;
+        "ogit/_owner"?: string;
+        "ogit/_v"?: number;
+        "ogit/_v-id"?: string;
+        "ogit/_organization"?: string;
+        "ogit/_scope"?: string;
+        "ogit/Auth/Account/acceptedEmails"?: number; // timestamp
+        "ogit/Auth/Account/displayName"?: string;
+        "ogit/firstName"?: string;
+        "ogit/lastName"?: string;
+        "/jobRole"?: string;
+        "/profileSet"?: boolean;
+    }
+}
+
+export interface AccountWithProfile extends OGIT.SafeNode {
+    account: OGIT.Account
+    avatar: string;
+    profile: OGIT.AccountProfile;
 }
 
 export interface NodeHistory<T extends OGIT.SafeNode = OGIT.Node> {
@@ -335,7 +375,7 @@ export default class Client {
 
     eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
     getToken<T extends Token = Token>(): T;
-    me(): object;
+    me(): AccountWithProfile;
     fetch: <T = import("node-fetch").Response>(
         url: string,
         init?: import("node-fetch").RequestInit,
