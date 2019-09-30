@@ -1,5 +1,7 @@
 // Data
 
+import { Response } from 'node-fetch';
+
 export namespace OGIT {
     export interface SafeNode {
         "ogit/_id": string;
@@ -9,6 +11,7 @@ export namespace OGIT {
         "ogit/_creator": string;
         "ogit/_created-on": number;
         "ogit/_is-deleted": boolean;
+        "ogit/_graphtype": string;
         "ogit/_xid": string;
     }
 
@@ -18,7 +21,6 @@ export namespace OGIT {
 
     export interface Issue extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_graphtype"?: string;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
         "ogit/_v"?: number;
@@ -33,7 +35,6 @@ export namespace OGIT {
 
     export interface Session extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_graphtype"?: string;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
         "ogit/_v"?: number;
@@ -46,7 +47,6 @@ export namespace OGIT {
     export interface KnowledgeItem extends SafeNode {
         "ogit/Automation/knowledgeItemFormalRepresentation": string;
         "ogit/_creator-app"?: string;
-        "ogit/_graphtype"?: string;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
         "ogit/_v"?: number;
@@ -60,7 +60,6 @@ export namespace OGIT {
 
     export interface KnowledgePool extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_graphtype"?: string;
         "ogit/_is-deleted": boolean;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
@@ -73,7 +72,6 @@ export namespace OGIT {
 
     export interface Account extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_graphtype"?: string;
         "ogit/_is-deleted": boolean;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
@@ -88,7 +86,6 @@ export namespace OGIT {
 
     export interface AccountProfile extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_graphtype"?: string;
         "ogit/_is-deleted": boolean;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
@@ -102,6 +99,23 @@ export namespace OGIT {
         "ogit/lastName"?: string;
         "/jobRole"?: string;
         "/profileSet"?: string;
+    }
+
+    export interface Edge extends SafeNode {
+        "ogit/_edge-id": string;
+        "ogit/_in-type": string;
+        "ogit/_out-id": string;
+        "ogit/_out-type": string;
+        "ogit/_in-id": string;
+    }
+
+    export interface Variable {
+        "ogit/accessControl": string;
+        "ogit/name": string;
+        "ogit/subType": string;
+        "ogit/_creator": string;
+        "ogit/description": string;
+        "ogit/Automation\/todo": boolean;
     }
 }
 
@@ -122,6 +136,16 @@ export interface NodeHistory<T extends OGIT.SafeNode = OGIT.Node> {
         version: number;
         vid: string;
     };
+}
+
+export interface KI {
+    validate: () => Promise<Response | any>;
+}
+
+interface Variables {
+    add: () => Promise<OGIT.Variable>
+    suggest: () => Promise<OGIT.Variable[]>
+    define: () => Promise<OGIT.Variable>
 }
 
 // HttpTransport
@@ -381,11 +405,11 @@ export default class Client {
         init?: import("node-fetch").RequestInit,
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
-    gremlin: <T extends OGIT.SafeNode = OGIT.Node>(
+    gremlin: <T>(
         root: string,
         query: string,
         reqOptions?: ReqOptions<T>
-    ) => Promise<T[]>;
+    ) => Promise<T>;
     connect: <T extends OGIT.SafeNode = OGIT.Node>(
         type: string,
         inId: string,

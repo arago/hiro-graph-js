@@ -10,6 +10,10 @@ export default {
             ...rest
         });
 
+        if (options.raw === undefined) {
+            options.raw = true;
+        }
+
         return fetch("/api/6/ki/check", options);
     }
 };
