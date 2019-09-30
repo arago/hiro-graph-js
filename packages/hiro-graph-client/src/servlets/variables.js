@@ -28,5 +28,30 @@ export default {
     suggest(fetch, options, name) {
         const url = "/_variables/suggest?" + stringify({ name });
         return fetch(url, options);
-    }
+    },
+
+    suggestFull(fetch, options, requestData) {
+        const url = encodeURI(
+            `/_variables/suggest?${stringify({
+                ...requestData,
+                full: true,
+            })}`,
+        );
+
+        return fetch(url, options);
+    },
+
+    define(fetch, options, name) {
+        const url = encodeURI(
+            `/_variables/define?${stringify({
+                name,
+            })}`,
+        );
+
+        return fetch(url, options)
+            .then((res) => ({
+                isTodo: res['ogit/Automation/todo'] || false,
+            }))
+            .catch(() => undefined);
+    },
 };
