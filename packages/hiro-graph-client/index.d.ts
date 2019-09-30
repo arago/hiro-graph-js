@@ -96,16 +96,16 @@ export namespace OGIT {
         "ogit/_v-id"?: string;
         "ogit/_organization"?: string;
         "ogit/_scope"?: string;
-        "ogit/Auth/Account/acceptedEmails"?: number; // timestamp
+        "ogit/Auth/Account/acceptedEmails"?: string; // timestamp
         "ogit/Auth/Account/displayName"?: string;
         "ogit/firstName"?: string;
         "ogit/lastName"?: string;
         "/jobRole"?: string;
-        "/profileSet"?: boolean;
+        "/profileSet"?: string;
     }
 }
 
-export interface AccountWithProfile extends OGIT.SafeNode {
+export interface AccountWithProfile {
     account: OGIT.Account
     avatar: string;
     profile: OGIT.AccountProfile;
