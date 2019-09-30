@@ -40,6 +40,7 @@ export default {
 
         return fetch(url, options);
     },
+
     define(fetch, options, name) {
         const url = encodeURI(
             `/_variables/define?${stringify({
