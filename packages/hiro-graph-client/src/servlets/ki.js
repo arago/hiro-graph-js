@@ -12,6 +12,34 @@ export default {
         return fetch("/_ki/validate", options);
     },
 
+    validateKiLang(fetch, options, kilang = '') {
+        options.method = 'POST';
+        options.body = JSON.stringify({ ki: kilang });
+        options.raw = true;
+
+        return fetch('/api/6/ki/check', options)
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.code >= 400) {
+                    return {
+                        valid: false,
+                        response,
+                    };
+                }
+
+                return {
+                    valid: true,
+                    response,
+                };
+            })
+            .catch((error) => {
+                return {
+                    valid: false,
+                    response: error.message,
+                };
+            });
+    },
+
     autocomplete(fetch, options, type, data) {
         const url = "/_ki/autocomplete?" + stringify({ type });
 
