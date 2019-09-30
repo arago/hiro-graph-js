@@ -3,7 +3,7 @@ import querystring from "querystring";
 /**
  *  This is the core strategy.
  *  despite the differing methods, Implicit OAuth always returns the token in a specific way in the hash fragment.
- *  we also store the token in localStorage in the same way.
+ *  we also store the token in sessionStorage in the same way.
  *  Therefore we can abstract those bits.
  *
  *  Also the concept of whether we are "local" i.e. in the page, or "remote", i.e.
@@ -51,7 +51,7 @@ export default function createOauthStrategy(implementation) {
                 redirect_url: redirectUri
             });
 
-        const clear = () => window.localStorage.removeItem(TOKEN_KEY);
+        const clear = () => window.sessionStorage.removeItem(TOKEN_KEY);
 
         const logout = () => {
             if (clearStorageOnLogout) {
@@ -106,7 +106,7 @@ export default function createOauthStrategy(implementation) {
                     error.type = errorType;
                 }
             }
-            window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+            window.sessionStorage.setItem(TOKEN_KEY, JSON.stringify(token));
 
             //remote version of check.
             return Object.assign(baseReturnValue, {
@@ -126,11 +126,11 @@ export default function createOauthStrategy(implementation) {
             });
         } else {
             // we are in the local path
-            // try and pull from localstorage;
+            // try and pull from sessionStorage;
             let error = null;
             try {
                 const fromStorage = JSON.parse(
-                    window.localStorage.getItem(TOKEN_KEY)
+                    window.sessionStorage.getItem(TOKEN_KEY)
                 );
                 if (
                     fromStorage.meta.expiry &&
