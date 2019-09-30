@@ -1,6 +1,6 @@
 // Data
 
-import { Response } from 'node-fetch';
+import { Response } from "node-fetch";
 
 export namespace OGIT {
     export interface SafeNode {
@@ -115,12 +115,12 @@ export namespace OGIT {
         "ogit/subType": string;
         "ogit/_creator": string;
         "ogit/description": string;
-        "ogit/Automation\/todo": boolean;
+        "ogit/Automation/todo": boolean;
     }
 }
 
 export interface AccountWithProfile {
-    account: OGIT.Account
+    account: OGIT.Account;
     avatar: string;
     profile: OGIT.AccountProfile;
 }
@@ -143,9 +143,9 @@ export interface KI {
 }
 
 interface Variables {
-    add: () => Promise<OGIT.Variable>
-    suggest: () => Promise<OGIT.Variable[]>
-    define: () => Promise<OGIT.Variable>
+    add: () => Promise<OGIT.Variable>;
+    suggest: () => Promise<OGIT.Variable[]>;
+    define: () => Promise<OGIT.Variable>;
 }
 
 // HttpTransport
