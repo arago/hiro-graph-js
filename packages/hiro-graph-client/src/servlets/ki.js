@@ -12,30 +12,30 @@ export default {
         return fetch("/_ki/validate", options);
     },
 
-    validateKiLang(fetch, options, kilang = '') {
-        options.method = 'POST';
+    validateKiLang(fetch, options, kilang = "") {
+        options.method = "POST";
         options.body = JSON.stringify({ ki: kilang });
         options.raw = true;
 
-        return fetch('/api/6/ki/check', options)
-            .then((response) => response.json())
-            .then((response) => {
+        return fetch("/api/6/ki/check", options)
+            .then(response => response.json())
+            .then(response => {
                 if (response.code >= 400) {
                     return {
                         valid: false,
-                        response,
+                        response
                     };
                 }
 
                 return {
                     valid: true,
-                    response,
+                    response
                 };
             })
-            .catch((error) => {
+            .catch(error => {
                 return {
                     valid: false,
-                    response: error.message,
+                    response: error.message
                 };
             });
     },

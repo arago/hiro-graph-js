@@ -34,8 +34,8 @@ export default {
         const url = encodeURI(
             `/_variables/suggest?${stringify({
                 ...requestData,
-                full: true,
-            })}`,
+                full: true
+            })}`
         );
 
         return fetch(url, options);
@@ -44,14 +44,14 @@ export default {
     define(fetch, options, name) {
         const url = encodeURI(
             `/_variables/define?${stringify({
-                name,
-            })}`,
+                name
+            })}`
         );
 
         return fetch(url, options)
-            .then((res) => ({
-                isTodo: res['ogit/Automation/todo'] || false,
+            .then(res => ({
+                isTodo: res["ogit/Automation/todo"] || false
             }))
             .catch(() => undefined);
-    },
+    }
 };
