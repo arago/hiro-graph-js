@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/redux",
-    "version": "7.0.9",
+    "version": "7.0.10",
     "repository": "arago/hiro-graph-js",
     "description": "Redux awareness for the `@hiro-graph/orm` package",
     "main": "lib/index.js",
@@ -14,7 +14,7 @@
     "dependencies": {
         "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "@hiro-graph/client": "^7.0.4",
-        "@hiro-graph/implicit-oauth": "^7.0.0",
+        "@hiro-graph/implicit-oauth": "^7.0.1",
         "@hiro-graph/orm": "^7.0.7",
         "eslint": "^5.3.0",
         "lodash.isplainobject": "^4.0.6",
