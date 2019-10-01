@@ -159,7 +159,7 @@ export class Schema {
 
 export type IClientServlets = {
     [index: string]: {
-        [index: string]: (data?: any) => Promise<any>;
+        [index: string]: (...args: any) => Promise<any>;
     };
 };
 

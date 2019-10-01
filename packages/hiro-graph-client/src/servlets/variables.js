@@ -4,19 +4,7 @@
 import { stringify } from "querystring";
 
 export default {
-    add(
-        fetch,
-        options,
-        { name, description, todo, type = "any", ...rest } = {}
-    ) {
-        const data = {
-            "ogit/name": name,
-            "ogit/description": description,
-            "ogit/Automation/todo": todo,
-            "ogit/subType": type,
-            ...rest
-        };
-
+    add(fetch, options, data = {}) {
         options.method = "PUT";
         options.body = JSON.stringify(data);
 

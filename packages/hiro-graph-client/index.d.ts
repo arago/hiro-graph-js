@@ -108,15 +108,6 @@ export namespace OGIT {
         "ogit/_out-type": string;
         "ogit/_in-id": string;
     }
-
-    export interface Variable {
-        "ogit/accessControl": string;
-        "ogit/name": string;
-        "ogit/subType": string;
-        "ogit/_creator": string;
-        "ogit/description": string;
-        "ogit/Automation/todo": boolean;
-    }
 }
 
 export interface AccountWithProfile {
@@ -139,13 +130,22 @@ export interface NodeHistory<T extends OGIT.SafeNode = OGIT.Node> {
 }
 
 export interface KI {
-    validate: () => Promise<Response | any>;
+    validate: (
+        options: ReqOptions,
+        data: { ki: string; [key: string]: string | boolean }
+    ) => Promise<Response | any>;
 }
 
 interface Variables {
-    add: () => Promise<OGIT.Variable>;
-    suggest: () => Promise<OGIT.Variable[]>;
-    define: () => Promise<OGIT.Variable>;
+    add: <Variable>(options: ReqOptions, data: Variable) => Promise<Variable>;
+    suggest: <Variable>(
+        options: ReqOptions,
+        opts: { name: string; [key: string]: string | boolean }
+    ) => Promise<Variable[]>;
+    define: <Variable>(
+        options: ReqOptions,
+        opts: { name: string; [key: string]: string | boolean }
+    ) => Promise<Variable>;
 }
 
 // HttpTransport
@@ -455,6 +455,10 @@ export default class Client {
     create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
     update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
     get(id: string): Promise<OGIT.Node>;
+
+    // servlets
+    ki: KI;
+    variables: Variables;
 }
 
 export type ClientWithServlets<
