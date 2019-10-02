@@ -43,17 +43,17 @@ export namespace OGIT {
         "ogit/title"?: string;
         "ogit/_organization"?: string;
         "ogit/_scope"?: string;
-        '/teaching_issue_subject'?: string;
-        '/teaching_is_handedover'?: string;
-        '/teaching_step_progress'?: string;
-        '/teaching_ki_progress'?: string;
-        '/teaching_ownerId'?: string;
-        '/teaching_conversion_ownerId'?: string;
-        '/teaching_rooms'?: string;
-        '/teaching_rooms_completed'?: string;
-        '/teaching_steps'?: string;
-        '/teaching_steps_deployed'?: string;
-        'ogit/Knowledge/archived'?: string;
+        "/teaching_issue_subject"?: string;
+        "/teaching_is_handedover"?: string;
+        "/teaching_step_progress"?: string;
+        "/teaching_ki_progress"?: string;
+        "/teaching_ownerId"?: string;
+        "/teaching_conversion_ownerId"?: string;
+        "/teaching_rooms"?: string;
+        "/teaching_rooms_completed"?: string;
+        "/teaching_steps"?: string;
+        "/teaching_steps_deployed"?: string;
+        "ogit/Knowledge/archived"?: string;
     }
 
     export interface KnowledgeItem extends SafeNode {
