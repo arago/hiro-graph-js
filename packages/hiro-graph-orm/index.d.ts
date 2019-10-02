@@ -1,3 +1,7 @@
+import { LuceneQuery } from "@hiro-graph/lucene";
+import { GremlinQueryBuilder } from '@hiro-graph/gremlin';
+import Client from "@hiro-graph/client";
+
 export interface IDefinitionData {
     [index: string]: string;
 }
@@ -49,22 +53,22 @@ export class Entity<T extends GraphVertex> {
         options?: IQueryOptions
     ): (items: T) => Promise<T>;
     find<SearchKeys extends string = string>(
-        query: import("@hiro-graph/lucene").LuceneQuery<SearchKeys>,
+        query: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T[]>;
     findById(idOrIds: string, options?: IQueryOptions): Promise<T>;
     findById(idOrIds: Array<string>, options?: IQueryOptions): Promise<T[]>;
     findOne<SearchKeys extends string = string>(
-        query: import("@hiro-graph/lucene").LuceneQuery<SearchKeys>,
+        query: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T>;
     findCount<SearchKeys extends string = string>(
-        query: import("@hiro-graph/lucene").LuceneQuery<SearchKeys>,
+        query: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<number>;
     search<SearchKeys extends string = string>(
         query: string | object,
-        filter: import("@hiro-graph/lucene").LuceneQuery<SearchKeys>,
+        filter: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T | T[]>;
 }
@@ -169,11 +173,11 @@ type FetchReturn = <T extends GraphVertex | GraphVertex[]>(
 
 export default class Context {
     private _cache: Map<string, object>;
-    private _client: import("@hiro-graph/client").default;
+    private _client: Client;
     private _log: string[];
 
     constructor(
-        clientSpec: import("@hiro-graph/client").default | IClientArgs,
+        clientSpec: Client | IClientArgs,
         schemaSpec: Schema | Array<IDefinition>,
         cache?: Map<string, object>
     );
@@ -182,7 +186,7 @@ export default class Context {
     profile<T extends GraphVertex>(): Promise<T>;
     getClient<
         T extends IClientServlets
-    >(): import("@hiro-graph/client").default & T;
+    >(): Client & T;
     setCache(cache: Map<string, object>): void;
     deleteFromCache(key: string): boolean;
 
@@ -192,7 +196,7 @@ export default class Context {
     ): Promise<T>;
     gremlin(
         initialQuery?: string
-    ): import("@hiro-graph/gremlin").GremlinQueryBuilder;
+    ): GremlinQueryBuilder;
     getEntity<T extends GraphVertex>(name: string): Entity<T> | undefined;
     remove(vertexId: string): undefined;
     insertRaw<T extends GraphVertex>(rawData: object): T;
@@ -207,7 +211,7 @@ export default class Context {
         options?: IQueryOptions
     ): FetchReturn;
     find<T extends GraphVertex, SearchKeys extends string = string>(
-        query: import("@hiro-graph/lucene").LuceneQuery<SearchKeys>,
+        query: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T | T[]>;
     findById<T extends GraphVertex>(
@@ -223,12 +227,12 @@ export default class Context {
         options?: IQueryOptions
     ): Promise<T>;
     findCount<T extends GraphVertex, SearchKeys extends string = string>(
-        query: import("@hiro-graph/lucene").LuceneQuery<SearchKeys>,
+        query: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<number>;
     search<T extends GraphVertex, SearchKeys extends string = string>(
         query: string | object,
-        filter: import("@hiro-graph/lucene").LuceneQuery<SearchKeys>,
+        filter: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T | T[]>;
 }
