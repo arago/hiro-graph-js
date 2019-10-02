@@ -121,7 +121,7 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
     const options = defaultFetchOptions();
     switch (type) {
         case "getme":
-            url = "/api/7.0/graph/me/account?profile=true";
+            url = `${GRAPH_API_BASE}/me/account?profile=true`;
             break;
         case "get":
             url = `${GRAPH_API_BASE}/${encodeURIComponent(
