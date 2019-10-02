@@ -22,7 +22,7 @@ export default {
         fetch(`/api/7.0/graph/me/avatar`, { ...options, raw: true }),
     meAccount: (fetch, options) => fetch(`/api/7.0/graph/me/account`, options),
     mePassword: (fetch, options, oldPassword, newPassword) => {
-        options.method = "POST";
+        options.method = "PUT";
         options.body = JSON.stringify({
             oldPassword,
             newPassword
