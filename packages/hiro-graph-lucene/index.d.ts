@@ -22,7 +22,7 @@ export const createLuceneQuerystring: <T extends string = string>(
     entity?: any
 ) => {
     querystring: string;
-    placeholders?: object;
+    placeholders: object;
 };
 
 export default createLuceneQuerystring;

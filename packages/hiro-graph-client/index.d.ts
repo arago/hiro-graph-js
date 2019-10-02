@@ -72,7 +72,6 @@ export namespace OGIT {
 
     export interface KnowledgePool extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_is-deleted": boolean;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
         "ogit/_v"?: number;
@@ -84,7 +83,6 @@ export namespace OGIT {
 
     export interface Account extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_is-deleted": boolean;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
         "ogit/_v"?: number;
@@ -98,7 +96,6 @@ export namespace OGIT {
 
     export interface AccountProfile extends SafeNode {
         "ogit/_creator-app"?: string;
-        "ogit/_is-deleted": boolean;
         "ogit/_modified-by-app"?: string;
         "ogit/_owner"?: string;
         "ogit/_v"?: number;
@@ -470,7 +467,7 @@ export default class Client {
     addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
     create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
     update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
-    get(id: string): Promise<OGIT.Node>;
+    get: <T extends OGIT.SafeNode = OGIT.Node>(id: string) => Promise<T>;
 
     // servlets
     ki: KI;
