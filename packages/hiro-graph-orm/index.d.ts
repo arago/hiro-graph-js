@@ -1,5 +1,5 @@
 import { LuceneQuery } from "@hiro-graph/lucene";
-import { GremlinQueryBuilder } from '@hiro-graph/gremlin';
+import { GremlinQueryBuilder } from "@hiro-graph/gremlin";
 import Client from "@hiro-graph/client";
 
 export interface IDefinitionData {
@@ -184,9 +184,7 @@ export default class Context {
 
     me<T extends GraphVertex>(): Promise<T>;
     profile<T extends GraphVertex>(): Promise<T>;
-    getClient<
-        T extends IClientServlets
-    >(): Client & T;
+    getClient<T extends IClientServlets>(): Client & T;
     setCache(cache: Map<string, object>): void;
     deleteFromCache(key: string): boolean;
 
@@ -194,9 +192,7 @@ export default class Context {
         vertexId: string,
         options?: IQueryOptions
     ): Promise<T>;
-    gremlin(
-        initialQuery?: string
-    ): GremlinQueryBuilder;
+    gremlin(initialQuery?: string): GremlinQueryBuilder;
     getEntity<T extends GraphVertex>(name: string): Entity<T> | undefined;
     remove(vertexId: string): undefined;
     insertRaw<T extends GraphVertex>(rawData: object): T;
