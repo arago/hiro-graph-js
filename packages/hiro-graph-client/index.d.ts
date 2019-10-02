@@ -1,6 +1,7 @@
 // Data
 
-import { Response } from "node-fetch";
+import NodeFetch, { RequestInit, Response } from "node-fetch";
+import { w3cwebsocket } from "websocket";
 
 export namespace OGIT {
     export interface SafeNode {
@@ -199,14 +200,14 @@ declare class HttpTransport {
     fetch(
         token: string,
         url: string,
-        init?: import("node-fetch").RequestInit,
+        init?: RequestInit,
         reqOptions?: ReqOptions
-    ): Promise<import("node-fetch").Response>;
+    ): Promise<Response>;
     request(
         token: string,
         params?: RequestParams,
         reqOptions?: ReqOptions
-    ): Promise<import("node-fetch").Response>;
+    ): Promise<Response>;
     defaultFetchOptions(): {
         method: "GET";
         headers: {
@@ -229,15 +230,12 @@ declare class WebSocketTransport {
         token: string,
         params?: RequestParams,
         reqOptions?: object
-    ): Promise<import("websocket").w3cwebsocket>;
-    connect(
-        token: string,
-        emit: EmitHandler
-    ): Promise<import("websocket").w3cwebsocket>;
+    ): Promise<w3cwebsocket>;
+    connect(token: string, emit: EmitHandler): Promise<w3cwebsocket>;
     createWebSocket(
         initialToken: string,
         emit: EmitHandler
-    ): Promise<import("websocket").w3cwebsocket>;
+    ): Promise<w3cwebsocket>;
     defaultFetchOptions(): {
         method: "GET";
         headers: {
@@ -382,7 +380,7 @@ interface ClientParams {
     token: string | Token;
 }
 
-export type IServletFetchType = typeof import("node-fetch").default;
+export type IServletFetchType = typeof NodeFetch;
 
 export interface Servlet {
     [index: string]: ServletFunction;
@@ -390,7 +388,7 @@ export interface Servlet {
 
 export type ServletFunction<Data = any, Response = any> = (
     fetch: Client["fetch"],
-    init?: import("node-fetch").RequestInit,
+    init?: RequestInit,
     data?: Data
 ) => Promise<Response>;
 
@@ -418,9 +416,9 @@ export default class Client {
     eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
     getToken<T extends Token = Token>(): T;
     me(): AccountWithProfile;
-    fetch: <T = import("node-fetch").Response>(
+    fetch: <T = Response>(
         url: string,
-        init?: import("node-fetch").RequestInit,
+        init?: RequestInit,
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
     gremlin: <T>(
