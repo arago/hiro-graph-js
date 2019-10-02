@@ -160,8 +160,8 @@ interface Variables {
 }
 
 interface App {
-    getAll: <App>(options: ReqOptions) => Promise<{ items: App[] }>;
-    getMy: <App>(options: ReqOptions) => Promise<{ items: App[] }>;
+    getAll: <App>(options: ReqOptions) => Promise<App[]>;
+    getMy: <App>(options: ReqOptions) => Promise<App[]>;
     install: (options: ReqOptions, appId: string) => Promise<Response>;
     uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
 }
