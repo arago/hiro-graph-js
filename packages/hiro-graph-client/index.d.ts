@@ -159,6 +159,13 @@ interface Variables {
     ) => Promise<Variable>;
 }
 
+interface App {
+    getAll: <App>(options: ReqOptions) => Promise<{ items: App[] }>;
+    getMy: <App>(options: ReqOptions) => Promise<{ items: App[] }>;
+    install: (options: ReqOptions, appId: string) => Promise<Response>;
+    uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
+}
+
 // HttpTransport
 
 interface RequestParams {
@@ -470,6 +477,7 @@ export default class Client {
     // servlets
     ki: KI;
     variables: Variables;
+    app: App;
 }
 
 export type ClientWithServlets<
