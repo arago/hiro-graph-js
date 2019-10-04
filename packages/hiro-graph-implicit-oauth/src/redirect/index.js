@@ -9,7 +9,7 @@ const redirectStrategy = function({ url, redirectUri }) {
         },
 
         callLocalCallback() {
-            //basically we got the token, which means it is in sessionStorage. redirect back to local page
+            //basically we got the token, which means it is in localStorage. redirect back to local page
             window.location = redirectUri;
         },
 
