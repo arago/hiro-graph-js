@@ -1,6 +1,6 @@
 # `@hiro-graph/implicit-oauth`: Implicit OAuth flow helper
 
-A simple oauth implicit flow, with options for a Popup or a Redirect based
+A simple oauth implicit flow
 
 ## installation
 
@@ -11,8 +11,7 @@ $ npm install @hiro-graph/implicit-oauth
 ## Usage example
 
 ```javascript
-
-import { Popup } from "@hiro-graph/implicit-oauth"
+import { Redirect } from "@hiro-graph/implicit-oauth"
 
 const config = {
     url: "https://your/authorize/url...",
@@ -22,7 +21,7 @@ const config = {
 // Your login button
 const loginButton = document.getElementById("loginButton")
 
-const { check, request } = Popup(config);
+const { check, request } = Redirect(config);
 
 const authCallback = (err, token) => {
     if (err) {
@@ -40,8 +39,7 @@ const authCallback = (err, token) => {
 //perform passive login check
 check(authCallback);
 
-// Trigger implicitOauth when clicked (open popup)
+// Trigger implicitOauth when clicked
 loginButton.addEventListener("click", () => request(authCallback));
-
 ```
 

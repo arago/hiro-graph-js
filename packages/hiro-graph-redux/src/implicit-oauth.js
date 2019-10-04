@@ -2,8 +2,6 @@
  *  Helper functions for getting data from oauth implicit auth flow.
  */
 import { createStrategy } from "@hiro-graph/implicit-oauth";
-import { popupStrategy } from "@hiro-graph/implicit-oauth/lib/popup";
-import { iframeStrategy } from "@hiro-graph/implicit-oauth/lib/iframe";
 import { redirectStrategy } from "@hiro-graph/implicit-oauth/lib/redirect";
 
 import {
@@ -71,8 +69,6 @@ const fetchMeForToken = createAction(
 );
 
 const builtInStrategies = {
-    popup: popupStrategy,
-    iframe: iframeStrategy,
     redirect: redirectStrategy
 };
 
@@ -82,7 +78,7 @@ const builtInStrategies = {
  */
 export default function setupImplicitOauth(
     { url, clientId, redirectUri, logoutUri, store, ...options },
-    strategySpec = "popup"
+    strategySpec = "redirect"
 ) {
     const strategy =
         typeof strategySpec === "string"

@@ -20,8 +20,6 @@
     request() - do whatever this implementation does to get a token
 */
 import createStrategy from "./base";
-import Popup from "./popup";
-import Iframe from "./iframe";
 import Redirect from "./redirect";
 
-export { createStrategy, Popup, Iframe, Redirect };
+export { createStrategy, Redirect };
