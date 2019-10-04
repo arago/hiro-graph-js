@@ -1,6 +1,6 @@
 // Data
 
-import NodeFetch, { RequestInit, Response } from "node-fetch";
+import { RequestInit, Response } from "node-fetch";
 import { w3cwebsocket } from "websocket";
 
 export namespace OGIT {
@@ -136,32 +136,6 @@ export interface NodeHistory<T extends OGIT.SafeNode = OGIT.Node> {
         version: number;
         vid: string;
     };
-}
-
-export interface KI {
-    validate: (
-        options: ReqOptions,
-        data: { ki: string; [key: string]: string | boolean }
-    ) => Promise<Response | any>;
-}
-
-interface Variables {
-    add: <Variable>(options: ReqOptions, data: Variable) => Promise<Variable>;
-    suggest: <Variable>(
-        options: ReqOptions,
-        opts: { name: string; [key: string]: string | boolean }
-    ) => Promise<Variable[]>;
-    define: <Variable>(
-        options: ReqOptions,
-        opts: { name: string; [key: string]: string | boolean }
-    ) => Promise<Variable>;
-}
-
-interface App {
-    getAll: <App>(options: ReqOptions) => Promise<App[]>;
-    getMy: <App>(options: ReqOptions) => Promise<App[]>;
-    install: (options: ReqOptions, appId: string) => Promise<Response>;
-    uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
 }
 
 // HttpTransport
@@ -377,8 +351,6 @@ interface ClientParams {
     token: string | Token;
 }
 
-export type IServletFetchType = typeof NodeFetch;
-
 export interface Servlet {
     [index: string]: ServletFunction;
 }
@@ -388,6 +360,34 @@ export type ServletFunction<Data = any, Response = any> = (
     init?: RequestInit,
     data?: Data
 ) => Promise<Response>;
+
+export namespace Servlet {
+  export interface KI {
+    validate: (
+      options: ReqOptions,
+      data: { ki: string; [key: string]: string | boolean }
+    ) => Promise<Response | any>;
+  }
+
+  export interface Variables {
+    add: <Variable>(options: ReqOptions, data: Variable) => Promise<Variable>;
+    suggest: <Variable>(
+      options: ReqOptions,
+      opts: { name: string; [key: string]: string | boolean }
+    ) => Promise<Variable[]>;
+    define: <Variable>(
+      options: ReqOptions,
+      opts: { name: string; [key: string]: string | boolean }
+    ) => Promise<Variable>;
+  }
+
+  export interface App {
+    getAll: <App>(options: ReqOptions) => Promise<App[]>;
+    getMy: <App>(options: ReqOptions) => Promise<App[]>;
+    install: (options: ReqOptions, appId: string) => Promise<Response>;
+    uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
+  }
+}
 
 interface BaseOptions {
     offset?: number;
@@ -468,13 +468,4 @@ export default class Client {
     create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
     update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
     get: <T extends OGIT.SafeNode = OGIT.Node>(id: string) => Promise<T>;
-
-    // servlets
-    ki: KI;
-    variables: Variables;
-    app: App;
 }
-
-export type ClientWithServlets<
-    Servlets extends { [index: string]: Servlet }
-> = Client & Servlets;
