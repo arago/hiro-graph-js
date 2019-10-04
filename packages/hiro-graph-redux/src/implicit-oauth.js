@@ -1,8 +1,7 @@
 /**
  *  Helper functions for getting data from oauth implicit auth flow.
  */
-import { createStrategy } from "@hiro-graph/implicit-oauth";
-import { redirectStrategy } from "@hiro-graph/implicit-oauth/lib/redirect";
+import createStrategy from "./create-oauth-strategy";
 
 import {
     setToken,
@@ -68,14 +67,28 @@ const fetchMeForToken = createAction(
     }
 );
 
+const redirectStrategy = function({ url, redirectUri }) {
+    return {
+        isRemote() {
+            return /access_token/.test(window.location.hash);
+        },
+
+        callLocalCallback() {
+            //basically we got the token, which means it is in localStorage. redirect back to local page
+            window.location = redirectUri;
+        },
+
+        requestToken() {
+            //bump to auth page
+            window.location = url;
+        }
+    };
+};
+
 const builtInStrategies = {
     redirect: redirectStrategy
 };
 
-/**
- *  The "strategy" option is one of the exports from "@hiro-graph/implicit-oauth"
- *  We provide a shorthand for the common ones, so you don't have to add the depenency explitictly
- */
 export default function setupImplicitOauth(
     { url, clientId, redirectUri, logoutUri, store, ...options },
     strategySpec = "redirect"

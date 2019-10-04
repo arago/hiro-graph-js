@@ -13,7 +13,6 @@ Each package maintains it's own documentation:
 -   [`@hiro-graph/client`](/packages/hiro-graph-client/)
 -   [`@hiro-graph/codecs`](/packages/hiro-graph-codecs/)
 -   [`@hiro-graph/gremlin`](/packages/hiro-graph-gremlin/)
--   [`@hiro-graph/implicit-oauth`](/packages/hiro-graph-implicit-oauth/)
 -   [`@hiro-graph/lucene`](/packages/hiro-graph-lucene/)
 -   [`@hiro-graph/orm`](/packages/hiro-graph-orm/)
 -   [`@hiro-graph/orm-mappings`](/packages/hiro-graph-orm-mappings/)
