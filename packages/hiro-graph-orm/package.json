@@ -13,7 +13,6 @@
     "license": "MIT",
     "dependencies": {
         "@hiro-graph/client": "^7.0.4",
-        "@hiro-graph/codecs": "^7.0.0",
         "@hiro-graph/gremlin": "^7.0.0",
         "@hiro-graph/lucene": "^7.0.3",
         "lodash.isplainobject": "^4.0.6"
