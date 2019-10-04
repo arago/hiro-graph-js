@@ -40,7 +40,7 @@ const createReduxStoreAndClient = () => {
 
     /**
      *  This accepts the redux store, and wraps the oauth flow
-     *  We use the default OAuth strategy (popup)
+     *  We use the default OAuth strategy
      */
     implicitOauth(
         {

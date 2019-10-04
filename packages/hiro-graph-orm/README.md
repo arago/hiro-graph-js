@@ -432,3 +432,20 @@ console.log(result); // hopefully { errors: 0, detail: {} }
 ```
 
 If there are errors, the `detail` object will contain much more information keyed by `ogit/_type`, to help you make the required changes to either the schema or the ontology.
+
+## Codecs: String-to-type mappers
+
+HIRO Graph only allows storing string values, so if we wish to infer more meaningful types to those values we need to encode them. Also, as in the graph all values are strings, in order to sanely sort our values, they need to sort lexically when encoded.
+
+This package cover both those use-cases so you can define mappings for fields with types and have the conversion to and from string values done transparently. Most codecs handle bad input values by providing a zero value in the case
+
+```javascript
+const int = codec.int;
+
+console.log(int.encode(101)); // "p0000000000000101"
+console.log(int.encode(-101)); // "n9007199254740890"
+console.log(int.encode("this is not a number")); // "p0000000000000000"
+
+console.log(int.decode("n9007199254740890")); // -101
+console.log(int.decode("I am not a number")); // 0
+```

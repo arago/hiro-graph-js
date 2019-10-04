@@ -7,7 +7,7 @@ import querystring from "querystring";
  *  Therefore we can abstract those bits.
  *
  *  Also the concept of whether we are "local" i.e. in the page, or "remote", i.e.
- *  in the popup/frame/redirection process will be common, it's a bit like a "fork"
+ *  in the redirection process will be common, it's a bit like a "fork"
  *
  *  One branch of code is for the local, another for the remote.
  */
