@@ -362,29 +362,29 @@ export type ServletFunction<Data = any, Response = any> = (
 ) => Promise<Response>;
 
 export interface KIServlet {
-  validate: (
-    options: ReqOptions,
-    data: { ki: string; [key: string]: string | boolean }
-  ) => Promise<Response | any>;
+    validate: (
+        options: ReqOptions,
+        data: { ki: string; [key: string]: string | boolean }
+    ) => Promise<Response | any>;
 }
 
 export interface VariablesServlet {
-  add: <Variable>(options: ReqOptions, data: Variable) => Promise<Variable>;
-  suggest: <Variable>(
-    options: ReqOptions,
-    opts: { name: string; [key: string]: string | boolean }
-  ) => Promise<Variable[]>;
-  define: <Variable>(
-    options: ReqOptions,
-    opts: { name: string; [key: string]: string | boolean }
-  ) => Promise<Variable>;
+    add: <Variable>(options: ReqOptions, data: Variable) => Promise<Variable>;
+    suggest: <Variable>(
+        options: ReqOptions,
+        opts: { name: string; [key: string]: string | boolean }
+    ) => Promise<Variable[]>;
+    define: <Variable>(
+        options: ReqOptions,
+        opts: { name: string; [key: string]: string | boolean }
+    ) => Promise<Variable>;
 }
 
 export interface AppsServlet {
-  getAll: <App>(options: ReqOptions) => Promise<App[]>;
-  getMy: <App>(options: ReqOptions) => Promise<App[]>;
-  install: (options: ReqOptions, appId: string) => Promise<Response>;
-  uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
+    getAll: <App>(options: ReqOptions) => Promise<App[]>;
+    getMy: <App>(options: ReqOptions) => Promise<App[]>;
+    install: (options: ReqOptions, appId: string) => Promise<Response>;
+    uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
 }
 
 interface BaseOptions {
