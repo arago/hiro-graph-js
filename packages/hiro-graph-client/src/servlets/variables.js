@@ -1,5 +1,5 @@
 /**
- *  Servlet extension for the "/_variables/" endpoints.
+ *  Servlet extension for the "/variables/" endpoints.
  */
 import { stringify } from "querystring";
 
@@ -8,12 +8,12 @@ export default {
         options.method = "PUT";
         options.body = JSON.stringify(data);
 
-        return fetch("/_variables", options);
+        return fetch("/api/6/variables/", options);
     },
 
     suggest(fetch, options, { name, full = true, ...rest }) {
         const url = encodeURI(
-            "/_variables/suggest?" +
+            "/api/6/variables/suggest?" +
                 stringify({
                     name,
                     full,
@@ -26,7 +26,7 @@ export default {
 
     define(fetch, options, { name, ...rest }) {
         const url = encodeURI(
-            `/_variables/define?${stringify({
+            `/api/6/variables/define?${stringify({
                 name,
                 rest
             })}`
