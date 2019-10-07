@@ -275,11 +275,9 @@ export default {
         options.method = "POST";
         options.headers["Content-Type"] = "application/json";
 
-        options.body = JSON.stringify(
-            JSON.stringify({
-                client_id: clientId
-            })
-        );
+        options.body = JSON.stringify({
+            client_id: clientId
+        });
 
         return fetch(toPath(URL_PATH_REVOKE), options);
     }
