@@ -362,31 +362,34 @@ export type ServletFunction<Data = any, Response = any> = (
 ) => Promise<Response>;
 
 export namespace Servlet {
-  export interface KI {
-    validate: (
-      options: ReqOptions,
-      data: { ki: string; [key: string]: string | boolean }
-    ) => Promise<Response | any>;
-  }
+    export interface KI {
+        validate: (
+            options: ReqOptions,
+            data: { ki: string; [key: string]: string | boolean }
+        ) => Promise<Response | any>;
+    }
 
-  export interface Variables {
-    add: <Variable>(options: ReqOptions, data: Variable) => Promise<Variable>;
-    suggest: <Variable>(
-      options: ReqOptions,
-      opts: { name: string; [key: string]: string | boolean }
-    ) => Promise<Variable[]>;
-    define: <Variable>(
-      options: ReqOptions,
-      opts: { name: string; [key: string]: string | boolean }
-    ) => Promise<Variable>;
-  }
+    export interface Variables {
+        add: <Variable>(
+            options: ReqOptions,
+            data: Variable
+        ) => Promise<Variable>;
+        suggest: <Variable>(
+            options: ReqOptions,
+            opts: { name: string; [key: string]: string | boolean }
+        ) => Promise<Variable[]>;
+        define: <Variable>(
+            options: ReqOptions,
+            opts: { name: string; [key: string]: string | boolean }
+        ) => Promise<Variable>;
+    }
 
-  export interface App {
-    getAll: <App>(options: ReqOptions) => Promise<App[]>;
-    getMy: <App>(options: ReqOptions) => Promise<App[]>;
-    install: (options: ReqOptions, appId: string) => Promise<Response>;
-    uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
-  }
+    export interface App {
+        getAll: <App>(options: ReqOptions) => Promise<App[]>;
+        getMy: <App>(options: ReqOptions) => Promise<App[]>;
+        install: (options: ReqOptions, appId: string) => Promise<Response>;
+        uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
+    }
 }
 
 interface BaseOptions {
