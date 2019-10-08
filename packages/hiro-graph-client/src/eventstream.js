@@ -15,7 +15,7 @@ import timer from "./timer";
 const noop = () => {};
 
 const RECONNECT_TIMEOUT = 5e3;
-const EVENTS_PROTOCOL = 'events-1.0.0';
+const EVENTS_PROTOCOL = "events-1.0.0";
 
 export default class EventStream {
     static OFFSET_NEWEST_MSG = "largest";
