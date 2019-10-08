@@ -80,7 +80,7 @@ type AuthStrategy = (
 
 export const implicitOauth: (
     oauth: IOAuthOptions,
-    strategy?: AuthStrategy | "popup" | "iframe" | "redirect"
+    strategy?: AuthStrategy | "redirect"
 ) => void;
 export const loginTaskSelector: (state: any) => ITaskShape;
 export const doLogin: () => void;

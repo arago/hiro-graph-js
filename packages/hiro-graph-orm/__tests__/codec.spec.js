@@ -2,7 +2,7 @@
 /**
  *  Testing the codecs, and that number coercion is correctly lexically sortable.
  */
-import createCodec from "../src";
+import createCodec from "../src/codecs";
 
 //rescursive object for JSON test.
 const recurser = {};
