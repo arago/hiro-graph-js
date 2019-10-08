@@ -1,24 +1,19 @@
 /**
  *  Servlet extension for the "/_ki/" endpoints.
  */
-import { stringify } from "querystring";
 
 export default {
-    validate(fetch, options, xml = "") {
+    validate(fetch, options, { ki = "", ...rest }) {
         options.method = "POST";
-        options.headers["Content-Type"] = "application/x-www-form-urlencoded";
-        options.body = stringify({ xml });
+        options.body = JSON.stringify({
+            ki,
+            ...rest
+        });
 
-        return fetch("/_ki/validate", options);
-    },
+        if (options.raw === undefined) {
+            options.raw = true;
+        }
 
-    autocomplete(fetch, options, type, data) {
-        const url = "/_ki/autocomplete?" + stringify({ type });
-
-        options.method = "POST";
-        options.body = stringify({ data });
-        options.headers["Content-Type"] = "application/x-www-form-urlencoded";
-
-        return fetch(url, options);
+        return fetch("/api/6/ki/check", options);
     }
 };

@@ -7,15 +7,9 @@ const filterUndef = obj =>
     }, {});
 
 const PATH = "/api/6.1/iam";
-// const QUERY_PARAM_NAME = "name";
-// const QUERY_PARAM_ACTIVE = "active";
-// const QUERY_PARAM_CONTENT = "content";
 const URL_PATH_ACCOUNTS = "accounts";
-// const URL_PATH_ACCOUNT = "account";
 const URL_PATH_PROFILE = "profile";
-// const URL_PATH_PROFILES = "profiles";
 const URL_PATH_AVATAR = "avatar";
-// const URL_PATH_PASSWORD = "password";
 const URL_PATH_TEAMS = "teams";
 const URL_PATH_ROLE = "role";
 const URL_PATH_ROLES = "roles";
@@ -28,10 +22,9 @@ const URL_PATH_ROLE_ASSIGNMENTS = "roleassignments";
 const URL_PATH_ORG_DOMAIN = "domain";
 const URL_PATH_ORG_DOMAINS = "domains";
 const URL_PATH_DATA_SCOPE = "scope";
-// const URL_PATH_ORG_SCOPES = "scopes";
 const URL_PATH_DATA_SETS = "datasets";
 const URL_PATH_ACTIVATE = "activate";
-// const URL_PATH_DEACTIVATE = "deactivate";
+const URL_PATH_REVOKE = "revoke";
 
 const toPath = (...paths) => `${PATH}/${paths.join("/")}`;
 
@@ -277,5 +270,15 @@ export default {
         options.headers["Content-Type"] = "application/json";
 
         return fetch(toPath(URL_PATH_ROLE), options);
+    },
+    revoke: (fetch, options, clientId) => {
+        options.method = "POST";
+        options.headers["Content-Type"] = "application/json";
+
+        options.body = JSON.stringify({
+            client_id: clientId
+        });
+
+        return fetch(toPath(URL_PATH_REVOKE), options);
     }
 };

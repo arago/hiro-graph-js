@@ -6,10 +6,6 @@ export default client => [
         fn: () => client.me()
     },
     {
-        name: "info",
-        fn: () => client.info()
-    },
-    {
         name: "get",
         fn: () => client.get("some-id")
     },

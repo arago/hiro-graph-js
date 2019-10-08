@@ -1,3 +1,5 @@
+import { LuceneQuery } from "@hiro-graph/lucene";
+import { GremlinQueryBuilder } from "@hiro-graph/gremlin";
 import Client from "@hiro-graph/client";
 
 export interface IDefinitionData {
@@ -50,43 +52,26 @@ export class Entity<T extends GraphVertex> {
         relations: Array<string>,
         options?: IQueryOptions
     ): (items: T) => Promise<T>;
-    find(query: LuceneQuery, options?: IQueryOptions): Promise<T[]>;
+    find<SearchKeys extends string = string>(
+        query: LuceneQuery<SearchKeys>,
+        options?: IQueryOptions
+    ): Promise<T[]>;
     findById(idOrIds: string, options?: IQueryOptions): Promise<T>;
     findById(idOrIds: Array<string>, options?: IQueryOptions): Promise<T[]>;
-    findOne(query: LuceneQuery, options?: IQueryOptions): Promise<T>;
-    findCount(query: LuceneQuery, options?: IQueryOptions): Promise<number>;
-    search(
+    findOne<SearchKeys extends string = string>(
+        query: LuceneQuery<SearchKeys>,
+        options?: IQueryOptions
+    ): Promise<T>;
+    findCount<SearchKeys extends string = string>(
+        query: LuceneQuery<SearchKeys>,
+        options?: IQueryOptions
+    ): Promise<number>;
+    search<SearchKeys extends string = string>(
         query: string | object,
-        filter: LuceneQuery,
+        filter: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T | T[]>;
 }
-
-export class GremlinQueryBuilder {
-    order(): GremlinQueryBuilder;
-    by(prop: string): GremlinQueryBuilder;
-    range(from: number, to: number): GremlinQueryBuilder;
-    execute<T>(id: string, options?: { raw: boolean }): Promise<T>;
-}
-
-type LuceneOptions<T> = "$not" | "$or" | "$must" | "$and" | "$missing" | T;
-
-type LucenseBase<T extends string> = {
-    [K in LuceneOptions<T>]?: string | string[] | LucenseBase<T>
-};
-type LuceneSpecial = {
-    $search?:
-        | { type: "ngram" | "prefix"; term: string; field?: string }
-        | string;
-    $range?: { [index: string]: [number, number] };
-};
-type LucenseAny = {
-    [index: string]: string | string[] | LucenseAny;
-};
-
-export type LuceneQuery<T extends string = defaultProps> = LucenseBase<T> &
-    LuceneSpecial &
-    LucenseAny;
 
 type SetterObject<Props extends string> = Partial<{ [k in Props]: any }>;
 
@@ -178,7 +163,7 @@ export class Schema {
 
 export type IClientServlets = {
     [index: string]: {
-        [index: string]: (data?: any) => Promise<any>;
+        [index: string]: (...args: any) => Promise<any>;
     };
 };
 
@@ -221,8 +206,8 @@ export default class Context {
         relations: Array<string>,
         options?: IQueryOptions
     ): FetchReturn;
-    find<T extends GraphVertex>(
-        query: LuceneQuery,
+    find<T extends GraphVertex, SearchKeys extends string = string>(
+        query: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T | T[]>;
     findById<T extends GraphVertex>(
@@ -237,13 +222,13 @@ export default class Context {
         query: any,
         options?: IQueryOptions
     ): Promise<T>;
-    findCount<T extends GraphVertex>(
-        query: LuceneQuery,
+    findCount<T extends GraphVertex, SearchKeys extends string = string>(
+        query: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<number>;
-    search<T extends GraphVertex>(
+    search<T extends GraphVertex, SearchKeys extends string = string>(
         query: string | object,
-        filter: LuceneQuery,
+        filter: LuceneQuery<SearchKeys>,
         options?: IQueryOptions
     ): Promise<T | T[]>;
 }

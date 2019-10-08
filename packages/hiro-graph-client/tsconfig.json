@@ -9,7 +9,9 @@
         "baseUrl": "../",
         "typeRoots": ["../"],
         "noEmit": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
     },
     "files": ["index.d.ts"]
 }
