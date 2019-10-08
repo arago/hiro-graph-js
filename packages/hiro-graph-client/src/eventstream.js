@@ -8,16 +8,14 @@
  *  and continue to emit events.
  */
 import { w3cwebsocket as WebSocket } from "websocket";
-import {
-    ensureWebSocketsAvailable,
-    GRAPH_API_PROTOCOL
-} from "./transport-websocket";
+import { ensureWebSocketsAvailable } from "./transport-websocket";
 import { channel } from "./subscriber-fanout";
 import qs from "querystring";
 import timer from "./timer";
 const noop = () => {};
 
 const RECONNECT_TIMEOUT = 5e3;
+const EVENTS_PROTOCOL = 'events-1.0.0';
 
 export default class EventStream {
     static OFFSET_NEWEST_MSG = "largest";
@@ -210,7 +208,7 @@ export default class EventStream {
         const t = timer();
         return new Promise((resolve, reject) => {
             const ws = new WebSocket(this._endpoint, [
-                GRAPH_API_PROTOCOL,
+                EVENTS_PROTOCOL,
                 `token-${initialToken}`
             ]);
 
