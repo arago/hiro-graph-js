@@ -107,6 +107,7 @@ declare type defaultProps =
     | "_modified-on"
     | "_organization"
     | "_owner"
+    | "_scope"
     | "_type";
 
 export type PlainVertex<Required = {}, Optional = {}, Relations = {}> = {
