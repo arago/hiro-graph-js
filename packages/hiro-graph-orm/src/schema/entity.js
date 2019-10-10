@@ -170,6 +170,13 @@ const internalProps = [
         required: false
     },
     {
+        src: "ogit/_scope",
+        dst: "_scope",
+        encode: stringCodec.encode,
+        decode: stringCodec.decode,
+        required: false
+    },
+    {
         src: "ogit/_owner",
         dst: "_owner",
         encode: listCodec.encode,
