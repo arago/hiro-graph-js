@@ -3,39 +3,39 @@
  */
 import { stringify } from "querystring";
 
-export default {
-    add(fetch, options, data = {}) {
-        options.method = "PUT";
-        options.body = JSON.stringify(data);
+const BASE_PATH = "/api/6/variables";
 
-        return fetch("/api/6/variables/", options);
-    },
+export default function variablesServletFactory(fetch, options) {
+    return {
+        add(data) {
+            return fetch(BASE_PATH, {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
+        },
 
-    suggest(fetch, options, { name, full = true, ...rest }) {
-        const url = encodeURI(
-            "/api/6/variables/suggest?" +
-                stringify({
-                    name,
-                    full,
-                    ...rest
-                })
-        );
-
-        return fetch(url, options);
-    },
-
-    define(fetch, options, { name, ...rest }) {
-        const url = encodeURI(
-            `/api/6/variables/define?${stringify({
+        suggest({ name, full = true, ...rest }) {
+            const query = stringify({
+                ...rest,
                 name,
-                rest
-            })}`
-        );
+                full
+            });
 
-        return fetch(url, options)
-            .then(res => ({
-                isTodo: res["ogit/Automation/todo"] || false
-            }))
-            .catch(() => undefined);
-    }
-};
+            const url = encodeURI(`${BASE_PATH}/suggest?${query}`);
+
+            return fetch(url, options);
+        },
+
+        define({ name, ...rest }) {
+            const url = encodeURI(
+                `${BASE_PATH}/define?${stringify({
+                    ...rest,
+                    name
+                })}`
+            );
+
+            return fetch(url, options);
+        }
+    };
+}

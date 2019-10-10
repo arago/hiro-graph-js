@@ -6,38 +6,49 @@ const filterUndef = obj =>
         return ret;
     }, {});
 
-export default {
-    getMeProfile: (fetch, options) =>
-        fetch(`/api/7.0/graph/me/profile`, options),
-    updateMeProfile: (fetch, options, data) => {
-        const payload = filterUndef(data);
+export default function apiServletFactory(fetch, options) {
+    return {
+        getMeProfile: () => fetch("/api/7.0/graph/me/profile", options),
 
-        options.method = "POST";
-        options.body = JSON.stringify(payload);
-        options.headers["Content-Type"] = "application/json";
+        updateMeProfile: data => {
+            const payload = filterUndef(data);
 
-        return fetch(`/api/7.0/graph/me/profile`, options);
-    },
-    getMeAvatar: (fetch, options) =>
-        fetch(`/api/7.0/graph/me/avatar`, { ...options, raw: true }),
-    meAccount: (fetch, options) => fetch(`/api/7.0/graph/me/account`, options),
-    mePassword: (fetch, options, oldPassword, newPassword) => {
-        options.method = "PUT";
-        options.body = JSON.stringify({
-            oldPassword,
-            newPassword
-        });
-        options.headers["Content-Type"] = "application/json";
+            return fetch("/api/7.0/graph/me/profile", {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+        },
 
-        return fetch(`/api/7.0/graph/me/password`, options);
-    },
-    meTeams: (fetch, options) => fetch(`/api/7.0/graph/me/teams`, options),
-    updateMeAvatar: (fetch, options, data) => {
-        options.method = "PUT";
-        options.body = data;
-        options.headers["Content-Type"] = data.type;
-        options.raw = true;
+        getMeAvatar: () =>
+            fetch("/api/7.0/graph/me/avatar", { ...options, raw: true }),
 
-        return fetch(`/api/7.0/graph/me/avatar`, options);
-    }
-};
+        meAccount: () => fetch("/api/7.0/graph/me/account", options),
+
+        mePassword: (oldPassword, newPassword) => {
+            return fetch("/api/7.0/graph/me/password", {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify({
+                    oldPassword,
+                    newPassword
+                })
+            });
+        },
+
+        meTeams: () => fetch("/api/7.0/graph/me/teams", options),
+
+        updateMeAvatar: data => {
+            return fetch("/api/7.0/graph/me/avatar", {
+                ...options,
+                method: "POST",
+                body: data,
+                headers: {
+                    ...options.headers,
+                    "Content-Type": data.type
+                },
+                raw: true
+            });
+        }
+    };
+}
