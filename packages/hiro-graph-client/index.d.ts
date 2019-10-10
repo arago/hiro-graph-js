@@ -388,13 +388,13 @@ export interface AppsServlet {
 }
 
 interface StatsCounterOptions {
-  organization: any;
-  type: string;
-  [key: string]: any;
+    organization: any;
+    type: string;
+    [key: string]: any;
 }
 
 export interface StatsServlet {
-  counter<T>(options: StatsCounterOptions): Promise<T>;
+    counter<T>(options: StatsCounterOptions): Promise<T>;
 }
 
 interface BaseOptions {

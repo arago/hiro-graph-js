@@ -13,9 +13,8 @@ export {
     Token,
     cannotGetToken,
     Errors,
-
     appsServlet,
     kiServlet,
     statsServlet,
-    variablesSerlvet,
+    variablesSerlvet
 };
