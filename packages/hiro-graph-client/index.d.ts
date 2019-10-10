@@ -387,6 +387,16 @@ export interface AppsServlet {
     uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
 }
 
+interface StatsCounterOptions {
+    organization: any;
+    type: string;
+    [key: string]: any;
+}
+
+export interface StatsServlet {
+    counter<T>(options: StatsCounterOptions): Promise<T>;
+}
+
 interface BaseOptions {
     offset?: number;
     limit?: number;
@@ -467,3 +477,8 @@ export default class Client {
     update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
     get: <T extends OGIT.SafeNode = OGIT.Node>(id: string) => Promise<T>;
 }
+
+export declare const appsServlet: AppsServlet;
+export declare const kiServlet: KIServlet;
+export declare const statsServlet: StatsServlet;
+export declare const variablesSerlvet: VariablesServlet;
