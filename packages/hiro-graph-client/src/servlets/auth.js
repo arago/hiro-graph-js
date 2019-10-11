@@ -24,7 +24,6 @@ const URL_PATH_ORG_DOMAINS = "domains";
 const URL_PATH_DATA_SCOPE = "scope";
 const URL_PATH_DATA_SETS = "datasets";
 const URL_PATH_ACTIVATE = "activate";
-const URL_PATH_REVOKE = "revoke";
 
 const toPath = (...paths) => `${PATH}/${paths.join("/")}`;
 
@@ -316,14 +315,11 @@ export default function authServletFactory(fetch, options) {
         },
 
         revoke: clientId => {
-            options.method = "POST";
-            options.headers["Content-Type"] = "application/json";
-
-            options.body = JSON.stringify({
-                client_id: clientId
+            return fetch("/api/6/auth/revoke", {
+                ...options,
+                method: "POST",
+                body: JSON.stringify({ client_id: clientId })
             });
-
-            return fetch(toPath(URL_PATH_REVOKE), options);
         }
     };
 }
