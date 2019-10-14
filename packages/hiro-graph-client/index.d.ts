@@ -375,18 +375,20 @@ interface KiValidateOptions {
 }
 
 interface KiValidationResponse {
-  valid: boolean;
-  response: string | {
-    code: number;
-    status: string;
-    error?: string;
-    formatted?: string;
-    variables?: {
-      ISSUE: string[];
-      NODE: string[];
-    };
-    errors?: { line: number, message: string }[]
-  };
+    valid: boolean;
+    response:
+        | string
+        | {
+              code: number;
+              status: string;
+              error?: string;
+              formatted?: string;
+              variables?: {
+                  ISSUE: string[];
+                  NODE: string[];
+              };
+              errors?: { line: number; message: string }[];
+          };
 }
 
 export interface KiServlet {
