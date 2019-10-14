@@ -9,7 +9,20 @@ export default function kiServletFactory(fetch, options) {
                     ki
                 }),
                 raw: true
-            });
+            })
+                .then(response => response.json())
+                .then(response => {
+                    return {
+                        valid: response.code === 200,
+                        response
+                    };
+                })
+                .catch(error => {
+                    return {
+                        valid: false,
+                        response: error.message
+                    };
+                });
         }
     };
 }
