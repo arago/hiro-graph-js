@@ -1,11 +1,3 @@
-const filterUndef = obj =>
-    Object.keys(obj).reduce((ret, k) => {
-        if (obj[k] !== undefined) {
-            ret[k] = obj[k];
-        }
-        return ret;
-    }, {});
-
 const PATH = "/api/6.1/iam";
 const URL_PATH_ACCOUNTS = "accounts";
 const URL_PATH_PROFILE = "profile";
@@ -40,20 +32,17 @@ function putBinary(fetch, options, path, body) {
     });
 }
 
+// TODO: move methods to corresponding servlets (auth, me, iam, saas)
 export default function authServletFactory(fetch, options) {
     return {
-        // createAccount
         createAccount: data => {
-            const payload = filterUndef(data);
-
-            options.method = "POST";
-            options.body = JSON.stringify(payload);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ACCOUNTS), options);
+            return fetch(toPath(URL_PATH_ACCOUNTS), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
         },
 
-        // deactivateAccount
         getAvatar: id =>
             fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR), {
                 ...options,
@@ -86,16 +75,11 @@ export default function authServletFactory(fetch, options) {
             fetch(toPath(URL_PATH_ACCOUNTS, id) + "?profile=true", options),
 
         updateAccountProfile: (id, data) => {
-            const payload = filterUndef(data);
-
-            options.method = "POST";
-            options.body = JSON.stringify(payload);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(
-                toPath(URL_PATH_ACCOUNTS, URL_PATH_PROFILE, id),
-                options
-            );
+            return fetch(toPath(URL_PATH_ACCOUNTS, URL_PATH_PROFILE, id), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
         },
 
         getAccountProfile: id =>
@@ -105,30 +89,27 @@ export default function authServletFactory(fetch, options) {
             fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_PROFILE), options),
 
         updatePassword: (id, password) => {
-            options.method = "PUT";
-            options.body = JSON.stringify({ password });
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ACCOUNTS, id, "password"), options);
+            return fetch(toPath(URL_PATH_ACCOUNTS, id, "password"), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify({ password })
+            });
         },
 
         activateAccount: id => {
-            options.method = "PATCH";
-            options.body = JSON.stringify({});
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(
-                toPath(URL_PATH_ACCOUNTS, id, URL_PATH_ACTIVATE),
-                options
-            );
+            return fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_ACTIVATE), {
+                ...options,
+                method: "PATCH",
+                body: "{}"
+            });
         },
 
         createDataSet: data => {
-            options.method = "POST";
-            options.body = JSON.stringify(data);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_DATASET), options);
+            return fetch(toPath(URL_PATH_DATASET), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
         },
 
         updateDataSet: (id, data) => {
@@ -136,72 +117,71 @@ export default function authServletFactory(fetch, options) {
             options.body = JSON.stringify(data);
             options.headers["Content-Type"] = "application/json";
 
-            return fetch(toPath(URL_PATH_DATASET, id), options);
+            return fetch(toPath(URL_PATH_DATASET, id), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
         },
 
         getDataSet: id => fetch(toPath(URL_PATH_DATASET, id), options),
 
         deleteDataSet: id => {
-            options.method = "DELETE";
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_DATASET, id), options);
+            return fetch(toPath(URL_PATH_DATASET, id), {
+                ...options,
+                method: "DELETE"
+            });
         },
 
         createTeam: data => {
-            options.method = "POST";
-            options.body = JSON.stringify(data);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_TEAM), options);
+            return fetch(toPath(URL_PATH_TEAM), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
         },
 
         updateTeam: (id, data) => {
-            options.method = "PUT";
-            options.body = JSON.stringify(data);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_TEAM, id), options);
+            return fetch(toPath(URL_PATH_TEAM, id), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
         },
 
         getTeam: id => fetch(toPath(URL_PATH_TEAM, id), options),
 
         deleteTeam: id => {
-            options.method = "DELETE";
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_TEAM, id), options);
+            return fetch(toPath(URL_PATH_TEAM, id), {
+                ...options,
+                method: "DELETE"
+            });
         },
 
         createOrganization: data => {
-            const payload = filterUndef(data);
-
-            options.method = "POST";
-            options.body = JSON.stringify(payload);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ORGANIZATION), options);
+            return fetch(toPath(URL_PATH_ORGANIZATION), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
         },
 
         addMembers: (id, ...accounts) => {
-            options.method = "POST";
-            options.body = JSON.stringify({ accounts: accounts.join(",") });
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(
-                toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS, "add"),
-                options
-            );
+            return fetch(toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS, "add"), {
+                ...options,
+                method: "POST",
+                data: JSON.stringify({ accounts: accounts.join("/") })
+            });
         },
 
         removeMembers: (id, ...accounts) => {
-            options.method = "POST";
-            options.body = JSON.stringify({ accounts: accounts.join(",") });
-            options.headers["Content-Type"] = "application/json";
-
             return fetch(
                 toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS, "remove"),
-                options
+                {
+                    ...options,
+                    method: "POST",
+                    data: JSON.stringify({ accounts: accounts.join("/") })
+                }
             );
         },
 
@@ -225,41 +205,41 @@ export default function authServletFactory(fetch, options) {
             fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_TEAMS), options),
 
         createRoleAssignment: data => {
-            options.method = "POST";
-            options.body = JSON.stringify(data);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ROLE_ASSIGNMENT), options);
+            return fetch(toPath(URL_PATH_ROLE_ASSIGNMENT), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
         },
 
         getRoleAssignment: id =>
             fetch(toPath(URL_PATH_ROLE_ASSIGNMENT, id), options),
 
         deleteRoleAssignment: id => {
-            options.method = "DELETE";
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ORG_DOMAIN, id), options);
+            return fetch(toPath(URL_PATH_ORG_DOMAIN, id), {
+                ...options,
+                method: "DELETE"
+            });
         },
 
         createDomain: (name, organization) => {
-            options.method = "POST";
-            options.body = JSON.stringify({
-                name,
-                organization
+            return fetch(toPath(URL_PATH_ORG_DOMAIN), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify({
+                    name,
+                    organization
+                })
             });
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ORG_DOMAIN), options);
         },
 
         getDomain: id => fetch(toPath(URL_PATH_ORG_DOMAIN, id), options),
 
         deleteDomain: id => {
-            options.method = "DELETE";
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ORG_DOMAIN, id), options);
+            return fetch(toPath(URL_PATH_ORG_DOMAIN, id), {
+                ...options,
+                method: "DELETE"
+            });
         },
 
         organizationDomains: id =>
@@ -282,20 +262,26 @@ export default function authServletFactory(fetch, options) {
             ),
 
         createDataScope: data => {
-            options.method = "POST";
-            options.body = JSON.stringify(data);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_DATA_SCOPE), options);
+            return fetch(toPath(URL_PATH_DATA_SCOPE), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
         },
 
         updateDataScope: (id, data) => {
-            options.method = "PUT";
-            options.body = JSON.stringify(data);
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_DATA_SCOPE, id), options);
+            return fetch(toPath(URL_PATH_DATA_SCOPE, id), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
         },
+
+        organizationScopes: id =>
+            fetch(
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SCOPE),
+                options
+            ),
 
         getDataScope: id => fetch(toPath(URL_PATH_DATA_SCOPE, id), options),
 
@@ -308,10 +294,10 @@ export default function authServletFactory(fetch, options) {
         listAllRoles: () => fetch(toPath(URL_PATH_ROLES), options),
 
         listRoles: (limit, offset, name) => {
-            options.body = JSON.stringify({ limit, offset, name });
-            options.headers["Content-Type"] = "application/json";
-
-            return fetch(toPath(URL_PATH_ROLE), options);
+            return fetch(toPath(URL_PATH_ROLE), {
+                ...options,
+                body: JSON.stringify({ limit, offset, name })
+            });
         },
 
         revoke: clientId => {
