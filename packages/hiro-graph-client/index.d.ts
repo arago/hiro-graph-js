@@ -374,8 +374,23 @@ interface KiValidateOptions {
     [key: string]: any;
 }
 
+interface KiValidationResponse {
+  valid: boolean;
+  response: string | {
+    code: number;
+    status: string;
+    error?: string;
+    formatted?: string;
+    variables?: {
+      ISSUE: string[];
+      NODE: string[];
+    };
+    errors?: { line: number, message: string }[]
+  };
+}
+
 export interface KiServlet {
-    validate(options: KiValidateOptions): Promise<Response>;
+    validate(options: KiValidateOptions): Promise<KiValidationResponse>;
 }
 
 interface DefineVariableOptions {
@@ -608,7 +623,7 @@ export default class Client {
         }
     ) => Promise<TimeseriesResponse[]>;
 
-    history: <T extends OGIT.SafeNode = OGIT.Node>(
+    history: <T = any>(
         id: string,
         options?: {
             offset?: number;
