@@ -1,25 +1,27 @@
 const APPS_BASE = "/api/6.1/app";
 
-export default {
-    getAll(fetch, opts) {
-        return fetch(`${APPS_BASE}/desktop`, opts);
-    },
+export default function appsServletFactory(fetch, options) {
+    return {
+        getAll() {
+            return fetch(`${APPS_BASE}/desktop`, options);
+        },
 
-    getMy(fetch, opts) {
-        return fetch(`${APPS_BASE}/desktop/installed`, opts);
-    },
+        getMy() {
+            return fetch(`${APPS_BASE}/desktop/installed`, options);
+        },
 
-    install(fetch, opts, appId) {
-        return fetch(`${APPS_BASE}/install/${appId}`, {
-            ...opts,
-            method: "POST"
-        });
-    },
+        install(appId) {
+            return fetch(`${APPS_BASE}/install/${appId}`, {
+                ...options,
+                method: "POST"
+            });
+        },
 
-    uninstall(fetch, opts, appId) {
-        return fetch(`${APPS_BASE}/uninstall/${appId}`, {
-            ...opts,
-            method: "POST"
-        });
-    }
-};
+        uninstall(appId) {
+            return fetch(`${APPS_BASE}/uninstall/${appId}`, {
+                ...options,
+                method: "POST"
+            });
+        }
+    };
+}

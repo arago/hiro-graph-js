@@ -1,11 +1,3 @@
-const filterUndef = obj =>
-    Object.keys(obj).reduce((ret, k) => {
-        if (obj[k] !== undefined) {
-            ret[k] = obj[k];
-        }
-        return ret;
-    }, {});
-
 const PATH = "/api/6.1/iam";
 const URL_PATH_ACCOUNTS = "accounts";
 const URL_PATH_PROFILE = "profile";
@@ -24,7 +16,6 @@ const URL_PATH_ORG_DOMAINS = "domains";
 const URL_PATH_DATA_SCOPE = "scope";
 const URL_PATH_DATA_SETS = "datasets";
 const URL_PATH_ACTIVATE = "activate";
-const URL_PATH_REVOKE = "revoke";
 
 const toPath = (...paths) => `${PATH}/${paths.join("/")}`;
 
@@ -41,244 +32,280 @@ function putBinary(fetch, options, path, body) {
     });
 }
 
-export default {
-    // createAccount
-    createAccount: (fetch, options, data) => {
-        const payload = filterUndef(data);
+// TODO: move methods to corresponding servlets (auth, me, iam, saas)
+export default function authServletFactory(fetch, options) {
+    return {
+        createAccount: data => {
+            return fetch(toPath(URL_PATH_ACCOUNTS), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        },
 
-        options.method = "POST";
-        options.body = JSON.stringify(payload);
-        options.headers["Content-Type"] = "application/json";
+        getAvatar: id =>
+            fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR), {
+                ...options,
+                raw: true
+            }),
 
-        return fetch(toPath(URL_PATH_ACCOUNTS), options);
-    },
-    // deactivateAccount
-    getAvatar: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR), {
-            ...options,
-            raw: true
-        }),
-    getOrgAvatar: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_AVATAR), {
-            ...options,
-            raw: true
-        }),
-    setAvatar: (fetch, options, id, avatar) =>
-        putBinary(
-            fetch,
-            options,
-            toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR),
-            avatar
-        ),
-    setOrgAvatar: (fetch, options, id, avatar) =>
-        putBinary(
-            fetch,
-            options,
-            toPath(URL_PATH_ORGANIZATION, id, URL_PATH_AVATAR),
-            avatar
-        ),
-    // updateAccount
-    getAccount: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ACCOUNTS, id) + "?profile=true", options),
-    updateAccountProfile: (fetch, options, id, data) => {
-        const payload = filterUndef(data);
+        getOrgAvatar: id =>
+            fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_AVATAR), {
+                ...options,
+                raw: true
+            }),
 
-        options.method = "POST";
-        options.body = JSON.stringify(payload);
-        options.headers["Content-Type"] = "application/json";
+        setAvatar: (id, avatar) =>
+            putBinary(
+                fetch,
+                options,
+                toPath(URL_PATH_ACCOUNTS, id, URL_PATH_AVATAR),
+                avatar
+            ),
 
-        return fetch(toPath(URL_PATH_ACCOUNTS, URL_PATH_PROFILE, id), options);
-    },
-    getAccountProfile: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ACCOUNTS, URL_PATH_PROFILE, id), options),
-    getAccountProfileByAccountId: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_PROFILE), options),
-    updatePassword: (fetch, options, id, password) => {
-        options.method = "PUT";
-        options.body = JSON.stringify({ password });
-        options.headers["Content-Type"] = "application/json";
+        setOrgAvatar: (id, avatar) =>
+            putBinary(
+                fetch,
+                options,
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_AVATAR),
+                avatar
+            ),
 
-        return fetch(toPath(URL_PATH_ACCOUNTS, id, "password"), options);
-    },
-    activateAccount: (fetch, options, id) => {
-        options.method = "PATCH";
-        options.body = JSON.stringify({});
-        options.headers["Content-Type"] = "application/json";
+        getAccount: id =>
+            fetch(toPath(URL_PATH_ACCOUNTS, id) + "?profile=true", options),
 
-        return fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_ACTIVATE), options);
-    },
-    createDataSet: (fetch, options, data) => {
-        options.method = "POST";
-        options.body = JSON.stringify(data);
-        options.headers["Content-Type"] = "application/json";
+        updateAccountProfile: (id, data) => {
+            return fetch(toPath(URL_PATH_ACCOUNTS, URL_PATH_PROFILE, id), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        },
 
-        return fetch(toPath(URL_PATH_DATASET), options);
-    },
-    updateDataSet: (fetch, options, id, data) => {
-        options.method = "PUT";
-        options.body = JSON.stringify(data);
-        options.headers["Content-Type"] = "application/json";
+        getAccountProfile: id =>
+            fetch(toPath(URL_PATH_ACCOUNTS, URL_PATH_PROFILE, id), options),
 
-        return fetch(toPath(URL_PATH_DATASET, id), options);
-    },
-    getDataSet: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_DATASET, id), options),
-    deleteDataSet: (fetch, options, id) => {
-        options.method = "DELETE";
-        options.headers["Content-Type"] = "application/json";
+        getAccountProfileByAccountId: id =>
+            fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_PROFILE), options),
 
-        return fetch(toPath(URL_PATH_DATASET, id), options);
-    },
-    createTeam: (fetch, options, data) => {
-        options.method = "POST";
-        options.body = JSON.stringify(data);
-        options.headers["Content-Type"] = "application/json";
+        updatePassword: (id, password) => {
+            return fetch(toPath(URL_PATH_ACCOUNTS, id, "password"), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify({ password })
+            });
+        },
 
-        return fetch(toPath(URL_PATH_TEAM), options);
-    },
-    updateTeam: (fetch, options, id, data) => {
-        options.method = "PUT";
-        options.body = JSON.stringify(data);
-        options.headers["Content-Type"] = "application/json";
+        activateAccount: id => {
+            return fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_ACTIVATE), {
+                ...options,
+                method: "PATCH",
+                body: "{}"
+            });
+        },
 
-        return fetch(toPath(URL_PATH_TEAM, id), options);
-    },
-    getTeam: (fetch, options, id) => fetch(toPath(URL_PATH_TEAM, id), options),
-    deleteTeam: (fetch, options, id) => {
-        options.method = "DELETE";
-        options.headers["Content-Type"] = "application/json";
+        createDataSet: data => {
+            return fetch(toPath(URL_PATH_DATASET), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        },
 
-        return fetch(toPath(URL_PATH_TEAM, id), options);
-    },
-    // createRole
-    // updateRole
-    // getRole
-    // deleteRole
-    createOrganization: (fetch, options, data) => {
-        const payload = filterUndef(data);
+        updateDataSet: (id, data) => {
+            options.method = "PUT";
+            options.body = JSON.stringify(data);
+            options.headers["Content-Type"] = "application/json";
 
-        options.method = "POST";
-        options.body = JSON.stringify(payload);
-        options.headers["Content-Type"] = "application/json";
+            return fetch(toPath(URL_PATH_DATASET, id), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
+        },
 
-        return fetch(toPath(URL_PATH_ORGANIZATION), options);
-    },
-    addMembers: (fetch, options, id, ...accounts) => {
-        options.method = "POST";
-        options.body = JSON.stringify({ accounts: accounts.join(",") });
-        options.headers["Content-Type"] = "application/json";
+        getDataSet: id => fetch(toPath(URL_PATH_DATASET, id), options),
 
-        return fetch(
-            toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS, "add"),
-            options
-        );
-    },
-    removeMembers: (fetch, options, id, ...accounts) => {
-        options.method = "POST";
-        options.body = JSON.stringify({ accounts: accounts.join(",") });
-        options.headers["Content-Type"] = "application/json";
+        deleteDataSet: id => {
+            return fetch(toPath(URL_PATH_DATASET, id), {
+                ...options,
+                method: "DELETE"
+            });
+        },
 
-        return fetch(
-            toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS, "remove"),
-            options
-        );
-    },
-    getTeamMembers: (fetch, options, id) =>
-        fetch(
-            toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS) + "?profile=true",
-            options
-        ),
-    getOrganizationMembers: (fetch, options, id) =>
-        fetch(
-            toPath(URL_PATH_ORGANIZATION, id, URL_PATH_MEMBERS) +
-                "?profile=true",
-            options
-        ),
-    organizationTeams: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
-    accountTeams: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_TEAMS), options),
-    createRoleAssignment: (fetch, options, data) => {
-        options.method = "POST";
-        options.body = JSON.stringify(data);
-        options.headers["Content-Type"] = "application/json";
+        createTeam: data => {
+            return fetch(toPath(URL_PATH_TEAM), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        },
 
-        return fetch(toPath(URL_PATH_ROLE_ASSIGNMENT), options);
-    },
-    getRoleAssignment: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ROLE_ASSIGNMENT, id), options),
-    deleteRoleAssignment: (fetch, options, id) => {
-        options.method = "DELETE";
-        options.headers["Content-Type"] = "application/json";
+        updateTeam: (id, data) => {
+            return fetch(toPath(URL_PATH_TEAM, id), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
+        },
 
-        return fetch(toPath(URL_PATH_ORG_DOMAIN, id), options);
-    },
-    // deleteFromPth
-    // getFromPath
-    // createFromPath
-    // updateFromPath
-    createDomain: (fetch, options, name, organization) => {
-        options.method = "POST";
-        options.body = JSON.stringify({
-            name,
-            organization
-        });
-        options.headers["Content-Type"] = "application/json";
+        getTeam: id => fetch(toPath(URL_PATH_TEAM, id), options),
 
-        return fetch(toPath(URL_PATH_ORG_DOMAIN), options);
-    },
-    getDomain: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORG_DOMAIN, id), options),
-    deleteDomain: (fetch, options, id) => {
-        options.method = "DELETE";
-        options.headers["Content-Type"] = "application/json";
+        deleteTeam: id => {
+            return fetch(toPath(URL_PATH_TEAM, id), {
+                ...options,
+                method: "DELETE"
+            });
+        },
 
-        return fetch(toPath(URL_PATH_ORG_DOMAIN, id), options);
-    },
-    organizationDomains: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_ORG_DOMAINS), options),
-    organizationRoleAssignments: (fetch, options, id) =>
-        fetch(
-            toPath(URL_PATH_ORGANIZATION, id, URL_PATH_ROLE_ASSIGNMENTS) +
-                "?detail=true",
-            options
-        ),
-    getDomainOrganization: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORG_DOMAIN, id, URL_PATH_ORGANIZATION), options),
-    createDataScope: (fetch, options, data) => {
-        options.method = "POST";
-        options.body = JSON.stringify(data);
-        options.headers["Content-Type"] = "application/json";
+        createOrganization: data => {
+            return fetch(toPath(URL_PATH_ORGANIZATION), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        },
 
-        return fetch(toPath(URL_PATH_DATA_SCOPE), options);
-    },
-    updateDataScope: (fetch, options, id, data) => {
-        options.method = "PUT";
-        options.body = JSON.stringify(data);
-        options.headers["Content-Type"] = "application/json";
+        addMembers: (id, ...accounts) => {
+            return fetch(toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS, "add"), {
+                ...options,
+                method: "POST",
+                data: JSON.stringify({ accounts: accounts.join("/") })
+            });
+        },
 
-        return fetch(toPath(URL_PATH_DATA_SCOPE, id), options);
-    },
-    getDataScope: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_DATA_SCOPE, id), options),
-    organizationDataSets: (fetch, options, id) =>
-        fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SETS), options),
-    // organizationDataScopes
-    listAllRoles: (fetch, options) => fetch(toPath(URL_PATH_ROLES), options),
-    listRoles: (fetch, options, limit, offset, name) => {
-        options.body = JSON.stringify({ limit, offset, name });
-        options.headers["Content-Type"] = "application/json";
+        removeMembers: (id, ...accounts) => {
+            return fetch(
+                toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS, "remove"),
+                {
+                    ...options,
+                    method: "POST",
+                    data: JSON.stringify({ accounts: accounts.join("/") })
+                }
+            );
+        },
 
-        return fetch(toPath(URL_PATH_ROLE), options);
-    },
-    revoke: (fetch, options, clientId) => {
-        options.method = "POST";
-        options.headers["Content-Type"] = "application/json";
+        getTeamMembers: id =>
+            fetch(
+                toPath(URL_PATH_TEAM, id, URL_PATH_MEMBERS) + "?profile=true",
+                options
+            ),
 
-        options.body = JSON.stringify({
-            client_id: clientId
-        });
+        getOrganizationMembers: id =>
+            fetch(
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_MEMBERS) +
+                    "?profile=true",
+                options
+            ),
 
-        return fetch(toPath(URL_PATH_REVOKE), options);
-    }
-};
+        organizationTeams: id =>
+            fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
+
+        accountTeams: id =>
+            fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_TEAMS), options),
+
+        createRoleAssignment: data => {
+            return fetch(toPath(URL_PATH_ROLE_ASSIGNMENT), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        },
+
+        getRoleAssignment: id =>
+            fetch(toPath(URL_PATH_ROLE_ASSIGNMENT, id), options),
+
+        deleteRoleAssignment: id => {
+            return fetch(toPath(URL_PATH_ORG_DOMAIN, id), {
+                ...options,
+                method: "DELETE"
+            });
+        },
+
+        createDomain: (name, organization) => {
+            return fetch(toPath(URL_PATH_ORG_DOMAIN), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify({
+                    name,
+                    organization
+                })
+            });
+        },
+
+        getDomain: id => fetch(toPath(URL_PATH_ORG_DOMAIN, id), options),
+
+        deleteDomain: id => {
+            return fetch(toPath(URL_PATH_ORG_DOMAIN, id), {
+                ...options,
+                method: "DELETE"
+            });
+        },
+
+        organizationDomains: id =>
+            fetch(
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_ORG_DOMAINS),
+                options
+            ),
+
+        organizationRoleAssignments: id =>
+            fetch(
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_ROLE_ASSIGNMENTS) +
+                    "?detail=true",
+                options
+            ),
+
+        getDomainOrganization: id =>
+            fetch(
+                toPath(URL_PATH_ORG_DOMAIN, id, URL_PATH_ORGANIZATION),
+                options
+            ),
+
+        createDataScope: data => {
+            return fetch(toPath(URL_PATH_DATA_SCOPE), {
+                ...options,
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        },
+
+        updateDataScope: (id, data) => {
+            return fetch(toPath(URL_PATH_DATA_SCOPE, id), {
+                ...options,
+                method: "PUT",
+                body: JSON.stringify(data)
+            });
+        },
+
+        organizationScopes: id =>
+            fetch(
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SCOPE),
+                options
+            ),
+
+        getDataScope: id => fetch(toPath(URL_PATH_DATA_SCOPE, id), options),
+
+        organizationDataSets: id =>
+            fetch(
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SETS),
+                options
+            ),
+
+        listAllRoles: () => fetch(toPath(URL_PATH_ROLES), options),
+
+        listRoles: (limit, offset, name) => {
+            return fetch(toPath(URL_PATH_ROLE), {
+                ...options,
+                body: JSON.stringify({ limit, offset, name })
+            });
+        },
+
+        revoke: clientId => {
+            return fetch("/api/6/auth/revoke", {
+                ...options,
+                method: "POST",
+                body: JSON.stringify({ client_id: clientId })
+            });
+        }
+    };
+}

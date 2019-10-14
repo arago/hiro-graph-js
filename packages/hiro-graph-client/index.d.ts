@@ -117,6 +117,13 @@ export namespace OGIT {
         "ogit/_out-type": string;
         "ogit/_in-id": string;
     }
+
+    export interface Application extends SafeNode {
+        "ogit/name": string;
+        "ogit/description": string;
+        "ogit/Auth/vertexRule": string;
+        "ogit/Auth/edgeRule": string;
+    }
 }
 
 export interface AccountWithProfile {
@@ -331,6 +338,196 @@ export interface TimeseriesResponse {
     value: string;
 }
 
+// Servlets
+
+interface PlainObject {
+    [key: string]: any;
+}
+
+export type LegacyServletFunction = (
+    // TODO: fix fetch type
+    fetch: any,
+    options: PlainObject,
+    ...args: any[]
+) => any;
+
+export interface LegacyServletDefinition {
+    [key: string]: LegacyServletFunction;
+}
+
+export type ServletFactory = () => PlainObject;
+
+export type ServletMethods = LegacyServletDefinition | ServletFactory;
+
+export interface AppsServlet {
+    getAll<T = OGIT.Application>(): Promise<T[]>;
+
+    getMy<T = OGIT.Application>(): Promise<T[]>;
+
+    install<T = any>(id: string): Promise<T>;
+
+    uninstall<T = any>(id: string): Promise<T>;
+}
+
+interface KiValidateOptions {
+    ki: string;
+    [key: string]: any;
+}
+
+interface KiValidationResponse {
+    valid: boolean;
+    response:
+        | string
+        | {
+              code: number;
+              status: string;
+              error?: string;
+              formatted?: string;
+              variables?: {
+                  ISSUE: string[];
+                  NODE: string[];
+              };
+              errors?: { line: number; message: string }[];
+          };
+}
+
+export interface KiServlet {
+    validate(options: KiValidateOptions): Promise<KiValidationResponse>;
+}
+
+interface DefineVariableOptions {
+    name: string;
+    [key: string]: any;
+}
+
+export interface VariablesServlet {
+    // TODO: define Variable interface
+    add<T = any>(data: any): Promise<T>;
+
+    suggest<T = any>(name: string, full: boolean, ...args: any[]): Promise<T>;
+
+    define<T = any>(options: DefineVariableOptions): Promise<T>;
+}
+
+export interface ApiServlet {
+    getMeProfile<T = any>(): Promise<T>;
+
+    updateMeProfile<T = any>(data: PlainObject): Promise<T>;
+
+    getMeAvatar(): Promise<Response>;
+
+    meAccount<T = any>(): Promise<T>;
+
+    mePassword<T = any>(oldPassword: string, newPassword: string): Promise<T>;
+
+    meTeams<T = any>(): Promise<T[]>;
+
+    updateMeAvatar<T = any>(): Promise<T>;
+}
+
+export interface AuthServlet {
+    createAccount<T = any>(data: PlainObject): Promise<T>;
+
+    getAvatar(id: string): Promise<Response>;
+
+    getOrgAvatar(id: string): Promise<Response>;
+
+    // TODO: replace avatar type with smth like File
+    setAvatar(id: string, avatar: any): Promise<Response>;
+
+    // TODO: replace avatar type with smth like File
+    setOrgAvatar(id: string, avatar: any): Promise<Response>;
+
+    getAccount(id: string): Promise<AccountWithProfile>;
+
+    updateAccountProfile(
+        id: string,
+        data: PlainObject
+    ): Promise<OGIT.AccountProfile>;
+
+    getAccountProfile(id: string): Promise<OGIT.AccountProfile>;
+
+    getAccountProfileByAccountId(
+        accountId: string
+    ): Promise<OGIT.AccountProfile>;
+
+    updatePassword<T = any>(id: string, password: string): Promise<T>;
+
+    activateAccount<T = any>(id: string): Promise<T>;
+
+    createDataSet<T = any>(data: PlainObject): Promise<T>;
+
+    updateDataSet<T = any>(id: string, data: PlainObject): Promise<T>;
+
+    getDataSet<T = any>(id: string): Promise<T>;
+
+    deleteDataSet<T = any>(id: string): Promise<T>;
+
+    createTeam<T = any>(data: PlainObject): Promise<T>;
+
+    updateTeam<T = any>(id: string, data: PlainObject): Promise<T>;
+
+    getTeam<T = any>(id: string): Promise<T>;
+
+    deleteTeam<T = any>(id: string): Promise<T>;
+
+    createOrganization<T = any>(data: PlainObject): Promise<T>;
+
+    addMembers<T = any>(id: string, ...accountIds: string[]): Promise<T>;
+
+    removeMembers<T = any>(id: string, ...accountIds: string[]): Promise<T>;
+
+    getTeamMembers<T = any>(id: string): Promise<T[]>;
+
+    getOrganizationMembers<T = any>(id: string): Promise<T[]>;
+
+    organizationTeams<T = any>(id: string): Promise<T[]>;
+
+    accountTeams<T = any>(id: string): Promise<T[]>;
+
+    createRoleAssignment<T = any>(data: PlainObject): Promise<T>;
+
+    getRoleAssignment<T = any>(id: string): Promise<T>;
+
+    deleteRoleAssignment<T = any>(id: string): Promise<T>;
+
+    createDomain<T = any>(name: string, organization: string): Promise<T>;
+
+    getDomain<T = any>(id: string): Promise<T>;
+
+    deleteDomain<T = any>(id: string): Promise<T>;
+
+    organizationDomains<T = any>(id: string): Promise<T>;
+
+    organizationRoleAssignments<T = any>(id: string): Promise<T[]>;
+
+    getDomainOrganization<T = any>(id: string): Promise<T>;
+
+    createDataScope<T = any>(data: PlainObject): Promise<T>;
+
+    updateDataScope<T = any>(id: string, data: PlainObject): Promise<T>;
+
+    getDataScope<T = any>(id: string): Promise<T>;
+
+    organizationScopes<T = any>(id: string): Promise<T[]>;
+
+    organizationDataSets<T = any>(id: string): Promise<T[]>;
+
+    listAllRoles<T = any>(): Promise<T[]>;
+
+    listRoles<T = any>(
+        offset: number,
+        limit: number,
+        name: string
+    ): Promise<T[]>;
+
+    revoke<T = any>(clientId: string): Promise<T>;
+}
+
+export declare const appsServletFactory: () => AppsServlet;
+export declare const kiServletFactory: () => KiServlet;
+export declare const variablesSerlvetFactory: () => VariablesServlet;
+
 // Client
 
 export class Token {
@@ -351,55 +548,22 @@ interface ClientParams {
     token: string | Token;
 }
 
-export interface Servlet {
-    [index: string]: ServletFunction;
-}
-
-export type ServletFunction<Data = any, Response = any> = (
-    fetch: Client["fetch"],
-    init?: RequestInit,
-    data?: Data
-) => Promise<Response>;
-
-export interface KIServlet {
-    validate: (
-        options: ReqOptions,
-        data: { ki: string; [key: string]: string | boolean }
-    ) => Promise<Response | any>;
-}
-
-export interface VariablesServlet {
-    add: <Variable>(options: ReqOptions, data: Variable) => Promise<Variable>;
-    suggest: <Variable>(
-        options: ReqOptions,
-        opts: { name: string; [key: string]: string | boolean }
-    ) => Promise<Variable[]>;
-    define: <Variable>(
-        options: ReqOptions,
-        opts: { name: string; [key: string]: string | boolean }
-    ) => Promise<Variable>;
-}
-
-export interface AppsServlet {
-    getAll: <App>(options: ReqOptions) => Promise<App[]>;
-    getMy: <App>(options: ReqOptions) => Promise<App[]>;
-    install: (options: ReqOptions, appId: string) => Promise<Response>;
-    uninstall: (options: ReqOptions, appId: string) => Promise<Response>;
-}
-
-interface StatsCounterOptions {
-    organization: any;
-    type: string;
-    [key: string]: any;
-}
-
-export interface StatsServlet {
-    counter<T>(options: StatsCounterOptions): Promise<T>;
-}
-
 interface BaseOptions {
     offset?: number;
     limit?: number;
+}
+
+interface HistoryResponse<T = any> {
+    action: string;
+    data: T;
+    identity: string;
+    meta: {
+        id: string;
+        nanotime: number;
+        timestamp: number;
+        version: number;
+        vid: string;
+    };
 }
 
 export default class Client {
@@ -407,6 +571,10 @@ export default class Client {
     token: Token;
     http: HttpTransport;
     transport: WebSocketTransport | HttpTransport;
+
+    // added in constructor
+    auth: AuthServlet;
+    api: ApiServlet;
 
     constructor(
         params: ClientParams,
@@ -418,32 +586,41 @@ export default class Client {
         subscribe: (emit: EmitHandler) => void;
     };
 
+    setToken(token: string | Token): void;
+
     eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
+
     getToken<T extends Token = Token>(): T;
-    me(): AccountWithProfile;
+
+    me(): Promise<AccountWithProfile>;
+
     fetch: <T = Response>(
         url: string,
         init?: RequestInit,
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
+
     gremlin: <T>(
         root: string,
         query: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T>;
+
     connect: <T extends OGIT.SafeNode = OGIT.Node>(
         type: string,
         inId: string,
         outId: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
+
     disconnect: <T extends OGIT.SafeNode = OGIT.Node>(
         type: string,
         inId: string,
         outId: string,
         reqOptions?: ReqOptions<T>
     ) => Promise<T[]>;
-    lucene: <T extends OGIT.SafeNode = OGIT.Node>(
+
+    lucene: <T>(
         query: string,
         options?: BaseOptions & {
             order?: string;
@@ -452,7 +629,8 @@ export default class Client {
             [index: string]: any;
         },
         reqOptions?: ReqOptions<T>
-    ) => Promise<T[]>;
+    ) => Promise<T>;
+
     streamts: <T extends OGIT.SafeNode = OGIT.Node>(
         timeseriesId: string,
         options?: {
@@ -461,7 +639,8 @@ export default class Client {
             limit?: number;
         }
     ) => Promise<TimeseriesResponse[]>;
-    history: <T extends OGIT.SafeNode = OGIT.Node>(
+
+    history: <T = any>(
         id: string,
         options?: {
             offset?: number;
@@ -471,14 +650,17 @@ export default class Client {
             version?: number;
             type?: string;
         }
-    ) => Promise<NodeHistory<T>[]>;
-    addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
+    ) => Promise<HistoryResponse<T>[]>;
+
+    addServlet(
+        prefix: string,
+        servletMethods: ServletMethods,
+        proxy?: string
+    ): Client;
+
     create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+
     update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+
     get: <T extends OGIT.SafeNode = OGIT.Node>(id: string) => Promise<T>;
 }
-
-export declare const appsServlet: AppsServlet;
-export declare const kiServlet: KIServlet;
-export declare const statsServlet: StatsServlet;
-export declare const variablesSerlvet: VariablesServlet;
