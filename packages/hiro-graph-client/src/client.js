@@ -49,7 +49,7 @@ export default class Client {
         this.endpoint = endpoint;
 
         //we hold on to the token for ease of access/manual invalidation
-        this.token = typeof token === "string" ? fixedToken(token) : token;
+        this.setToken(token);
 
         //create the transports.
         //the http is for http only endpoint, e.g. the /_ki/* and /_variable/* servlets
@@ -101,7 +101,7 @@ export default class Client {
     }
 
     setToken(token) {
-        this.token = token;
+        this.token = typeof token === "string" ? fixedToken(token) : token;
     }
 
     // NB this is not held anywhere in this instance, but returned
