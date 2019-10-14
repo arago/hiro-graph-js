@@ -100,6 +100,10 @@ export default class Client {
         );
     }
 
+    setToken(token) {
+        this.token = token;
+    }
+
     // NB this is not held anywhere in this instance, but returned
     // to the caller. It only connects when it's subscribe() method
     // is called.
