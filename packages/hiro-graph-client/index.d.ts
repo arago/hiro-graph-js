@@ -492,6 +492,8 @@ export interface AuthServlet {
 
     getDataScope<T = any>(id: string): Promise<T>;
 
+    organizationScopes<T = any>(id: string): Promise<T[]>;
+
     organizationDataSets<T = any>(id: string): Promise<T[]>;
 
     listAllRoles<T = any>(): Promise<T[]>;
