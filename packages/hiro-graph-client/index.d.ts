@@ -554,16 +554,16 @@ interface BaseOptions {
 }
 
 interface HistoryResponse<T = any> {
-  action: string;
-  data: T;
-  identity: string;
-  meta: {
-    id: string;
-    nanotime: number;
-    timestamp: number;
-    version: number;
-    vid: string;
-  }
+    action: string;
+    data: T;
+    identity: string;
+    meta: {
+        id: string;
+        nanotime: number;
+        timestamp: number;
+        version: number;
+        vid: string;
+    };
 }
 
 export default class Client {
