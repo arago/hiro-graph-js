@@ -573,6 +573,8 @@ export default class Client {
         subscribe: (emit: EmitHandler) => void;
     };
 
+    setToken(token: string | Token): void;
+
     eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
 
     getToken<T extends Token = Token>(): T;
