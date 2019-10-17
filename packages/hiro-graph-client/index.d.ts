@@ -103,7 +103,7 @@ export namespace OGIT {
         "ogit/_organization"?: string;
         "ogit/_scope"?: string;
         "ogit/Auth/Account/acceptedEmails"?: string; // timestamp
-        "ogit/Auth/Account/displayName"?: string;
+        "ogit/Auth/Account/displayName": string;
         "ogit/firstName"?: string;
         "ogit/lastName"?: string;
         "/jobRole"?: string;
