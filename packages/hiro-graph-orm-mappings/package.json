@@ -6,7 +6,7 @@
     "description": "Automatic generation of ORM mapping based on OGIT",
     "license": "MIT",
     "scripts": {
-        "build": "TS_NODE_FILES=true ts-node ./src/index && yarn format",
+        "build": "TS_NODE_FILES=true ts-node ./src/index",
         "prepublish": "yarn test && yarn build",
         "test": "echo no tests"
     },
