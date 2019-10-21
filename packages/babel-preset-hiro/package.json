@@ -4,7 +4,6 @@
     "version": "0.4.1",
     "description": "Babel preset for hiro-graph, extends react-app",
     "main": "index.js",
-    "author": "Brendan Moore <bmoore@arago.co>",
     "dependencies": {
         "babel-plugin-dev-expression": "^0.2.1",
         "babel-plugin-dynamic-import-node": "^2.0.0",

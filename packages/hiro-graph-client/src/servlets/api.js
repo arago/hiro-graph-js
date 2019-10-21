@@ -1,54 +1,55 @@
-const filterUndef = obj =>
+const filterUndef = (obj) =>
     Object.keys(obj).reduce((ret, k) => {
         if (obj[k] !== undefined) {
             ret[k] = obj[k];
         }
+
         return ret;
     }, {});
 
 export default function apiServletFactory(fetch, options) {
     return {
-        getMeProfile: () => fetch("/api/7.0/graph/me/profile", options),
+        getMeProfile: () => fetch('/api/7.0/graph/me/profile', options),
 
-        updateMeProfile: data => {
+        updateMeProfile: (data) => {
             const payload = filterUndef(data);
 
-            return fetch("/api/7.0/graph/me/profile", {
+            return fetch('/api/7.0/graph/me/profile', {
                 ...options,
-                method: "POST",
-                body: JSON.stringify(payload)
+                method: 'POST',
+                body: JSON.stringify(payload),
             });
         },
 
         getMeAvatar: () =>
-            fetch("/api/7.0/graph/me/avatar", { ...options, raw: true }),
+            fetch('/api/7.0/graph/me/avatar', { ...options, raw: true }),
 
-        meAccount: () => fetch("/api/7.0/graph/me/account", options),
+        meAccount: () => fetch('/api/7.0/graph/me/account', options),
 
         mePassword: (oldPassword, newPassword) => {
-            return fetch("/api/7.0/graph/me/password", {
+            return fetch('/api/7.0/graph/me/password', {
                 ...options,
-                method: "PUT",
+                method: 'PUT',
                 body: JSON.stringify({
                     oldPassword,
-                    newPassword
-                })
+                    newPassword,
+                }),
             });
         },
 
-        meTeams: () => fetch("/api/7.0/graph/me/teams", options),
+        meTeams: () => fetch('/api/7.0/graph/me/teams', options),
 
-        updateMeAvatar: data => {
-            return fetch("/api/7.0/graph/me/avatar", {
+        updateMeAvatar: (data) => {
+            return fetch('/api/7.0/graph/me/avatar', {
                 ...options,
-                method: "POST",
+                method: 'POST',
                 body: data,
                 headers: {
                     ...options.headers,
-                    "Content-Type": data.type
+                    'Content-Type': data.type,
                 },
-                raw: true
+                raw: true,
             });
-        }
+        },
     };
 }

@@ -1,8 +1,8 @@
-import createEntity, { $internal } from "./entity";
-import { mapIfArray } from "../utils";
+import createEntity, { $internal } from './entity';
+import { mapIfArray } from '../utils';
 
 const defaultOptions = {
-    immutable: true
+    immutable: true,
 };
 
 /**
@@ -16,8 +16,9 @@ export default class Schema {
         this._changeListeners = [];
         this.options = {
             ...defaultOptions,
-            ...opts
+            ...opts,
         };
+
         const { immutable } = this.options;
 
         this.__init = () => {
@@ -47,9 +48,9 @@ export default class Schema {
          */
         this.internal = createEntity(
             {
-                [$internal]: true
+                [$internal]: true,
             },
-            this
+            this,
         );
 
         /**
@@ -58,43 +59,51 @@ export default class Schema {
          *  @param {object} entityMapping - the definition
          *  @return {undefined}
          */
-        this.__define = entityMapping => {
+        this.__define = (entityMapping) => {
             let exists = false;
             const entity = createEntity(entityMapping, this);
+
             if (entity.name in this.entities) {
                 if (immutable) {
                     throw new Error(`duplicate entity name: ${entity.name}`);
                 }
+
                 exists = true;
             }
+
             if (entity.ogit in this.entities) {
                 if (immutable) {
                     throw new Error(
-                        `duplicate entity for vertex type: ${entity.ogit}`
+                        `duplicate entity for vertex type: ${entity.ogit}`,
                     );
                 }
             }
+
             this.entities[entity.name] = entity;
             this.entities[entity.ogit] = entity;
+
             if (!exists) {
                 this.names.push(entity.name);
             }
         };
 
-        this.setSchema = entityMapping => {
+        this.setSchema = (entityMapping) => {
             if (immutable) {
-                throw new TypeError("Cannot setSchema when `immutable: true`");
+                throw new TypeError('Cannot setSchema when `immutable: true`');
             }
+
             this.__init();
+
             return this.define(entityMapping);
         };
 
-        this.updateSchema = entityMapping => {
+        this.updateSchema = (entityMapping) => {
             if (immutable) {
                 throw new TypeError(
-                    "Cannot updateSchema when `immutable: true`"
+                    'Cannot updateSchema when `immutable: true`',
                 );
             }
+
             return this.define(entityMapping);
         };
 
@@ -116,7 +125,7 @@ export default class Schema {
     }
 
     emitUpdate() {
-        this._changeListeners.forEach(fn => {
+        this._changeListeners.forEach((fn) => {
             fn(this);
         });
     }
@@ -125,6 +134,7 @@ export default class Schema {
         if (this._changeListeners.indexOf(fn) === -1) {
             this._changeListeners.push(fn);
         }
+
         return () => {
             this._changeListeners.splice(this._changeListeners.indexOf(fn), 1);
         };
@@ -132,6 +142,7 @@ export default class Schema {
 
     removeUpdateListener(fn) {
         const idx = this._changeListeners.indexOf(fn);
+
         if (idx > -1) {
             this._changeListeners.splice(idx, 1);
         }
@@ -151,6 +162,7 @@ export default class Schema {
         if (!entityType) {
             return this.internal;
         }
+
         return this.entities[entityType];
     }
 }

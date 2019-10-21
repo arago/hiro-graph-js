@@ -2,7 +2,7 @@
  *  Copes with values that have complex values stored as strings
  */
 export default {
-    decode: s => {
+    decode: (s) => {
         try {
             return JSON.parse(s);
         } catch (e) {
@@ -10,12 +10,12 @@ export default {
             return s;
         }
     },
-    encode: s => {
+    encode: (s) => {
         try {
             return JSON.stringify(s);
         } catch (e) {
             //should we throw here, or swallow silently...
             return null;
         }
-    }
+    },
 };

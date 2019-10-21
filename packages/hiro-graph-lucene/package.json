@@ -9,7 +9,7 @@
     },
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-        "prepublish": "yarn build",
+        "prepublish": "yarn test && yarn build",
         "test": "jest --silent"
     },
     "repository": {
@@ -22,7 +22,6 @@
         "lucene",
         "vertices"
     ],
-    "author": "Chris Walker <cwalker@arago.de>",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/arago/hiro-graph-js/issues"

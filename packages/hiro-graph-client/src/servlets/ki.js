@@ -1,28 +1,28 @@
 export default function kiServletFactory(fetch, options) {
     return {
         validate({ ki, ...rest }) {
-            return fetch("/api/6/ki/check", {
+            return fetch('/api/6/ki/check', {
                 ...options,
-                method: "POST",
+                method: 'POST',
                 body: JSON.stringify({
                     ...rest,
-                    ki
+                    ki,
                 }),
-                raw: true
+                raw: true,
             })
-                .then(response => response.json())
-                .then(response => {
+                .then((response) => response.json())
+                .then((response) => {
                     return {
                         valid: response.code === 200,
-                        response
+                        response,
                     };
                 })
-                .catch(error => {
+                .catch((error) => {
                     return {
                         valid: false,
-                        response: error.message
+                        response: error.message,
                     };
                 });
-        }
+        },
     };
 }

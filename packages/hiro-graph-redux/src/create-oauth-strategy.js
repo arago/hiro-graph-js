@@ -1,4 +1,4 @@
-import querystring from "querystring";
+import querystring from 'querystring';
 
 /**
  *  This is the core strategy.
@@ -12,14 +12,15 @@ import querystring from "querystring";
  *  One branch of code is for the local, another for the remote.
  */
 
-const createKey = clientId => key => `___${clientId}:${key}`;
-const parseQuerystring = qs => querystring.parse(qs.replace(/^\?/, ""));
-const parseFragment = fragment => querystring.parse(fragment.replace(/^#/, ""));
+const createKey = (clientId) => (key) => `___${clientId}:${key}`;
+const parseQuerystring = (qs) => querystring.parse(qs.replace(/^\?/, ''));
+const parseFragment = (fragment) =>
+    querystring.parse(fragment.replace(/^#/, ''));
 const getOrigin = (l = window.location) =>
     !l.origin
-        ? l.protocol + "//" + l.hostname + (l.port ? ":" + l.port : "")
+        ? l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '')
         : l.origin;
-const defaultRedirectUri = () => getOrigin() + "/";
+const defaultRedirectUri = () => getOrigin() + '/';
 
 export default function createOauthStrategy(implementation) {
     return ({
@@ -32,10 +33,10 @@ export default function createOauthStrategy(implementation) {
         ...options
     }) => {
         const key = createKey(clientId);
-        const TOKEN_KEY = key("token");
+        const TOKEN_KEY = key('token');
         const token = {
             accessToken: null,
-            meta: {}
+            meta: {},
         };
         const tokenIfOK = () => {
             if (token.accessToken) {
@@ -45,10 +46,10 @@ export default function createOauthStrategy(implementation) {
 
         const url =
             baseURL +
-            (baseURL.indexOf("?") > -1 ? "&" : "?") +
+            (baseURL.indexOf('?') > -1 ? '&' : '?') +
             querystring.stringify({
                 client_id: clientId,
-                redirect_url: redirectUri
+                redirect_url: redirectUri,
             });
 
         const clear = () => window.localStorage.removeItem(TOKEN_KEY);
@@ -57,11 +58,12 @@ export default function createOauthStrategy(implementation) {
             if (clearStorageOnLogout) {
                 clear();
             }
+
             return (
                 logoutUri +
-                "?" +
+                '?' +
                 querystring.stringify({
-                    return_url: logoutReturnUrl
+                    return_url: logoutReturnUrl,
                 })
             );
         };
@@ -72,14 +74,14 @@ export default function createOauthStrategy(implementation) {
             url,
             key,
             redirectUri,
-            ...options
+            ...options,
         });
 
         //turns out these are useful to the consumer as well.
         const baseReturnValue = {
             clear,
             isRemote: () => strategy.isRemote(),
-            isLocal: () => !strategy.isRemote()
+            isLocal: () => !strategy.isRemote(),
         };
 
         if (strategy.isRemote()) {
@@ -87,18 +89,22 @@ export default function createOauthStrategy(implementation) {
             //we are in the remote path. That means that we *SHOULD*
             //be checking for the token in the url fragment
             const frag = parseFragment(window.location.hash);
+
             if (frag.access_token) {
                 token.accessToken = frag.access_token;
+
                 const expiry =
                     Date.now() + parseInt(frag.expires_in, 10) * 1000;
+
                 if (!isNaN(expiry)) {
                     token.meta.expiry = expiry;
                 }
             } else {
                 const {
                     error: errorType,
-                    error_description: errDescription
+                    error_description: errDescription,
                 } = parseQuerystring(window.location.search);
+
                 if (errorType && errDescription) {
                     token.meta.error = errDescription;
                     token.meta.errorType = errorType;
@@ -106,6 +112,7 @@ export default function createOauthStrategy(implementation) {
                     error.type = errorType;
                 }
             }
+
             window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
 
             //remote version of check.
@@ -122,16 +129,18 @@ export default function createOauthStrategy(implementation) {
                 },
                 logout() {
                     //nothing on remote side
-                }
+                },
             });
         } else {
             // we are in the local path
             // try and pull from localStorage;
             let error = null;
+
             try {
                 const fromStorage = JSON.parse(
-                    window.localStorage.getItem(TOKEN_KEY)
+                    window.localStorage.getItem(TOKEN_KEY),
                 );
+
                 if (
                     fromStorage.meta.expiry &&
                     fromStorage.meta.expiry < Date.now()
@@ -162,12 +171,13 @@ export default function createOauthStrategy(implementation) {
                 },
                 logout() {
                     const uri = logout();
-                    if (typeof strategy.logout === "function") {
+
+                    if (typeof strategy.logout === 'function') {
                         strategy.logout(uri);
                     } else {
                         window.location.href = uri;
                     }
-                }
+                },
             });
         }
     };

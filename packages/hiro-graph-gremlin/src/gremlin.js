@@ -12,36 +12,37 @@ export default function queryBuilder(initialQuery) {
  *  We export this constant T for easy/intuitive use in querys, although the strings
  *  work just the same.
  */
-export const T = ["in", "notin", "eq", "neq", "lt", "lte", "gt", "gte"].reduce(
+export const T = ['in', 'notin', 'eq', 'neq', 'lt', 'lte', 'gt', 'gte'].reduce(
     (obj, key) => {
-        obj[key] = "T." + key;
+        obj[key] = 'T.' + key;
+
         return obj;
     },
-    {}
+    {},
 );
 
-const $placeholder = Symbol("gremlin-placeholder");
+const $placeholder = Symbol('gremlin-placeholder');
 /**
  *  Returns a string that will be used as is as a placeholder variable
  *  @TODO discover what limitations there are on placeholder strings.
  */
-export const placeholder = name => {
+export const placeholder = (name) => {
     return {
         toString: () => name,
-        [$placeholder]: true
+        [$placeholder]: true,
     };
 };
 
 /**
  *  long/float are simply helpers that add the correct suffixes to our queries
  */
-export const long = n => {
+export const long = (n) => {
     //n should be a number.
-    return n + "l";
+    return n + 'l';
 };
-export const float = n => {
+export const float = (n) => {
     // n should be a number
-    return n + "f";
+    return n + 'f';
 };
 
 /**
@@ -58,6 +59,7 @@ export class GremlinQueryBuilder {
     constructor(initialQuery = false) {
         this._stack = [];
         this._query = false;
+
         if (initialQuery) {
             this._stack.push(initialQuery);
             this._query = initialQuery;
@@ -74,8 +76,9 @@ export class GremlinQueryBuilder {
      */
     toString() {
         if (this._query === false) {
-            this._query = this._stack.filter(Boolean).join(".");
+            this._query = this._stack.filter(Boolean).join('.');
         }
+
         return this._query;
     }
 
@@ -90,6 +93,7 @@ export class GremlinQueryBuilder {
     raw(query) {
         this._stack.push(query);
         this._query = false;
+
         return this;
     }
 
@@ -108,6 +112,7 @@ export class GremlinQueryBuilder {
     append(query) {
         if (this._stack.length > 0) {
             const chunk = this._stack.pop() + query;
+
             return this.raw(chunk);
         } else {
             this.raw(query);
@@ -124,16 +129,18 @@ export class GremlinQueryBuilder {
      */
     transform(transforms) {
         let branches;
-        const brancher = createBrancher("it");
+        const brancher = createBrancher('it');
+
         if (Array.isArray(transforms)) {
             //closure to remove the "index" argument
-            branches = transforms.map(value => brancher(value));
+            branches = transforms.map((value) => brancher(value));
         } else {
-            branches = Object.keys(transforms).map(key =>
-                brancher(transforms[key], key)
+            branches = Object.keys(transforms).map((key) =>
+                brancher(transforms[key], key),
             );
         }
-        return this.raw(`transform{[${branches.join(",")}]}`);
+
+        return this.raw(`transform{[${branches.join(',')}]}`);
     }
 
     /**
@@ -147,15 +154,17 @@ export class GremlinQueryBuilder {
                             or `exhaustMerge` which exhausts each branch in turn
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
-    copySplit(paths, mergeType = "fairMerge") {
-        if (mergeType !== "fairMerge" && mergeType !== "exhaustMerge") {
+    copySplit(paths, mergeType = 'fairMerge') {
+        if (mergeType !== 'fairMerge' && mergeType !== 'exhaustMerge') {
             throw new Error(
-                "invalid copySplit merge. should be `fairMerge` or `exhaustMerge`"
+                'invalid copySplit merge. should be `fairMerge` or `exhaustMerge`',
             );
         }
-        const brancher = createBrancher("_()");
-        const branches = paths.map(value => brancher(value));
-        return this.raw(`copySplit(${branches.join(",")}).${mergeType}`);
+
+        const brancher = createBrancher('_()');
+        const branches = paths.map((value) => brancher(value));
+
+        return this.raw(`copySplit(${branches.join(',')}).${mergeType}`);
     }
 
     /**
@@ -170,9 +179,10 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     or(conditions) {
-        const brancher = createBrancher("__");
-        const branches = conditions.map(value => brancher(value));
-        return this.raw(`or(${branches.join(",")})`);
+        const brancher = createBrancher('__');
+        const branches = conditions.map((value) => brancher(value));
+
+        return this.raw(`or(${branches.join(',')})`);
     }
 
     /**
@@ -184,7 +194,7 @@ export class GremlinQueryBuilder {
                             You will almost always want the default (`ogit/_id`).
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
-    dedup(prop = "ogit/_id") {
+    dedup(prop = 'ogit/_id') {
         return this.raw(`dedup{it.getProperty(${quote(prop)})}`);
     }
 
@@ -215,7 +225,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     order() {
-        return this.raw("order()");
+        return this.raw('order()');
     }
 
     /**
@@ -253,7 +263,7 @@ export class GremlinQueryBuilder {
      */
     values(target) {
         if (!target) {
-            return this.raw("values()");
+            return this.raw('values()');
         }
 
         return this.raw(`values("${target}")`);
@@ -297,7 +307,9 @@ export class GremlinQueryBuilder {
      */
     addComputedProp(name, query) {
         ensureTemporaryPropNameOK(name);
-        const subQuery = createBrancher("it")(query);
+
+        const subQuery = createBrancher('it')(query);
+
         return this.raw(`transform{it.${name}=${subQuery};it}`);
     }
 
@@ -312,12 +324,13 @@ export class GremlinQueryBuilder {
      */
     groupBy(groupingProp, resultProp = false) {
         const prop =
-            groupingProp === "label"
+            groupingProp === 'label'
                 ? groupingProp
                 : `getProperty(${quote(groupingProp)})`;
         const resultStanza = resultProp
             ? `it.getProperty(${quote(resultProp)})`
-            : "it";
+            : 'it';
+
         return this.raw(`groupBy{it.${prop}}{${resultStanza}}.cap`);
     }
 
@@ -331,9 +344,10 @@ export class GremlinQueryBuilder {
      */
     groupCount(groupingProp) {
         const prop =
-            groupingProp === "label"
+            groupingProp === 'label'
                 ? groupingProp
                 : `getProperty(${quote(groupingProp)})`;
+
         return this.raw(`groupCount{it.${prop}}.cap`);
     }
 
@@ -344,7 +358,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     inE(...args) {
-        return this.raw(methodCall("inE", args));
+        return this.raw(methodCall('inE', args));
     }
 
     /**
@@ -354,7 +368,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     outE(...args) {
-        return this.raw(methodCall("outE", args));
+        return this.raw(methodCall('outE', args));
     }
 
     /**
@@ -364,7 +378,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     bothE(...args) {
-        return this.raw(methodCall("bothE", args));
+        return this.raw(methodCall('bothE', args));
     }
 
     /**
@@ -374,7 +388,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     inV(...args) {
-        return this.raw(methodCall("inV", args));
+        return this.raw(methodCall('inV', args));
     }
 
     /**
@@ -384,7 +398,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     outV(...args) {
-        return this.raw(methodCall("outV", args));
+        return this.raw(methodCall('outV', args));
     }
 
     /**
@@ -394,7 +408,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     bothV(...args) {
-        return this.raw(methodCall("bothV", args));
+        return this.raw(methodCall('bothV', args));
     }
 
     /**
@@ -404,7 +418,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     in(...args) {
-        return this.raw(methodCall("in", args));
+        return this.raw(methodCall('in', args));
     }
     /**
      *  Traverse to vertices along outbound edges
@@ -413,7 +427,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     out(...args) {
-        return this.raw(methodCall("out", args));
+        return this.raw(methodCall('out', args));
     }
 
     /**
@@ -423,7 +437,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     both(...args) {
-        return this.raw(methodCall("both", args));
+        return this.raw(methodCall('both', args));
     }
 
     /**
@@ -432,7 +446,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     count(...args) {
-        return this.raw(methodCall("count", args));
+        return this.raw(methodCall('count', args));
     }
 
     /**
@@ -442,7 +456,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     as(...args) {
-        return this.raw(methodCall("as", args));
+        return this.raw(methodCall('as', args));
     }
 
     /**
@@ -452,7 +466,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     back(...args) {
-        return this.raw(methodCall("back", args));
+        return this.raw(methodCall('back', args));
     }
 
     /**
@@ -462,7 +476,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     shuffle(...args) {
-        return this.raw(methodCall("shuffle", args));
+        return this.raw(methodCall('shuffle', args));
     }
 
     /**
@@ -475,7 +489,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     has(...args) {
-        return objectMethodCall(this, "has", args);
+        return objectMethodCall(this, 'has', args);
     }
 
     /**
@@ -488,7 +502,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     hasNot(...args) {
-        return objectMethodCall(this, "hasNot", args);
+        return objectMethodCall(this, 'hasNot', args);
     }
 
     /**
@@ -498,7 +512,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     tree() {
-        return this.raw("tree.cap");
+        return this.raw('tree.cap');
     }
 
     /**
@@ -512,7 +526,7 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     property(...args) {
-        return this.raw(methodCall("property", args));
+        return this.raw(methodCall('property', args));
     }
 
     /**
@@ -524,81 +538,91 @@ export class GremlinQueryBuilder {
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
     getProperty(...args) {
-        return this.raw(methodCall("getProperty", args));
+        return this.raw(methodCall('getProperty', args));
     }
 }
 
 //helper to validate temporary property name
-const ensureTemporaryPropNameOK = name => {
-    if (name.indexOf("$_") !== 0) {
+const ensureTemporaryPropNameOK = (name) => {
+    if (name.indexOf('$_') !== 0) {
         throw new Error(
-            `Gremlin temporary properties must start with $_, given: ${name}`
+            `Gremlin temporary properties must start with $_, given: ${name}`,
         );
     }
 };
 
 //creates a branched structure with subQueries
-const createBrancher = prefix => (value, key = false) => {
+const createBrancher = (prefix) => (value, key = false) => {
     const subQuery = new GremlinQueryBuilder(prefix);
+
     //if a string, assume a fixed query
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
         subQuery.raw(value);
     } else {
         value(subQuery);
     }
-    return (key ? key + ":" : "") + subQuery;
+
+    return (key ? key + ':' : '') + subQuery;
 };
 
 //quote a value for use in a gremlin function argument.
-const quote = value => `"${value.replace(/"/g, `\\"`).replace(/\$/g, `\\$`)}"`;
+const quote = (value) =>
+    `"${value.replace(/"/g, `\\"`).replace(/\$/g, `\\$`)}"`;
 
-const formatArgs = args =>
-    args.map(value => {
+const formatArgs = (args) =>
+    args.map((value) => {
         if (value === true || value === false) {
             //don't quote;
-            return value ? "true" : "false";
+            return value ? 'true' : 'false';
         }
+
         if (Array.isArray(value)) {
             //OK, an array of values need quoting and adding surrounded by
             //square brackets
-            return `[${formatArgs(value).join(",")}]`;
+            return `[${formatArgs(value).join(',')}]`;
         }
+
         // check if this is a placeholder object
         if (value && value[$placeholder]) {
             return value.toString(); // raw value for placeholder
         }
 
         //after this cast to string
-        const str = "" + value;
+        const str = '' + value;
 
         if (/^T\.[a-z]+/.test(str)) {
             //this is an identifier used for comparison operators.
             //do not quote.
             return str;
         }
+
         if (/^[0-9]+(\.[0-9]*)?[lf]?$/.test(str)) {
             //this is a java int/long/float, return as is.
             //NB this is not the only way to denote this, but
             //the only format *we* accept.
             return str;
         }
+
         //otherwise just quote.
         return quote(str);
     });
 
 //a simple method call to string.
 const methodCall = (method, args = []) => {
-    return `${method}(${formatArgs(args).join(",")})`;
+    return `${method}(${formatArgs(args).join(',')})`;
 };
 
 const objectMethodCall = (instance, method, args = []) => {
     const first = args[0];
-    if (typeof first === "object") {
-        Object.keys(first).forEach(key => {
+
+    if (typeof first === 'object') {
+        Object.keys(first).forEach((key) => {
             //only single arguments in this form.
             instance.raw(methodCall(method, [key, first[key]]));
         });
+
         return instance;
     }
+
     return instance.raw(methodCall(method, args));
 };

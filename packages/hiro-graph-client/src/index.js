@@ -1,10 +1,10 @@
-import Token, { cannotGetToken } from "./token";
-import Client from "./client";
-import * as Errors from "./errors";
+import Token, { cannotGetToken } from './token';
+import Client from './client';
+import * as Errors from './errors';
 
-import appsServletFactory from "./servlets/app";
-import kiServletFactory from "./servlets/ki";
-import variablesServletFactory from "./servlets/variables";
+import appsServletFactory from './servlets/app';
+import kiServletFactory from './servlets/ki';
+import variablesServletFactory from './servlets/variables';
 
 export default Client;
 
@@ -14,5 +14,5 @@ export {
     Errors,
     appsServletFactory,
     kiServletFactory,
-    variablesServletFactory
+    variablesServletFactory,
 };

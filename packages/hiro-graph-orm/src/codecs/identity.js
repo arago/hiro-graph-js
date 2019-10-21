@@ -1,8 +1,8 @@
 /**
  *  Identity does no coercion.
  */
-const identity = x => x;
+const identity = (x) => x;
 export default {
     decode: identity,
-    encode: identity
+    encode: identity,
 };

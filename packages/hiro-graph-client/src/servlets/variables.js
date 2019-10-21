@@ -1,17 +1,17 @@
 /**
  *  Servlet extension for the "/variables/" endpoints.
  */
-import { stringify } from "querystring";
+import { stringify } from 'querystring';
 
-const BASE_PATH = "/api/6/variables";
+const BASE_PATH = '/api/6/variables';
 
 export default function variablesServletFactory(fetch, options) {
     return {
         add(data) {
             return fetch(BASE_PATH, {
                 ...options,
-                method: "PUT",
-                body: JSON.stringify(data)
+                method: 'PUT',
+                body: JSON.stringify(data),
             });
         },
 
@@ -19,7 +19,7 @@ export default function variablesServletFactory(fetch, options) {
             const query = stringify({
                 ...rest,
                 name,
-                full
+                full,
             });
 
             const url = encodeURI(`${BASE_PATH}/suggest?${query}`);
@@ -31,11 +31,11 @@ export default function variablesServletFactory(fetch, options) {
             const url = encodeURI(
                 `${BASE_PATH}/define?${stringify({
                     ...rest,
-                    name
-                })}`
+                    name,
+                })}`,
             );
 
             return fetch(url, options);
-        }
+        },
     };
 }
