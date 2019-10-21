@@ -6,7 +6,7 @@
     "main": "lib/index.js",
     "types": "index.d.ts",
     "scripts": {
-        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib",
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "yarn test && yarn build",
         "test": "jest --silent"
     },

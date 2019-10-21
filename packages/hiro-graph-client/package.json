@@ -16,14 +16,11 @@
         "websocket": "^1.0.25"
     },
     "devDependencies": {
-        "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "@types/node-fetch": "*",
         "@types/websocket": "*",
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
         "babel-preset-hiro": "^0.4.1",
-        "eslint": "^5.3.0",
-        "husky": "^1.1.2",
         "jest": "^23.5.0"
     },
     "babel": {
