@@ -1,16 +1,16 @@
 /**
  *  Codec define how we manipulate the (mostly) string data in HIRO Graph
  */
-import string from "./string";
-import list from "./list";
-import uint from "./uint";
-import int from "./int";
-import json from "./json";
-import { createEnum } from "./enum";
-import bool, { createBool } from "./bool";
-import timestamp from "./timestamp";
-import identity from "./identity";
-import iso8601 from "./iso8601";
+import string from './string';
+import list from './list';
+import uint from './uint';
+import int from './int';
+import json from './json';
+import { createEnum } from './enum';
+import bool, { createBool } from './bool';
+import timestamp from './timestamp';
+import identity from './identity';
+import iso8601 from './iso8601';
 
 //NB enum is NOT on this list.
 const types = {
@@ -22,7 +22,7 @@ const types = {
     bool,
     timestamp,
     iso8601,
-    identity
+    identity,
 };
 
 /**
@@ -38,8 +38,8 @@ const types = {
  */
 export default function createCodec(name) {
     if (
-        typeof name.encode === "function" &&
-        typeof name.decode === "function"
+        typeof name.encode === 'function' &&
+        typeof name.decode === 'function'
     ) {
         return name; //this allows custom codecs or double calling of this function
     }
@@ -47,22 +47,24 @@ export default function createCodec(name) {
     if (name in types) {
         return types[name];
     }
+
     //special cases.
-    if (name.indexOf("bool:") === 0) {
+    if (name.indexOf('bool:') === 0) {
         //split on ":" and slice off the "bool"
-        return createBool(...name.split(":").slice(1));
+        return createBool(...name.split(':').slice(1));
     }
 
-    if (name.indexOf("enum:") === 0) {
-        return createEnum(...name.split(":").slice(1));
+    if (name.indexOf('enum:') === 0) {
+        return createEnum(...name.split(':').slice(1));
     }
 
     //unknown
     console.warn(`unknown coercion type: ${name}`);
+
     return string;
 }
 
 // allow direct access (of the main types)
-Object.keys(types).forEach(key => {
+Object.keys(types).forEach((key) => {
     createCodec[key] = types[key];
 });

@@ -1,17 +1,19 @@
 /**
  *  String ensure whatever is given is string.
  */
-const stringify = s => {
+const stringify = (s) => {
     if (s === null || s === undefined) {
-        return "";
+        return '';
     }
-    if (typeof s === "string") {
+
+    if (typeof s === 'string') {
         return s;
     }
-    return "" + s;
+
+    return '' + s;
 };
 
 export default {
     decode: stringify,
-    encode: stringify
+    encode: stringify,
 };

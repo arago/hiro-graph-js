@@ -1,4 +1,4 @@
-const APPS_BASE = "/api/6.1/app";
+const APPS_BASE = '/api/6.1/app';
 
 export default function appsServletFactory(fetch, options) {
     return {
@@ -13,15 +13,15 @@ export default function appsServletFactory(fetch, options) {
         install(appId) {
             return fetch(`${APPS_BASE}/install/${appId}`, {
                 ...options,
-                method: "POST"
+                method: 'POST',
             });
         },
 
         uninstall(appId) {
             return fetch(`${APPS_BASE}/uninstall/${appId}`, {
                 ...options,
-                method: "POST"
+                method: 'POST',
             });
-        }
+        },
     };
 }

@@ -1,19 +1,19 @@
 /* eslint-env jest */
-import Client from "../src/client";
-import { mockFn } from "isomorphic-fetch";
-import clientTestHelper from "../__mocks__/client-test-helper.js";
+import Client from '../src/client';
+import { mockFn } from 'isomorphic-fetch';
+import clientTestHelper from '../__mocks__/client-test-helper.js';
 
-const fakeTokenPromise = Promise.resolve("<token>");
+const fakeTokenPromise = Promise.resolve('<token>');
 const onInvalidate = jest.fn();
 const fakeToken = { get: () => fakeTokenPromise, onInvalidate };
 
 // These test are run with a client, in order to assure that the correct
 // client calls result in the correct HTTP requests.
-describe("transport-http", () => {
+describe('transport-http', () => {
     // uses the real HttpTransport, but with fake fetch
     const client = new Client(
-        { endpoint: "https://graphit/", token: fakeToken },
-        { forceHTTP: true }
+        { endpoint: 'https://graphit/', token: fakeToken },
+        { forceHTTP: true },
     );
 
     // uncomment the next line to get a lot of debug output...
@@ -34,20 +34,24 @@ describe("transport-http", () => {
         });
     });
 
-    it("should handle bad http responses appropriately", async () => {
+    it('should handle bad http responses appropriately', async () => {
         const bad = [
-            [200, "Totally invalid response"],
-            [403, { error: { code: 403, message: "forbidden" } }],
-            [404, { error: { code: 404, message: "not found" } }]
+            [200, 'Totally invalid response'],
+            [403, { error: { code: 403, message: 'forbidden' } }],
+            [404, { error: { code: 404, message: 'not found' } }],
         ];
+
         for (let i = 0; i < bad.length; i++) {
             mockFn.mockReturnValueOnce(bad[i]);
+
             let error;
+
             try {
                 await client.me();
             } catch (e) {
                 error = { code: e.code, message: e.message };
             }
+
             expect(error).toBeDefined();
             expect(error).toMatchSnapshot();
         }

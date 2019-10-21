@@ -1,8 +1,8 @@
 /**
  *  Schema aware Gremlin wrapper.
  */
-import { gremlin } from "../context/graph";
-import { GremlinQueryBuilder, T } from "@hiro-graph/gremlin";
+import { gremlin } from '../context/graph';
+import { GremlinQueryBuilder, T } from '@hiro-graph/gremlin';
 
 export { T };
 
@@ -70,9 +70,11 @@ export class OrmGremlinQueryBuilder extends GremlinQueryBuilder {
      */
     relation(type, relations) {
         if (!this._ctx) {
-            throw new Error("Cannot use gremlin `relation` without context");
+            throw new Error('Cannot use gremlin `relation` without context');
         }
+
         const query = this._ctx[type].relationQuery(relations);
+
         return this.raw(query);
     }
 }

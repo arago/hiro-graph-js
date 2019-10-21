@@ -1,9 +1,10 @@
-import Vertex, { isVertex } from "./index";
+import Vertex, { isVertex } from './index';
+
+import { merge } from '../utils';
+
 export { isVertex };
 
-import { merge } from "../utils";
-
-const $guard = Symbol("VertexGaurd");
+const $guard = Symbol('VertexGaurd');
 /**
  *  Create a Context bound GraphVertex
  *
@@ -20,10 +21,14 @@ const $guard = Symbol("VertexGaurd");
  */
 export function createVertex(data, context) {
     const id = data._id;
+
     data._fetched = Date.now();
+
     const vtx = new GraphVertex(data, context, $guard);
+
     mergeRelations(context._cache.get(id), vtx);
     context._cache.set(id, vtx);
+
     return vtx;
 }
 
@@ -33,17 +38,17 @@ export function createVertex(data, context) {
  */
 export function mergeRelations(oldVtx, newVtx) {
     if (oldVtx) {
-        ["_counts", "_ids", "_vertices"].forEach(prop => {
+        ['_counts', '_ids', '_vertices'].forEach((prop) => {
             newVtx[prop] = merge(oldVtx[prop], newVtx[prop]);
         });
     }
 }
 
 //pull only the changed data from the vertex object
-const getChangedData = vertex => {
+const getChangedData = (vertex) => {
     return Object.keys(vertex._before).reduce(
         (obj, key) => ((obj[key] = vertex._data[key]), obj),
-        {}
+        {},
     );
 };
 
@@ -60,11 +65,13 @@ export default class GraphVertex extends Vertex {
      */
     constructor(data, context, guardSymbol) {
         super(data);
+
         if (guardSymbol !== $guard) {
             throw new Error(
-                `use 'createVertex', do not instaniate directly with 'new GraphVertex'`
+                `use 'createVertex', do not instaniate directly with 'new GraphVertex'`,
             );
         }
+
         this._ctx = context;
         this._db = context[this.type()];
     }
@@ -79,8 +86,10 @@ export default class GraphVertex extends Vertex {
         if (this._clean && !options.force) {
             return Promise.resolve(this);
         }
+
         //get changed data.
         const data = getChangedData(this);
+
         return this._db.update(this._id, data, options);
     }
 
@@ -95,11 +104,7 @@ export default class GraphVertex extends Vertex {
      */
     connect(relation, vertexOrId) {
         return this._db
-            .connect(
-                relation,
-                this._id,
-                vertexOrId
-            )
+            .connect(relation, this._id, vertexOrId)
             .then(refetchRelationData(this, relation));
     }
 
@@ -178,8 +183,9 @@ export default class GraphVertex extends Vertex {
      */
     getVertices(relation) {
         const ids = this._vertices[relation];
+
         return (Array.isArray(ids) ? ids : [])
-            .map(id => this._ctx._cache.get(id))
+            .map((id) => this._ctx._cache.get(id))
             .filter(Boolean);
     }
 
@@ -197,21 +203,24 @@ export default class GraphVertex extends Vertex {
         const randVal =
             (Math.random().toString(16) + Math.random().toString(16)).replace(
                 /[0.]*/g,
-                ""
+                '',
             ) + Date.now();
         const testKey = `/__jsGraphOrm_${randVal}`;
         const rawConn = this._ctx.getClient();
+
         return rawConn
             .update(this._id, { [testKey]: randVal })
-            .then(res => {
+            .then((res) => {
                 if (res[testKey] !== randVal) {
                     throw new Error("value doesn't match - no write access");
                 }
+
                 return rawConn.update(this._id, { [testKey]: null });
             })
             .then(() => true)
-            .catch(err => {
+            .catch((err) => {
                 console.error(err);
+
                 return false;
             });
     }
@@ -224,16 +233,17 @@ export default class GraphVertex extends Vertex {
     fetchEntries(options) {
         const t = this.type();
         const o = this._ctx.get(t).ogit;
+
         switch (o) {
-            case "ogit/Timeseries":
+            case 'ogit/Timeseries':
                 return this._ctx.getClient().streamts(this._id, options);
-            case "ogit/Log":
+            case 'ogit/Log':
                 return this._ctx.getClient().readlogs(this._id, options);
             default:
                 return Promise.reject(
                     new Error(
-                        `Cannot fetch entries for vertex type: ${t} (${o})`
-                    )
+                        `Cannot fetch entries for vertex type: ${t} (${o})`,
+                    ),
                 );
         }
     }
@@ -245,30 +255,35 @@ const refetchRelationData = (vertex, relation) => () => {
     const vtx = vertex.getVertices(relation).length;
     const ids = vertex.getIds(relation).length;
     const cts = vertex.getCount(relation);
+
     if (vertex.hasVertices(relation) && vtx === ids && vtx === cts) {
         return vertex.fetchVertices([relation], { refetch: true });
     }
+
     if (vertex.hasIds(relation) && ids === cts) {
         return vertex.fetchIds([relation], { refetch: true });
     }
+
     if (vertex.hasCount(relation)) {
         return vertex.fetchCount([relation], { refetch: true });
     }
+
     //don't bother.
     return vertex;
 };
 
-const addRelationInfo = vertex => data => {
+const addRelationInfo = (vertex) => (data) => {
     //data will be an object keyed on the relation and
     //values will be either:
     // - Array of Vertexes (getVertices) - but we only keep the id's
     // - Array of strings (getIds)
     // - an Integer (getCount)
-    const promises = Object.keys(data).map(relation => {
+    const promises = Object.keys(data).map((relation) => {
         const value = data[relation];
+
         if (Array.isArray(value)) {
             //nodes or ids.
-            if (typeof value[0] === "string") {
+            if (typeof value[0] === 'string') {
                 // ids
                 return vertex.setIds(relation, value);
             } else {
@@ -278,5 +293,6 @@ const addRelationInfo = vertex => data => {
             return vertex.setCount(relation, value);
         }
     });
-    return Promise.all(promises).then(res => (res.length ? res[0] : vertex));
+
+    return Promise.all(promises).then((res) => (res.length ? res[0] : vertex));
 };
