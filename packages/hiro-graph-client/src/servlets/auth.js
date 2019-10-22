@@ -198,8 +198,12 @@ export default function authServletFactory(fetch, options) {
                 options,
             ),
 
-        organizationTeams: (id) =>
-            fetch(toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS), options),
+        organizationTeams: (id, virtual = false) =>
+            fetch(
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_TEAMS) +
+                    (virtual ? '?include-virtual=true' : ''),
+                options,
+            ),
 
         accountTeams: (id) =>
             fetch(toPath(URL_PATH_ACCOUNTS, id, URL_PATH_TEAMS), options),
