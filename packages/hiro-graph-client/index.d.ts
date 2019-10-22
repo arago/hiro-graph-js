@@ -479,7 +479,7 @@ export interface AuthServlet {
 
   getOrganizationMembers<T = any>(id: string): Promise<T[]>;
 
-  organizationTeams<T = any>(id: string): Promise<T[]>;
+  organizationTeams<T = any>(id: string, virtual?: boolean): Promise<T[]>;
 
   accountTeams<T = any>(id: string): Promise<T[]>;
 
