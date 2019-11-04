@@ -8,16 +8,22 @@ function getDefaultApi() {
 }
 
 export class Client implements GraphClient {
-  private http: Transport;
+  public http: Transport;
+  public ws: Transport;
   public apiVersionInfo: POJO = {};
   private transport: Transport;
 
   constructor(
-    private readonly token: Token,
+    private token: Token,
     private readonly endpoint: string,
     private readonly transportOptions?: POJO,
   ) {
     this.apiVersionInfo = getDefaultApi();
+    this.ws = new HttpTransport(
+      this.endpoint,
+      this.apiVersionInfo['graph']['version'],
+      this.apiVersionInfo['graph']['endpoint'],
+    );
     this.http = new HttpTransport(
       this.endpoint,
       this.apiVersionInfo['graph']['version'],
@@ -80,9 +86,15 @@ export class Client implements GraphClient {
     return this.request('query', { type: 'vertices' }, body) as Promise<T[]>;
   }
 
-  setToken() {}
+  gremlin<T>(root: string, query: string): Promise<T> {
+    return this.request('query', { type: query }, { root, query }) as Promise<
+      T
+    >;
+  }
 
-  eventStream() {}
+  setToken(token: Token) {
+    this.token = token;
+  }
 
   introspect() {}
 
@@ -92,24 +104,42 @@ export class Client implements GraphClient {
     return this.token;
   }
 
-  get(id: string) {
-    return this.request('get', { 'ogit/_id': id })
+  get<T>(id: string): Promise<T> {
+    return this.request('get', { 'ogit/_id': id }) as Promise<T>;
   }
 
-  me() {}
+  me<T>(): Promise<T> {
+    return this.request('getme', {}) as Promise<T>;
+  }
 
-  create() {}
+  create<T>(type: string, data: POJO = {}): Promise<T> {
+    return this.request('create', { 'ogit/_type': type }, data) as Promise<T>;
+  }
 
-  update() {}
+  update<T>(id: string, data: POJO = {}): Promise<T> {
+    return this.request('update', { 'ogit/_id': id }, data) as Promise<T>;
+  }
 
-  replace() {}
+  delete<T>(id: string): Promise<T> {
+    return this.request('delete', {}) as Promise<T>;
+  }
 
-  delete() {}
+  ids<T>(ids: string[]): Promise<T[]> {
+    const query = ids.map((id) => `(ogit/_id: "${id}")`).join(' OR ');
 
+    return this.lucene(query) as Promise<T[]>;
+  }
 
-  ids() {}
+  connect<T>(outId: string, type: string, inId: string): Promise<T> {
+    return this.request(
+      'connect',
+      { 'ogit/_type': type },
+      { out: outId, in: inId },
+    ) as Promise<T>;
+  }
 
-  gremlin() {}
-
-  connect() {}
+  // TODO: need to make upsert as well
+  replace<T>(id: string, data: POJO): Promise<T> {
+    return this.request('replace', {}, data) as Promise<T>;
+  }
 }

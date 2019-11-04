@@ -62,28 +62,19 @@ export interface Token {
 }
 
 export interface GraphClient {
-  constructor(token: string | Token, endpoint: string): GraphClient;
-
   http: Transport;
   ws: Transport;
 
-  // TODO: Do we need this methods?
-  request<T>(
-    type: RequestType,
-    headers: POJO,
-    body: POJO,
-  ): Promise<T | Response>;
+  // eventStream();
 
-  eventStream();
-
-  dedupedRequest();
+  // dedupedRequest();
 
   introspect();
 
   // TODO END
   setToken(token: Token): void;
 
-  cloneWithNewToken(token: Token): GraphClient;
+  // cloneWithNewToken(token: Token): GraphClient;
 
   getToken(): Token;
 
@@ -109,25 +100,25 @@ export interface GraphClient {
     },
   ): Promise<T[]>;
 
-  ids<T>(ids: string): Promise<T[]>;
+  ids<T>(ids: string[]): Promise<T[]>;
 
   gremlin<T>(root: string, query: string): Promise<T>;
 
   connect<T>(outId: string, type: string, inId: string): Promise<T>;
 
-//   //TODO: Should we extract it to timeseries extension?
-//   writets(timeseriesId: string, value: string): Promise<TimeseriesResponse[]>;
-//
-//   streamts(
-//     timeseriesId: string,
-//     options?: {
-//       from?: number;
-//       to?: number;
-//       limit?: number;
-//     },
-//   ): Promise<TimeseriesResponse[]>;
-//
-//   //TODO END
-//
-//   history<T>(): Promise<T[]>;
-// }
+  //   //TODO: Should we extract it to timeseries extension?
+  //   writets(timeseriesId: string, value: string): Promise<TimeseriesResponse[]>;
+  //
+  //   streamts(
+  //     timeseriesId: string,
+  //     options?: {
+  //       from?: number;
+  //       to?: number;
+  //       limit?: number;
+  //     },
+  //   ): Promise<TimeseriesResponse[]>;
+  //
+  //   //TODO END
+  //
+  //   history<T>(): Promise<T[]>;
+}
