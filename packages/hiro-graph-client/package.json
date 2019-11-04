@@ -16,6 +16,7 @@
         "websocket": "^1.0.25"
     },
     "devDependencies": {
+        "@types/isomorphic-fetch": "^0.0.35",
         "@types/node-fetch": "*",
         "@types/websocket": "*",
         "babel-cli": "^6.6.5",

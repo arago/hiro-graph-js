@@ -1,4 +1,4 @@
-import { Client, POJO } from '../types';
+import { GraphClient, POJO } from '../types';
 
 export interface VariablesExtension {
   // TODO: define Variable interface
@@ -9,19 +9,19 @@ export interface VariablesExtension {
   define<T = any>(options: any): Promise<T>;
 }
 
-export function add(client: Client, variable: POJO) {
+export function add(client: GraphClient, data: POJO) {
   return client.http.fetch();
 }
 
-export function suggest(client: Client, variable: POJO) {
+export function suggest(client: GraphClient, name: string, full: boolean) {
   return client.http.fetch();
 }
 
-export function define(client: Client, variable: POJO) {
+export function define(client: GraphClient, options: POJO) {
   return client.http.fetch();
 }
 
-export function Factory(client: Client, options: any): VariablesExtension {
+export function factory(client: GraphClient, options: any): VariablesExtension {
   return {
     add: add.bind(null, client),
     suggest: suggest.bind(null, client),

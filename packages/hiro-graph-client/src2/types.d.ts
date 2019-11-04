@@ -33,8 +33,13 @@ export interface Meta {
 }
 
 export interface Transport {
-  request(type: RequestType): Promise<any>;
-  fetch(): Promise<any>;
+  // new (endpoint: string): Transport;
+  request<T = any>(
+    token: Token,
+    type: RequestType,
+    options: POJO,
+  ): Promise<T | Response>;
+  fetch<T = any>(token: Token, url: string, options: POJO): Promise<T>;
 }
 
 export interface TimeseriesResponse {
@@ -56,24 +61,29 @@ export interface Token {
   invalidate(): Promise<void>;
 }
 
-export interface Client {
-  constructor(token: string | Token, endpoint: string): Client;
+export interface GraphClient {
+  constructor(token: string | Token, endpoint: string): GraphClient;
 
   http: Transport;
   ws: Transport;
 
   // TODO: Do we need this methods?
-  request<T>(): Promise<T>;
+  request<T>(
+    type: RequestType,
+    headers: POJO,
+    body: POJO,
+  ): Promise<T | Response>;
 
   eventStream();
 
   dedupedRequest();
 
   introspect();
+
   // TODO END
   setToken(token: Token): void;
 
-  cloneWithNewToken(token: Token): Client;
+  cloneWithNewToken(token: Token): GraphClient;
 
   getToken(): Token;
 
@@ -105,15 +115,19 @@ export interface Client {
 
   connect<T>(outId: string, type: string, inId: string): Promise<T>;
 
-  //TODO: Should we extract it to timeseries extension?
-  writets();
-
-  streamts();
-
-  writelog();
-
-  readlog();
-  //TODO END
-
-  history();
-}
+//   //TODO: Should we extract it to timeseries extension?
+//   writets(timeseriesId: string, value: string): Promise<TimeseriesResponse[]>;
+//
+//   streamts(
+//     timeseriesId: string,
+//     options?: {
+//       from?: number;
+//       to?: number;
+//       limit?: number;
+//     },
+//   ): Promise<TimeseriesResponse[]>;
+//
+//   //TODO END
+//
+//   history<T>(): Promise<T[]>;
+// }
