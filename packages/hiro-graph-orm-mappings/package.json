@@ -17,7 +17,6 @@
     },
     "devDependencies": {
         "@arago/OGIT": "https://github.com/arago/OGIT.git#master",
-        "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "@types/mustache": "^0.8.32",
         "@types/shelljs": "^0.8.2",
         "babel-eslint": "^10.0.2",
