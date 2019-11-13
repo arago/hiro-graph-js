@@ -52,10 +52,7 @@ describe("transport-websocket", () => {
         // this is a setup pain, but without it we couldn't easily use this transport in many tests
         // with making them reliant on each other.
         captureNextConnection();
-        await transport.connect(
-            fakeToken,
-            log
-        );
+        await transport.connect(fakeToken, log);
         // now  we have a connection.
     });
 

@@ -85,19 +85,11 @@ describe("Client Response handling", () => {
         const forbidden = errors.forbidden();
         client.enqueueMockResponse(conflict, forbidden);
         await expect(
-            client.connect(
-                "foo",
-                "bar",
-                "baz"
-            )
+            client.connect("foo", "bar", "baz")
         ).resolves.toBeUndefined(); // connect returns nothing on success
-        await expect(
-            client.connect(
-                "foo",
-                "bar",
-                "baz"
-            )
-        ).rejects.toBe(forbidden);
+        await expect(client.connect("foo", "bar", "baz")).rejects.toBe(
+            forbidden
+        );
     });
 
     it("should handle `conflict` and `not found` as OK for disconnect", async () => {

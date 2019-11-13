@@ -31,10 +31,7 @@ export default class WebSocketTransport {
      */
     request(token, { type, headers = {}, body = {} }, reqOptions = {}) {
         //the connect call ensures the websocket is connected before continuing.
-        return this.connect(
-            token,
-            reqOptions.emit
-        ).then(client =>
+        return this.connect(token, reqOptions.emit).then(client =>
             client.send(
                 token,
                 {
@@ -251,9 +248,7 @@ export default class WebSocketTransport {
                     if (ws.protocol !== GRAPH_API_PROTOCOL) {
                         throw Object.assign(
                             new Error(
-                                `Expecting Graph API SubProtocol: '${GRAPH_API_PROTOCOL}', got: '${
-                                    ws.protocol
-                                }'`
+                                `Expecting Graph API SubProtocol: '${GRAPH_API_PROTOCOL}', got: '${ws.protocol}'`
                             ),
                             {
                                 protocolError: {

@@ -106,7 +106,7 @@ declare type defaultProps =
     | "_type";
 
 export type PlainVertex<Required = {}, Optional = {}, Relations = {}> = {
-    [K in defaultProps]: any
+    [K in defaultProps]: any;
 } &
     { [K in keyof Required]: any } &
     { [K in keyof Optional]?: any } & {

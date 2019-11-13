@@ -16,8 +16,8 @@ import { createVertex, isVertex } from "../vertex/graph";
 const identity = val => val;
 
 // Convenience method based on user options
-const convertVerticesToPlain = mapIfArray(
-    input => (typeof input.plain === "function" ? input.plain() : input)
+const convertVerticesToPlain = mapIfArray(input =>
+    typeof input.plain === "function" ? input.plain() : input
 );
 
 export const naiveDetectRaw = input => input["ogit/_id"] && input["ogit/_type"];
@@ -279,12 +279,7 @@ export function connect(
     const { verb, direction } = relationDef.hops[0];
     const [inId, outId] =
         direction === "in" ? [source, target] : [target, source];
-    return ctx.getClient().connect(
-        verb,
-        inId,
-        outId,
-        options
-    );
+    return ctx.getClient().connect(verb, inId, outId, options);
 }
 
 /**
@@ -302,9 +297,7 @@ export function disconnect(
     }
     if (relationDef.hops.length > 1) {
         throw badRequest(
-            `Cannot "disconnect" multi-hop relation ${relation} for ${
-                entity.name
-            }`
+            `Cannot "disconnect" multi-hop relation ${relation} for ${entity.name}`
         );
     }
     const { verb, direction } = relationDef.hops[0];

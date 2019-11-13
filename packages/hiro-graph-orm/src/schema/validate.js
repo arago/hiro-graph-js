@@ -35,17 +35,19 @@ export default function validate(schema, ontologyLocation) {
         };
     }
     //schema.names has the application name of each entity.
-    return schema.names.map(name => schema.get(name)).reduce(
-        (output, entity) => {
-            const errors = validateEntity(entity, ontology);
-            if (errors.length) {
-                output.errors += errors.length;
-                output.detail[entity.name] = errors;
-            }
-            return output;
-        },
-        { errors: 0, detail: {} }
-    );
+    return schema.names
+        .map(name => schema.get(name))
+        .reduce(
+            (output, entity) => {
+                const errors = validateEntity(entity, ontology);
+                if (errors.length) {
+                    output.errors += errors.length;
+                    output.detail[entity.name] = errors;
+                }
+                return output;
+            },
+            { errors: 0, detail: {} }
+        );
 }
 
 //load an ontology.
@@ -117,9 +119,7 @@ const emptyOntology = () => ({
 function validateEntity(appEntity, { entities, verbs }) {
     if (appEntity.ogit in entities === false) {
         return [
-            `Entity (${appEntity.name}) does not exist in Ontology as '${
-                appEntity.ogit
-            }'`
+            `Entity (${appEntity.name}) does not exist in Ontology as '${appEntity.ogit}'`
         ];
     }
     const ogitEntity = entities[appEntity.ogit];
@@ -132,15 +132,11 @@ function validateEntity(appEntity, { entities, verbs }) {
             const prop = appEntity.prop(attr);
             if (!prop) {
                 errors.push(
-                    `Ontology mandatory field (${attr}) not defined in Entity (${
-                        appEntity.name
-                    })`
+                    `Ontology mandatory field (${attr}) not defined in Entity (${appEntity.name})`
                 );
             } else if (!prop.required) {
                 errors.push(
-                    `Ontology mandatory field (${attr}) not listed as 'required' in Entity (${
-                        appEntity.name
-                    })`
+                    `Ontology mandatory field (${attr}) not listed as 'required' in Entity (${appEntity.name})`
                 );
             }
         }, []);

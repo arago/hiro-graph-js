@@ -358,17 +358,15 @@ function luceneTerm(context, field, values, isPlaceholdersNeeded) {
     return values
         .map(prop.encode) // encode for graphit with our mapping
         .map(checkTermForQuoting)
-        .map(
-            term =>
-                isPlaceholdersNeeded
-                    ? createPlaceholder(context.placeholders, slashString(term))
-                    : term
+        .map(term =>
+            isPlaceholdersNeeded
+                ? createPlaceholder(context.placeholders, slashString(term))
+                : term
         ) // add placeholders only for $and, $or, $must, $not sections for preventing breaking changes
-        .map(
-            term =>
-                term === null
-                    ? luceneMissing(context, field) //if term is null, that means the field should be missing.
-                    : `${context.op}${slashForward(prop.src)}:${term}`
+        .map(term =>
+            term === null
+                ? luceneMissing(context, field) //if term is null, that means the field should be missing.
+                : `${context.op}${slashForward(prop.src)}:${term}`
         ) //create querystring
         .join(" "); //join terms
 }

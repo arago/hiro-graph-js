@@ -1,7 +1,7 @@
 type LuceneOptions<T> = "$not" | "$or" | "$must" | "$and" | "$missing" | T;
 
 type LucenseBase<T extends string> = {
-    [K in LuceneOptions<T>]?: string | string[] | LucenseBase<T>
+    [K in LuceneOptions<T>]?: string | string[] | LucenseBase<T>;
 };
 interface LuceneSpecial {
     $search?:

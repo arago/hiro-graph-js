@@ -95,11 +95,7 @@ export default class GraphVertex extends Vertex {
      */
     connect(relation, vertexOrId) {
         return this._db
-            .connect(
-                relation,
-                this._id,
-                vertexOrId
-            )
+            .connect(relation, this._id, vertexOrId)
             .then(refetchRelationData(this, relation));
     }
 
@@ -127,7 +123,10 @@ export default class GraphVertex extends Vertex {
      */
     fetchCount(relations, options = {}) {
         return this._db
-            .fetchCount(relations, options)(this)
+            .fetchCount(
+                relations,
+                options
+            )(this)
             .then(addRelationInfo(this));
     }
 
@@ -140,7 +139,10 @@ export default class GraphVertex extends Vertex {
      */
     fetchIds(relations, options = {}) {
         return this._db
-            .fetchIds(relations, options)(this)
+            .fetchIds(
+                relations,
+                options
+            )(this)
             .then(addRelationInfo(this));
     }
 
@@ -153,7 +155,10 @@ export default class GraphVertex extends Vertex {
      */
     fetchVertices(relations, options = {}) {
         return this._db
-            .fetchVertices(relations, options)(this)
+            .fetchVertices(
+                relations,
+                options
+            )(this)
             .then(addRelationInfo(this));
     }
 

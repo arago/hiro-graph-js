@@ -75,9 +75,13 @@ interface IOAuthOptions {
     dispatch: Dispatch;
 }
 
-type AuthStrategy = (
-    { url, dispatch }: { url: string; dispatch: Dispatch }
-) => {
+type AuthStrategy = ({
+    url,
+    dispatch
+}: {
+    url: string;
+    dispatch: Dispatch;
+}) => {
     [index: string]: (...args: any) => any;
 };
 

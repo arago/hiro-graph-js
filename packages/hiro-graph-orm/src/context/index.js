@@ -44,9 +44,7 @@ const relationFetch = (ctx, method, relations, options = {}) =>
                         } else {
                             throw new TypeError(
                                 `Trying to call "${method}" on raw GraphVertex without Schema!\n` +
-                                    `Check whether you have defined Schema for "ogit/_type: ${
-                                        vertex["ogit/_type"]
-                                    }"`
+                                    `Check whether you have defined Schema for "ogit/_type: ${vertex["ogit/_type"]}"`
                             );
                         }
                     } else {
@@ -361,12 +359,7 @@ const mixinMethods = {
     create: (ctx, entity) => (data, options = {}) =>
         create(ctx, entity, data, options),
     connect: (ctx, entity) => (relation, source, target, options = {}) =>
-        connect(
-            ctx,
-            entity,
-            { relation, source, target },
-            options
-        ),
+        connect(ctx, entity, { relation, source, target }, options),
     disconnect: (ctx, entity) => (relation, source, target, options = {}) =>
         disconnect(ctx, entity, { relation, source, target }, options),
     update: (ctx, entity) => (vertexId, appData, options = {}) =>

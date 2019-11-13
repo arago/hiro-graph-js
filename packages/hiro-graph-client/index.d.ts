@@ -215,7 +215,7 @@ export namespace TimeSeries {
     }
 
     export type ChangeVariables<VariableNames extends string = string> = {
-        [key in VariableNames]: ChangeValue
+        [key in VariableNames]: ChangeValue;
     };
 
     export interface ChangeMeta {
