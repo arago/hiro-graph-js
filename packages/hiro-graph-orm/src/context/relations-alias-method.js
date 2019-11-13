@@ -1,9 +1,9 @@
 /**
  *  This is where the crazy queries for relation data are handled.
  */
-import { queryBuilder } from "../gremlin";
-import { mapPromiseIfArray } from "../utils";
-import { vertexize } from "./graph";
+import { queryBuilder } from '../gremlin';
+import { mapPromiseIfArray } from '../utils';
+import { vertexize } from './graph';
 
 function createRelationMap(relations, keyFn = () => []) {
     return relations.reduce((obj, rel) => ((obj[rel] = keyFn(rel)), obj), {});
@@ -18,31 +18,35 @@ export function fetchVertices(ctx, entity) {
         //get the nodes as well
         const query = gremlin.copySplit([
             //this is the edge map
-            _ => _.groupBy("$_alias", "ogit/_id"),
+            (_) => _.groupBy('$_alias', 'ogit/_id'),
             //and this is all the nodes
-            _ => _.dedup()
+            (_) => _.dedup(),
         ]);
+
         if (options.returnQuery) {
             return query;
         }
-        return mapPromiseIfArray(vertex => {
+
+        return mapPromiseIfArray((vertex) => {
             return query
                 .executeInContext(
                     ctx,
                     vertex._id,
-                    Object.assign({ raw: true }, options)
+                    Object.assign({ raw: true }, options),
                 )
                 .then(([edgeMap, ...raw]) => {
                     //patch them together again
-                    return vertexize(ctx)(raw).then(vertices => {
+                    return vertexize(ctx)(raw).then((vertices) => {
                         const vertexMap = vertices.reduce(
                             (o, v) => ((o[v._id] = v), o),
-                            {}
+                            {},
                         );
-                        return createRelationMap(relations, key => {
+
+                        return createRelationMap(relations, (key) => {
                             if (edgeMap[key]) {
-                                return edgeMap[key].map(id => vertexMap[id]);
+                                return edgeMap[key].map((id) => vertexMap[id]);
                             }
+
                             return [];
                         });
                     });
@@ -58,19 +62,21 @@ export function fetchVertices(ctx, entity) {
 export function fetchIds(ctx, entity) {
     return relationQuery(ctx, entity, (relations, gremlin, options) => {
         //count the aliases.
-        const query = gremlin.groupBy("$_alias", "ogit/_id");
+        const query = gremlin.groupBy('$_alias', 'ogit/_id');
+
         if (options.returnQuery) {
             return query;
         }
-        return mapPromiseIfArray(vertex => {
+
+        return mapPromiseIfArray((vertex) => {
             return query
                 .executeInContext(
                     ctx,
                     vertex._id,
-                    Object.assign({ raw: true }, options)
+                    Object.assign({ raw: true }, options),
                 )
                 .then(([info]) =>
-                    createRelationMap(relations, key => info[key] || [])
+                    createRelationMap(relations, (key) => info[key] || []),
                 );
         });
     });
@@ -83,16 +89,17 @@ export function fetchIds(ctx, entity) {
 export function fetchCount(ctx, entity) {
     return relationQuery(ctx, entity, (relations, gremlin, options) => {
         //count the aliases.
-        const query = gremlin.groupCount("$_alias");
-        return mapPromiseIfArray(vertex => {
+        const query = gremlin.groupCount('$_alias');
+
+        return mapPromiseIfArray((vertex) => {
             return query
                 .executeInContext(
                     ctx,
                     vertex._id,
-                    Object.assign({ raw: true }, options)
+                    Object.assign({ raw: true }, options),
                 )
                 .then(([info]) =>
-                    createRelationMap(relations, key => info[key] || 0)
+                    createRelationMap(relations, (key) => info[key] || 0),
                 );
         });
     });
@@ -111,17 +118,20 @@ export function getRelationQuery(entity, relation, options = {}) {
  * @ignore - we don't need docs about this. they are internal exports
  */
 function relationQuery(ctx, entity, finaliser) {
-    const getQuery = relationQueryGenerator(entity, { withAlias: "$_alias" });
+    const getQuery = relationQueryGenerator(entity, { withAlias: '$_alias' });
+
     return (relations, options = {}) => {
-        const queries = relations.map(r => getQuery(r, options));
+        const queries = relations.map((r) => getQuery(r, options));
 
         //now we have an array.
         const gremlin = ctx.gremlin();
+
         if (queries.length === 1) {
             queries[0](gremlin); //apply directly.
         } else {
             gremlin.copySplit(queries);
         }
+
         //finish up indiviually
         return finaliser(relations, gremlin, options);
     };
@@ -136,23 +146,25 @@ function relationQuery(ctx, entity, finaliser) {
 export function relationQueryGenerator(entity, { withAlias = false }) {
     return (relation, { offset = 0, limit = false } = {}) => {
         const { alias, hops } = entity.relation(relation);
-        let limiter = x => x;
+        let limiter = (x) => x;
+
         if (limit !== false) {
-            limiter = g => g.range(offset, offset + limit);
+            limiter = (g) => g.range(offset, offset + limit);
         } else if (offset !== 0) {
             // this is a bit of a hack, there is no offset without limit
             // but Integer.MAX_VALUE is as big as we are allowed anyway.
             // Hopefully we won't get that many results!
-            limiter = g => g.range(offset, "Integer.MAX_VALUE");
+            limiter = (g) => g.range(offset, 'Integer.MAX_VALUE');
         }
-        return gremlin => {
+
+        return (gremlin) => {
             hops.forEach(({ verb, direction, filter, vertices }) => {
-                const inbound = direction === "in";
-                const firstEdge = inbound ? "inE" : "outE";
-                const secondEdge = inbound ? "outV" : "inV";
+                const inbound = direction === 'in';
+                const firstEdge = inbound ? 'inE' : 'outE';
+                const secondEdge = inbound ? 'outV' : 'inV';
                 const edgeTypeProp = inbound
-                    ? "ogit/_out-type"
-                    : "ogit/_in-type";
+                    ? 'ogit/_out-type'
+                    : 'ogit/_in-type';
 
                 //traverse the edge by verb label.
                 gremlin[firstEdge](verb);
@@ -169,7 +181,7 @@ export function relationQueryGenerator(entity, { withAlias = false }) {
                         break;
                     default:
                         //many possible nodes, we use T.in to filter.
-                        gremlin.has(edgeTypeProp, "T.in", vertices);
+                        gremlin.has(edgeTypeProp, 'T.in', vertices);
                 }
 
                 //now out to the vertices

@@ -1,8 +1,8 @@
-import { statSync, readFileSync, readdirSync } from "fs";
-import { join } from "path";
-import { safeLoad } from "js-yaml";
+import { statSync, readFileSync, readdirSync } from 'fs';
+import { join } from 'path';
+import { safeLoad } from 'js-yaml';
 
-import { $dangerouslyGetProps, $dangerouslyGetRelations } from "./entity";
+import { $dangerouslyGetProps, $dangerouslyGetRelations } from './entity';
 
 /**
  *  Validate a schema against an OGIT ontology
@@ -26,27 +26,31 @@ import { $dangerouslyGetProps, $dangerouslyGetRelations } from "./entity";
  */
 export default function validate(schema, ontologyLocation) {
     let ontology;
+
     try {
         ontology = load(ontologyLocation);
     } catch (e) {
         return {
             errors: 1,
-            loadOntologyFail: e.message
+            loadOntologyFail: e.message,
         };
     }
+
     //schema.names has the application name of each entity.
     return schema.names
-        .map(name => schema.get(name))
+        .map((name) => schema.get(name))
         .reduce(
             (output, entity) => {
                 const errors = validateEntity(entity, ontology);
+
                 if (errors.length) {
                     output.errors += errors.length;
                     output.detail[entity.name] = errors;
                 }
+
                 return output;
             },
-            { errors: 0, detail: {} }
+            { errors: 0, detail: {} },
         );
 }
 
@@ -56,22 +60,26 @@ export default function validate(schema, ontologyLocation) {
 //if a dir, recurse and load all files.
 const load = (location, ontology = emptyOntology()) => {
     const stat = statSync(location);
+
     if (stat.isDirectory()) {
-        readdirSync(location).forEach(entry => {
+        readdirSync(location).forEach((entry) => {
             const fullPath = join(location, entry);
+
             load(fullPath, ontology);
         });
     } else if (stat.isFile() && isYamlFile(location)) {
-        const data = safeLoad(readFileSync(location, "utf8"), {
-            onWarning: () => {}
+        const data = safeLoad(readFileSync(location, 'utf8'), {
+            onWarning: () => {},
         });
+
         //data should be an array
         if (Array.isArray(data)) {
-            data.forEach(object => {
+            data.forEach((object) => {
                 let type, item;
+
                 switch (true) {
-                    case "Entity" in object:
-                        type = "entities";
+                    case 'Entity' in object:
+                        type = 'entities';
                         item = object.Entity;
                         break;
                     // we don't actually care about this...
@@ -79,31 +87,33 @@ const load = (location, ontology = emptyOntology()) => {
                     //     type = "attributes";
                     //     item = object.Attribute;
                     //     break;
-                    case "Verb" in object:
-                        type = "verbs";
+                    case 'Verb' in object:
+                        type = 'verbs';
                         item = object.Verb;
                         break;
                     default:
                         //no default
                         return;
                 }
+
                 item.__sourcefile__ = location;
                 item.ogit = depurl(item.id);
                 ontology[type][item.ogit] = item;
             });
         }
     }
+
     return ontology;
 };
 
-const depurl = name => name.replace("http://www.purl.org/", "");
+const depurl = (name) => name.replace('http://www.purl.org/', '');
 
-const isYamlFile = file => /\.ya?ml$/.test(file);
+const isYamlFile = (file) => /\.ya?ml$/.test(file);
 
 const emptyOntology = () => ({
     entities: {},
     //attributes: {},
-    verbs: {}
+    verbs: {},
 });
 
 // now the tricky one, validate an entity against an ontology.
@@ -119,24 +129,26 @@ const emptyOntology = () => ({
 function validateEntity(appEntity, { entities, verbs }) {
     if (appEntity.ogit in entities === false) {
         return [
-            `Entity (${appEntity.name}) does not exist in Ontology as '${appEntity.ogit}'`
+            `Entity (${appEntity.name}) does not exist in Ontology as '${appEntity.ogit}'`,
         ];
     }
+
     const ogitEntity = entities[appEntity.ogit];
     const errors = [];
 
     //check mandatory attributes
     if (ogitEntity.attributes.mandatory) {
-        ogitEntity.attributes.mandatory.map(depurl).forEach(attr => {
+        ogitEntity.attributes.mandatory.map(depurl).forEach((attr) => {
             //invalid if not in appEntity.required.
             const prop = appEntity.prop(attr);
+
             if (!prop) {
                 errors.push(
-                    `Ontology mandatory field (${attr}) not defined in Entity (${appEntity.name})`
+                    `Ontology mandatory field (${attr}) not defined in Entity (${appEntity.name})`,
                 );
             } else if (!prop.required) {
                 errors.push(
-                    `Ontology mandatory field (${attr}) not listed as 'required' in Entity (${appEntity.name})`
+                    `Ontology mandatory field (${attr}) not listed as 'required' in Entity (${appEntity.name})`,
                 );
             }
         }, []);
@@ -150,80 +162,89 @@ function validateEntity(appEntity, { entities, verbs }) {
         //we are checking non-free attributes. so we remove the free ones
         //and also remove the "ogit" internal attributes
         .filter(
-            prop => prop.src.charAt(0) !== "/" && !/^ogit\/_/.test(prop.src)
+            (prop) => prop.src.charAt(0) !== '/' && !/^ogit\/_/.test(prop.src),
         )
-        .filter(prop => !validAttributes[prop.src]) //remove valid ones.
-        .forEach(invalidProp => {
+        .filter((prop) => !validAttributes[prop.src]) //remove valid ones.
+        .forEach((invalidProp) => {
             //all the remaining are invalid
             errors.push(
                 `Entity ${
-                    invalidProp.required ? "required" : "optional"
+                    invalidProp.required ? 'required' : 'optional'
                 } property (${
                     invalidProp.dst
                 }) does not reference an available attribute in Ontology (${
                     invalidProp.src
-                })`
+                })`,
             );
         });
 
     //now check relations.
     const relations = appEntity[$dangerouslyGetRelations]();
 
-    Object.keys(relations).forEach(alias => {
+    Object.keys(relations).forEach((alias) => {
         let startNodes = [appEntity.ogit];
         let broken = false;
+
         relations[alias].hops.forEach((hop, i) => {
             if (broken) {
                 return;
             }
+
             const { direction, verb, filter, vertices } = hop;
+
             //first check the verb exists.
             if (verb in verbs === false) {
                 errors.push(
                     `Relation (${alias}) invalid at hop (${i +
-                        1}): Verb (${verb}) does not exist in ontology.`
+                        1}): Verb (${verb}) does not exist in ontology.`,
                 );
                 broken = false;
+
                 return;
             }
+
             const connections = getValidConnections(verbs[verb]);
-            vertices.forEach(endNode => {
-                startNodes.forEach(startNode => {
+
+            vertices.forEach((endNode) => {
+                startNodes.forEach((startNode) => {
                     const key =
-                        direction === "out"
+                        direction === 'out'
                             ? [startNode, endNode]
                             : [endNode, startNode];
+
                     if (!connections[key.join()]) {
                         errors.push(
                             `Relation (${alias}) invalid at hop (${i +
                                 1}): Connection from '${
                                 key[0]
-                            } --> ${verb} -> ${key[1]}' not allowed.`
+                            } --> ${verb} -> ${key[1]}' not allowed.`,
                         );
                     }
                 });
+
                 // also check the endNodes for filter props if filter exists and has
                 // non-free attributes in it.
                 if (filter) {
                     const endDefinition = entities[endNode];
                     const validEndAttributes = getValidAttributes(
-                        endDefinition
+                        endDefinition,
                     );
+
                     Object.keys(filter)
                         //remove any free or internal props.
                         .filter(
-                            prop =>
-                                prop.src.charAt(0) !== "/" ||
-                                !/^ogit\/_/.test(prop.src)
+                            (prop) =>
+                                prop.src.charAt(0) !== '/' ||
+                                !/^ogit\/_/.test(prop.src),
                         )
                         //remove valid props.
-                        .filter(prop => !validEndAttributes[prop])
+                        .filter((prop) => !validEndAttributes[prop])
                         //the rest are errors
-                        .forEach(prop =>
+                        .forEach((prop) =>
                             errors.push(
                                 `Relation (${alias}) invalid at hop (${i +
-                                    1}): filter contains invalid prop (${prop}) for Entity (${endNode})`
-                            )
+                                    1}): filter contains invalid prop (${prop}) for Entity (${endNode})`,
+                            ),
                         );
                 }
             });
@@ -231,10 +252,12 @@ function validateEntity(appEntity, { entities, verbs }) {
             startNodes = vertices;
         });
     });
+
     return errors;
 }
 
 const validAttributeCache = {};
+
 function getValidAttributes(entity) {
     if (entity.ogit in validAttributeCache === false) {
         validAttributeCache[entity.ogit] = (entity.attributes.mandatory || [])
@@ -242,15 +265,18 @@ function getValidAttributes(entity) {
             .map(depurl)
             .reduce((valid, attr) => ((valid[attr] = true), valid), {});
     }
+
     return validAttributeCache[entity.ogit];
 }
 
 const validConnectionsCache = {};
+
 function getValidConnections(verb) {
     if (verb.ogit in validConnectionsCache === false) {
         validConnectionsCache[verb.ogit] = (verb.allowed || [])
             .map(({ from, to }) => [depurl(from), depurl(to)].join())
             .reduce((valid, attr) => ((valid[attr] = true), valid), {});
     }
+
     return validConnectionsCache[verb.ogit];
 }

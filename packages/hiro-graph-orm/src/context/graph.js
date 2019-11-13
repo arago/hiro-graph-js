@@ -5,25 +5,26 @@
  *  the context and entity definitions to produce Vertex objects
  *  from queries.
  */
-import { notFound, badRequest } from "@hiro-graph/client/lib/errors";
-import parseLucene from "@hiro-graph/lucene";
+import { notFound, badRequest } from '@hiro-graph/client/lib/errors';
+import parseLucene from '@hiro-graph/lucene';
 
-import { decodeResults, filter, mapIfArray } from "../utils";
+import { decodeResults, filter, mapIfArray } from '../utils';
 
-import { createVertex, isVertex } from "../vertex/graph";
+import { createVertex, isVertex } from '../vertex/graph';
 
 // Structural helper
-const identity = val => val;
+const identity = (val) => val;
 
 // Convenience method based on user options
-const convertVerticesToPlain = mapIfArray(input =>
-    typeof input.plain === "function" ? input.plain() : input
+const convertVerticesToPlain = mapIfArray((input) =>
+    typeof input.plain === 'function' ? input.plain() : input,
 );
 
-export const naiveDetectRaw = input => input["ogit/_id"] && input["ogit/_type"];
+export const naiveDetectRaw = (input) =>
+    input['ogit/_id'] && input['ogit/_type'];
 
 //this is not in utils, so utils doesn't need to import GraphVertex
-const createVertices = ctx => mapIfArray(data => createVertex(data, ctx));
+const createVertices = (ctx) => mapIfArray((data) => createVertex(data, ctx));
 
 //this is a pipeline of a few functions.
 //first decode results, then filter empties, then turn to vertexes.
@@ -32,7 +33,7 @@ const createVertices = ctx => mapIfArray(data => createVertex(data, ctx));
 /**
  * @ignore
  */
-export const vertexize = (ctx, entity = ctx._schema.get()) => input => {
+export const vertexize = (ctx, entity = ctx._schema.get()) => (input) => {
     return Promise.resolve(input)
         .then(decodeResults(ctx, entity))
         .then(filter(Boolean))
@@ -40,28 +41,33 @@ export const vertexize = (ctx, entity = ctx._schema.get()) => input => {
 };
 
 //this is for results that expect a single result.
-const returnOneOrThrow = result => {
+const returnOneOrThrow = (result) => {
     if (!result || result.length === 0) {
-        throw notFound("single vertex not found");
+        throw notFound('single vertex not found');
     }
+
     return Array.isArray(result) ? result[0] : result;
 };
 
 // order specified as ["field1 desc", "field2 asc"]
 const convertSortOrderToOGIT = (order, entity) => {
     if (!Array.isArray(order)) {
-        const a = order.split(" ");
+        const a = order.split(' ');
+
         if (a.length === 2 && /^(asc|desc)$/i.test(a[1])) {
             //OK we can work with this
             return convertSortOrderToOGIT([order], entity);
         }
     }
-    return order.map(def => {
-        const [field, dir = ""] = def.split(" ");
+
+    return order.map((def) => {
+        const [field, dir = ''] = def.split(' ');
         const p = entity.prop(field);
+
         if (p) {
-            return [p.src, dir].join(" ");
+            return [p.src, dir].join(' ');
         }
+
         return def;
     });
 };
@@ -72,13 +78,16 @@ const convertSortOrderToOGIT = (order, entity) => {
 export function find(ctx, entity, query, options = {}) {
     const { querystring, placeholders } = parseLucene(query, entity);
     const luceneOptions = Object.assign({}, options, placeholders);
+
     if (luceneOptions.order) {
         luceneOptions.order = convertSortOrderToOGIT(
             luceneOptions.order,
-            entity
+            entity,
         );
     }
+
     const req = ctx.getClient().lucene(querystring, luceneOptions);
+
     return options.raw
         ? req
         : req
@@ -92,6 +101,7 @@ export function find(ctx, entity, query, options = {}) {
 export function findOne(ctx, entity, query, options = {}) {
     // force the limit to be 1
     const limitOneOptions = Object.assign({}, options, { limit: 1 });
+
     return find(ctx, entity, query, limitOneOptions).then(returnOneOrThrow);
 }
 
@@ -103,8 +113,9 @@ export function findCount(ctx, entity, query, options = {}) {
     // the default limit is set to -1 here, so we get all results.
     // otherwise the max count will be `limit` (we may/may not be desirable)
     const luceneOptions = Object.assign({ limit: -1 }, options, placeholders, {
-        count: true
+        count: true,
     });
+
     return ctx
         .getClient()
         .lucene(querystring, luceneOptions)
@@ -117,16 +128,19 @@ const cacheCheck = (
     entity,
     cache,
     id,
-    { isCached = noop, isCachedButWrongType = noop, notCached = noop }
+    { isCached = noop, isCachedButWrongType = noop, notCached = noop },
 ) => {
     const cached = cache.get(id);
+
     //the second check is in case errors or something else get in the cache
     if (!cached || !isVertex(cached)) {
         return notCached(id);
     }
+
     if (entity && !entity.internal && entity.name !== cached.type()) {
         return isCachedButWrongType(cached);
     }
+
     return isCached(cached);
 };
 
@@ -136,7 +150,8 @@ const cacheCheck = (
  * @ignore
  */
 export function fetchMe(ctx) {
-    const entity = ctx.getEntity("ogit/Auth/Account");
+    const entity = ctx.getEntity('ogit/Auth/Account');
+
     return ctx
         .getClient()
         .me()
@@ -155,23 +170,26 @@ export function findById(ctx, entity, query, options = {}) {
         //do an ids query.
         const cached = [];
         let toFetch;
+
         if (!options.refetch) {
             const callbacks = {
-                isCached: vertex => {
+                isCached: (vertex) => {
                     cached.push(vertex);
+
                     return false; //
                 },
                 isCachedButWrongType: () => false,
-                notCached: id => id
+                notCached: (id) => id,
             };
+
             toFetch = query
-                .map(id => cacheCheck(entity, ctx._cache, id, callbacks))
+                .map((id) => cacheCheck(entity, ctx._cache, id, callbacks))
                 .filter(Boolean);
         } else {
             toFetch = query;
         }
 
-        const finalise = promise =>
+        const finalise = (promise) =>
             options.raw
                 ? promise
                 : promise
@@ -179,7 +197,7 @@ export function findById(ctx, entity, query, options = {}) {
                       .then(
                           options.plain === true
                               ? convertVerticesToPlain
-                              : identity
+                              : identity,
                       );
 
         const fetched =
@@ -187,19 +205,22 @@ export function findById(ctx, entity, query, options = {}) {
                 ? Promise.resolve([])
                 : finalise(ctx.getClient().ids(toFetch, options));
 
-        return fetched.then(vertices => cached.concat(vertices));
+        return fetched.then((vertices) => cached.concat(vertices));
     }
+
     //check cache first.
     if (!options.refetch) {
         const cached = cacheCheck(entity, ctx._cache, query, {
-            isCached: vertex => vertex,
+            isCached: (vertex) => vertex,
             isCachedButWrongType: () => false,
-            notCached: () => false
+            notCached: () => false,
         });
+
         if (cached) {
             return Promise.resolve(cached);
         }
     }
+
     return findOne(ctx, entity, { _id: query }, options);
 }
 
@@ -211,7 +232,7 @@ export function search(ctx, entity, query, filters = {}, options = {}) {
         ctx,
         entity,
         Object.assign({ $search: query }, filters),
-        options
+        options,
     );
 }
 
@@ -222,7 +243,9 @@ export function create(ctx, entity, data, options = {}) {
     if (options.addCreatedOn && !data.created_on) {
         data.created_on = Date.now();
     }
+
     const dbData = entity.encode(data);
+
     return ctx
         .getClient()
         .create(entity.ogit, dbData, options)
@@ -234,6 +257,7 @@ export function create(ctx, entity, data, options = {}) {
  */
 export function update(ctx, entity, vertexId, data, options = {}) {
     const dbData = entity.encode(data);
+
     return ctx
         .getClient()
         .update(vertexId, dbData, options)
@@ -245,6 +269,7 @@ export function update(ctx, entity, vertexId, data, options = {}) {
  */
 export function replace(ctx, entity, vertexId, data, options = {}) {
     const dbData = entity.encode(data);
+
     return ctx
         .getClient()
         .replace(vertexId, dbData, options)
@@ -265,20 +290,24 @@ export function connect(
     ctx,
     entity,
     { relation, source, target },
-    options = {}
+    options = {},
 ) {
     const relationDef = entity.relation(relation);
+
     if (!relationDef) {
         throw badRequest(`No Relation ${relation} defined for ${entity.name}`);
     }
+
     if (relationDef.hops.length > 1) {
         throw badRequest(
-            `Cannot "connect" multi-hop relation ${relation} for ${entity.name}`
+            `Cannot "connect" multi-hop relation ${relation} for ${entity.name}`,
         );
     }
+
     const { verb, direction } = relationDef.hops[0];
     const [inId, outId] =
-        direction === "in" ? [source, target] : [target, source];
+        direction === 'in' ? [source, target] : [target, source];
+
     return ctx.getClient().connect(verb, inId, outId, options);
 }
 
@@ -289,20 +318,24 @@ export function disconnect(
     ctx,
     entity,
     { relation, source, target },
-    options = {}
+    options = {},
 ) {
     const relationDef = entity.relation(relation);
+
     if (!relationDef) {
         throw badRequest(`No Relation ${relation} defined for ${entity.name}`);
     }
+
     if (relationDef.hops.length > 1) {
         throw badRequest(
-            `Cannot "disconnect" multi-hop relation ${relation} for ${entity.name}`
+            `Cannot "disconnect" multi-hop relation ${relation} for ${entity.name}`,
         );
     }
+
     const { verb, direction } = relationDef.hops[0];
     const [inId, outId] =
-        direction === "in" ? [source, target] : [target, source];
+        direction === 'in' ? [source, target] : [target, source];
+
     return ctx.getClient().disconnect(verb, inId, outId, options);
 }
 
@@ -313,9 +346,11 @@ export function gremlin(ctx, rootVertexId, query, options = {}) {
     const queryResults = ctx
         .getClient()
         .gremlin(rootVertexId, query.toString(), options);
+
     if (options.raw) {
         return queryResults;
     }
+
     return queryResults
         .then(vertexize(ctx))
         .then(options.plain === true ? convertVerticesToPlain : identity);

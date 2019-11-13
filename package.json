@@ -28,15 +28,13 @@
         "start-again": "rm -rf package-lock.json node_modules/* && yarn lerna exec 'rm -rf package-lock.json node_modules/*' && yarn lerna bootstrap --concurrency 1",
         "precommit": "yarn format"
     },
-    "lint-staged": {
-      "src/**/*.{js,ts,tsx}": [
-        "eslint --max-warnings 0"
-      ]
-    },
     "eslintConfig": {
-        "extends": "@arago/eslint-config-arago",
-        "globals": {
-            "__DEV__": true
-        }
-    }
+        "extends": "@hiro-ui"
+    },
+    "prettier": "@hiro-ui/prettier-config",
+    "lint-staged": {
+        "src/**/*.{js,ts,tsx}": [
+          "eslint --max-warnings 0"
+        ]
+  }
 }

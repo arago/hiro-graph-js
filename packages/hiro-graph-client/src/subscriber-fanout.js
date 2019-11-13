@@ -10,33 +10,37 @@ const noop = () => {};
 // and "now we have no subscribers" respectively.
 export default function subscriberFanout(onStart = noop, onStop = noop) {
     const subs = [];
-    const fanout = event => {
-        subs.forEach(fn => {
+    const fanout = (event) => {
+        subs.forEach((fn) => {
             try {
                 fn(event);
             } catch (e) {
-                console.warn("error thrown in fanout fn", fn);
+                console.warn('error thrown in fanout fn', fn);
                 console.error(e);
             }
         });
     };
 
-    const subscribe = fn => {
+    const subscribe = (fn) => {
         if (subs.indexOf(fn) === -1) {
             subs.push(fn);
+
             if (subs.length === 1) {
                 onStart(fanout);
             }
         }
+
         return () => {
             if (subs.length !== 0) {
                 subs.splice(subs.indexOf(fn), 1);
+
                 if (subs.length === 0) {
                     return onStop(fanout);
                 }
             }
         };
     };
+
     return { fanout, subscribe };
 }
 
@@ -46,7 +50,7 @@ export default function subscriberFanout(onStart = noop, onStop = noop) {
 // mimic's redux-saga's `eventChannel` model
 export function channel(initialise) {
     let stop = noop;
-    const onStart = fanout => {
+    const onStart = (fanout) => {
         stop = initialise(fanout);
     };
     const onStop = () => {
@@ -54,5 +58,6 @@ export function channel(initialise) {
         stop = noop;
     };
     const { subscribe } = subscriberFanout(onStart, onStop);
+
     return subscribe;
 }

@@ -1,4 +1,4 @@
-import createStrategy from "../base";
+import createStrategy from '../base';
 
 // Simple strategy that simple bumps the user to the new page
 // and back again afterwards
@@ -16,7 +16,7 @@ const redirectStrategy = function({ url, redirectUri }) {
         requestToken() {
             //bump to auth page
             window.location = url;
-        }
+        },
     };
 };
 

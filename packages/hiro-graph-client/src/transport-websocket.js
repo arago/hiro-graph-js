@@ -1,9 +1,10 @@
 /**
  *  Websocket Transport for the GraphIT REST API.
  */
-import { create as createError, connectionClosedBeforeSend } from "./errors";
-import { w3cwebsocket as WS } from "websocket";
-import timer from "./timer";
+import { create as createError, connectionClosedBeforeSend } from './errors';
+import { w3cwebsocket as WS } from 'websocket';
+import timer from './timer';
+
 const noop = () => {};
 
 export const webSocketsAvailable = WS !== undefined && WS !== null;
@@ -11,19 +12,19 @@ export const webSocketsAvailable = WS !== undefined && WS !== null;
 // throw if websockets NOT available
 export const ensureWebSocketsAvailable = () => {
     if (!webSocketsAvailable) {
-        throw new Error("WebSockets are not available");
+        throw new Error('WebSockets are not available');
     }
 };
 
 // The graph websocket api accepts a protocol
-export const GRAPH_API_PROTOCOL = "graph-2.0.0";
+export const GRAPH_API_PROTOCOL = 'graph-2.0.0';
 
 export default class WebSocketTransport {
     constructor(endpoint) {
         ensureWebSocketsAvailable();
         this.endpoint = endpoint
-            .replace(/^http/, "ws") //replace http(s) with ws(s)
-            .replace(/\/?$/, "/_g/"); // replace possible trailing slash with api endpoint
+            .replace(/^http/, 'ws') //replace http(s) with ws(s)
+            .replace(/\/?$/, '/_g/'); // replace possible trailing slash with api endpoint
     }
 
     /**
@@ -31,19 +32,19 @@ export default class WebSocketTransport {
      */
     request(token, { type, headers = {}, body = {} }, reqOptions = {}) {
         //the connect call ensures the websocket is connected before continuing.
-        return this.connect(token, reqOptions.emit).then(client =>
+        return this.connect(token, reqOptions.emit).then((client) =>
             client.send(
                 token,
                 {
                     type,
                     headers: {
                         ...headers,
-                        ...(reqOptions.headers || {})
+                        ...(reqOptions.headers || {}),
                     },
-                    body
+                    body,
                 },
-                reqOptions
-            )
+                reqOptions,
+            ),
         );
     }
 
@@ -54,6 +55,7 @@ export default class WebSocketTransport {
         if (!this.__connectionPromise) {
             this.__connectionPromise = this.createWebSocket(token, emit);
         }
+
         return this.__connectionPromise;
     }
 
@@ -62,19 +64,22 @@ export default class WebSocketTransport {
      */
     createWebSocket(initialToken, emit) {
         if (!initialToken) {
-            throw new Error("createWebSocket received no initial token!");
+            throw new Error('createWebSocket received no initial token!');
         }
+
         //we do all this in a promise, so the result is shared between
         //all requests that come in during connection.
         const t = timer({ laps: false }); // always since beginning timer
-        return initialToken.get().then(initialTok => {
-            emit({ name: "token:get", data: { token: initialTok, time: t() } });
+
+        return initialToken.get().then((initialTok) => {
+            emit({ name: 'token:get', data: { token: initialTok, time: t() } });
+
             return new Promise((resolve, reject) => {
                 //always try for the newer protocol. The older one is forwards compatible so
                 //we don't really care if we get the old one.
                 const ws = new WS(this.endpoint, [
                     GRAPH_API_PROTOCOL,
-                    `token-${initialTok}`
+                    `token-${initialTok}`,
                 ]);
 
                 //this is for our inflight messages
@@ -87,11 +92,13 @@ export default class WebSocketTransport {
                 let _id = 0;
                 const nextId = () => {
                     const n = _id++;
+
                     if (_id > 1e9) {
                         //this has got big. let's reset.
                         _id = 0;
                     }
-                    return "" + n; //needs to be a string.
+
+                    return '' + n; //needs to be a string.
                 };
 
                 //in the server side implementation these are important
@@ -99,7 +106,7 @@ export default class WebSocketTransport {
                 const ref = () => {
                     if (++refCount && ws._connection && ws._connection.socket) {
                         ws._connection.socket.ref();
-                        emit({ name: "ws:ref", data: refCount });
+                        emit({ name: 'ws:ref', data: refCount });
                     }
                 };
                 const unref = () => {
@@ -109,18 +116,19 @@ export default class WebSocketTransport {
                         ws._connection.socket
                     ) {
                         ws._connection.socket.unref();
-                        emit({ name: "ws:unref", data: null });
+                        emit({ name: 'ws:unref', data: null });
                     }
                 };
 
                 //when the connection closes we need to tidy up.
                 ws.onclose = () => {
-                    emit({ name: "ws:close", data: t() }); // give how long it was open as data
+                    emit({ name: 'ws:close', data: t() }); // give how long it was open as data
                     //most importantly, remove this promise. so a new one can be created.
                     this.__connectionPromise = null;
 
                     //clean any inflight messages, they need to FAIL, but in a retryable way.
-                    const error = createError(500, "[REST] WebSocket Closed");
+                    const error = createError(500, '[REST] WebSocket Closed');
+
                     error.isRetryable = true;
                     inflight.forEach(({ callback }) => callback(error));
                     inflight.clear();
@@ -130,49 +138,56 @@ export default class WebSocketTransport {
                     if (!hasResolved) {
                         hasResolved = true;
                         initialToken.invalidate();
-                        emit({ name: "ws:invalidate", data: null });
+                        emit({ name: 'ws:invalidate', data: null });
                         reject(error);
                     }
                 };
 
                 //on connection error, we almost certainly close after this anyway, so just
                 //log the error
-                ws.onerror = err => {
-                    emit({ name: "ws:error", data: err });
+                ws.onerror = (err) => {
+                    emit({ name: 'ws:error', data: err });
                 };
 
                 //how to handle inbound messages, find the inflight it matches and return
-                ws.onmessage = msg => {
+                ws.onmessage = (msg) => {
                     //we can only handle string messages
-                    if (typeof msg.data !== "string") {
+                    if (typeof msg.data !== 'string') {
                         //we don't handle messages like this.
-                        emit({ name: "ws:bad-message", data: msg.data });
+                        emit({ name: 'ws:bad-message', data: msg.data });
+
                         return;
                     }
+
                     //try and parse as JSON
                     let object;
+
                     try {
                         object = JSON.parse(msg.data);
                     } catch (e) {
-                        emit({ name: "ws:bad-message", data: msg.data });
+                        emit({ name: 'ws:bad-message', data: msg.data });
+
                         return;
                     }
+
                     //ok, we should now have an ID we can use.
                     const id = object.id;
                     const handle = inflight.get(id);
+
                     if (!handle) {
-                        emit({ name: "ws:unknown", data: id });
+                        emit({ name: 'ws:unknown', data: id });
+
                         return;
                     }
 
                     const hasSub =
-                        handle.sub && typeof handle.sub.next === "function";
+                        handle.sub && typeof handle.sub.next === 'function';
 
                     // check for error response.
                     if (object.error) {
                         emit({
-                            name: "ws:message-error",
-                            data: { id, error: object.error }
+                            name: 'ws:message-error',
+                            data: { id, error: object.error },
                         });
                         //remove object from inflight immediately.
                         inflight.delete(id);
@@ -181,21 +196,25 @@ export default class WebSocketTransport {
                         const error = createError(
                             object.error.code,
                             object.error.message ||
-                                "[REST] Unknown GraphIT Error"
+                                '[REST] Unknown GraphIT Error',
                         );
+
                         return handle.callback(error);
                     }
 
                     const body = object.body;
 
                     if (!object.multi) {
-                        emit({ name: "ws:single", data: { id } });
+                        emit({ name: 'ws:single', data: { id } });
+
                         if (hasSub) {
                             handle.sub.next(body);
                         }
+
                         //This is a single packet response.
                         handle.callback(null, body);
                         inflight.delete(id);
+
                         return; //or we'll double callback and breqak the refs
                     }
 
@@ -210,54 +229,61 @@ export default class WebSocketTransport {
                     // happens in a "multi" response when there where no hits.
                     // NOPE! we can have gremlin/count results with a single numeric/string value
                     // so we check those too
-                    if (body || body === 0 || body === "") {
+                    if (body || body === 0 || body === '') {
                         handle.result.push(body);
                     }
 
                     if (object.more === true) {
                         emit({
-                            name: "ws:more",
-                            data: { id, count: handle.result.length }
+                            name: 'ws:more',
+                            data: { id, count: handle.result.length },
                         });
+
                         if (hasSub) {
                             handle.sub.next(body);
                         }
+
                         return;
                     }
+
                     //final response
                     //remove object from inflight immediately.
                     inflight.delete(id);
                     //ok, we should have an array in handle.result
                     emit({
-                        name: "ws:multi",
-                        data: { id, count: handle.result.length }
+                        name: 'ws:multi',
+                        data: { id, count: handle.result.length },
                     });
+
                     if (hasSub) {
                         handle.sub.next(body);
                     }
+
                     handle.callback(null, handle.result);
                 };
 
                 //now the socket is opened we can resolve our promise with a client API
                 ws.onopen = () => {
                     emit({
-                        name: "ws:open",
-                        data: { time: t(), protocol: ws.protocol }
+                        name: 'ws:open',
+                        data: { time: t(), protocol: ws.protocol },
                     });
                     this.protocol = ws.protocol;
+
                     if (ws.protocol !== GRAPH_API_PROTOCOL) {
                         throw Object.assign(
                             new Error(
-                                `Expecting Graph API SubProtocol: '${GRAPH_API_PROTOCOL}', got: '${ws.protocol}'`
+                                `Expecting Graph API SubProtocol: '${GRAPH_API_PROTOCOL}', got: '${ws.protocol}'`,
                             ),
                             {
                                 protocolError: {
                                     expected: GRAPH_API_PROTOCOL,
-                                    actual: ws.protocol
-                                }
-                            }
+                                    actual: ws.protocol,
+                                },
+                            },
                         );
                     }
+
                     //actually if we send a bad token, we need to wait for a moment before resolving.
                     //otherwise, the connection will shut straightaway.
                     //testing shows this usually takes about 10ms, but the largest time I saw was
@@ -268,9 +294,10 @@ export default class WebSocketTransport {
                             //crap, we did fail.
                             return;
                         }
+
                         //now mark this as resolving so we don't invalidate our token accidentally.
                         hasResolved = true;
-                        emit({ name: "ws:connected", data: { time: t() } });
+                        emit({ name: 'ws:connected', data: { time: t() } });
                         resolve({
                             //this is how we initiate a send and create the callback.
                             send: (
@@ -280,36 +307,42 @@ export default class WebSocketTransport {
                                     sub = {
                                         next: noop,
                                         error: noop,
-                                        complete: noop
-                                    }
-                                }
+                                        complete: noop,
+                                    },
+                                },
                             ) => {
                                 //first we get the new Token.
                                 const reqtimer = timer();
-                                return token.get().then(tok => {
+
+                                return token.get().then((tok) => {
                                     emit({
-                                        name: "token:get",
-                                        data: { token: tok, time: reqtimer() }
+                                        name: 'token:get',
+                                        data: { token: tok, time: reqtimer() },
                                     });
+
                                     const id = nextId();
                                     const payload = JSON.stringify({
                                         _TOKEN: tok,
                                         id,
                                         type,
                                         headers,
-                                        body
+                                        body,
                                     });
+
                                     return new Promise((_resolve, _reject) => {
                                         if (ws.readyState !== WS.OPEN) {
                                             //we may have closed whilst waiting for the token.
                                             //always retry.
                                             emit({
-                                                name: "ws:close-before-send",
-                                                data: null
+                                                name: 'ws:close-before-send',
+                                                data: null,
                                             });
+
                                             return connectionClosedBeforeSend;
                                         }
+
                                         ref();
+
                                         let called = false;
                                         const callback = (err, data) => {
                                             if (called) {
@@ -325,13 +358,14 @@ export default class WebSocketTransport {
                                             called = true;
                                             unref();
                                             emit({
-                                                name: "ws:complete",
+                                                name: 'ws:complete',
                                                 data: {
                                                     ok: Boolean(err),
                                                     time: reqtimer(),
-                                                    data: err ? err : data
-                                                }
+                                                    data: err ? err : data,
+                                                },
                                             });
+
                                             return err
                                                 ? _reject(err)
                                                 : _resolve(data);
@@ -340,14 +374,14 @@ export default class WebSocketTransport {
                                         //create a callback for the inflight requests.
                                         inflight.set(id, { callback, sub });
                                         emit({
-                                            name: "ws:send",
-                                            data: { payload, time: reqtimer() }
+                                            name: 'ws:send',
+                                            data: { payload, time: reqtimer() },
                                         });
                                         //now send the request.
                                         ws.send(payload);
                                     });
                                 });
-                            }
+                            },
                         });
                     }, 100);
                 };

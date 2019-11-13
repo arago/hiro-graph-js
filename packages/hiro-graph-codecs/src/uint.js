@@ -5,6 +5,6 @@
  *  that is still sortable.
  *
  */
-import { encodeUInt as encode, decodeUInt as decode } from "./_number_utils";
+import { encodeUInt as encode, decodeUInt as decode } from './_number_utils';
 
 export default { encode, decode };

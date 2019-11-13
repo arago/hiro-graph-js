@@ -10,13 +10,15 @@ export function clone(object) {
     if (Array.isArray(object)) {
         return object.map(clone);
     }
+
     //is it an object?
-    if (Object.prototype.toString.call(object) === "[object Object]") {
+    if (Object.prototype.toString.call(object) === '[object Object]') {
         return Object.keys(object).reduce(
             (acc, key) => ((acc[key] = clone(object[key])), acc),
-            {}
+            {},
         );
     }
+
     //assume a primitive
     return object;
 }
@@ -30,16 +32,17 @@ export function clone(object) {
  *  @ignore
  */
 export function merge(old = {}, data = {}) {
-    Object.keys(old).forEach(key => {
+    Object.keys(old).forEach((key) => {
         if (key in data === false) {
             data[key] = old[key];
         }
     });
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
         if (data[key] === null) {
             delete data[key];
         }
     });
+
     return data;
 }
 
@@ -51,7 +54,7 @@ export function merge(old = {}, data = {}) {
  *
  *  @ignore - internal helper
  */
-export const filter = fn => input =>
+export const filter = (fn) => (input) =>
     Array.isArray(input) ? input.filter(fn) : [input].filter(fn)[0]; //could be undefined...
 
 /**
@@ -60,10 +63,11 @@ export const filter = fn => input =>
  *  @ignore - internal helper
  */
 export const decodeResults = (ctx, entity) =>
-    mapIfArray(item => {
+    mapIfArray((item) => {
         const decoder = entity.internal
-            ? ctx.getEntity(item["ogit/_type"])
+            ? ctx.getEntity(item['ogit/_type'])
             : entity;
+
         try {
             return decoder.decode(item);
         } catch (e) {
@@ -76,7 +80,7 @@ export const decodeResults = (ctx, entity) =>
  *
  *  @ignore - internal helper
  */
-export const mapIfArray = fn => input =>
+export const mapIfArray = (fn) => (input) =>
     Array.isArray(input) ? input.map(fn) : fn(input);
 
 /**
@@ -84,7 +88,7 @@ export const mapIfArray = fn => input =>
  *
  *  @ignore - internal helper
  */
-export const mapPromiseIfArray = fn => input =>
+export const mapPromiseIfArray = (fn) => (input) =>
     Array.isArray(input)
         ? Promise.all(input.map(fn))
         : Promise.resolve(fn(input));
@@ -95,11 +99,13 @@ export const mapPromiseIfArray = fn => input =>
  */
 export const deprecationWarning = (fn, warning) => {
     let warned = false;
+
     return (...args) => {
         if (!warned) {
             console.warn(warning);
             warned = true;
         }
+
         return fn(...args);
     };
 };

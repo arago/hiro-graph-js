@@ -1,10 +1,10 @@
 /**
  *  Helper functions for getting data from oauth implicit auth flow.
  */
-import { createStrategy } from "@hiro-graph/implicit-oauth";
-import { popupStrategy } from "@hiro-graph/implicit-oauth/lib/popup";
-import { iframeStrategy } from "@hiro-graph/implicit-oauth/lib/iframe";
-import { redirectStrategy } from "@hiro-graph/implicit-oauth/lib/redirect";
+import { createStrategy } from '@hiro-graph/implicit-oauth';
+import { popupStrategy } from '@hiro-graph/implicit-oauth/lib/popup';
+import { iframeStrategy } from '@hiro-graph/implicit-oauth/lib/iframe';
+import { redirectStrategy } from '@hiro-graph/implicit-oauth/lib/redirect';
 
 import {
     setToken,
@@ -15,10 +15,10 @@ import {
     taskLoading,
     resetTask,
     setLoginTrigger,
-    GRAPH_LOGIN
-} from "./actions";
-import { createAction } from "./create-action";
-import { createTaskSelector, getMyId } from "./reducer";
+    GRAPH_LOGIN,
+} from './actions';
+import { createAction } from './create-action';
+import { createTaskSelector, getMyId } from './reducer';
 
 export const loginTaskSelector = createTaskSelector(GRAPH_LOGIN);
 
@@ -29,24 +29,26 @@ const fetchMeForToken = createAction(
     (
         { dispatch, getState, orm },
         { accessToken, meta },
-        { callOnFail = false } = {}
+        { callOnFail = false } = {},
     ) => {
         return orm
             .getClient()
             .http.request(
                 //force http transport.
                 null /* we don't use a token object here, but supply a fixed one - perhaps the api should update */,
-                { type: "me" },
-                { token: accessToken }
+                { type: 'me' },
+                { token: accessToken },
             )
             .then(
-                me => {
-                    const myRoles = me["/roles"];
-                    const myId = me["ogit/_id"];
+                (me) => {
+                    const myRoles = me['/roles'];
+                    const myId = me['ogit/_id'];
                     const currentMe = getMyId(getState());
+
                     if (currentMe && currentMe !== myId) {
                         window.location.reload(); // a hard refresh is best.
                     }
+
                     //put vertex into ORM cache
                     orm.insertRaw(me, orm);
                     //when it is in, continue
@@ -55,21 +57,22 @@ const fetchMeForToken = createAction(
                         dispatch(taskSuccess(GRAPH_LOGIN, accessToken));
                     });
                 },
-                err => {
+                (err) => {
                     dispatch(setToken());
                     dispatch(taskError(GRAPH_LOGIN, err.message));
+
                     if (callOnFail) {
                         callOnFail();
                     }
-                }
+                },
             );
-    }
+    },
 );
 
 const builtInStrategies = {
     popup: popupStrategy,
     iframe: iframeStrategy,
-    redirect: redirectStrategy
+    redirect: redirectStrategy,
 };
 
 /**
@@ -78,30 +81,32 @@ const builtInStrategies = {
  */
 export default function setupImplicitOauth(
     { url, clientId, redirectUri, logoutUri, store, ...options },
-    strategySpec = "popup"
+    strategySpec = 'popup',
 ) {
     const strategy =
-        typeof strategySpec === "string"
+        typeof strategySpec === 'string'
             ? builtInStrategies[strategySpec]
             : strategySpec;
     let shouldReallyLogout = false;
     const strategyLogout =
-        typeof strategy.logout === "function"
+        typeof strategy.logout === 'function'
             ? strategy.logout
-            : uri => (window.location.href = uri);
+            : (uri) => (window.location.href = uri);
 
-    strategy.logout = uri => {
+    strategy.logout = (uri) => {
         if (shouldReallyLogout) {
             strategyLogout(uri);
         }
     };
+
     const { check, request, logout } = createStrategy(strategy)({
         url,
         clientId,
         redirectUri,
         logoutUri,
-        ...options
+        ...options,
     });
+
     check((_err, token) => {
         if (token) {
             store.dispatch(taskLoading(GRAPH_LOGIN));
@@ -130,12 +135,12 @@ export default function setupImplicitOauth(
                     store.dispatch(
                         taskError(
                             GRAPH_LOGIN,
-                            new Error("no token in response")
-                        )
+                            new Error('no token in response'),
+                        ),
                     );
                 }
             });
-        })
+        }),
     );
     store.dispatch(
         setOnTokenInvalidate(() => {
@@ -145,6 +150,6 @@ export default function setupImplicitOauth(
             // what we can do is RESET the login task and kill the token
             store.dispatch(setToken());
             store.dispatch(resetTask(GRAPH_LOGIN));
-        })
+        }),
     );
 }
