@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/codecs",
-    "version": "6.0.0",
+    "version": "6.0.1",
     "description": "Coercion utilities for working with the *mostly* string values in HIRO Graph",
     "main": "lib/index.js",
     "directories": {
@@ -24,7 +24,7 @@
     "devDependencies": {
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
-        "babel-preset-hiro": "^0.4.1",
+        "babel-preset-hiro": "^0.4.3",
         "jest": "^23.5.0"
     },
     "babel": {
