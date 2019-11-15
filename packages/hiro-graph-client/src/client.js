@@ -6,38 +6,40 @@
  *  The connection requires a `Token`.
  */
 import WebsocketTransport, {
-    webSocketsAvailable
-} from "./transport-websocket-pool";
-import HttpTransport from "./transport-http";
+    webSocketsAvailable,
+} from './transport-websocket-pool';
+import HttpTransport from './transport-http';
 import {
     isUnauthorized,
     isTransactionFail,
     isConflict,
     isNotFound,
-    connectionClosedBeforeSend
-} from "./errors";
-import { fixedToken } from "./token";
-import EventStream from "./eventstream";
-import subscriberFanout from "./subscriber-fanout";
-import timer from "./timer";
+    connectionClosedBeforeSend,
+} from './errors';
+import { fixedToken } from './token';
+import EventStream from './eventstream';
+import subscriberFanout from './subscriber-fanout';
+import timer from './timer';
 
-const passthru = fn => [
-    r => (fn(), r),
-    e => {
+const passthru = (fn) => [
+    (r) => (fn(), r),
+    (e) => {
         fn();
         throw e;
-    }
+    },
 ];
 
 //nb this isn't a deep clone, just a top level deref.
 //we only deal with primitives, arrays and plain objects.
-const dereference = obj => {
-    if (typeof obj !== "object" || obj === null) {
+const dereference = (obj) => {
+    if (typeof obj !== 'object' || obj === null) {
         return obj;
     }
+
     if (Array.isArray(obj)) {
         return obj.slice();
     }
+
     return Object.assign({}, obj);
 };
 
@@ -46,7 +48,7 @@ export default class Client {
         this.endpoint = endpoint;
 
         //we hold on to the token for ease of access/manual invalidation
-        this.token = typeof token === "string" ? fixedToken(token) : token;
+        this.token = typeof token === 'string' ? fixedToken(token) : token;
 
         //create the transports.
         //the http is for http only endpoint, e.g. the /_ki/* and /_variable/* servlets
@@ -56,7 +58,7 @@ export default class Client {
         // Use Websocket if available (except if specifically disabled)
         // fallback to http, or use given transport
         // duck type the final parameter
-        if (typeof transportOptions.request === "function") {
+        if (typeof transportOptions.request === 'function') {
             this.transport = transportOptions;
         } else if (webSocketsAvailable && !transportOptions.forceHTTP) {
             //All a transport needs to implement is "request"
@@ -64,15 +66,16 @@ export default class Client {
         } else {
             if (!webSocketsAvailable) {
                 console.warn(
-                    "WebSockets not available, falling back to HTTP transport"
+                    'WebSockets not available, falling back to HTTP transport',
                 );
             }
+
             this.transport = this.http;
         }
 
         // Bind our fetch for extension servlets.
         this.fetch = (...args) => this.http.fetch(this.token, ...args);
-        this.proxyFetch = proxy => (url, ...args) =>
+        this.proxyFetch = (proxy) => (url, ...args) =>
             this.fetch(`${proxy}${url}`, ...args);
 
         this._dedup = Object.create(null);
@@ -88,22 +91,26 @@ export default class Client {
     // is called.
     eventStream(filters = [], { groupId, offset } = {}) {
         let filtersArray = filters;
+
         if (!Array.isArray(filters)) {
             filtersArray = [filters];
         }
-        if (filtersArray.some(f => typeof f !== "string")) {
+
+        if (filtersArray.some((f) => typeof f !== 'string')) {
             throw new Error(
-                "All filters must be strings representing `jfilter` filters"
+                'All filters must be strings representing `jfilter` filters',
             );
         }
+
         if (filtersArray.length === 0) {
             // add a default one that catches everything
-            filtersArray.push("(element.ogit/_id = *)");
+            filtersArray.push('(element.ogit/_id = *)');
         }
+
         return new EventStream(
             { endpoint: this.endpoint, token: this.token },
             { groupId, offset, filters: filtersArray },
-            this._pubsub.fanout
+            this._pubsub.fanout,
         );
     }
 
@@ -122,13 +129,15 @@ export default class Client {
         const cloned = new Client(
             {
                 endpoint: this.endpoint,
-                token: newToken
+                token: newToken,
             },
-            this.transport
+            this.transport,
         );
+
         this._servlets.forEach(([name, methods]) =>
-            cloned.addServlet(name, methods)
+            cloned.addServlet(name, methods),
         );
+
         return cloned;
     }
 
@@ -139,22 +148,24 @@ export default class Client {
     request(
         { type, headers = {}, body = {} } = {},
         reqOptions = {},
-        retries = 1
+        retries = 1,
     ) {
         this._pubsub.fanout({
-            name: "client:pre-request",
-            data: { type, headers, body }
+            name: 'client:pre-request',
+            data: { type, headers, body },
         });
+
         return this.transport
             .request(
                 this.token,
                 { type, headers, body },
                 Object.assign({ debug: this._debug_requests }, reqOptions, {
-                    emit: this._pubsub.fanout
-                })
+                    emit: this._pubsub.fanout,
+                }),
             )
-            .catch(err => {
-                this._pubsub.fanout({ name: "client:error", data: err });
+            .catch((err) => {
+                this._pubsub.fanout({ name: 'client:error', data: err });
+
                 //these are the special cases.
                 //regular errors end up with code === undefined, so not retryable.
                 switch (true) {
@@ -163,13 +174,13 @@ export default class Client {
                         return this.request(
                             { type, headers, body },
                             reqOptions,
-                            retries
+                            retries,
                         );
                     case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
                         this.token.invalidate();
                         this._pubsub.fanout({
-                            name: "client:unauthorized",
-                            data: null
+                            name: 'client:unauthorized',
+                            data: null,
                         });
                         err.isRetryable = true;
                         break;
@@ -178,23 +189,27 @@ export default class Client {
                         break;
                     //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
                     default:
-                        if ("isRetryable" in err === false) {
+                        if ('isRetryable' in err === false) {
                             err.isRetryable = false;
                         }
+
                         break;
                 }
+
                 //a chance to retry
                 if (err.isRetryable && retries > 0) {
                     this._pubsub.fanout({
-                        name: "client:retry",
-                        data: { type, headers, body }
+                        name: 'client:retry',
+                        data: { type, headers, body },
                     });
+
                     return this.request(
                         { type, headers, body },
                         reqOptions,
-                        retries - 1
+                        retries - 1,
                     );
                 }
+
                 throw err;
             });
     }
@@ -203,45 +218,53 @@ export default class Client {
     dedupedRequest(
         { type, headers = {}, body = {} } = {},
         reqOptions = {},
-        retries = 1
+        retries = 1,
     ) {
         try {
             const requestKey = JSON.stringify({ type, headers, body });
+
             this._pubsub.fanout({
-                name: "client:deduping",
+                name: 'client:deduping',
                 data: {
                     key: requestKey,
                     calls: this._dedup[requestKey]
                         ? this._dedup[requestKey]._calls
-                        : 0
-                }
+                        : 0,
+                },
             });
+
             if (requestKey in this._dedup) {
                 this._dedup[requestKey]._calls++;
+
                 return this._dedup[requestKey].then(dereference);
             }
+
             const cleanUp = passthru(() => {
                 const calls = this._dedup[requestKey]._calls;
+
                 this._pubsub.fanout({
-                    name: "client:deduped",
-                    data: { key: requestKey, calls }
+                    name: 'client:deduped',
+                    data: { key: requestKey, calls },
                 });
                 delete this._dedup[requestKey];
             });
             const promise = (this._dedup[requestKey] = this.request(
                 { type, headers, body },
                 reqOptions,
-                retries
+                retries,
             )
                 .then(...cleanUp)
-                .then(res => (promise._calls > 1 ? dereference(res) : res)));
+                .then((res) => (promise._calls > 1 ? dereference(res) : res)));
+
             promise._calls = 1;
+
             return promise;
         } catch (e) {
             this._pubsub.fanout({
-                name: "client:dedup-error",
-                data: e
+                name: 'client:dedup-error',
+                data: e,
             });
+
             return Promise.reject(e);
         }
     }
@@ -253,13 +276,14 @@ export default class Client {
     // helper to get debug info...
     wrapTimedEvent(event, args, promise) {
         const t = timer();
+
         return promise.then(
             ...passthru(() =>
                 this._pubsub.fanout({
-                    name: "client:" + event,
-                    data: { time: t(), args }
-                })
-            )
+                    name: 'client:' + event,
+                    data: { time: t(), args },
+                }),
+            ),
         );
     }
 
@@ -275,30 +299,31 @@ export default class Client {
      */
     info(reqOptions = {}) {
         return this.wrapTimedEvent(
-            "info",
+            'info',
             {},
             this.http.request(
                 null, // no token here
-                { type: "info" },
-                { token: false, ...reqOptions } //no token here
-            )
+                { type: 'info' },
+                { token: false, ...reqOptions }, //no token here
+            ),
         );
     }
 
     /**
      *  Get a single item by ID
      */
-    get(id = "_me", reqOptions = {}) {
-        if (id === "_me") {
+    get(id = '_me', reqOptions = {}) {
+        if (id === '_me') {
             return this.me(reqOptions);
         }
+
         return this.wrapTimedEvent(
-            "get",
+            'get',
             { id },
             this.dedupedRequest(
-                { type: "get", headers: { "ogit/_id": id } },
-                reqOptions
-            )
+                { type: 'get', headers: { 'ogit/_id': id } },
+                reqOptions,
+            ),
         );
     }
 
@@ -307,9 +332,9 @@ export default class Client {
      */
     me(reqOptions = {}) {
         return this.wrapTimedEvent(
-            "me",
+            'me',
             {},
-            this.dedupedRequest({ type: "me" }, reqOptions)
+            this.dedupedRequest({ type: 'me' }, reqOptions),
         );
     }
 
@@ -317,14 +342,16 @@ export default class Client {
      *  Create a new node
      */
     create(type, data = {}, reqOptions = {}) {
-        const headers = { "ogit/_type": type };
+        const headers = { 'ogit/_type': type };
+
         if (reqOptions.waitForIndex) {
-            headers.waitForIndex = "true";
+            headers.waitForIndex = 'true';
         }
+
         return this.wrapTimedEvent(
-            "create",
+            'create',
             { data },
-            this.request({ type: "create", headers, body: data }, reqOptions)
+            this.request({ type: 'create', headers, body: data }, reqOptions),
         );
     }
 
@@ -332,14 +359,16 @@ export default class Client {
      *  Update a Node
      */
     update(id, data = {}, reqOptions = {}) {
-        const headers = { "ogit/_id": id };
+        const headers = { 'ogit/_id': id };
+
         if (reqOptions.waitForIndex) {
-            headers.waitForIndex = "true";
+            headers.waitForIndex = 'true';
         }
+
         return this.wrapTimedEvent(
-            "update",
+            'update',
             { id, data },
-            this.request({ type: "update", headers, body: data }, reqOptions)
+            this.request({ type: 'update', headers, body: data }, reqOptions),
         );
     }
 
@@ -350,20 +379,23 @@ export default class Client {
         const { createIfNotExists = false, waitForIndex = false } = reqOptions;
         //createIfNotExists should contain the "ogit/_type" to create if the node doesn't exist,
         //and nothing otherwise
-        const headers = { "ogit/_id": id };
+        const headers = { 'ogit/_id': id };
+
         if (createIfNotExists) {
             Object.assign(headers, {
-                createIfNotExists: "true",
-                "ogit/_type": createIfNotExists
+                createIfNotExists: 'true',
+                'ogit/_type': createIfNotExists,
             });
         }
+
         if (waitForIndex) {
-            headers.waitForIndex = "true";
+            headers.waitForIndex = 'true';
         }
+
         return this.wrapTimedEvent(
-            "replace",
+            'replace',
             { id, data },
-            this.request({ type: "replace", headers, body: data }, reqOptions)
+            this.request({ type: 'replace', headers, body: data }, reqOptions),
         );
     }
 
@@ -374,14 +406,16 @@ export default class Client {
      */
     delete(id, reqOptions = {}) {
         const { waitForIndex = false } = reqOptions;
-        const headers = { "ogit/_id": id };
+        const headers = { 'ogit/_id': id };
+
         if (waitForIndex) {
-            headers.waitForIndex = "true";
+            headers.waitForIndex = 'true';
         }
+
         return this.wrapTimedEvent(
-            "delete",
+            'delete',
             { id },
-            this.request({ type: "delete", headers }, reqOptions)
+            this.request({ type: 'delete', headers }, reqOptions),
         );
     }
 
@@ -389,7 +423,7 @@ export default class Client {
      *  This is a vertices query
      */
     lucene(
-        query = "",
+        query = '',
         {
             limit = 50,
             offset = 0,
@@ -398,51 +432,55 @@ export default class Client {
             count = false,
             ...placeholders
         } = {},
-        reqOptions = {}
+        reqOptions = {},
     ) {
         const body = {
             query,
             limit,
             offset,
-            ...placeholders
+            ...placeholders,
         };
+
         if (count) {
-            body.count = "true"; // string true
+            body.count = 'true'; // string true
         }
+
         if (order) {
-            body.order = "" + order; // this implicitly does array.join(",") for arrays. (and works with strings...)
+            body.order = '' + order; // this implicitly does array.join(",") for arrays. (and works with strings...)
         }
+
         if (fields.length > 0) {
             body.fields = Array.isArray(fields)
-                ? fields.join(",")
+                ? fields.join(',')
                 : String(fields);
         }
+
         return this.wrapTimedEvent(
-            "lucene",
+            'lucene',
             body,
             this.dedupedRequest(
                 {
-                    type: "query",
-                    headers: { type: "vertices" },
-                    body
+                    type: 'query',
+                    headers: { type: 'vertices' },
+                    body,
                 },
-                reqOptions
-            )
+                reqOptions,
+            ),
         );
     }
 
     ids(list, reqOptions = {}) {
         return this.wrapTimedEvent(
-            "ids",
+            'ids',
             { ids: list },
             this.dedupedRequest(
                 {
-                    type: "query",
-                    headers: { type: "ids" },
-                    body: { query: list.join(",") } // yes, it has to be a comma-seperated string
+                    type: 'query',
+                    headers: { type: 'ids' },
+                    body: { query: list.join(',') }, // yes, it has to be a comma-seperated string
                 },
-                reqOptions
-            )
+                reqOptions,
+            ),
         );
     }
 
@@ -451,16 +489,16 @@ export default class Client {
      */
     gremlin(root, query, reqOptions = {}) {
         return this.wrapTimedEvent(
-            "gremlin",
-            { root, query: "" + query },
+            'gremlin',
+            { root, query: '' + query },
             this.dedupedRequest(
                 {
-                    type: "query",
-                    headers: { type: "gremlin" },
-                    body: { root, query }
+                    type: 'query',
+                    headers: { type: 'gremlin' },
+                    body: { root, query },
                 },
-                reqOptions
-            )
+                reqOptions,
+            ),
         );
     }
 
@@ -469,26 +507,27 @@ export default class Client {
      */
     connect(type, inId, outId, reqOptions = {}) {
         return this.wrapTimedEvent(
-            "connect",
+            'connect',
             { verb: type, in: inId, out: outId },
             this.request(
                 {
-                    type: "connect",
-                    headers: { "ogit/_type": type },
-                    body: { in: inId, out: outId }
+                    type: 'connect',
+                    headers: { 'ogit/_type': type },
+                    body: { in: inId, out: outId },
                 },
-                reqOptions
+                reqOptions,
             ).then(
                 () => {}, //return nothing.
-                err => {
+                (err) => {
                     //Conflict is OK here, just means that the edge was already connected.
                     if (isConflict(err)) {
                         return; //return nothing.
                     }
+
                     //real error.
                     throw err;
-                }
-            )
+                },
+            ),
         );
     }
 
@@ -497,19 +536,20 @@ export default class Client {
      */
     disconnect(type, inId, outId, reqOptions = {}) {
         return this.wrapTimedEvent(
-            "disconnect",
+            'disconnect',
             { verb: type, in: inId, out: outId },
             this.delete(`${outId}$$${type}$$${inId}`, reqOptions).then(
                 () => {}, //return nothing.
-                err => {
+                (err) => {
                     //Not Found or Conflict is OK here, just means that the edge was already deleted/didn't ever exist
                     if (isNotFound(err) || isConflict(err)) {
                         return; //return nothing.
                     }
+
                     //real error.
                     throw err;
-                }
-            )
+                },
+            ),
         );
     }
 
@@ -520,19 +560,21 @@ export default class Client {
      */
     writets(timeseriesId, values) {
         let items = values;
+
         if (!Array.isArray(values)) {
             items = [values];
         }
+
         return this.wrapTimedEvent(
-            "writets",
+            'writets',
             { id: timeseriesId, items },
             this.request({
-                type: "writets",
+                type: 'writets',
                 headers: {
-                    "ogit/_id": timeseriesId
+                    'ogit/_id': timeseriesId,
                 },
-                body: { items }
-            })
+                body: { items },
+            }),
         );
     }
 
@@ -541,31 +583,35 @@ export default class Client {
      */
     streamts(timeseriesId, { from = false, to = false, limit = 50 } = {}) {
         const headers = {
-            "ogit/_id": timeseriesId
+            'ogit/_id': timeseriesId,
         };
         const body = {};
+
         if (from !== false) {
             body.from = from.toString();
         }
+
         if (to !== false) {
             body.to = to.toString();
         }
+
         if (limit !== false) {
             body.limit = limit.toString();
         }
+
         return this.wrapTimedEvent(
-            "streamts",
+            'streamts',
             {
                 id: timeseriesId,
                 from: from.toString(),
                 to: to.toString(),
-                limit: limit.toString()
+                limit: limit.toString(),
             },
             this.dedupedRequest({
-                type: "streamts",
+                type: 'streamts',
                 headers,
-                body
-            })
+                body,
+            }),
         );
     }
 
@@ -574,11 +620,11 @@ export default class Client {
      */
     //eslint-disable-next-line no-unused-vars
     writelog(logId, entries) {
-        return Promise.reject(new Error("Log writing is not implemented yet"));
+        return Promise.reject(new Error('Log writing is not implemented yet'));
     }
     //eslint-disable-next-line no-unused-vars
     readlog(logId, options) {
-        return Promise.reject(new Error("Log reading is not implemented yet"));
+        return Promise.reject(new Error('Log reading is not implemented yet'));
     }
 
     /**
@@ -592,38 +638,44 @@ export default class Client {
             from = false,
             to = false,
             version = false,
-            type = false
-        } = {}
+            type = false,
+        } = {},
     ) {
-        const headers = { "ogit/_id": id };
+        const headers = { 'ogit/_id': id };
         const body = {};
+
         if (offset !== false) {
             body.offset = offset;
         }
+
         if (limit !== false) {
             body.limit = limit;
         }
+
         if (from !== false) {
             body.from = from;
         }
+
         if (to !== false) {
             body.to = to;
         }
+
         if (version !== false) {
             body.version = version;
         }
+
         if (type !== false) {
             body.type = type;
         }
 
         return this.wrapTimedEvent(
-            "history",
+            'history',
             { id, ...body },
             this.dedupedRequest({
-                type: "history",
+                type: 'history',
                 headers: headers,
-                body
-            })
+                body,
+            }),
         );
     }
 
@@ -638,13 +690,14 @@ export default class Client {
      */
     addServlet(prefix, servletMethods, proxy) {
         if (!prefix) {
-            throw new Error("[GRAPH] Must give prefix for servlet");
+            throw new Error('[GRAPH] Must give prefix for servlet');
         }
+
         if (prefix in this) {
             throw new Error(
-                "[GRAPH] Sevlet Extensions must have unique prefixes. Attempted to re-add `" +
+                '[GRAPH] Sevlet Extensions must have unique prefixes. Attempted to re-add `' +
                     prefix +
-                    "`"
+                    '`',
             );
         }
 
@@ -656,11 +709,12 @@ export default class Client {
         Object.keys(servletMethods).reduce((acc, method) => {
             acc[method] = (...args) => {
                 const call = servletMethods[method];
+
                 return this.wrapTimedEvent(
-                    "servlet-" + method,
+                    'servlet-' + method,
                     { args },
                     call(fetch, this.http.defaultOptions(), ...args).catch(
-                        err => {
+                        (err) => {
                             //these are the special cases.
                             //regular errors end up with code === undefined, so not retryable.
                             switch (true) {
@@ -673,26 +727,31 @@ export default class Client {
                                     break;
                                 //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
                                 default:
-                                    if ("isRetryable" in err === false) {
+                                    if ('isRetryable' in err === false) {
                                         err.isRetryable = false;
                                     }
+
                                     break;
                             }
+
                             //a chance to retry - only once.
                             if (err.isRetryable) {
                                 return servletMethods[method](
                                     fetch,
                                     this.http.defaultOptions(),
-                                    ...args
+                                    ...args,
                                 );
                             }
+
                             throw err;
-                        }
-                    )
+                        },
+                    ),
                 );
             };
+
             return acc;
         }, this[prefix]);
+
         //chainable? might be useful.
         return this;
     }

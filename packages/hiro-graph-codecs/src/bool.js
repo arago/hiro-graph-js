@@ -10,10 +10,10 @@
  *  @param {?string} [stringForFalse=null] - the string to use to signify `false` (or not expplicitly `true`)
  *  @return {Codec} The custom boolean codec
  */
-export function createBool(stringForTrue = "true", stringForFalse = null) {
+export function createBool(stringForTrue = 'true', stringForFalse = null) {
     return {
-        decode: s => s === stringForTrue,
-        encode: s => (s ? stringForTrue : stringForFalse)
+        decode: (s) => s === stringForTrue,
+        encode: (s) => (s ? stringForTrue : stringForFalse),
     };
 }
 
@@ -21,4 +21,4 @@ export function createBool(stringForTrue = "true", stringForFalse = null) {
  *  The default boolean export is one that maps to the strings
  *  "true" and "false".
  */
-export default createBool("true", "false");
+export default createBool('true', 'false');

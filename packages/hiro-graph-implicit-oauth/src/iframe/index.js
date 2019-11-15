@@ -1,4 +1,4 @@
-import createStrategy from "../base";
+import createStrategy from '../base';
 
 /**
  *  Creates the login window in an iframe.
@@ -9,7 +9,7 @@ import createStrategy from "../base";
  */
 
 const iframeStrategy = function({ url, key, iframe = false }) {
-    const CALLBACK_KEY = key("callback");
+    const CALLBACK_KEY = key('callback');
 
     return {
         isRemote() {
@@ -19,31 +19,35 @@ const iframeStrategy = function({ url, key, iframe = false }) {
         callLocalCallback(err, token) {
             //i.e from remote
             const fn = window.parent[CALLBACK_KEY];
-            if (typeof fn === "function") {
+
+            if (typeof fn === 'function') {
                 delete window.parent[CALLBACK_KEY]; //cleanup
-                console.log("iframe callback", err, token);
+                console.log('iframe callback', err, token);
                 fn(err, token);
             }
         },
 
         requestToken(callback) {
             let $iframe;
+
             if (iframe === false) {
                 //create one.
-                $iframe = document.createElement("IFRAME");
-            } else if (typeof iframe === "string") {
+                $iframe = document.createElement('IFRAME');
+            } else if (typeof iframe === 'string') {
                 //assume an id
                 $iframe = document.getElementById(iframe);
-            } else if (typeof iframe === "function") {
+            } else if (typeof iframe === 'function') {
                 //could be a "getter"
                 $iframe = iframe();
             } else {
                 //assume a real iframe element.
                 $iframe = iframe;
             }
+
             if ($iframe instanceof HTMLIFrameElement === false) {
-                throw new Error("Could not get iframe for login!");
+                throw new Error('Could not get iframe for login!');
             }
+
             //set callback
             window[CALLBACK_KEY] = (err, token) => {
                 callback(err, token);
@@ -52,7 +56,7 @@ const iframeStrategy = function({ url, key, iframe = false }) {
 
             //remember to attach to the DOM, or something. ;)
             return $iframe;
-        }
+        },
     };
 };
 

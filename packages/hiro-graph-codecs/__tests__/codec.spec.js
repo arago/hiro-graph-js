@@ -2,458 +2,459 @@
 /**
  *  Testing the codecs, and that number coercion is correctly lexically sortable.
  */
-import createCodec from "../src";
+import createCodec from '../src';
 
 //rescursive object for JSON test.
 const recurser = {};
+
 recurser.recurser = recurser;
 
 //for the timestamp tests.
 
-const isoDate = "2016-05-26T12:50:37.577Z";
+const isoDate = '2016-05-26T12:50:37.577Z';
 const date = Date.parse(isoDate);
-const tooEarly = Date.parse("Sun, 09 Sep 2001 01:46:38 GMT");
-const tooLate = Date.parse("Sat, 20 Nov 2286 17:46:41 GMT");
+const tooEarly = Date.parse('Sun, 09 Sep 2001 01:46:38 GMT');
+const tooLate = Date.parse('Sat, 20 Nov 2286 17:46:41 GMT');
 
-const isoWithTimeZone = "2016-05-26T13:50:37.577+0100";
-const isoWithTimeZone2 = "2016-05-26T11:50:37.577-0100";
-const isoWithTimeZone3 = "2016-05-26T13:50:37.577+01:00";
+const isoWithTimeZone = '2016-05-26T13:50:37.577+0100';
+const isoWithTimeZone2 = '2016-05-26T11:50:37.577-0100';
+const isoWithTimeZone3 = '2016-05-26T13:50:37.577+01:00';
 
-describe("Codecs:", function() {
+describe('Codecs:', function() {
     const testPlan = {
         string: {
             commutative: [
                 {
-                    name: "simple string",
-                    input: "some string",
-                    output: "some string"
-                }
+                    name: 'simple string',
+                    input: 'some string',
+                    output: 'some string',
+                },
             ],
             encoding: [
                 {
-                    name: "string cast",
-                    input: { some: "object" },
-                    output: "[object Object]"
-                }
-            ]
+                    name: 'string cast',
+                    input: { some: 'object' },
+                    output: '[object Object]',
+                },
+            ],
         },
         identity: {
             commutative: [
                 {
-                    name: "integer",
+                    name: 'integer',
                     input: 1,
-                    output: 1
+                    output: 1,
                 },
                 {
-                    name: "undefined",
+                    name: 'undefined',
                     input: undefined,
-                    output: undefined
+                    output: undefined,
                 },
                 {
-                    name: "object",
-                    input: { foo: "bar" },
-                    output: { foo: "bar" }
+                    name: 'object',
+                    input: { foo: 'bar' },
+                    output: { foo: 'bar' },
                 },
                 {
-                    name: "array",
-                    input: [1, "two"],
-                    output: [1, "two"]
+                    name: 'array',
+                    input: [1, 'two'],
+                    output: [1, 'two'],
                 },
                 {
-                    name: "null",
+                    name: 'null',
                     input: null,
-                    output: null
+                    output: null,
                 },
                 {
-                    name: "bool",
+                    name: 'bool',
                     input: true,
-                    output: true
-                }
-            ]
+                    output: true,
+                },
+            ],
         },
         int: {
             commutative: [
                 {
-                    name: "positive int",
+                    name: 'positive int',
                     input: 101,
-                    output: "p0000000000000101"
+                    output: 'p0000000000000101',
                 },
                 {
-                    name: "negative int",
+                    name: 'negative int',
                     input: -101,
-                    output: "n9007199254740890"
-                }
+                    output: 'n9007199254740890',
+                },
             ],
             encoding: [
                 {
                     name: "string that doesn't look like a number",
-                    input: "this is not a number",
-                    output: "p0000000000000000"
+                    input: 'this is not a number',
+                    output: 'p0000000000000000',
                 },
                 {
-                    name: "NaN",
+                    name: 'NaN',
                     input: NaN,
-                    output: "p0000000000000000"
+                    output: 'p0000000000000000',
                 },
                 {
-                    name: "positive float",
+                    name: 'positive float',
                     input: 123.456,
-                    output: "p0000000000000123"
-                }
+                    output: 'p0000000000000123',
+                },
             ],
             decoding: [
                 {
                     name: "something that doesn't look like a number",
-                    input: "this is not a number",
-                    output: 0
-                }
+                    input: 'this is not a number',
+                    output: 0,
+                },
             ],
             ordering: [
                 {
-                    name: "simple",
+                    name: 'simple',
                     sorted: [1, 2, 10, 20, 100, 200],
-                    shuffled: [200, 1, 2, 10, 100, 20]
+                    shuffled: [200, 1, 2, 10, 100, 20],
                 },
                 {
-                    name: "with negatives",
+                    name: 'with negatives',
                     sorted: [-10000000, -100, 0, 1, 2, 10, 20, 200, 4000],
-                    shuffled: [1, 0, -10000000, 10, -100, 2, 4000, 20, 200]
-                }
-            ]
+                    shuffled: [1, 0, -10000000, 10, -100, 2, 4000, 20, 200],
+                },
+            ],
         },
         uint: {
             commutative: [
                 {
-                    name: "positive int",
+                    name: 'positive int',
                     input: 101,
-                    output: "0000000000000101"
-                }
+                    output: '0000000000000101',
+                },
             ],
             encoding: [
                 {
-                    name: "negative int",
+                    name: 'negative int',
                     input: -101,
-                    output: "0000000000000101"
+                    output: '0000000000000101',
                 },
                 {
                     name: "string that doesn't look like a number",
-                    input: "this is not a number",
-                    output: "0000000000000000"
+                    input: 'this is not a number',
+                    output: '0000000000000000',
                 },
                 {
-                    name: "NaN",
+                    name: 'NaN',
                     input: NaN,
-                    output: "0000000000000000"
-                }
+                    output: '0000000000000000',
+                },
             ],
             decoding: [
                 {
                     name: "something that doesn't look like a number",
-                    input: "this is not a number",
-                    output: 0
+                    input: 'this is not a number',
+                    output: 0,
                 },
                 {
-                    name: "something that looks like `int` encoding",
-                    input: "p0000000000000123",
-                    output: 123
+                    name: 'something that looks like `int` encoding',
+                    input: 'p0000000000000123',
+                    output: 123,
                 },
                 {
                     name:
-                        "something that looks like -ve `int` encoding (we should lose sign)",
-                    input: "n9007199254740890",
-                    output: 101
-                }
+                        'something that looks like -ve `int` encoding (we should lose sign)',
+                    input: 'n9007199254740890',
+                    output: 101,
+                },
             ],
             ordering: [
                 {
-                    name: "simple",
+                    name: 'simple',
                     sorted: [1, 2, 10, 20, 100, 200],
-                    shuffled: [200, 1, 2, 10, 100, 20]
-                }
-            ]
+                    shuffled: [200, 1, 2, 10, 100, 20],
+                },
+            ],
         },
         bool: {
             commutative: [
                 {
-                    name: "true",
+                    name: 'true',
                     input: true,
-                    output: "true"
+                    output: 'true',
                 },
                 {
-                    name: "false",
+                    name: 'false',
                     input: false,
-                    output: "false"
-                }
+                    output: 'false',
+                },
             ],
             encoding: [
                 {
-                    name: "truthy string",
-                    input: "this string is not empty",
-                    output: "true"
+                    name: 'truthy string',
+                    input: 'this string is not empty',
+                    output: 'true',
                 },
                 {
-                    name: "falsey number",
+                    name: 'falsey number',
                     input: 0,
-                    output: "false"
+                    output: 'false',
                 },
                 {
                     name: "string 'false' (it's truthy!)",
-                    input: "false",
-                    output: "true"
-                }
+                    input: 'false',
+                    output: 'true',
+                },
             ],
             decoding: [
                 {
-                    name: "random string",
-                    input: "something random",
-                    output: false
-                }
-            ]
+                    name: 'random string',
+                    input: 'something random',
+                    output: false,
+                },
+            ],
         },
-        "bool:yes:no": {
+        'bool:yes:no': {
             commutative: [
                 {
-                    name: "true",
+                    name: 'true',
                     input: true,
-                    output: "yes"
+                    output: 'yes',
                 },
                 {
-                    name: "false",
+                    name: 'false',
                     input: false,
-                    output: "no"
-                }
+                    output: 'no',
+                },
             ],
             encoding: [
                 {
-                    name: "truthy string",
-                    input: "this string is not empty",
-                    output: "yes"
+                    name: 'truthy string',
+                    input: 'this string is not empty',
+                    output: 'yes',
                 },
                 {
-                    name: "falsey number",
+                    name: 'falsey number',
                     input: 0,
-                    output: "no"
+                    output: 'no',
                 },
                 {
                     name: "string 'false' (it's truthy!)",
-                    input: "false",
-                    output: "yes"
-                }
+                    input: 'false',
+                    output: 'yes',
+                },
             ],
             decoding: [
                 {
-                    name: "random string",
-                    input: "something random",
-                    output: false
-                }
-            ]
+                    name: 'random string',
+                    input: 'something random',
+                    output: false,
+                },
+            ],
         },
-        "bool:ok": {
+        'bool:ok': {
             commutative: [
                 {
-                    name: "true",
+                    name: 'true',
                     input: true,
-                    output: "ok"
+                    output: 'ok',
                 },
                 {
-                    name: "false",
+                    name: 'false',
                     input: false,
-                    output: null
-                }
+                    output: null,
+                },
             ],
             encoding: [
                 {
-                    name: "truthy string",
-                    input: "this string is not empty",
-                    output: "ok"
+                    name: 'truthy string',
+                    input: 'this string is not empty',
+                    output: 'ok',
                 },
                 {
-                    name: "falsey number",
+                    name: 'falsey number',
                     input: 0,
-                    output: null
+                    output: null,
                 },
                 {
                     name: "string 'false' (it's truthy!)",
-                    input: "false",
-                    output: "ok"
-                }
+                    input: 'false',
+                    output: 'ok',
+                },
             ],
             decoding: [
                 {
-                    name: "random string",
-                    input: "something random",
-                    output: false
-                }
-            ]
+                    name: 'random string',
+                    input: 'something random',
+                    output: false,
+                },
+            ],
         },
         json: {
             commutative: [
                 {
-                    name: "primitive string",
-                    input: "string",
-                    output: `"string"`
+                    name: 'primitive string',
+                    input: 'string',
+                    output: `"string"`,
                 },
                 {
-                    name: "primitive number",
+                    name: 'primitive number',
                     input: 10101,
-                    output: `10101`
+                    output: `10101`,
                 },
                 {
-                    name: "array",
-                    input: [1, 2, 3, "four"],
-                    output: `[1,2,3,"four"]`
+                    name: 'array',
+                    input: [1, 2, 3, 'four'],
+                    output: `[1,2,3,"four"]`,
                 },
                 {
-                    name: "object",
-                    input: { foo: "bar", baz: [1, 2, 3], quux: { qu: "ux" } },
-                    output: `{"foo":"bar","baz":[1,2,3],"quux":{"qu":"ux"}}`
-                }
+                    name: 'object',
+                    input: { foo: 'bar', baz: [1, 2, 3], quux: { qu: 'ux' } },
+                    output: `{"foo":"bar","baz":[1,2,3],"quux":{"qu":"ux"}}`,
+                },
             ],
             encoding: [
                 {
-                    name: "recursive object",
+                    name: 'recursive object',
                     input: recurser,
-                    output: null
-                }
+                    output: null,
+                },
             ],
             decoding: [
                 {
-                    name: "invalid JSON",
-                    input: "this is not JSON",
-                    output: "this is not JSON"
-                }
-            ]
+                    name: 'invalid JSON',
+                    input: 'this is not JSON',
+                    output: 'this is not JSON',
+                },
+            ],
         },
         list: {
             commutative: [
                 {
-                    name: "single item",
-                    input: ["test"],
-                    output: "test"
+                    name: 'single item',
+                    input: ['test'],
+                    output: 'test',
                 },
                 {
-                    name: "multi item",
-                    input: ["one", "two", "three"],
-                    output: "one, two, three"
-                }
+                    name: 'multi item',
+                    input: ['one', 'two', 'three'],
+                    output: 'one, two, three',
+                },
             ],
             encoding: [
                 {
-                    name: "string input, single item",
-                    input: "test",
-                    output: "test"
+                    name: 'string input, single item',
+                    input: 'test',
+                    output: 'test',
                 },
                 {
-                    name: "string input, multi item (formatting)",
-                    input: "one, two,three",
-                    output: "one, two, three"
+                    name: 'string input, multi item (formatting)',
+                    input: 'one, two,three',
+                    output: 'one, two, three',
                 },
                 {
-                    name: "array input, entries cast",
-                    input: ["one", 2, { three: 3 }],
-                    output: "one, 2, [object Object]"
+                    name: 'array input, entries cast',
+                    input: ['one', 2, { three: 3 }],
+                    output: 'one, 2, [object Object]',
                 },
                 {
-                    name: "sparse list",
-                    input: ["one", , , "two"], //eslint-disable-line no-sparse-arrays
-                    output: "one, two"
-                }
+                    name: 'sparse list',
+                    input: ['one', , , 'two'], //eslint-disable-line no-sparse-arrays
+                    output: 'one, two',
+                },
             ],
             decoding: [
                 {
-                    name: "sparse list",
-                    input: "one,,two",
-                    output: ["one", "two"]
-                }
-            ]
+                    name: 'sparse list',
+                    input: 'one,,two',
+                    output: ['one', 'two'],
+                },
+            ],
         },
         timestamp: {
             commutative: [
                 {
-                    name: "a valid timestamp",
+                    name: 'a valid timestamp',
                     input: date,
-                    output: "" + date
-                }
+                    output: '' + date,
+                },
             ],
             encoding: [
                 {
-                    name: "too early timestamp",
+                    name: 'too early timestamp',
                     input: tooEarly,
-                    output: null
+                    output: null,
                 },
                 {
-                    name: "too late timestamp",
+                    name: 'too late timestamp',
                     input: tooLate,
-                    output: null
+                    output: null,
                 },
                 {
-                    name: "a date object",
+                    name: 'a date object',
                     input: new Date(date),
-                    output: "" + date
-                }
+                    output: '' + date,
+                },
             ],
             decoding: [
                 {
-                    name: "too early timestamp",
+                    name: 'too early timestamp',
                     input: tooEarly,
-                    output: null
+                    output: null,
                 },
                 {
-                    name: "too late timestamp",
+                    name: 'too late timestamp',
                     input: tooLate,
-                    output: null
+                    output: null,
                 },
                 {
-                    name: "not a valid timestamp at all",
-                    input: "this is not a timestamp",
-                    output: null
+                    name: 'not a valid timestamp at all',
+                    input: 'this is not a timestamp',
+                    output: null,
                 },
                 {
-                    name: "iso8061 formatting",
+                    name: 'iso8061 formatting',
                     input: isoDate,
-                    output: date
-                }
-            ]
+                    output: date,
+                },
+            ],
         },
         iso8601: {
             commutative: [
                 {
-                    name: "basic UTC",
+                    name: 'basic UTC',
                     input: date,
-                    output: isoDate
-                }
+                    output: isoDate,
+                },
             ],
             encoding: [
                 {
-                    name: "not a timestamp at all",
+                    name: 'not a timestamp at all',
                     input: undefined,
-                    output: null
-                }
+                    output: null,
+                },
             ],
             decoding: [
                 {
-                    name: "with timezone +0100",
+                    name: 'with timezone +0100',
                     input: isoWithTimeZone,
-                    output: date
+                    output: date,
                 },
                 {
-                    name: "with timezone -0100",
+                    name: 'with timezone -0100',
                     input: isoWithTimeZone2,
-                    output: date
+                    output: date,
                 },
                 {
-                    name: "with timezone +01:00",
+                    name: 'with timezone +01:00',
                     input: isoWithTimeZone3,
-                    output: date
-                }
-            ]
-        }
+                    output: date,
+                },
+            ],
+        },
     };
 
     const testLexicalOrdering = (type, codec) => ({
         name,
         sorted,
-        shuffled
+        shuffled,
     }) => {
         it(`'${type}' ensure lexical sort: ${name}`, function() {
             //encode then sort should = sort then encode
@@ -470,6 +471,7 @@ describe("Codecs:", function() {
                 .map(codec.encode)
                 .sort()
                 .map(codec.decode);
+
             expect(afterShuffled).toEqual(sorted);
             expect(afterRandomised).toEqual(sorted);
         });
@@ -478,6 +480,7 @@ describe("Codecs:", function() {
     const testExplicit = (type, codec, method) => ({ name, input, output }) => {
         it(`'${type}' ${method}: ${name}`, function() {
             const actual = codec[method](input);
+
             expect(actual).toEqual(output);
         });
     };
@@ -488,6 +491,7 @@ describe("Codecs:", function() {
             const decoded = codec.decode(output);
             const encodeDecode = codec.decode(encoded);
             const decodeEncode = codec.encode(decoded);
+
             //console.log({ encoded, encodeDecode, decoded, decodeEncode })
             expect(encoded).toEqual(output);
             expect(decodeEncode).toEqual(output);
@@ -496,17 +500,18 @@ describe("Codecs:", function() {
         });
     };
 
-    Object.keys(testPlan).forEach(type => {
+    Object.keys(testPlan).forEach((type) => {
         const {
             encoding = [],
             decoding = [],
             commutative = [],
-            ordering = []
+            ordering = [],
         } = testPlan[type];
         const codec = createCodec(type);
+
         commutative.forEach(testCommutative(type, codec));
-        encoding.forEach(testExplicit(type, codec, "encode"));
-        decoding.forEach(testExplicit(type, codec, "decode"));
+        encoding.forEach(testExplicit(type, codec, 'encode'));
+        decoding.forEach(testExplicit(type, codec, 'decode'));
         ordering.forEach(testLexicalOrdering(type, codec));
     });
 });
@@ -516,6 +521,7 @@ describe("Codecs:", function() {
 function shuffle(array) {
     let currentIndex = array.length;
     let randomIndex;
+
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
         // Pick a remaining element...
@@ -524,8 +530,9 @@ function shuffle(array) {
         // And swap it with the current element.
         [array[currentIndex], array[randomIndex]] = [
             array[randomIndex],
-            array[currentIndex]
+            array[currentIndex],
         ];
     }
+
     return array;
 }

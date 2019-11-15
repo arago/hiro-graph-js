@@ -20,7 +20,6 @@
         "reselect": "^4.0.0"
     },
     "devDependencies": {
-        "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
         "babel-preset-hiro": "^0.4.1",

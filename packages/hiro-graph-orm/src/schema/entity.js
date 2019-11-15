@@ -3,31 +3,31 @@
  *  convert database database results into application data and
  *  application queries into database format
  */
-import codec from "@hiro-graph/codecs";
+import codec from '@hiro-graph/codecs';
 
 const stringCodec = codec.string;
 const listCodec = codec.list;
 const identity = codec.identity;
 const iso8601 = codec.iso8601;
 // map an array of objects to an object keyed on the given key
-const indexBy = key => (acc, obj) => ((acc[obj[key]] = obj), acc);
+const indexBy = (key) => (acc, obj) => ((acc[obj[key]] = obj), acc);
 
 /**
  *  @ignore - internal only
  */
-export const $dangerouslyGetProps = Symbol("dangerouslyGetProps");
+export const $dangerouslyGetProps = Symbol('dangerouslyGetProps');
 /**
  *  @ignore - internal only
  */
-export const $dangerouslyGetRelations = Symbol("dangerouslyGetRelations");
+export const $dangerouslyGetRelations = Symbol('dangerouslyGetRelations');
 /**
  *  @ignore - internal only
  */
-export const $dangerouslyGetDefinition = Symbol("dangerouslyGetDefinition");
+export const $dangerouslyGetDefinition = Symbol('dangerouslyGetDefinition');
 /**
  *  @ignore - internal only
  */
-export const $internal = Symbol("internal entity");
+export const $internal = Symbol('internal entity');
 
 /**
  *  The entity is an object which provides the information to
@@ -40,50 +40,54 @@ export const $internal = Symbol("internal entity");
  *  @return {Entity}
  */
 export default function createEntity(definition, schema) {
-    const firstLetter = definition.name ? definition.name[0] : "x";
+    const firstLetter = definition.name ? definition.name[0] : 'x';
+
     if (!definition[$internal] && firstLetter !== firstLetter.toUpperCase()) {
         throw new Error(
-            `entity defition name must start with a Capital letter (${
-                definition.name
-            })`
+            `entity defition name must start with a Capital letter (${definition.name})`,
         );
     }
+
     const props = createPropList(
         schema,
         definition.name,
         definition.required,
         definition.optional,
-        definition.virtual
+        definition.virtual,
     );
-    const byDb = props.reduce(indexBy("src"), {});
-    const byApp = props.reduce(indexBy("dst"), {});
+    const byDb = props.reduce(indexBy('src'), {});
+    const byApp = props.reduce(indexBy('dst'), {});
 
     const shouldMapFreeAttributes =
         definition.includeUnmappedFreeAttributes === true;
 
-    const getProp = name => {
+    const getProp = (name) => {
         if (byApp[name]) {
             return byApp[name];
         }
+
         if (byDb[name]) {
             return byDb[name];
         }
+
         //nothing
         return;
     };
 
     const relations = createRelationMap(definition.relations);
-    const getRelation = name => {
+    const getRelation = (name) => {
         if (relations[name]) {
             return relations[name];
         }
+
         //nothing
         return;
     };
 
-    const convert = (encode = true) => input => {
+    const convert = (encode = true) => (input) => {
         return objectEntries(input).reduce((output, [key, value]) => {
             const prop = encode ? byApp[key] : byDb[key];
+
             if (!prop) {
                 //this might be missing, or it may be free.
                 //if we are decoding, we have access to unmapped free props.
@@ -95,17 +99,20 @@ export default function createEntity(definition, schema) {
                     //this is a little different
                     addFreeAttribute(output, key, value);
                 }
+
                 return output;
             } else if (encode && prop.immutable) {
                 //skip readOnly fields on encode
                 return output;
             }
+
             if (encode) {
                 //remember null is used for unset, so pass-through
                 output[prop.src] = value === null ? null : prop.encode(value);
             } else {
                 output[prop.dst] = prop.decode(value);
             }
+
             return output;
         }, {});
     };
@@ -113,114 +120,118 @@ export default function createEntity(definition, schema) {
     const entity = Object.create(null, {
         ogit: {
             enumerable: true,
-            value: definition.ogit
+            value: definition.ogit,
         },
         name: {
             enumerable: true,
-            value: definition.name
+            value: definition.name,
         },
         relation: {
             enumerable: true,
-            value: getRelation
+            value: getRelation,
         },
         prop: {
             enumerable: true,
-            value: getProp
+            value: getProp,
         },
         decode: {
             enumerable: true,
-            value: convert(false)
+            value: convert(false),
         },
         encode: {
             enumerable: true,
-            value: convert(true)
+            value: convert(true),
         },
         internal: {
             enumerable: true,
-            value: definition[$internal] === true
-        }
+            value: definition[$internal] === true,
+        },
     });
+
     entity[$dangerouslyGetProps] = () => props;
     entity[$dangerouslyGetRelations] = () => relations;
     entity[$dangerouslyGetDefinition] = () => definition;
+
     return entity;
 }
 
 const internalProps = [
     {
-        src: "ogit/_id",
-        dst: "_id",
+        src: 'ogit/_id',
+        dst: '_id',
         encode: stringCodec.encode,
         decode: stringCodec.decode,
-        required: false
+        required: false,
     },
     {
         //_content and fields will be moved to ontology definition, e.g. github.com/arago/OGIT
-        src: "ogit/_content",
-        dst: "_content",
+        src: 'ogit/_content',
+        dst: '_content',
         encode: stringCodec.encode,
         decode: stringCodec.decode,
-        required: false
+        required: false,
     },
     {
-        src: "ogit/_organization",
-        dst: "_organization",
+        src: 'ogit/_organization',
+        dst: '_organization',
         encode: stringCodec.encode,
         decode: stringCodec.decode,
-        required: false
+        required: false,
     },
     {
-        src: "ogit/_owner",
-        dst: "_owner",
+        src: 'ogit/_owner',
+        dst: '_owner',
         encode: listCodec.encode,
         decode: listCodec.decode,
-        required: false
+        required: false,
     },
     {
-        src: "ogit/_tags",
-        dst: "_tags",
+        src: 'ogit/_tags',
+        dst: '_tags',
         encode: listCodec.encode,
         decode: listCodec.decode,
-        required: false
-    }
+        required: false,
+    },
 ];
 
 const readOnlyProps = [
-    "ogit/_created-on",
-    "ogit/_modified-on",
-    "ogit/_created-by",
-    "ogit/_modified-by"
-].map(src => ({
+    'ogit/_created-on',
+    'ogit/_modified-on',
+    'ogit/_created-by',
+    'ogit/_modified-by',
+].map((src) => ({
     src,
-    dst: src.split("/")[1],
+    dst: src.split('/')[1],
     decode: identity.decode,
     encode: /-on$/.test(src) ? iso8601.encode : identity.encode,
     required: false,
-    immutable: true
+    immutable: true,
 }));
 
 const _typeProp = {
-    src: "ogit/_type",
-    dst: "_type",
-    required: false
+    src: 'ogit/_type',
+    dst: '_type',
+    required: false,
 };
-const typeProp = schema => {
-    if ("encode" in _typeProp) {
+const typeProp = (schema) => {
+    if ('encode' in _typeProp) {
         return _typeProp;
     }
+
     return Object.assign(_typeProp, {
-        encode: name => schema.get(name).ogit,
-        decode: ogit => schema.get(ogit).name
+        encode: (name) => schema.get(name).ogit,
+        decode: (ogit) => schema.get(ogit).name,
     });
 };
 
 //free attributes start with Slash.
-const isFreeAttribute = prop => prop.indexOf("/") === 0;
+const isFreeAttribute = (prop) => prop.indexOf('/') === 0;
 //adding one goes into the free pot.
 const addFreeAttribute = (output, key, value) => {
-    if ("_free" in output === false) {
+    if ('_free' in output === false) {
         output._free = {};
     }
+
     output._free[key.substring(1)] = value; //no coercion.
 };
 
@@ -230,34 +241,36 @@ const restrictedPropsMap = internalProps
 
 const ensureFullProps = (name, base) => ([key, def]) => {
     const result = {
-        dst: key
+        dst: key,
     };
-    if (typeof def === "string") {
-        Object.assign(result, { src: def }, codec("string"), base);
+
+    if (typeof def === 'string') {
+        Object.assign(result, { src: def }, codec('string'), base);
     } else {
         Object.assign(
             result,
             { src: def.src },
-            codec(def.type || "string"),
-            base
+            codec(def.type || 'string'),
+            base,
         );
     }
+
     // check for defined internal props.
     if (result.src in restrictedPropsMap) {
         const p = restrictedPropsMap[result.src];
+
         throw new Error(
             `Trying to redefine an internal property as '${result.dst}'. ` +
-                `The property '${p.src}' will already be available as '${
-                    p.dst
-                }'. ` +
-                `Check the schema mapping for entity '${name}'.`
+                `The property '${p.src}' will already be available as '${p.dst}'. ` +
+                `Check the schema mapping for entity '${name}'.`,
         );
     }
+
     return result;
 };
 
 //to iterate objects easily
-const objectEntries = obj => Object.keys(obj).map(key => [key, obj[key]]);
+const objectEntries = (obj) => Object.keys(obj).map((key) => [key, obj[key]]);
 
 //create a flat array of props.
 const createPropList = (
@@ -265,7 +278,7 @@ const createPropList = (
     name,
     required = {},
     optional = {},
-    virtual = {}
+    virtual = {},
 ) => {
     //we add the defaults as well.
     const props = internalProps
@@ -273,51 +286,59 @@ const createPropList = (
         .concat(readOnlyProps)
         .concat(
             objectEntries(required).map(
-                ensureFullProps(name, { required: true })
-            )
+                ensureFullProps(name, { required: true }),
+            ),
         )
         .concat(
             objectEntries(optional).map(
-                ensureFullProps(name, { required: false })
-            )
+                ensureFullProps(name, { required: false }),
+            ),
         )
         .concat(
             objectEntries(virtual).map(
-                ensureFullProps(name, { immutable: true })
-            )
+                ensureFullProps(name, { immutable: true }),
+            ),
         );
     // now check if anything is "double defined"
     const check = {};
-    props.forEach(p => {
+
+    props.forEach((p) => {
         if (p.immutable) {
             // it doesn't matter if immutable props have multiple definitions
             return;
         }
+
         if (p.src in check === false) {
             check[p.src] = [];
         }
+
         check[p.src].push(p);
     });
+
     const problems = Object.keys(check)
-        .map(k => {
+        .map((k) => {
             if (check[k].length === 1) {
                 return false;
             }
+
             return check[k];
         })
         .filter(Boolean);
+
     if (problems.length) {
         const message =
             `Conflicting property definitions in entity: ${name}.` +
             problems.map(
-                defs =>
-                    "\n" +
+                (defs) =>
+                    '\n' +
                     `OGIT property '${defs[0].src}' is mapped by ${
                         defs.length
-                    } definitions (${defs.map(d => d.dst).join(", ")})`
+                    } definitions (${defs.map((d) => d.dst).join(', ')})`,
             );
+
         throw new Error(message);
     }
+
     return props;
 };
 
@@ -325,15 +346,18 @@ const createPropList = (
 const createRelationMap = (relations = {}) => {
     return objectEntries(relations).reduce((map, [alias, def]) => {
         const relation = [];
-        if (typeof def === "string" || !Array.isArray(def)) {
+
+        if (typeof def === 'string' || !Array.isArray(def)) {
             relation.push(def);
         } else {
             relation.push(...def);
         }
+
         map[alias] = {
             alias,
-            hops: relation.reduce(createRelation, [])
+            hops: relation.reduce(createRelation, []),
         };
+
         return map;
     }, {});
 };
@@ -356,26 +380,30 @@ const createRelationMap = (relations = {}) => {
  */
 const createRelation = (hops, def) => {
     //if string, we must parse.
-    if (typeof def === "string") {
+    if (typeof def === 'string') {
         return parseRelationString(def).reduce(createRelation, hops);
     }
+
     const {
         direction,
         verb,
         filter = null,
         vertex = false,
-        vertices = []
+        vertices = [],
     } = def;
     const vertexTypes = [];
+
     //now check the minimal definition.
-    if (direction !== "in" && direction !== "out") {
+    if (direction !== 'in' && direction !== 'out') {
         throw new Error(
-            `relation: direction must be "in" or "out" not: ${direction}`
+            `relation: direction must be "in" or "out" not: ${direction}`,
         );
     }
-    if (typeof verb !== "string" || verb.indexOf("ogit/") !== 0) {
+
+    if (typeof verb !== 'string' || verb.indexOf('ogit/') !== 0) {
         throw new Error(`relation: verb must be 'ogit/...' got: ${verb}`);
     }
+
     //this should be a single item, but it might get an array...
     if (vertex) {
         if (Array.isArray(vertex)) {
@@ -384,61 +412,68 @@ const createRelation = (hops, def) => {
             vertexTypes.push(vertex);
         }
     }
+
     //this is the one that should be used as an array, be we might get a single item.
     if (!Array.isArray(vertices)) {
         vertexTypes.push(vertices);
     } else {
         vertexTypes.push(...vertices);
     }
+
     // now check everything we got was a string.
     if (
-        vertexTypes.some(r => typeof r !== "string") ||
+        vertexTypes.some((r) => typeof r !== 'string') ||
         vertexTypes.length === 0
     ) {
         throw new Error(
-            `relation: vertex must be a string, or an array of strings`
+            `relation: vertex must be a string, or an array of strings`,
         );
     }
+
     //OK we have all the info we need, should we generate the gremlin base alias query now? nah.
     return hops.concat([
         {
             direction,
             filter,
             verb,
-            vertices: vertexTypes
-        }
+            vertices: vertexTypes,
+        },
     ]);
 };
 
 //parse the string form of the relation definition.
 //
 // the definition is in the form "verb dir type|type, verb dir type|type, ..."
-const parseRelationString = string => {
+const parseRelationString = (string) => {
     //split the parts into an array on comma.
-    return string.split(/\s*,\s*/).map(rel => {
+    return string.split(/\s*,\s*/).map((rel) => {
         //OK this is a single one.
         const [verb, dir, types, ...rest] = rel.split(/\s+/);
+
         //if there is "rest" then the definiton is probably done something wrong.
         if (rest.length) {
             throw new Error(
-                `relation: error parsing '${rel}' - (if you need a filter, use the longhand object form)`
+                `relation: error parsing '${rel}' - (if you need a filter, use the longhand object form)`,
             );
         }
+
         let direction;
+
         switch (dir) {
-            case "<-":
-                direction = "in";
+            case '<-':
+                direction = 'in';
                 break;
-            case "->":
-                direction = "out";
+            case '->':
+                direction = 'out';
                 break;
             default:
                 direction = dir;
         }
+
         return {
             direction,
             verb,
-            vertices: types.split("|").map(v => v.trim())
+            vertices: types.split('|').map((v) => v.trim()),
         };
     });
 };

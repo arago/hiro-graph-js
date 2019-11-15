@@ -15,6 +15,6 @@
  *  If you do not need negative numbers it is more natural (and probably more performant) to
  *  use the `uint` type.
  */
-import { encodeInt as encode, decodeInt as decode } from "./_number_utils";
+import { encodeInt as encode, decodeInt as decode } from './_number_utils';
 
 export default { encode, decode };

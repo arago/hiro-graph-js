@@ -1,12 +1,12 @@
-import * as multi from "./relations-multi-method";
-import * as alias from "./relations-alias-method";
+import * as multi from './relations-multi-method';
+import * as alias from './relations-alias-method';
 
 const implementations = {
     multi: multi,
-    alias: alias
+    alias: alias,
 };
 
-let current = "multi";
+let current = 'multi';
 
 export function useImplementation(name) {
     if (name in implementations) {
@@ -14,6 +14,7 @@ export function useImplementation(name) {
     } else {
         console.warn(`unknown implementation: "${name}"`);
     }
+
     return current;
 }
 

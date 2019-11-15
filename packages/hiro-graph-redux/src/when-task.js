@@ -24,8 +24,8 @@ export default function whenTask(
         ok = noop,
         error = noop,
         ignoreReloadingIfOK = false,
-        ignoreReloadingIfError = false
-    }
+        ignoreReloadingIfError = false,
+    },
 ) {
     if (!task) {
         return pre();
@@ -35,9 +35,11 @@ export default function whenTask(
             if (task.error && ignoreReloadingIfError) {
                 return error(task.error);
             }
+
             if (!task.error && ignoreReloadingIfOK) {
                 return ok(task.result);
             }
+
             return reloading(task.error, task.result);
         } else {
             return loading();

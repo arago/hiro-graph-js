@@ -6,9 +6,10 @@
  */
 export function createEnum(...options) {
     const _enum = options.reduce((acc, val) => ((acc[val] = val), acc), {});
-    const check = s => (s in _enum ? s : null);
+    const check = (s) => (s in _enum ? s : null);
+
     return {
         decode: check,
-        encode: check
+        encode: check,
     };
 }

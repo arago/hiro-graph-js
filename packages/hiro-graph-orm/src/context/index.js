@@ -1,7 +1,7 @@
 /**
  *  Defines a Schema aware GraphIT client library
  */
-import { queryBuilder } from "../gremlin";
+import { queryBuilder } from '../gremlin';
 import {
     find,
     findById,
@@ -16,52 +16,52 @@ import {
     deleteVertex,
     fetchMe,
     naiveDetectRaw,
-    vertexize
-} from "./graph";
-import { createVertex } from "../vertex/graph";
-import { mapPromiseIfArray, deprecationWarning } from "../utils";
+    vertexize,
+} from './graph';
+import { createVertex } from '../vertex/graph';
+import { mapPromiseIfArray, deprecationWarning } from '../utils';
 import {
     getRelationQuery,
     fetchVertices,
     fetchIds,
-    fetchCount
-} from "./relations";
-import isPlainObject from "lodash.isplainobject";
-import Schema from "../schema";
-import Client from "@hiro-graph/client";
+    fetchCount,
+} from './relations';
+import isPlainObject from 'lodash.isplainobject';
+import Schema from '../schema';
+import Client from '@hiro-graph/client';
 
 //shorthand for creating the getCount/Ids/Vertices fetching functions
 const relationFetch = (ctx, method, relations, options = {}) =>
-    mapPromiseIfArray(input => {
+    mapPromiseIfArray((input) => {
         return Promise.resolve(input)
-            .then(vertex => {
-                if (typeof vertex[method] !== "function") {
+            .then((vertex) => {
+                if (typeof vertex[method] !== 'function') {
                     // Could be raw
                     if (naiveDetectRaw(vertex)) {
-                        const entity = ctx._schema.get(vertex["ogit/_type"]);
+                        const entity = ctx._schema.get(vertex['ogit/_type']);
+
                         if (entity) {
                             return vertexize(ctx, entity)(input);
                         } else {
                             throw new TypeError(
                                 `Trying to call "${method}" on raw GraphVertex without Schema!\n` +
-                                    `Check whether you have defined Schema for "ogit/_type: ${
-                                        vertex["ogit/_type"]
-                                    }"`
+                                    `Check whether you have defined Schema for "ogit/_type: ${vertex['ogit/_type']}"`,
                             );
                         }
                     } else {
                         throw new TypeError(
                             `Trying to call "${method}" on non GraphVertex object!\n` +
-                                `Check whether or not you have converted the objects to plain`
+                                `Check whether or not you have converted the objects to plain`,
                         );
                     }
                 }
+
                 return vertex;
             })
-            .then(vertex => vertex[method](relations, options));
+            .then((vertex) => vertex[method](relations, options));
     });
 
-const noEntity = "_no_entity";
+const noEntity = '_no_entity';
 
 /**
  *  The context is a wrapper for the schema and client.
@@ -80,6 +80,7 @@ export default class Context {
      */
     constructor(connectionSpec, schemaSpec, cache = new Map()) {
         let client = connectionSpec;
+
         if (isPlainObject(connectionSpec)) {
             client = new Client(connectionSpec);
         }
@@ -94,15 +95,17 @@ export default class Context {
             this._schema = new Schema(schemaSpec);
         }
 
-        this.removeOnUpdateListener = this._schema.addUpdateListener(schema => {
-            // This is currently the safety on the footgun
-            this._cache.clear();
-            mapEntityShortcuts(this, schema, schema.names);
-        });
+        this.removeOnUpdateListener = this._schema.addUpdateListener(
+            (schema) => {
+                // This is currently the safety on the footgun
+                this._cache.clear();
+                mapEntityShortcuts(this, schema, schema.names);
+            },
+        );
 
         mapEntityShortcuts(this, this._schema, [
             noEntity,
-            ...this._schema.names
+            ...this._schema.names,
         ]);
 
         //this adds the instance specific methods for each entity type
@@ -125,8 +128,8 @@ export default class Context {
     profile() {
         //this is a bit different.
         return fetchMe(this)
-            .then(me => me.fetchVertices(["profile"]))
-            .then(me => me.getVertices("profile").pop());
+            .then((me) => me.fetchVertices(['profile']))
+            .then((me) => me.getVertices('profile').pop());
     }
 
     /**
@@ -145,7 +148,7 @@ export default class Context {
     getConnection() {
         return deprecationWarning(
             () => this.getClient(),
-            "`getConnection` is deprecated, please use `getClient` instead. This method will be removed in a future version"
+            '`getConnection` is deprecated, please use `getClient` instead. This method will be removed in a future version',
         );
     }
 
@@ -269,7 +272,7 @@ export default class Context {
      *      - returns a function which will call `fetchCount(relations, options)` on each input
      */
     fetchCount(relations, options = {}) {
-        return relationFetch(this, "fetchCount", relations, options);
+        return relationFetch(this, 'fetchCount', relations, options);
     }
 
     /**
@@ -284,7 +287,7 @@ export default class Context {
      *      - returns a function which will call `fetchIds(relations, options)` on each input
      */
     fetchIds(relations, options = {}) {
-        return relationFetch(this, "fetchIds", relations, options);
+        return relationFetch(this, 'fetchIds', relations, options);
     }
 
     /**
@@ -299,7 +302,7 @@ export default class Context {
      *      - returns a function which will call `fetchVertices(relations, options)` on each input
      */
     fetchVertices(relations, options = {}) {
-        return relationFetch(this, "fetchVertices", relations, options);
+        return relationFetch(this, 'fetchVertices', relations, options);
     }
 
     /**
@@ -331,8 +334,9 @@ export default class Context {
      *  @return {GraphVertex} - the inserted vertex
      */
     insertRaw(rawData) {
-        const entity = this.getEntity(rawData["ogit/_type"]);
+        const entity = this.getEntity(rawData['ogit/_type']);
         const decoded = entity.decode(rawData);
+
         return this.insert(decoded);
     }
 
@@ -361,21 +365,16 @@ const mixinMethods = {
     create: (ctx, entity) => (data, options = {}) =>
         create(ctx, entity, data, options),
     connect: (ctx, entity) => (relation, source, target, options = {}) =>
-        connect(
-            ctx,
-            entity,
-            { relation, source, target },
-            options
-        ),
+        connect(ctx, entity, { relation, source, target }, options),
     disconnect: (ctx, entity) => (relation, source, target, options = {}) =>
         disconnect(ctx, entity, { relation, source, target }, options),
     update: (ctx, entity) => (vertexId, appData, options = {}) =>
         update(ctx, entity, vertexId, appData, options),
     replace: (ctx, entity) => (vertexId, appData, options = {}) =>
         replace(ctx, entity, vertexId, appData, options),
-    encode: (ctx, entity) => appData => entity.encode(appData),
-    decode: (ctx, entity) => graphData => entity.decode(graphData),
-    relationQuery: (ctx, entity) => relation =>
+    encode: (ctx, entity) => (appData) => entity.encode(appData),
+    decode: (ctx, entity) => (graphData) => entity.decode(graphData),
+    relationQuery: (ctx, entity) => (relation) =>
         getRelationQuery(entity, relation),
     findRelationVertices: (ctx, entity) => (id, relations) =>
         fetchVertices(ctx, entity)(relations)(id),
@@ -385,13 +384,13 @@ const mixinMethods = {
         fetchCount(ctx, entity)(relations)(id),
     hasRelation: (ctx, entity) => (id, relation, test) =>
         getRelationQuery(entity, relation)
-            .has("ogit/_id", test)
+            .has('ogit/_id', test)
             .count()
             .executeInContext(ctx, id, { raw: true })
             .then(([count]) => count > 0),
     fetchVertices,
     fetchIds,
-    fetchCount
+    fetchCount,
 };
 const mixinMethodNames = Object.keys(mixinMethods);
 
@@ -401,10 +400,12 @@ const mixinMethodNames = Object.keys(mixinMethods);
 const mapEntityShortcuts = (ctx, schema, names) => {
     //we add "_unbound" to add use for the unbound instance methods.
     //they have a null entity, the others get an Identity
-    names.forEach(name => {
+    names.forEach((name) => {
         const entity = schema.get(name === noEntity ? null : name);
+
         ctx[name] = mixinMethodNames.reduce((obj, method) => {
             obj[method] = mixinMethods[method](ctx, entity);
+
             return obj;
         }, {});
     });
