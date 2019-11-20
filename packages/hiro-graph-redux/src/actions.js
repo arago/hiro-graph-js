@@ -1,21 +1,21 @@
-export const GRAPH_ACTION = "~hgr:action";
-export const GRAPH_CANCEL = "~hgr:cancel";
-export const GRAPH_LOGIN = "~hgr:login";
-export const GRAPH_LOGIN_TRIGGER = "~hgr:login-trigger";
-export const GRAPH_LOGIN_FUNCTION = "~hgr:login-function";
-export const GRAPH_LOGOUT = "~hgr:logout";
-export const GRAPH_UPDATE = "~hgr:update";
-export const LOGOUT_HOOK = "~hgr:logout-hook";
-export const TOKEN_INVALIDATION_HOOK = "~hgr:token-invalidation-hook";
-export const UPDATE_VERTICES = "~hgr:update-vertices";
-export const SET_TOKEN = "~hgr:set-token";
-export const SET_ME = "~hgr:set-me";
-export const SET_ROLES = "~hgr:set-roles";
-export const TASK_LOADING = "~hgr:task-loading";
-export const TASK_SUCCESS = "~hgr:task-success";
-export const TASK_UPDATE = "~hgr:task-update";
-export const TASK_ERROR = "~hgr:task-error";
-export const TASK_RESET = "~hgr:task-reset";
+export const GRAPH_ACTION = '~hgr:action';
+export const GRAPH_CANCEL = '~hgr:cancel';
+export const GRAPH_LOGIN = '~hgr:login';
+export const GRAPH_LOGIN_TRIGGER = '~hgr:login-trigger';
+export const GRAPH_LOGIN_FUNCTION = '~hgr:login-function';
+export const GRAPH_LOGOUT = '~hgr:logout';
+export const GRAPH_UPDATE = '~hgr:update';
+export const LOGOUT_HOOK = '~hgr:logout-hook';
+export const TOKEN_INVALIDATION_HOOK = '~hgr:token-invalidation-hook';
+export const UPDATE_VERTICES = '~hgr:update-vertices';
+export const SET_TOKEN = '~hgr:set-token';
+export const SET_ME = '~hgr:set-me';
+export const SET_ROLES = '~hgr:set-roles';
+export const TASK_LOADING = '~hgr:task-loading';
+export const TASK_SUCCESS = '~hgr:task-success';
+export const TASK_UPDATE = '~hgr:task-update';
+export const TASK_ERROR = '~hgr:task-error';
+export const TASK_RESET = '~hgr:task-reset';
 
 //this is the action to set a newly acquired token into the
 //connection

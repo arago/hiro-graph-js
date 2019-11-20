@@ -1,11 +1,11 @@
-import { mapping } from "../config.json";
+import { mapping } from '../config.json';
 
 export const mapRelationship = (value: string, fallback: string | number) => {
-    const mapped = (mapping as IMapping)[value];
+  const mapped = (mapping as IMapping)[value];
 
-    if (!mapped) {
-        return fallback;
-    }
+  if (!mapped) {
+    return fallback;
+  }
 
-    return mapped;
+  return mapped;
 };

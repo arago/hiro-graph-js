@@ -1,9 +1,9 @@
 /**
  *  Schema aware Lucene Wrapper
  */
-const OP_NOT = "-";
-const OP_MUST = "+";
-const OP_CAN = "";
+const OP_NOT = '-';
+const OP_MUST = '+';
+const OP_CAN = '';
 
 /**
  *  The lucene class takes a Schema and creates a query parser.
@@ -20,7 +20,7 @@ const OP_CAN = "";
  */
 export default function createLuceneQuerystring(
     query = {},
-    entity = nativeEntity // the nativeEntity does no mapping of prop names, or encoding of values
+    entity = nativeEntity, // the nativeEntity does no mapping of prop names, or encoding of values
 ) {
     return convertLuceneQuery(entity, query);
 }
@@ -29,11 +29,12 @@ export default function createLuceneQuerystring(
  */
 const createPlaceholder = (placeholders, term) => {
     placeholders.push(term);
+
     return placeholderAliasInQuery(placeholders.length - 1);
 };
 
-const placeholderAliasInQuery = i => `$ph_${i}`;
-const placeholderKeyInRequest = i => `ph_${i}`;
+const placeholderAliasInQuery = (i) => `$ph_${i}`;
+const placeholderKeyInRequest = (i) => `ph_${i}`;
 
 // this is only exported to all for use in testing
 export const getPlaceholderKeyForIndex = placeholderKeyInRequest;
@@ -41,12 +42,12 @@ export const getPlaceholderKeyForIndex = placeholderKeyInRequest;
 /**
  *  The initial context object for the query building
  */
-const initialContext = entity => {
+const initialContext = (entity) => {
     return {
-        querystring: "",
+        querystring: '',
         placeholders: [],
         op: OP_MUST,
-        entity
+        entity,
     };
 };
 
@@ -55,15 +56,16 @@ const initialContext = entity => {
  */
 const nativeEntity = {
     internal: true,
-    prop: name => {
-        const transform = /^ogit\/_/.test(name) ? x => x : x => "" + x;
+    prop: (name) => {
+        const transform = /^ogit\/_/.test(name) ? (x) => x : (x) => '' + x;
+
         return {
             src: name,
             dst: name,
             encode: transform,
-            decode: transform
+            decode: transform,
         };
-    }
+    },
 };
 
 /**
@@ -77,48 +79,54 @@ function convertLuceneQuery(entity, query) {
         placeholders: context.placeholders.reduce(
             (opts, placeholder, index) => {
                 opts[placeholderKeyInRequest(index)] = placeholder;
+
                 return opts;
             },
-            {}
-        )
+            {},
+        ),
     };
+
     if (!entity.internal) {
         //this is not an internal-only entity (i.e. a fake one that just translates
         // ogit internal attributes. This means we should insert a "ogit/_type" filter.
-        parsed.querystring = `+${slashForward("ogit/_type")}:${quote(
-            entity.ogit
+        parsed.querystring = `+${slashForward('ogit/_type')}:${quote(
+            entity.ogit,
         )} ${parsed.querystring}`;
     }
+
     return parsed;
 }
 
 //turns a single value into an array if not already
-const ensureArray = value => {
+const ensureArray = (value) => {
     return Array.isArray(value) ? value : [value];
 };
 
 //the "$" keys which do not recurse
-const noRecurseKeys = ["$search", "$range", "$missing"];
+const noRecurseKeys = ['$search', '$range', '$missing'];
 
 //forces all properties to be arrays.
 //knows how to recurse and when not to.
 const normaliseQuery = (queryObject, isAnyOperator = false) => {
-    return Object.keys(queryObject).map(key => {
+    return Object.keys(queryObject).map((key) => {
         const value = queryObject[key];
-        if (key[0] === "$" && noRecurseKeys.indexOf(key) === -1) {
+
+        if (key[0] === '$' && noRecurseKeys.indexOf(key) === -1) {
             //we should recurse
             return { key, values: normaliseQuery(value, true) };
         }
+
         if (key.match(/\.ngram$/)) {
             // ngram search doesn't work with quoted phrases, like a "Single value", "Run machine".
             // Because of that we need to split our value by whitespace
             if (!Array.isArray(value)) {
-                return { key, values: value.split(" "), isAnyOperator };
+                return { key, values: value.split(' '), isAnyOperator };
             } else {
                 const values = value.reduce(
-                    (acc, val) => acc.concat(val.split(" ")),
-                    []
+                    (acc, val) => acc.concat(val.split(' ')),
+                    [],
                 );
+
                 return { key, values, isAnyOperator };
             }
         }
@@ -136,17 +144,19 @@ function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
     return query
         .map(({ key, values, isAnyOperator }) => {
             //always make value an array
-            if (key[0] === "$") {
+            if (key[0] === '$') {
                 //special case!
                 return operators[key](context, values);
             }
+
             if (!isAnyOperator && values.length > 1) {
                 return createQuerySegmentForMultiValues(context, key, values);
             }
+
             //default prop => values
             return luceneTerm(context, key, values, isPlaceholdersNeeded);
         })
-        .join(" ");
+        .join(' ');
 }
 
 //helper to flatten an array of arrays
@@ -156,8 +166,8 @@ function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
 const createQuerySegmentForMultiValues = (context, key, values) =>
     `+(${values
         .map(checkTermForQuoting)
-        .map(term => `${slashForward(key)}:${term}`)
-        .join(" ")})`;
+        .map((term) => `${slashForward(key)}:${term}`)
+        .join(' ')})`;
 
 // TODO: add placeholders replacement after fixing BE issues according to escaping
 
@@ -181,7 +191,7 @@ const operators = {
      *  { $missing: "field" }, or { $missing: [ "field", "second" ] }
      */
     $missing: (context, values) =>
-        values.map(field => luceneMissing(context, field)).join(" "),
+        values.map((field) => luceneMissing(context, field)).join(' '),
 
     /**
      *  lucene range operator
@@ -192,14 +202,15 @@ const operators = {
             .reduce(
                 (acc, object) =>
                     acc.concat(
-                        Object.keys(object).map(field => {
+                        Object.keys(object).map((field) => {
                             const [lower, higher] = object[field];
+
                             return luceneRange(context, field, lower, higher);
-                        })
+                        }),
                     ),
-                []
+                [],
             )
-            .join(" ");
+            .join(' ');
     },
     /**
      *  Search.
@@ -209,29 +220,32 @@ const operators = {
         return values
             .reduce((acc, searchInput) => {
                 let search = searchInput;
-                if (typeof search === "string") {
+
+                if (typeof search === 'string') {
                     //default search type.
-                    search = { type: "ngram", term: search };
+                    search = { type: 'ngram', term: search };
                 }
+
                 if (!search.field) {
-                    search.field = "_content";
+                    search.field = '_content';
                 }
-                if (search.type === "prefix") {
+
+                if (search.type === 'prefix') {
                     //this is terrible for multi-word searches.
                     return acc.concat(
-                        lucenePrefixMatch(context, search.field, search.term)
+                        lucenePrefixMatch(context, search.field, search.term),
                     );
                 }
 
                 //we always return an array
                 return acc.concat(
                     luceneSearch(context, search.field, search.term, {
-                        ngram: search.type === "ngram"
-                    })
+                        ngram: search.type === 'ngram',
+                    }),
                 );
             }, [])
-            .join(" ");
-    }
+            .join(' ');
+    },
 };
 
 //maps the values with the given operator as a sub segment
@@ -244,15 +258,19 @@ const mapOperator = (context, op, values) => {
         values.length === 1 && values[0].values.length === 1 && op === OP_CAN
             ? OP_MUST
             : op;
+
     //set the inner context's op
     context.op = nextOp;
+
     const segment = `${currentOp}(${createQuerySegment(
         context,
         values,
-        true
+        true,
     )})`;
+
     //return the context's op to the previous
     context.op = currentOp;
+
     return segment;
 };
 
@@ -269,14 +287,14 @@ const quote = function(string) {
     return `"${slashString(string)}"`;
 };
 
-const SOLIDUS = "/";
-const SLASH = "\\"; // two because it has to be escaped.
+const SOLIDUS = '/';
+const SLASH = '\\'; // two because it has to be escaped.
 const QUOTE = `"`;
 
-const slashForward = input => input.replace(/[/]/g, SLASH + SOLIDUS);
+const slashForward = (input) => input.replace(/[/]/g, SLASH + SOLIDUS);
 
 // this escapes quotes and slashes
-const slashString = input => input.replace(/[\\"]/g, char => SLASH + char);
+const slashString = (input) => input.replace(/[\\"]/g, (char) => SLASH + char);
 
 //run through the term string and pull out terms.
 //if there are any quotes, this becomes complex...
@@ -297,20 +315,21 @@ const findQuotedTerms = function(str) {
     const terms = [];
     const l = input.length;
     let i = 0;
-    let inQuoted = "";
+    let inQuoted = '';
     let inTerm = false;
-    let term = "";
+    let term = '';
     let char;
 
     for (; i < l; i++) {
         char = input[i];
+
         if (inTerm) {
             if (
-                (!inQuoted && char === " ") ||
+                (!inQuoted && char === ' ') ||
                 (inQuoted && char === inQuoted)
             ) {
                 terms.push(term);
-                term = "";
+                term = '';
                 inTerm = false;
             } else if (
                 inQuoted &&
@@ -323,54 +342,57 @@ const findQuotedTerms = function(str) {
             } else {
                 term += char;
             }
-        } else if (char !== " ") {
+        } else if (char !== ' ') {
             //ignore spaces between terms.
             if (char === QUOTE || char === "'") {
                 inQuoted = char;
             } else {
-                inQuoted = "";
+                inQuoted = '';
                 term = char;
             }
+
             inTerm = true;
         }
     }
+
     //flush remaining term
     terms.push(term);
+
     //remove empties from output;
     return terms.filter(Boolean);
 };
 
 function checkTermForQuoting(term) {
-    return typeof term === "string" ? quote(term) : term;
+    return typeof term === 'string' ? quote(term) : term;
 }
 //create a term query with an operator and many possible values.
 function luceneTerm(context, field, values, isPlaceholdersNeeded) {
     // TODO: remove force reassign after fixing BE issues according to escaping
     // eslint-disable-next-line no-param-reassign
     isPlaceholdersNeeded = false;
+
     const prop = context.entity.prop(field);
+
     if (!prop) {
         throw new TypeError(
-            `Cannot find '${field}' of type '${context.entity.name}'`
+            `Cannot find '${field}' of type '${context.entity.name}'`,
         );
     }
 
     return values
         .map(prop.encode) // encode for graphit with our mapping
         .map(checkTermForQuoting)
-        .map(
-            term =>
-                isPlaceholdersNeeded
-                    ? createPlaceholder(context.placeholders, slashString(term))
-                    : term
+        .map((term) =>
+            isPlaceholdersNeeded
+                ? createPlaceholder(context.placeholders, slashString(term))
+                : term,
         ) // add placeholders only for $and, $or, $must, $not sections for preventing breaking changes
-        .map(
-            term =>
-                term === null
-                    ? luceneMissing(context, field) //if term is null, that means the field should be missing.
-                    : `${context.op}${slashForward(prop.src)}:${term}`
+        .map((term) =>
+            term === null
+                ? luceneMissing(context, field) //if term is null, that means the field should be missing.
+                : `${context.op}${slashForward(prop.src)}:${term}`,
         ) //create querystring
-        .join(" "); //join terms
+        .join(' '); //join terms
 }
 
 //create a range query term
@@ -379,12 +401,14 @@ function luceneRange(context, field, lower, higher) {
     const [low, high] = [lower, higher]
         .map(prop.encode)
         .map(checkTermForQuoting);
+
     return `${context.op}${slashForward(prop.src)}:[${low} TO ${high}]`;
 }
 
 //create a _missing_ query
 function luceneMissing(context, field) {
     const prop = context.entity.prop(field);
+
     return `${context.op}_missing_:${quote(prop.src)}`;
 }
 
@@ -393,6 +417,7 @@ function luceneMissing(context, field) {
 function luceneSearch(context, field, term, { ngram = false } = {}) {
     const prop = context.entity.prop(field);
     let terms;
+
     if (term.indexOf(`"`) > -1 || term.indexOf("'") > -1) {
         //much more complex, but keeps spaces in quotes, and quoted quotes.
         terms = findQuotedTerms(term);
@@ -400,15 +425,16 @@ function luceneSearch(context, field, term, { ngram = false } = {}) {
         //simple split
         terms = term.split(/\s+/);
     }
-    const finalTerm = terms.filter(Boolean).join(" ");
+
+    const finalTerm = terms.filter(Boolean).join(' ');
     //now make a placeholder for the term
     const placeholder = createPlaceholder(
         context.placeholders,
-        slashString(finalTerm)
+        slashString(finalTerm),
     );
 
     return `${context.op}${slashForward(prop.src)}${
-        ngram ? ".ngram" : ""
+        ngram ? '.ngram' : ''
     }:${placeholder}`;
 }
 
@@ -418,7 +444,8 @@ function luceneSearch(context, field, term, { ngram = false } = {}) {
 //then replace space with question mark, then add the final asterisk
 function lucenePrefixMatch(context, field, term) {
     const prop = context.entity.prop(field);
-    const finalTerm = slashString(term).replace(/ /g, "?") + "*";
+    const finalTerm = slashString(term).replace(/ /g, '?') + '*';
     const placeholder = createPlaceholder(context.placeholders, finalTerm);
+
     return `${context.op}${slashForward(prop.src)}:${placeholder}`;
 }

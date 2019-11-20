@@ -1,7 +1,7 @@
 // A mock Transport for the Client that will allow us to test the client (and therefore also the ORM)
 // without having to have a live GraphIT environment.
-import * as errors from "./errors";
-import Client from "./client";
+import * as errors from './errors';
+import Client from './client';
 
 export class MockTransport {
     constructor() {
@@ -34,9 +34,9 @@ export class MockTransport {
     }
     fetch(tok, url, options = {}) {
         return this.request(tok, {
-            type: "fetch",
+            type: 'fetch',
             headers: options.headers,
-            body: url
+            body: url,
         });
     }
 
@@ -49,13 +49,17 @@ The request was:
 ${JSON.stringify({ type, headers, body }, null, 2)}
 
 Please add a mock response for it to return.`);
+
             return Promise.reject(errors.badRequest());
         }
+
         const req = { type, headers, body, options };
         const res = this._responses.shift();
+
         // otherwise use the first in the stack
         // store the requests for introspection
         this._requests.push(req);
+
         if (res instanceof Error) {
             return Promise.reject(res);
         } else {
@@ -64,19 +68,20 @@ Please add a mock response for it to return.`);
     }
 }
 
-export default function createMockClient(token = "mock-token") {
+export default function createMockClient(token = 'mock-token') {
     const transport = new MockTransport();
     const client = new Client(
         {
-            endpoint: "mock://graphit",
-            token: token
+            endpoint: 'mock://graphit',
+            token: token,
         },
-        transport
+        transport,
     );
+
     client.resetMockTransport = () => transport.clear();
     client.enqueueMockResponse = (...args) => transport.enqueue(...args);
     client.retrieveLastRequest = () => transport.getLastRequest();
-    client.debugMockRequests = arg => transport.debugMockRequests(arg);
+    client.debugMockRequests = (arg) => transport.debugMockRequests(arg);
     client.http = transport; // this has to be the http transport as well.
 
     return client;

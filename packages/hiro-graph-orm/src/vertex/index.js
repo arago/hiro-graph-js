@@ -2,7 +2,7 @@
  *  The vertex class represents an instance of a vertex and it's relations to
  *  other vertices.
  */
-import { clone } from "../utils";
+import { clone } from '../utils';
 
 /**
  *  Check is an object is a vertex
@@ -26,7 +26,7 @@ export default class Vertex {
      */
     constructor(data) {
         this._id = data._id;
-        this._isDeleted = "_is-deleted" in data ? data["_is-deleted"] : false;
+        this._isDeleted = '_is-deleted' in data ? data['_is-deleted'] : false;
 
         this._data = clone(data);
 
@@ -38,10 +38,12 @@ export default class Vertex {
         //unmapped data.
         //this should come in in a property called `_unmapped`
         let _free = {};
-        if ("_free" in this._data) {
+
+        if ('_free' in this._data) {
             _free = this._data._free;
             delete this._data._free;
         }
+
         this._free = _free;
 
         this._clean = true;
@@ -58,9 +60,9 @@ export default class Vertex {
         return Object.assign(
             {
                 _rel: mergeRelations(this),
-                _free: clone(this._free)
+                _free: clone(this._free),
             },
-            clone(this._data)
+            clone(this._data),
         );
     }
 
@@ -134,21 +136,28 @@ export default class Vertex {
      */
     set(prop, value = null) {
         if (this._isDeleted) {
-            throw new Error("cannot update deleted vertex");
+            throw new Error('cannot update deleted vertex');
         }
-        if (typeof prop !== "string") {
-            Object.keys(prop).forEach(key => this.set(key, prop[key]));
+
+        if (typeof prop !== 'string') {
+            Object.keys(prop).forEach((key) => this.set(key, prop[key]));
+
             return this;
         }
+
         if (this._data[prop] === value) {
             return this;
         }
+
         this._clean = false;
+
         if (prop in this._before === false) {
             //only set this the first time, i.e. to the value of the original data
             this._before[prop] = this._data[prop];
         }
+
         this._data[prop] = value;
+
         return this;
     }
 
@@ -167,8 +176,10 @@ export default class Vertex {
      *  @return {Vertex} - this (i.e. chainable)
      */
     setVertices(relation, nodes) {
-        const ids = nodes.map(n => n._id);
+        const ids = nodes.map((n) => n._id);
+
         this._vertices[relation] = ids;
+
         return this.setIds(relation, ids.slice());
     }
 
@@ -183,6 +194,7 @@ export default class Vertex {
      */
     setIds(relation, ids) {
         this._ids[relation] = ids;
+
         return this.setCount(relation, ids.length);
     }
 
@@ -195,26 +207,27 @@ export default class Vertex {
      */
     setCount(relation, count) {
         this._counts[relation] = count;
+
         return this;
     }
 }
 
 //pulls out ids and counts together.
-const mergeRelations = vertex => {
+const mergeRelations = (vertex) => {
     return mapKeys(
         vertex._counts,
-        addSuffix("Count"),
-        mapKeys(vertex._ids, addSuffix("Ids"))
+        addSuffix('Count'),
+        mapKeys(vertex._ids, addSuffix('Ids')),
     );
 };
 
 //adds a suffix to a key
-const addSuffix = suffix => key => key + suffix;
+const addSuffix = (suffix) => (key) => key + suffix;
 
 //calls a function of each key of an object returning a new object
 // or the given one, with the new key names.
 const mapKeys = (obj, fn, initial = {}) =>
     Object.keys(obj).reduce(
         (acc, key) => ((acc[fn(key)] = obj[key]), acc),
-        initial
+        initial,
     );

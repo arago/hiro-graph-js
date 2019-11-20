@@ -12,34 +12,29 @@
         ]
     },
     "devDependencies": {
-        "@arago/eslint-config-arago": "github:arago/eslint-config-arago",
-        "babel-eslint": "^9.0.0",
-        "eslint": "^5.3.0",
-        "husky": "^1.1.2",
+        "@hiro-ui/eslint-config": "1.1.1",
+        "@hiro-ui/prettier-config": "1.0.1",
+        "husky": "^3.0.9",
         "lerna": "^3.15.0",
-        "lint-staged": "^7.2.2",
-        "prettier": "1.14.3"
+        "lint-staged": "^7.2.2"
     },
     "scripts": {
         "test": "lerna bootstrap --concurrency 1 && yarn lint && lerna run build && lerna run test",
         "publish": "lerna publish",
-        "format": "prettier --tab-width=4 'packages/*/*.js' 'packages/*/!(node_modules|lib)/**/*.js' --write",
-        "lint-prettier": "prettier --tab-width=4 'packages/*/*.{js,ts}' 'packages/*/!(node_modules|lib)/**/*.js' --list-different",
+        "format": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.js' --write",
+        "lint-prettier": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.js' --list-different",
         "lint-eslint": "eslint packages/",
         "lint": "yarn lint-prettier && yarn lint-eslint",
         "start-again": "rm -rf package-lock.json node_modules/* && yarn lerna exec 'rm -rf package-lock.json node_modules/*' && yarn lerna bootstrap --concurrency 1",
         "precommit": "yarn format"
     },
-    "lint-staged": {
-        "*.js": [
-            "prettier --tab-width=4 --write",
-            "git add"
-        ]
-    },
     "eslintConfig": {
-        "extends": "@arago/eslint-config-arago",
-        "globals": {
-            "__DEV__": true
-        }
-    }
+        "extends": "@hiro-ui"
+    },
+    "prettier": "@hiro-ui/prettier-config",
+    "lint-staged": {
+        "src/**/*.{js,ts,tsx}": [
+          "eslint --max-warnings 0"
+        ]
+  }
 }

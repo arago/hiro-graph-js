@@ -19,9 +19,9 @@
     check() - a function that passively checks for auth complete. If it is, the callback is called.
     request() - do whatever this implementation does to get a token
 */
-import createStrategy from "./base";
-import Popup from "./popup";
-import Iframe from "./iframe";
-import Redirect from "./redirect";
+import createStrategy from './base';
+import Popup from './popup';
+import Iframe from './iframe';
+import Redirect from './redirect';
 
 export { createStrategy, Popup, Iframe, Redirect };

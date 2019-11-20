@@ -3,22 +3,24 @@
 /**
  *  Load our environment variables and configure the HIRO Graph pieces
  */
-import { combineReducers, createStore } from "redux";
-// but we need some globals that the implicit oauth uses.
-const noop = () => {};
-global.window = {
-    localStorage: { removeItem: noop, setItem: noop, getItem: noop },
-    location: { origin: "mock://app", hash: "#", search: "?", href: "" }
-};
+import { combineReducers, createStore } from 'redux';
 
-import createMockClient from "@hiro-graph/client/lib/mock";
-import mappings, { createPerson } from "./mappings";
+import createMockClient from '@hiro-graph/client/lib/mock';
+import mappings, { createPerson } from './mappings';
 import {
     createToken,
     graphReducer,
     createStoreEnhancer,
-    implicitOauth
-} from "../src/index";
+    implicitOauth,
+} from '../src/index';
+
+// but we need some globals that the implicit oauth uses.
+const noop = () => {};
+
+global.window = {
+    localStorage: { removeItem: noop, setItem: noop, getItem: noop },
+    location: { origin: 'mock://app', hash: '#', search: '?', href: '' },
+};
 
 // Our app configuration
 const createReduxStoreAndClient = () => {
@@ -33,7 +35,7 @@ const createReduxStoreAndClient = () => {
      */
     const store = createStore(
         combineReducers({ ...graphReducer }),
-        reduxEnhancer
+        reduxEnhancer,
     );
 
     // now we have to fake the implicit oauth. We do this by creating a fake Strategy.
@@ -44,12 +46,12 @@ const createReduxStoreAndClient = () => {
      */
     implicitOauth(
         {
-            url: "mock://graphit",
-            logoutUri: "mock://logout",
-            clientId: "clientId",
-            redirectUri: "mock://redirect",
+            url: 'mock://graphit',
+            logoutUri: 'mock://logout',
+            clientId: 'clientId',
+            redirectUri: 'mock://redirect',
             store: store,
-            dispatch: store.dispatch
+            dispatch: store.dispatch,
         },
         () => ({
             logout() {
@@ -63,14 +65,14 @@ const createReduxStoreAndClient = () => {
                 // don't do anything
                 setTimeout(() => {
                     // the orm will make a request to "me" immediately. we need to be ready for that.
-                    client.enqueueMockResponse(createPerson("me"));
+                    client.enqueueMockResponse(createPerson('me'));
                     callback(null, {
-                        accessToken: "redux-token",
-                        meta: { expiry: Date.now() + 3600e3 }
+                        accessToken: 'redux-token',
+                        meta: { expiry: Date.now() + 3600e3 },
                     });
                 }, 0);
-            }
-        })
+            },
+        }),
     );
 
     return { client, store };

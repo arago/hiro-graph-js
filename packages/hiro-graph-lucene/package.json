@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/lucene",
-    "version": "6.0.5",
+    "version": "6.0.7",
     "description": "Lucene Query helpers for HIRO Graph",
     "main": "lib/index.js",
     "types": "./index.d.ts",
@@ -31,7 +31,7 @@
     "devDependencies": {
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
-        "babel-preset-hiro": "^0.4.1",
+        "babel-preset-hiro": "^0.4.4",
         "jest": "^23.5.0"
     },
     "babel": {

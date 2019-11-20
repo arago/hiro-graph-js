@@ -9,29 +9,33 @@
  *
  *  It's altogether a better idea to use ISO8601 timestamps
  */
-import iso, { isoRegex } from "./iso8601";
+import iso, { isoRegex } from './iso8601';
 
 const TS_LOWER_BOUND = 999999999999;
 const TS_UPPER_BOUND = 10000000000000;
 
 export default {
-    decode: s => {
+    decode: (s) => {
         let n = parseInt(s, 10);
+
         if (isoRegex.test(s)) {
             n = iso.decode(s);
         }
+
         return isNaN(n) || n < TS_LOWER_BOUND || n > TS_UPPER_BOUND ? null : n;
     },
-    encode: s => {
+    encode: (s) => {
         let n;
-        if (typeof s === "string") {
+
+        if (typeof s === 'string') {
             n = parseInt(s, 10);
         } else {
             n = 1 * s; //cast to number...
         }
+
         //now finally if a reasonable number, cast back to string...
         return isNaN(n) || n < TS_LOWER_BOUND || n > TS_UPPER_BOUND
             ? null
-            : "" + n;
-    }
+            : '' + n;
+    },
 };
