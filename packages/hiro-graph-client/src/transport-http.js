@@ -193,7 +193,7 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 `${GRAPH_API_BASE}/` +
                 encodeURIComponent(headers['ogit/_id']) +
                 '/values' +
-                qsKeys(body, 'offset', 'limit');
+                qsKeys(body, 'offset', 'limit', 'from', 'to');
             break;
         case 'writets':
             url =
