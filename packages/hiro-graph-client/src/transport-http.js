@@ -169,7 +169,7 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
                 "/" +
                 encodeURIComponent(headers["ogit/_id"]) +
                 "/values" +
-                qsKeys(body, "offset", "limit");
+                qsKeys(body, "offset", "limit", "from", "to");
             break;
         case "writets":
             url = "/" + encodeURIComponent(headers["ogit/_id"]) + "/values";
