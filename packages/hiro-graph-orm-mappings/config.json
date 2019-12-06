@@ -58,6 +58,7 @@
         "ogit/consistsOf <- ogit/MRP/Part": "item",
         "ogit/consistsOf -> ogit/MRP/Part": "parts",
         "ogit/OSLC-ems/extendsScenario -> ogit/OSLC-ems/Scenario": "extends",
-        "ogit/OSLC-ems/extendsScenario <- ogit/OSLC-ems/Scenario": "extendedBy"
+        "ogit/OSLC-ems/extendsScenario <- ogit/OSLC-ems/Scenario": "extendedBy",
+        "ogit/isPartOf -> ogit/FinancialMarket/Corporation": "corporation"
     }
 }

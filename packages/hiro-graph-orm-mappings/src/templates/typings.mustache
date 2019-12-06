@@ -22,7 +22,7 @@ export interface IDefinition {
 export type MappedTypes = keyof typeof VertexLookup;
 
 {{#exports}}
-export const {{name}}: I{{name}},
+export const {{name}}: I{{name}};
 {{/exports}}
 
 export namespace VertexLookup {
