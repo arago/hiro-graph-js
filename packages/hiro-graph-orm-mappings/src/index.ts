@@ -2,6 +2,7 @@ import fs from 'fs';
 import { join } from 'path';
 import shell from 'shelljs';
 import Mustache from 'mustache';
+import { IDefinition } from '@hiro-graph/orm';
 
 import {
   getRequiredAttributes,
@@ -18,6 +19,7 @@ import {
 import { mapRelationship } from './relations';
 
 import config from '../config.json';
+import { IOutput, IToBeDone } from './types';
 
 const tbd: IToBeDone = {};
 

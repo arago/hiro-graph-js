@@ -1,4 +1,5 @@
 import { mapRelationship } from './relations';
+import { IDefinitionData } from './types';
 
 const mandatoryAttributesRegex = /ogit:mandatory-attributes \(([^);]+)/;
 const optionalAttributesRegex = /ogit:optional-attributes \(([^);]+)/;
