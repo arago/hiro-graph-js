@@ -1,5 +1,8 @@
 // Data
 
+import fetch, { RequestInit, Response, HeaderInit } from 'node-fetch';
+import { w3cwebsocket } from 'websocket';
+
 export namespace OGIT {
   export interface SafeNode {
     'ogit/_id': string;
@@ -85,6 +88,12 @@ interface Subscriber<T> {
   complete?: () => void;
 }
 
+interface DefaultFetchOptions {
+  mode: string;
+  method: string;
+  headers: HeaderInit;
+}
+
 interface ReqOptions<T = any> {
   waitForIndex?: boolean;
   headers?: object;
@@ -96,25 +105,21 @@ interface ReqOptions<T = any> {
 declare class HttpTransport {
   endpoint: string;
   constructor(endpoint: string);
+
   fetch(
     token: string,
     url: string,
-    init?: import('node-fetch').RequestInit,
+    init?: RequestInit,
     reqOptions?: ReqOptions,
-  ): Promise<import('node-fetch').Response>;
+  ): Promise<Response>;
+
   request(
     token: string,
     params?: RequestParams,
     reqOptions?: ReqOptions,
-  ): Promise<import('node-fetch').Response>;
-  defaultFetchOptions(): {
-    method: 'GET';
-    headers: {
-      'Content-Type': 'application/json';
-      Accept: 'application/json';
-    };
-    mode: 'cors';
-  };
+  ): Promise<Response>;
+
+  defaultFetchOptions(): DefaultFetchOptions;
 }
 
 // WebSocketTransport
@@ -125,27 +130,21 @@ declare class WebSocketTransport {
   endpoint: string;
   useLegacyProtocol: boolean;
   constructor(endpoint: string);
+
   request(
     token: string,
     params?: RequestParams,
     reqOptions?: object,
-  ): Promise<import('websocket').w3cwebsocket>;
-  connect(
-    token: string,
-    emit: EmitHandler,
-  ): Promise<import('websocket').w3cwebsocket>;
+  ): Promise<w3cwebsocket>;
+
+  connect(token: string, emit: EmitHandler): Promise<w3cwebsocket>;
+
   createWebSocket(
     initialToken: string,
     emit: EmitHandler,
-  ): Promise<import('websocket').w3cwebsocket>;
-  defaultFetchOptions(): {
-    method: 'GET';
-    headers: {
-      'Content-Type': 'application/json';
-      Accept: 'application/json';
-    };
-    mode: 'cors';
-  };
+  ): Promise<w3cwebsocket>;
+
+  defaultFetchOptions(): DefaultFetchOptions;
 }
 
 // EventStream
@@ -282,15 +281,15 @@ interface ClientParams {
   token: string | Token;
 }
 
-export type IServletFetchType = typeof import('node-fetch').default;
+export type IServletFetchType = typeof fetch;
 
 export interface Servlet {
   [index: string]: ServletFunction;
 }
 
 export type ServletFunction<Data = any, Response = any> = (
-  fetch: Client['fetch'],
-  init?: import('node-fetch').RequestInit,
+  fetch: IServletFetchType,
+  init?: RequestInit,
   data?: Data,
 ) => Promise<Response>;
 
@@ -318,29 +317,34 @@ export default class Client {
   eventStream(filters?: string[], options?: EventStreamOptions): EventStream;
   getToken<T extends Token = Token>(): T;
   me(): object;
-  fetch: <T = import('node-fetch').Response>(
+
+  fetch: <T = Response>(
     url: string,
-    init?: import('node-fetch').RequestInit,
+    init?: RequestInit,
     reqOptions?: ReqOptions<T>,
   ) => Promise<T>;
-  gremlin: <T extends OGIT.SafeNode = OGIT.Node>(
+
+  gremlin: <T>(
     root: string,
     query: string,
     reqOptions?: ReqOptions<T>,
-  ) => Promise<T[]>;
+  ) => Promise<T>;
+
   connect: <T extends OGIT.SafeNode = OGIT.Node>(
     type: string,
     inId: string,
     outId: string,
     reqOptions?: ReqOptions<T>,
-  ) => Promise<T[]>;
+  ) => Promise<T>;
+
   disconnect: <T extends OGIT.SafeNode = OGIT.Node>(
     type: string,
     inId: string,
     outId: string,
     reqOptions?: ReqOptions<T>,
-  ) => Promise<T[]>;
-  lucene: <T extends OGIT.SafeNode = OGIT.Node>(
+  ) => Promise<T>;
+
+  lucene: <T>(
     query: string,
     options?: BaseOptions & {
       order?: string;
@@ -349,7 +353,8 @@ export default class Client {
       [index: string]: any;
     },
     reqOptions?: ReqOptions<T>,
-  ) => Promise<T[]>;
+  ) => Promise<T>;
+
   streamts: <T extends OGIT.SafeNode = OGIT.Node>(
     timeseriesId: string,
     options?: {
@@ -358,6 +363,7 @@ export default class Client {
       limit?: number;
     },
   ) => Promise<TimeseriesResponse[]>;
+
   history: <T extends OGIT.SafeNode = OGIT.Node>(
     id: string,
     options?: {
@@ -369,10 +375,22 @@ export default class Client {
       type?: string;
     },
   ) => Promise<NodeHistory<T>[]>;
+
   addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
-  create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
-  update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
-  get(id: string): Promise<OGIT.Node>;
+
+  create<T = OGIT.SafeNode>(
+    type: string,
+    data: any,
+    reqOptions: ReqOptions,
+  ): Promise<T>;
+
+  update<T = OGIT.SafeNode>(
+    id: string,
+    data: any,
+    reqOptions: ReqOptions,
+  ): Promise<T>;
+
+  get<T = OGIT.SafeNode>(id: string): Promise<T>;
 }
 
 export type ClientWithServlets<
