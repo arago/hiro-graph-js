@@ -137,10 +137,7 @@ declare class WebSocketTransport {
     reqOptions?: object,
   ): Promise<w3cwebsocket>;
 
-  connect(
-    token: string,
-    emit: EmitHandler,
-  ): Promise<w3cwebsocket>;
+  connect(token: string, emit: EmitHandler): Promise<w3cwebsocket>;
 
   createWebSocket(
     initialToken: string,
@@ -381,9 +378,17 @@ export default class Client {
 
   addServlet(prefix: string, servletMethods: Servlet, proxy?: string): Client;
 
-  create<T = OGIT.SafeNode>(type: string, data: any, reqOptions: ReqOptions): Promise<T>;
+  create<T = OGIT.SafeNode>(
+    type: string,
+    data: any,
+    reqOptions: ReqOptions,
+  ): Promise<T>;
 
-  update<T = OGIT.SafeNode>(id: string, data: any, reqOptions: ReqOptions): Promise<T>;
+  update<T = OGIT.SafeNode>(
+    id: string,
+    data: any,
+    reqOptions: ReqOptions,
+  ): Promise<T>;
 
   get<T = OGIT.SafeNode>(id: string): Promise<T>;
 }
