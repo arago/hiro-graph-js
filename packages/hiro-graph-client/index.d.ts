@@ -426,54 +426,18 @@ export interface ApiServlet {
 }
 
 export interface AuthServlet {
-  createAccount<T = any>(data: PlainObject): Promise<T>;
 
   getAvatar(id: string): Promise<Response>;
 
   getOrgAvatar(id: string): Promise<Response>;
 
-  // TODO: replace avatar type with smth like File
-  setAvatar(id: string, avatar: any): Promise<Response>;
-
-  // TODO: replace avatar type with smth like File
-  setOrgAvatar(id: string, avatar: any): Promise<Response>;
-
   getAccount(id: string): Promise<AccountWithProfile>;
-
-  updateAccountProfile(
-    id: string,
-    data: PlainObject,
-  ): Promise<OGIT.AccountProfile>;
 
   getAccountProfile(id: string): Promise<OGIT.AccountProfile>;
 
   getAccountProfileByAccountId(accountId: string): Promise<OGIT.AccountProfile>;
 
-  updatePassword<T = any>(id: string, password: string): Promise<T>;
-
-  activateAccount<T = any>(id: string): Promise<T>;
-
-  createDataSet<T = any>(data: PlainObject): Promise<T>;
-
-  updateDataSet<T = any>(id: string, data: PlainObject): Promise<T>;
-
-  getDataSet<T = any>(id: string): Promise<T>;
-
-  deleteDataSet<T = any>(id: string): Promise<T>;
-
-  createTeam<T = any>(data: PlainObject): Promise<T>;
-
-  updateTeam<T = any>(id: string, data: PlainObject): Promise<T>;
-
   getTeam<T = any>(id: string): Promise<T>;
-
-  deleteTeam<T = any>(id: string): Promise<T>;
-
-  createOrganization<T = any>(data: PlainObject): Promise<T>;
-
-  addMembers<T = any>(id: string, ...accountIds: string[]): Promise<T>;
-
-  removeMembers<T = any>(id: string, ...accountIds: string[]): Promise<T>;
 
   getTeamMembers<T = any>(id: string): Promise<T[]>;
 
@@ -483,27 +447,11 @@ export interface AuthServlet {
 
   accountTeams<T = any>(id: string): Promise<T[]>;
 
-  createRoleAssignment<T = any>(data: PlainObject): Promise<T>;
-
-  getRoleAssignment<T = any>(id: string): Promise<T>;
-
-  deleteRoleAssignment<T = any>(id: string): Promise<T>;
-
-  createDomain<T = any>(name: string, organization: string): Promise<T>;
-
-  getDomain<T = any>(id: string): Promise<T>;
-
-  deleteDomain<T = any>(id: string): Promise<T>;
-
   organizationDomains<T = any>(id: string): Promise<T>;
 
   organizationRoleAssignments<T = any>(id: string): Promise<T[]>;
 
   getDomainOrganization<T = any>(id: string): Promise<T>;
-
-  createDataScope<T = any>(data: PlainObject): Promise<T>;
-
-  updateDataScope<T = any>(id: string, data: PlainObject): Promise<T>;
 
   getDataScope<T = any>(id: string): Promise<T>;
 
