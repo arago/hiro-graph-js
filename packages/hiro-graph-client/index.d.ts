@@ -426,7 +426,6 @@ export interface ApiServlet {
 }
 
 export interface AuthServlet {
-
   getAvatar(id: string): Promise<Response>;
 
   getOrgAvatar(id: string): Promise<Response>;
