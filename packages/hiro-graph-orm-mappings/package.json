@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/orm-mappings",
-    "version": "7.2.1",
+    "version": "7.2.2",
     "main": "lib/index.js",
     "typings": "lib/index.d.ts",
     "description": "Automatic generation of ORM mapping based on OGIT",
@@ -11,7 +11,7 @@
         "test": "echo no tests"
     },
     "dependencies": {
-        "@hiro-graph/orm": "^7.2.1"
+        "@hiro-graph/orm": "^7.2.2"
     },
     "devDependencies": {
         "@arago/OGIT": "https://github.com/arago/OGIT.git",
