@@ -9,12 +9,12 @@ const filterUndef = (obj) =>
 
 export default function apiServletFactory(fetch, options) {
     return {
-        getMeProfile: () => fetch('/api/7.0/graph/me/profile', options),
+        getMeProfile: () => fetch('/api/graph/7.1/me/profile', options),
 
         updateMeProfile: (data) => {
             const payload = filterUndef(data);
 
-            return fetch('/api/7.0/graph/me/profile', {
+            return fetch('/api/graph/7.1/me/profile', {
                 ...options,
                 method: 'POST',
                 body: JSON.stringify(payload),
@@ -22,12 +22,12 @@ export default function apiServletFactory(fetch, options) {
         },
 
         getMeAvatar: () =>
-            fetch('/api/7.0/graph/me/avatar', { ...options, raw: true }),
+            fetch('/api/graph/7.1/me/avatar', { ...options, raw: true }),
 
-        meAccount: () => fetch('/api/7.0/graph/me/account', options),
+        meAccount: () => fetch('/api/graph/7.1/me/account', options),
 
         mePassword: (oldPassword, newPassword) => {
-            return fetch('/api/7.0/graph/me/password', {
+            return fetch('/api/graph/7.1/me/password', {
                 ...options,
                 method: 'PUT',
                 body: JSON.stringify({
@@ -37,10 +37,10 @@ export default function apiServletFactory(fetch, options) {
             });
         },
 
-        meTeams: () => fetch('/api/7.0/graph/me/teams', options),
+        meTeams: () => fetch('/api/graph/7.1/me/teams', options),
 
         updateMeAvatar: (data) => {
-            return fetch('/api/7.0/graph/me/avatar', {
+            return fetch('/api/graph/7.1/me/avatar', {
                 ...options,
                 method: 'POST',
                 body: data,

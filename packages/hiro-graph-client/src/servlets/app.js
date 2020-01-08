@@ -1,4 +1,4 @@
-const APPS_BASE = '/api/6.1/app';
+const APPS_BASE = '/api/app/6.1';
 
 export default function appsServletFactory(fetch, options) {
     return {

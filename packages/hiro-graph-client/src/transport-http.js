@@ -132,7 +132,7 @@ export const defaultFetchOptions = () => ({
     mode: 'cors',
 });
 
-const GRAPH_API_BASE = '/api/7.0/graph';
+const GRAPH_API_BASE = '/api/graph/7.1';
 
 //here are the mappings to fetch options from the websocket payloads.
 function createFetchOptions({ type, headers = {}, body = {} } = {}) {

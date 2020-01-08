@@ -3,7 +3,7 @@
  */
 import { stringify } from 'querystring';
 
-const BASE_PATH = '/api/6/variables';
+const BASE_PATH = '/api/variables/6';
 
 export default function variablesServletFactory(fetch, options) {
     return {
