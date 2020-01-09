@@ -5,6 +5,7 @@
  */
 import fetch from 'isomorphic-fetch';
 import { create as createError } from './errors';
+import { GRAPH_API_BASE } from './api-version';
 
 import timer from './timer';
 
@@ -131,8 +132,6 @@ export const defaultFetchOptions = () => ({
     },
     mode: 'cors',
 });
-
-const GRAPH_API_BASE = '/api/graph/7.1';
 
 //here are the mappings to fetch options from the websocket payloads.
 function createFetchOptions({ type, headers = {}, body = {} } = {}) {

@@ -4,6 +4,7 @@
 import { create as createError, connectionClosedBeforeSend } from './errors';
 import { w3cwebsocket as WS } from 'websocket';
 import timer from './timer';
+import { WS_API_BASE } from './api-version';
 
 const noop = () => {};
 
@@ -24,7 +25,7 @@ export default class WebSocketTransport {
         ensureWebSocketsAvailable();
         this.endpoint = endpoint
             .replace(/^http/, 'ws') //replace http(s) with ws(s)
-            .replace(/\/?$/, '/api/graph-ws/6.1/'); // replace possible trailing slash with api endpoint
+            .replace(/\/?$/, `${WS_API_BASE}/`); // replace possible trailing slash with api endpoint
     }
 
     /**
