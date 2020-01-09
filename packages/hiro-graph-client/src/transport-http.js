@@ -5,7 +5,7 @@
  */
 import fetch from 'isomorphic-fetch';
 import { create as createError } from './errors';
-import { GRAPH_API_BASE } from './api-version';
+import { AUTH_API_BASE, GRAPH_API_BASE } from './api-version';
 
 import timer from './timer';
 
@@ -140,7 +140,7 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
 
     switch (type) {
         case 'getme':
-            url = `${GRAPH_API_BASE}/me/account?profile=true`;
+            url = `${AUTH_API_BASE}/me/account?profile=true`;
             break;
         case 'get':
             url = `${GRAPH_API_BASE}/${encodeURIComponent(

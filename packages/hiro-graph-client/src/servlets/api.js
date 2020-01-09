@@ -1,4 +1,4 @@
-import { GRAPH_API_BASE } from '../api-version';
+import { AUTH_API_BASE } from '../api-version';
 
 const filterUndef = (obj) =>
     Object.keys(obj).reduce((ret, k) => {
@@ -11,12 +11,12 @@ const filterUndef = (obj) =>
 
 export default function apiServletFactory(fetch, options) {
     return {
-        getMeProfile: () => fetch(`${GRAPH_API_BASE}/me/profile`, options),
+        getMeProfile: () => fetch(`${AUTH_API_BASE}/me/profile`, options),
 
         updateMeProfile: (data) => {
             const payload = filterUndef(data);
 
-            return fetch(`${GRAPH_API_BASE}/me/profile`, {
+            return fetch(`${AUTH_API_BASE}/me/profile`, {
                 ...options,
                 method: 'POST',
                 body: JSON.stringify(payload),
@@ -24,12 +24,12 @@ export default function apiServletFactory(fetch, options) {
         },
 
         getMeAvatar: () =>
-            fetch(`${GRAPH_API_BASE}/me/avatar`, { ...options, raw: true }),
+            fetch(`${AUTH_API_BASE}/me/avatar`, { ...options, raw: true }),
 
-        meAccount: () => fetch(`${GRAPH_API_BASE}/me/account`, options),
+        meAccount: () => fetch(`${AUTH_API_BASE}/me/account`, options),
 
         mePassword: (oldPassword, newPassword) => {
-            return fetch(`${GRAPH_API_BASE}/me/password`, {
+            return fetch(`${AUTH_API_BASE}/me/password`, {
                 ...options,
                 method: 'PUT',
                 body: JSON.stringify({
@@ -39,10 +39,10 @@ export default function apiServletFactory(fetch, options) {
             });
         },
 
-        meTeams: () => fetch(`${GRAPH_API_BASE}/me/teams`, options),
+        meTeams: () => fetch(`${AUTH_API_BASE}/me/teams`, options),
 
         updateMeAvatar: (data) => {
-            return fetch(`${GRAPH_API_BASE}/me/avatar`, {
+            return fetch(`${AUTH_API_BASE}/me/avatar`, {
                 ...options,
                 method: 'POST',
                 body: data,
