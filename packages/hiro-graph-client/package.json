@@ -1,7 +1,7 @@
 {
     "name": "@hiro-graph/client",
     "repository": "arago/hiro-graph-js",
-    "version": "6.1.1",
+    "version": "6.1.2",
     "types": "index.d.ts",
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
@@ -12,10 +12,10 @@
     },
     "license": "MIT",
     "dependencies": {
-        "isomorphic-fetch": "^2.2.1",
-        "websocket": "^1.0.25",
         "@types/node-fetch": "*",
-        "@types/websocket": "*"
+        "@types/websocket": "*",
+        "isomorphic-fetch": "^2.2.1",
+        "websocket": "^1.0.25"
     },
     "devDependencies": {
         "babel-cli": "^6.6.5",
