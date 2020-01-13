@@ -1,8 +1,4 @@
 // Data
-
-import fetch, { RequestInit, Response, HeaderInit } from 'node-fetch';
-import { w3cwebsocket } from 'websocket';
-
 export namespace OGIT {
   export interface SafeNode {
     'ogit/_id': string;
@@ -91,7 +87,7 @@ interface Subscriber<T> {
 interface DefaultFetchOptions {
   mode: string;
   method: string;
-  headers: HeaderInit;
+  headers: import('node-fetch').HeaderInit;
 }
 
 interface ReqOptions<T = any> {
@@ -102,6 +98,8 @@ interface ReqOptions<T = any> {
   sub?: Subscriber<T>;
 }
 
+type RequestInit = import('node-fetch').RequestInit & { raw?: boolean };
+
 declare class HttpTransport {
   endpoint: string;
   constructor(endpoint: string);
@@ -111,13 +109,13 @@ declare class HttpTransport {
     url: string,
     init?: RequestInit,
     reqOptions?: ReqOptions,
-  ): Promise<Response>;
+  ): Promise<import('node-fetch').Response>;
 
   request(
     token: string,
     params?: RequestParams,
     reqOptions?: ReqOptions,
-  ): Promise<Response>;
+  ): Promise<import('node-fetch').Response>;
 
   defaultFetchOptions(): DefaultFetchOptions;
 }
@@ -135,14 +133,17 @@ declare class WebSocketTransport {
     token: string,
     params?: RequestParams,
     reqOptions?: object,
-  ): Promise<w3cwebsocket>;
+  ): Promise<import('websocket').w3cwebsocket>;
 
-  connect(token: string, emit: EmitHandler): Promise<w3cwebsocket>;
+  connect(
+    token: string,
+    emit: EmitHandler,
+  ): Promise<import('websocket').w3cwebsocket>;
 
   createWebSocket(
     initialToken: string,
     emit: EmitHandler,
-  ): Promise<w3cwebsocket>;
+  ): Promise<import('websocket').w3cwebsocket>;
 
   defaultFetchOptions(): DefaultFetchOptions;
 }
@@ -281,7 +282,7 @@ interface ClientParams {
   token: string | Token;
 }
 
-export type IServletFetchType = typeof fetch;
+export type IServletFetchType = typeof import('node-fetch').default;
 
 export interface Servlet {
   [index: string]: ServletFunction;
@@ -318,7 +319,7 @@ export default class Client {
   getToken<T extends Token = Token>(): T;
   me(): object;
 
-  fetch: <T = Response>(
+  fetch: <T = import('node-fetch').Response>(
     url: string,
     init?: RequestInit,
     reqOptions?: ReqOptions<T>,
@@ -381,13 +382,13 @@ export default class Client {
   create<T = OGIT.SafeNode>(
     type: string,
     data: any,
-    reqOptions: ReqOptions,
+    reqOptions?: ReqOptions,
   ): Promise<T>;
 
   update<T = OGIT.SafeNode>(
     id: string,
     data: any,
-    reqOptions: ReqOptions,
+    reqOptions?: ReqOptions,
   ): Promise<T>;
 
   get<T = OGIT.SafeNode>(id: string): Promise<T>;
