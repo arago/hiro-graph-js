@@ -1,4 +1,8 @@
 // Data
+
+import fetch, { Response, HeaderInit } from 'node-fetch';
+import { w3cwebsocket } from 'websocket';
+
 export namespace OGIT {
   export interface SafeNode {
     'ogit/_id': string;
@@ -87,7 +91,7 @@ interface Subscriber<T> {
 interface DefaultFetchOptions {
   mode: string;
   method: string;
-  headers: import('node-fetch').HeaderInit;
+  headers: HeaderInit;
 }
 
 interface ReqOptions<T = any> {
@@ -109,13 +113,13 @@ declare class HttpTransport {
     url: string,
     init?: RequestInit,
     reqOptions?: ReqOptions,
-  ): Promise<import('node-fetch').Response>;
+  ): Promise<Response>;
 
   request(
     token: string,
     params?: RequestParams,
     reqOptions?: ReqOptions,
-  ): Promise<import('node-fetch').Response>;
+  ): Promise<Response>;
 
   defaultFetchOptions(): DefaultFetchOptions;
 }
@@ -133,17 +137,14 @@ declare class WebSocketTransport {
     token: string,
     params?: RequestParams,
     reqOptions?: object,
-  ): Promise<import('websocket').w3cwebsocket>;
+  ): Promise<w3cwebsocket>;
 
-  connect(
-    token: string,
-    emit: EmitHandler,
-  ): Promise<import('websocket').w3cwebsocket>;
+  connect(token: string, emit: EmitHandler): Promise<w3cwebsocket>;
 
   createWebSocket(
     initialToken: string,
     emit: EmitHandler,
-  ): Promise<import('websocket').w3cwebsocket>;
+  ): Promise<w3cwebsocket>;
 
   defaultFetchOptions(): DefaultFetchOptions;
 }
@@ -282,7 +283,7 @@ interface ClientParams {
   token: string | Token;
 }
 
-export type IServletFetchType = typeof import('node-fetch').default;
+export type IServletFetchType = typeof fetch;
 
 export interface Servlet {
   [index: string]: ServletFunction;
@@ -319,7 +320,7 @@ export default class Client {
   getToken<T extends Token = Token>(): T;
   me(): object;
 
-  fetch: <T = import('node-fetch').Response>(
+  fetch: <T = Response>(
     url: string,
     init?: RequestInit,
     reqOptions?: ReqOptions<T>,
