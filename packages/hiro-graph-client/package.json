@@ -13,11 +13,11 @@
     "license": "MIT",
     "dependencies": {
         "isomorphic-fetch": "^2.2.1",
-        "websocket": "^1.0.25"
+        "websocket": "^1.0.25",
+        "@types/node-fetch": "*",
+        "@types/websocket": "*"
     },
     "devDependencies": {
-        "@types/node-fetch": "*",
-        "@types/websocket": "*",
         "babel-cli": "^6.6.5",
         "babel-jest": "^23.4.2",
         "babel-preset-hiro": "^0.4.4",
