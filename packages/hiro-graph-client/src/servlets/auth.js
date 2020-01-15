@@ -113,6 +113,8 @@ export default function authServletFactory(fetch, options) {
                 ...options,
                 method: 'POST',
                 body: JSON.stringify({ client_id: clientId }),
+                mode: 'no-cors',
+                raw: true,
             });
         },
     };
