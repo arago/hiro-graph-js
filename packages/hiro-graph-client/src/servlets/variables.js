@@ -3,12 +3,12 @@
  */
 import { stringify } from 'querystring';
 
-const BASE_PATH = '/api/variables/6';
+import { VARIABLES_API_BASE } from '../api-version';
 
 export default function variablesServletFactory(fetch, options) {
     return {
         add(data) {
-            return fetch(BASE_PATH, {
+            return fetch(VARIABLES_API_BASE, {
                 ...options,
                 method: 'PUT',
                 body: JSON.stringify(data),
@@ -22,14 +22,14 @@ export default function variablesServletFactory(fetch, options) {
                 full,
             });
 
-            const url = encodeURI(`${BASE_PATH}/suggest?${query}`);
+            const url = encodeURI(`${VARIABLES_API_BASE}/suggest?${query}`);
 
             return fetch(url, options);
         },
 
         define({ name, ...rest }) {
             const url = encodeURI(
-                `${BASE_PATH}/define?${stringify({
+                `${VARIABLES_API_BASE}/define?${stringify({
                     ...rest,
                     name,
                 })}`,

@@ -1,7 +1,9 @@
+import { KI_API_BASE } from '../api-version';
+
 export default function kiServletFactory(fetch, options) {
     return {
         validate({ ki, ...rest }) {
-            return fetch('/api/ki/6/check', {
+            return fetch(`${KI_API_BASE}/check`, {
                 ...options,
                 method: 'POST',
                 body: JSON.stringify({

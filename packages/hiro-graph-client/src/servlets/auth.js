@@ -1,4 +1,5 @@
-const PATH = '/api/iam/6.1';
+import { AUTH_API_BASE, IAM_API_BASE } from '../api-version';
+
 const URL_PATH_ACCOUNTS = 'accounts';
 const URL_PATH_PROFILE = 'profile';
 const URL_PATH_AVATAR = 'avatar';
@@ -14,7 +15,7 @@ const URL_PATH_ORG_DOMAINS = 'domains';
 const URL_PATH_DATA_SCOPE = 'scope';
 const URL_PATH_DATA_SETS = 'datasets';
 
-const toPath = (...paths) => `${PATH}/${paths.join('/')}`;
+const toPath = (...paths) => `${IAM_API_BASE}/${paths.join('/')}`;
 
 // TODO: move methods to corresponding servlets (auth, me, iam, saas)
 export default function authServletFactory(fetch, options) {
@@ -108,7 +109,7 @@ export default function authServletFactory(fetch, options) {
         },
 
         revoke: (clientId) => {
-            return fetch('/api/auth/6/revoke', {
+            return fetch(`${AUTH_API_BASE}/revoke`, {
                 ...options,
                 method: 'POST',
                 body: JSON.stringify({ client_id: clientId }),

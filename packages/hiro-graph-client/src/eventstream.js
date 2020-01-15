@@ -12,6 +12,7 @@ import { ensureWebSocketsAvailable } from './transport-websocket';
 import { channel } from './subscriber-fanout';
 import qs from 'querystring';
 import timer from './timer';
+import { EVENTS_API_BASE } from './api-version';
 
 const noop = () => {};
 
@@ -31,7 +32,7 @@ export default class EventStream {
         this._token = token;
         this._endpoint = endpoint
             .replace(/^http/, 'ws') //replace http(s) with ws(s)
-            .replace(/\/?$/, '/api/events-ws/6.1/?'); // replace possible trailing slash with api endpoint
+            .replace(/\/?$/, `${EVENTS_API_BASE}/?`); // replace possible trailing slash with api endpoint
 
         const query = {};
 
