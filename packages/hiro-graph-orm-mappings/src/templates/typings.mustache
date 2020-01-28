@@ -11,14 +11,6 @@ export interface IDefinitionData {
     [index: string]: string;
 }
 
-export interface IDefinition {
-    name: string;
-    ogit: string;
-    required?: IDefinitionData;
-    optional?: IDefinitionData;
-    relations?: IDefinitionData;
-}
-
 export type MappedTypes = keyof typeof VertexLookup;
 
 {{#exports}}
@@ -30,4 +22,3 @@ export namespace VertexLookup {
     export const {{name}}: {{name}}Vertex;
 {{/exports}}
 }
-

@@ -1,18 +1,11 @@
+import { IDefinition } from "@hiro-graph/orm";
+
 interface IDefinitionData {
     [index: string]: string;
 }
 
 interface IMapping {
     [index: string]: string;
-}
-
-interface IDefinition {
-    name: string;
-    ogit: string;
-    required?: IDefinitionData;
-    optional?: IDefinitionData;
-    relations?: IDefinitionData;
-    [name: string]: string | IDefinitionData | undefined;
 }
 
 interface IOutput {

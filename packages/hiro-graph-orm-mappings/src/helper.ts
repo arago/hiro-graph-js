@@ -1,4 +1,10 @@
-export const cleanName = (originalNs: string, safeNs: string, name: string) => {
+import { IDefinitionData, IOutput } from "./types";
+
+export const cleanName = (
+  originalNs: string,
+  safeNs: string,
+  name: string,
+): string => {
     let output = name;
 
     if (safeNs.startsWith("oslc")) {
