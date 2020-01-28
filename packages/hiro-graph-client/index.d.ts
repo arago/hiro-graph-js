@@ -1,6 +1,6 @@
 // Data
 
-import { RequestInit, Response } from 'node-fetch';
+import { Response, HeaderInit } from 'node-fetch';
 import { w3cwebsocket } from 'websocket';
 
 export namespace OGIT {
@@ -164,6 +164,12 @@ interface Subscriber<T> {
   complete?: () => void;
 }
 
+interface DefaultFetchOptions {
+  mode: string;
+  method: string;
+  headers: HeaderInit;
+}
+
 interface ReqOptions<T = any> {
   waitForIndex?: boolean;
   headers?: object;
@@ -171,6 +177,8 @@ interface ReqOptions<T = any> {
   emit?: (message: EmitMessage) => void;
   sub?: Subscriber<T>;
 }
+
+type RequestInit = import('node-fetch').RequestInit & { raw?: boolean };
 
 declare class HttpTransport {
   endpoint: string;
@@ -186,14 +194,7 @@ declare class HttpTransport {
     params?: RequestParams,
     reqOptions?: ReqOptions,
   ): Promise<Response>;
-  defaultFetchOptions(): {
-    method: 'GET';
-    headers: {
-      'Content-Type': 'application/json';
-      Accept: 'application/json';
-    };
-    mode: 'cors';
-  };
+  defaultFetchOptions(): DefaultFetchOptions;
 }
 
 // WebSocketTransport
@@ -552,14 +553,14 @@ export default class Client {
     inId: string,
     outId: string,
     reqOptions?: ReqOptions<T>,
-  ) => Promise<T[]>;
+  ) => Promise<T>;
 
   disconnect: <T extends OGIT.SafeNode = OGIT.Node>(
     type: string,
     inId: string,
     outId: string,
     reqOptions?: ReqOptions<T>,
-  ) => Promise<T[]>;
+  ) => Promise<T>;
 
   lucene: <T>(
     query: string,
@@ -599,9 +600,17 @@ export default class Client {
     proxy?: string,
   ): Client;
 
-  create(type: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+  create<T extends OGIT.SafeNode = OGIT.Node>(
+    type: string,
+    data: any,
+    reqOptions: ReqOptions,
+  ): Promise<OGIT.Node>;
 
-  update(id: string, data: any, reqOptions: ReqOptions): Promise<OGIT.Node>;
+  update<T extends OGIT.SafeNode = OGIT.Node>(
+    id: string,
+    data: any,
+    reqOptions: ReqOptions,
+  ): Promise<OGIT.Node>;
 
-  get: <T extends OGIT.SafeNode = OGIT.Node>(id: string) => Promise<T>;
+  get<T extends OGIT.SafeNode = OGIT.Node>(id: string): Promise<T>;
 }
