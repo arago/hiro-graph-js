@@ -339,7 +339,7 @@ export default class Client {
                 {
                     type: 'getme',
                     body: {},
-                    headers: { addProfile: true, 'me-type': 'account' },
+                    headers: { profile: true, 'me-type': 'account' },
                 },
                 reqOptions,
             ),
