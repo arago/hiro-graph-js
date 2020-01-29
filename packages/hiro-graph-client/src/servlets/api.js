@@ -53,5 +53,9 @@ export default function apiServletFactory(fetch, options) {
                 raw: true,
             });
         },
+
+        meRoles: () => {
+            return fetch(`${AUTH_API_BASE}/me/roles`, options);
+        },
     };
 }

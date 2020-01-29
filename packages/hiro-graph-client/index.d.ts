@@ -124,6 +124,23 @@ export namespace OGIT {
     'ogit/Auth/vertexRule': string;
     'ogit/Auth/edgeRule': string;
   }
+
+  export interface Role extends SafeNode {
+    'ogit/name': string;
+    'ogit/description'?: string;
+    'ogit/Auth/vertexRule': string;
+    'ogit/Auth/edgeRule': string;
+  }
+
+  export interface Team extends SafeNode {
+    'ogit/name': string;
+    'ogit/description'?: string;
+  }
+
+  export interface DataScope extends SafeNode {
+    'ogit/name': string;
+    'ogit/description'?: string;
+  }
 }
 
 export interface AccountWithProfile {
