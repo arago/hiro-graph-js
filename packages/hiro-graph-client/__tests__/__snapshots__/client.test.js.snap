@@ -306,11 +306,10 @@ Object {
 
 exports[`Client Requests should call me correctly 1`] = `
 Object {
-  "body": Object {
-    "me-type": "account",
-  },
+  "body": Object {},
   "headers": Object {
     "addProfile": true,
+    "me-type": "account",
   },
   "type": "getme",
 }
