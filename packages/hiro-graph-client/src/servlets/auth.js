@@ -13,6 +13,7 @@ const URL_PATH_ROLE_ASSIGNMENTS = 'roleassignments';
 const URL_PATH_ORG_DOMAIN = 'domain';
 const URL_PATH_ORG_DOMAINS = 'domains';
 const URL_PATH_DATA_SCOPE = 'scope';
+const URL_PATH_DATA_SCOPES = 'scopes';
 const URL_PATH_DATA_SETS = 'datasets';
 
 const toPath = (...paths) => `${IAM_API_BASE}/${paths.join('/')}`;
@@ -87,7 +88,7 @@ export default function authServletFactory(fetch, options) {
 
         organizationScopes: (id) =>
             fetch(
-                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SCOPE),
+                toPath(URL_PATH_ORGANIZATION, id, URL_PATH_DATA_SCOPES),
                 options,
             ),
 
