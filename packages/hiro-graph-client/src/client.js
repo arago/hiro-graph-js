@@ -338,8 +338,8 @@ export default class Client {
             this.dedupedRequest(
                 {
                     type: 'getme',
-                    body: { 'me-type': 'account' },
-                    headers: { addProfile: true },
+                    body: {},
+                    headers: { addProfile: true, 'me-type': 'account' },
                 },
                 reqOptions,
             ),
