@@ -7,7 +7,7 @@ import kiServletFactory from './servlets/ki';
 import variablesServletFactory from './servlets/variables';
 
 import lucene from './lucene';
-import gremlin, { GremlinQueryBuilder } from './gremlin';
+import gremlin, { GremlinQueryBuilder, T } from './gremlin';
 
 export default Client;
 
@@ -23,4 +23,5 @@ export {
     // Gremlin
     gremlin,
     GremlinQueryBuilder,
+    T, // support legacy ORM
 };
