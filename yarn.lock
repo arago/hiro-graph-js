@@ -946,14 +946,6 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
-"@hiro-graph/client@^7.3.0":
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/@hiro-graph/client/-/client-7.3.0.tgz#271a25eaafd0ba060caec3fb9922cdf7a76284cd"
-  integrity sha512-oiy0iW/dqM9xzUxvYAUpXkz5QuQlrcs5+PjHWFbZ4JbfIJLvcygQtrEKBzbq/7w9NQzdzfP+LdaJqoZIem+eVg==
-  dependencies:
-    isomorphic-fetch "^2.2.1"
-    websocket "^1.0.25"
-
 "@hiro-ui/eslint-config@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@hiro-ui/eslint-config/-/eslint-config-1.1.1.tgz#4868e2d5522d13f8241d1afdcfa93f8d8cb126fb"
