@@ -650,7 +650,7 @@ export type LuceneQuery<T extends string = string> = LucenseBase<T> &
   LuceneSpecial &
   LucenseAny;
 
-export const createLuceneQuery: <T extends string = string>(
+export const lucene: <T extends string = string>(
   query: LuceneQuery<T>,
   entity?: any,
 ) => {
@@ -710,6 +710,6 @@ export class GremlinQueryBuilder {
   getProperty(...args: Array<string>): GremlinQueryBuilder;
 }
 
-export function createGremlinQuery(
+export function gremlin(
   initialQuery: string | GremlinQueryBuilder,
 ): GremlinQueryBuilder;

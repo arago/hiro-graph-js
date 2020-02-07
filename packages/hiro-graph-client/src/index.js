@@ -6,8 +6,8 @@ import appsServletFactory from './servlets/app';
 import kiServletFactory from './servlets/ki';
 import variablesServletFactory from './servlets/variables';
 
-import createLuceneQuery from './lucene';
-import createGremlinQuery, { GremlinQueryBuilder } from './gremlin';
+import lucene from './lucene';
+import gremlin, { GremlinQueryBuilder } from './gremlin';
 
 export default Client;
 
@@ -19,8 +19,8 @@ export {
     kiServletFactory,
     variablesServletFactory,
     // Lucene
-    createLuceneQuery,
+    lucene,
     // Gremlin
-    createGremlinQuery,
+    gremlin,
     GremlinQueryBuilder,
 };
