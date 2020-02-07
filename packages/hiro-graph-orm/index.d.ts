@@ -1,6 +1,4 @@
-import { LuceneQuery } from '@hiro-graph/lucene';
-import { GremlinQueryBuilder } from '@hiro-graph/gremlin';
-import Client from '@hiro-graph/client';
+import Client, { LuceneQuery, GremlinQueryBuilder } from '@hiro-graph/client';
 
 export interface IDefinitionData {
   [index: string]: string;

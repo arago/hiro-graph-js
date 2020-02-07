@@ -10,13 +10,10 @@ All the packages here are available on npm. Check the [packages](packages/) dire
 
 Each package maintains it's own documentation:
 
--   [`@hiro-graph/client`](/packages/hiro-graph-client/)
--   [`@hiro-graph/gremlin`](/packages/hiro-graph-gremlin/)
--   [`@hiro-graph/lucene`](/packages/hiro-graph-lucene/)
--   [`@hiro-graph/orm`](/packages/hiro-graph-orm/)
--   [`@hiro-graph/orm-mappings`](/packages/hiro-graph-orm-mappings/)
--   [`@hiro-graph/populate`](/packages/hiro-graph-populate/)
--   [`@hiro-graph/redux`](/packages/hiro-graph-redux/)
+- [`@hiro-graph/client`](/packages/hiro-graph-client/)
+- [`@hiro-graph/orm`](/packages/hiro-graph-orm/)
+- [`@hiro-graph/orm-mappings`](/packages/hiro-graph-orm-mappings/)
+- [`@hiro-graph/redux`](/packages/hiro-graph-redux/)
 
 ## Development
 

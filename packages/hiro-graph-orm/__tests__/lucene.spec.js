@@ -3,7 +3,7 @@
  *  Testing the Lucene Query Generator
  */
 import schema from '../__mocks__/schema.js';
-import parse, { getPlaceholderKeyForIndex } from '@hiro-graph/lucene';
+import { lucene as parse, getPlaceholderKeyForIndex } from '@hiro-graph/client';
 
 describe('Lucene Query Generator:', function() {
     const simple = schema.get('Simple');

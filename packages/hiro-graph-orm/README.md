@@ -17,23 +17,24 @@ $ npm install @hiro-graph/orm @hiro-graph/orm-mappings
 ## Example usage:
 
 ```javascript
-import HiroGraphOrm from "@hiro-graph/orm";
-import { Token } from "@hiro-graph/client";
-import mappings from "@hiro-graph/orm-mappings";
+import HiroGraphOrm from '@hiro-graph/orm';
+import { Token } from '@hiro-graph/client';
+import mappings from '@hiro-graph/orm-mappings';
 
-const token = new Token({ getToken: () => "some access token" });
+const token = new Token({ getToken: () => 'some access token' });
 
-const orm = new HiroGraphOrm({ endpoint: "https://graphit/", token }, mappings);
+const orm = new HiroGraphOrm({ endpoint: 'https://graphit/', token }, mappings);
 
 //fetch the user of this access token.
-orm.me()
-    .then(me => {
-        // Log the property `username`
-        console.log(me.get("username"));
-    })
-    .catch(err => {
-        console.log("something bad happened", err.stack);
-    });
+orm
+  .me()
+  .then((me) => {
+    // Log the property `username`
+    console.log(me.get('username'));
+  })
+  .catch((err) => {
+    console.log('something bad happened', err.stack);
+  });
 ```
 
 ---
@@ -198,11 +199,11 @@ orm.Person.findCount({ firstName: "Wes" })
 
 ```javascript
 // Simple search example
-orm.Profile.search("example.com"); // Search for any people that might match the domain
+orm.Profile.search('example.com'); // Search for any people that might match the domain
 
 // Filtered search example
-orm.Profile.search("example.com", {
-    firstName: "Jane"
+orm.Profile.search('example.com', {
+  firstName: 'Jane',
 }); // Search for any people that might match the domain and have the firstName "Jane"
 ```
 
@@ -210,12 +211,12 @@ orm.Profile.search("example.com", {
 
 To assist with the more complex lucene syntax we introduce some (mongodb inspired) special keys:
 
--   `$or`: switch to "one or more of these conditions".
--   `$and`: switch to "all of these conditions" (the default, but allows to switch back once in `$or` or `$not`) (aliased as `$must` as well).
--   `$not`: switch to "must not match these conditions".
--   `$range`: create a condition where matches must be in the given range.
--   `$missing`: create a condition which matches the presence of a field.
--   `$search`: helper for more complex matching
+- `$or`: switch to "one or more of these conditions".
+- `$and`: switch to "all of these conditions" (the default, but allows to switch back once in `$or` or `$not`) (aliased as `$must` as well).
+- `$not`: switch to "must not match these conditions".
+- `$range`: create a condition where matches must be in the given range.
+- `$missing`: create a condition which matches the presence of a field.
+- `$search`: helper for more complex matching
 
 A couple of these will need more explanation. Otherwise the test code is a good place to look.
 
@@ -224,9 +225,9 @@ A couple of these will need more explanation. Otherwise the test code is a good 
 ```javascript
 // find any Person with the firstName "Jane" or "Joe"
 orm.Person.find({
-    $or: {
-        firstName: ["Jane", "Joe"]
-    }
+  $or: {
+    firstName: ['Jane', 'Joe'],
+  },
 });
 ```
 
@@ -235,9 +236,9 @@ orm.Person.find({
 ```javascript
 // find everything modified in the last day
 orm.Profile.find({
-    $range: {
-        modified_on: [Date.now() - 86400 * 1000, Date.now()]
-    }
+  $range: {
+    modified_on: [Date.now() - 86400 * 1000, Date.now()],
+  },
 });
 ```
 
@@ -245,16 +246,17 @@ orm.Profile.find({
 
 ### `orm.gremlin()`
 
-`gremlin()` is a chainable gremlin query generator that abstracts the `Gremlin` syntax away using the schema it is based on `@hiro-graph/gremlin` with the `.execute(rootId)` method required in order to trigger the request.
+`gremlin()` is a chainable gremlin query generator that abstracts the `Gremlin` syntax away using the schema; it is based on `gremlin` from `@hiro-graph/client` with the `.execute(rootId)` method required in order to trigger the request.
 
 #### Example `orm.gremlin()`
 
 ```javascript
-orm.gremlin()
-    .outE("ogit/belongs")
-    .inV()
-    .has("ogit/_type", "Organization")
-    .execute(rootId);
+orm
+  .gremlin()
+  .outE('ogit/belongs')
+  .inV()
+  .has('ogit/_type', 'Organization')
+  .execute(rootId);
 // -> Resolves to [GraphVertex]
 ```
 
@@ -264,17 +266,19 @@ orm.gremlin()
 
 ```javascript
 // using `outE()/inV` etc
-orm.gremlin()
-    .outE("ogit/belongs")
-    .inV()
-    .has("ogit/_type", "Organization")
-    .execute(rootId);
+orm
+  .gremlin()
+  .outE('ogit/belongs')
+  .inV()
+  .has('ogit/_type', 'Organization')
+  .execute(rootId);
 // -> Resolves to [GraphVertex]
 
 // using `.relation()`
-orm.gremlin()
-    .relation("Person", ["orgs"])
-    .execute(rootId);
+orm
+  .gremlin()
+  .relation('Person', ['orgs'])
+  .execute(rootId);
 // -> Resolves to [GraphVertex]
 ```
 
@@ -311,21 +315,21 @@ Property access is restricted to `.get(propName)`. To update a property use `.se
 #### Example `get()` and `set()`
 
 ```javascript
-orm.me().then(myVertex => {
-    myVertex.get("username"); // returns current value...
-    myVertex.set("username", "Foo");
-    const userName = myVertex.get("username"); // returns current "Foo"
+orm.me().then((myVertex) => {
+  myVertex.get('username'); // returns current value...
+  myVertex.set('username', 'Foo');
+  const userName = myVertex.get('username'); // returns current "Foo"
 });
 
 // `.set()` also accepts an object of changes
-orm.me().then(myVertex => {
-    myVertex.set({
-        firstName: "Foo",
-        lastName: "Bar"
-    });
+orm.me().then((myVertex) => {
+  myVertex.set({
+    firstName: 'Foo',
+    lastName: 'Bar',
+  });
 
-    const firstName = myVertex.get("firstName"); // returns current "Foo"
-    const lastName = myVertex.get("lastName"); // returns current "Bar"
+  const firstName = myVertex.get('firstName'); // returns current "Foo"
+  const lastName = myVertex.get('lastName'); // returns current "Bar"
 });
 ```
 
@@ -338,18 +342,19 @@ In order to persist the changes to the graph we need to call the `.save()` metho
 #### Example `.save()`
 
 ```javascript
-orm.me()
-    .then(myVertex => {
-        return myVertex
-            .set({
-                firstName: "Foo",
-                lastName: "Bar"
-            })
-            .save();
-    })
-    .then(updatedMyVertex => {
-        //...
-    });
+orm
+  .me()
+  .then((myVertex) => {
+    return myVertex
+      .set({
+        firstName: 'Foo',
+        lastName: 'Bar',
+      })
+      .save();
+  })
+  .then((updatedMyVertex) => {
+    //...
+  });
 ```
 
 ### Relations Methods (`fetchVertices(<Array> relations)`, `fetchIds(<Array> relations)`,`fetchCount(<Array> relations)`)
@@ -376,19 +381,16 @@ We can connect/disconnect a GraphVertex to/from any of its defined relations`
 ```javascript
 // Connecting a person to an org
 Promise.all([orm.Person.findById(personId), orm.Org.findById(orgId)]).then(
-    ([personVertex, orgVertex]) => {
-        return personVertex.connect(
-            "orgs",
-            orgVertex
-        );
-    }
+  ([personVertex, orgVertex]) => {
+    return personVertex.connect('orgs', orgVertex);
+  },
 );
 
 // disconnecting a person from an org (example using the org vertex instead)
 Promise.all([orm.Person.findById(personId), orm.Org.findById(orgId)]).then(
-    ([personVertex, orgVertex]) => {
-        return orgVertex.disconnect("members", personVertex);
-    }
+  ([personVertex, orgVertex]) => {
+    return orgVertex.disconnect('members', personVertex);
+  },
 );
 ```
 
@@ -398,7 +400,7 @@ Deleting a `GraphVertex` is simply `vertex.delete()` Note: **Your token must hav
 
 ```javascript
 // Deleting a node
-orm.findById(id).then(v => v.delete());
+orm.findById(id).then((v) => v.delete());
 ```
 
 ### Serialisation
@@ -420,11 +422,11 @@ This package contains a library to verify an your local schema mappings match up
 
 ```javascript
 // NODE JS ONLY
-const { default: validate } = require("@hiro-graph/orm/lib/schema/validate");
+const { default: validate } = require('@hiro-graph/orm/lib/schema/validate');
 
-const schema = require("/path/to/your/schema/mappings/array/module");
+const schema = require('/path/to/your/schema/mappings/array/module');
 
-const ontologyPath = "/path/to/your/OGIT/yaml/directory/or/file";
+const ontologyPath = '/path/to/your/OGIT/yaml/directory/or/file';
 
 const result = validate(schema, ontologyPath);
 
@@ -444,8 +446,8 @@ const int = codec.int;
 
 console.log(int.encode(101)); // "p0000000000000101"
 console.log(int.encode(-101)); // "n9007199254740890"
-console.log(int.encode("this is not a number")); // "p0000000000000000"
+console.log(int.encode('this is not a number')); // "p0000000000000000"
 
-console.log(int.decode("n9007199254740890")); // -101
-console.log(int.decode("I am not a number")); // 0
+console.log(int.decode('n9007199254740890')); // -101
+console.log(int.decode('I am not a number')); // 0
 ```
