@@ -44,7 +44,7 @@ export default function apiServletFactory(fetch, options) {
         updateMeAvatar: (data) => {
             return fetch(`${AUTH_API_BASE}/me/avatar`, {
                 ...options,
-                method: 'POST',
+                method: 'PUT',
                 body: data,
                 headers: {
                     ...options.headers,
