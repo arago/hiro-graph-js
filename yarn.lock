@@ -179,13 +179,6 @@
   resolved "https://registry.yarnpkg.com/@hiro-graph/gremlin/-/gremlin-7.1.1.tgz#cdba41bacc4d2f6928ef4fd6f5af092672fbdcf2"
   integrity sha512-LYnGbLPsjdKQfNV4SJcMrmevkQAYZAAa4Gml4s6pFXZX6n2T2ase9w4Kvp0nuchGZDOQK2PkAtdVXwLL2COcnQ==
 
-"@hiro-graph/implicit-oauth@^7.0.0":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@hiro-graph/implicit-oauth/-/implicit-oauth-7.0.2.tgz#382f19ee4d665ae669f60480dbc7a24994a6e8bd"
-  integrity sha512-YgnXFxnxu1BhtI5FyE4W9vtoEnTPMeq8AN4kqmoozE/MoTtfpumNEpId16L8I7ypCzqCFak5ZrN2dg4xlUMDNA==
-  dependencies:
-    querystring "^0.2.0"
-
 "@hiro-graph/lucene@^7.1.1":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@hiro-graph/lucene/-/lucene-7.1.1.tgz#d65e7b88c0792e9349dad7bcdba47a2b0810d81c"
