@@ -1,64 +1,64 @@
 {
-  "name": "@hiro-graph/client",
-  "repository": "arago/hiro-graph-js",
-  "version": "7.3.0",
-  "types": "index.d.ts",
-  "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-    "prepublish": "yarn test && yarn build",
-    "test": "jest --silent"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "websocket": "^1.0.25"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-transform-regenerator": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/plugin-transform-spread": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
-    "@types/node-fetch": "2.5.4",
-    "@types/websocket": "1.0.0",
-    "babel-jest": "^25.1.0",
-    "jest": "^25.1.0"
-  },
-  "browserslist": [
-    "chrome >= 64",
-    "ie 11",
-    "edge >= 15"
-  ],
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "modules": "commonjs"
+    "name": "@hiro-graph/client",
+    "repository": "arago/hiro-graph-js",
+    "version": "7.3.0",
+    "types": "index.d.ts",
+    "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
+    "main": "lib/index.js",
+    "scripts": {
+        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "prepublish": "yarn test && yarn build",
+        "test": "jest --silent"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "isomorphic-fetch": "^2.2.1",
+        "websocket": "^1.0.25"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.8.4",
+        "@babel/core": "^7.8.4",
+        "@babel/plugin-proposal-class-properties": "^7.8.3",
+        "@babel/plugin-transform-regenerator": "^7.8.3",
+        "@babel/plugin-transform-runtime": "^7.8.3",
+        "@babel/plugin-transform-spread": "^7.8.3",
+        "@babel/preset-env": "^7.8.4",
+        "@types/node-fetch": "2.5.4",
+        "@types/websocket": "1.0.0",
+        "babel-jest": "^25.1.0",
+        "jest": "^25.1.0"
+    },
+    "browserslist": [
+        "chrome >= 64",
+        "ie 11",
+        "edge >= 15"
+    ],
+    "babel": {
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "modules": "commonjs"
+                }
+            ]
+        ],
+        "plugins": [
+            "@babel/plugin-proposal-class-properties",
+            "@babel/plugin-transform-regenerator",
+            "@babel/plugin-transform-runtime"
+        ]
+    },
+    "jest": {
+        "testPathIgnorePatterns": [
+            "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+        ],
+        "testEnvironment": "node",
+        "testURL": "http://localhost",
+        "transform": {
+            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
         }
-      ]
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-transform-regenerator",
-      "@babel/plugin-transform-runtime"
-    ]
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
-    ],
-    "testEnvironment": "node",
-    "testURL": "http://localhost",
-    "transform": {
-      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
+    },
+    "publishConfig": {
+        "access": "public"
     }
-  },
-  "publishConfig": {
-    "access": "public"
-  }
 }
