@@ -1,52 +1,51 @@
 {
-    "name": "@hiro-graph/redux",
-    "version": "7.2.10",
-    "repository": "arago/hiro-graph-js",
-    "description": "Redux awareness for the `@hiro-graph/orm` package",
-    "main": "lib/index.js",
-    "types": "index.d.ts",
-    "scripts": {
-        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-        "prepublish": "yarn test && yarn build",
-        "test": "jest --silent"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "@hiro-graph/client": "^7.2.10",
-        "@hiro-graph/implicit-oauth": "^7.0.0",
-        "@hiro-graph/orm": "^7.2.10",
-        "lodash.isplainobject": "^4.0.6",
-        "querystring": "^0.2.0",
-        "redux": "^4.0.0",
-        "reselect": "^4.0.0"
-    },
-    "devDependencies": {
-        "babel-cli": "^6.6.5",
-        "babel-jest": "^23.4.2",
-        "babel-preset-hiro": "^0.4.2",
-        "jest": "^23.5.0"
-    },
-    "babel": {
-        "presets": [
-            [
-                "hiro",
-                {
-                    "library": true
-                }
-            ]
-        ]
-    },
-    "jest": {
-        "testPathIgnorePatterns": [
-            "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
-        ],
-        "testEnvironment": "node",
-        "testURL": "http://localhost",
-        "transform": {
-            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
+  "name": "@hiro-graph/redux",
+  "version": "7.2.10",
+  "repository": "arago/hiro-graph-js",
+  "description": "Redux awareness for the `@hiro-graph/orm` package",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+    "prepublish": "yarn test && yarn build",
+    "test": "jest --silent"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@hiro-graph/client": "^7.2.10",
+    "@hiro-graph/orm": "^7.2.10",
+    "lodash.isplainobject": "^4.0.6",
+    "querystring": "^0.2.0",
+    "redux": "^4.0.0",
+    "reselect": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-jest": "^23.4.2",
+    "babel-preset-hiro": "^0.4.2",
+    "jest": "^23.5.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "hiro",
+        {
+          "library": true
         }
-    },
-    "publishConfig": {
-        "access": "public"
+      ]
+    ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
     }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

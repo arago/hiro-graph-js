@@ -174,13 +174,6 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
-"@hiro-graph/implicit-oauth@^7.0.0":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@hiro-graph/implicit-oauth/-/implicit-oauth-7.0.2.tgz#382f19ee4d665ae669f60480dbc7a24994a6e8bd"
-  integrity sha512-YgnXFxnxu1BhtI5FyE4W9vtoEnTPMeq8AN4kqmoozE/MoTtfpumNEpId16L8I7ypCzqCFak5ZrN2dg4xlUMDNA==
-  dependencies:
-    querystring "^0.2.0"
-
 "@hiro-ui/eslint-config@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@hiro-ui/eslint-config/-/eslint-config-1.1.1.tgz#4868e2d5522d13f8241d1afdcfa93f8d8cb126fb"

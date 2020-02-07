@@ -1,49 +1,47 @@
 {
-    "name": "@hiro-graph/orm",
-    "version": "7.2.10",
-    "description": "OGIT ontology to sane application mappings",
-    "repository": "arago/hiro-graph-js",
-    "main": "lib/index.js",
-    "types": "index.d.ts",
-    "scripts": {
-        "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
-        "prepublish": "yarn test && yarn build",
-        "test": "jest --silent"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "@hiro-graph/client": "^7.2.10",
-        "@hiro-graph/gremlin": "^7.1.1",
-        "@hiro-graph/lucene": "^7.1.1",
-        "lodash.isplainobject": "^4.0.6"
-    },
-    "devDependencies": {
-        "babel-cli": "^6.6.5",
-        "babel-jest": "^23.4.2",
-        "babel-preset-hiro": "^0.4.2",
-        "jest": "^23.5.0"
-    },
-    "babel": {
-        "presets": [
-            [
-                "hiro",
-                {
-                    "library": true
-                }
-            ]
-        ]
-    },
-    "jest": {
-        "testPathIgnorePatterns": [
-            "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
-        ],
-        "testEnvironment": "node",
-        "testURL": "http://localhost",
-        "transform": {
-            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
+  "name": "@hiro-graph/orm",
+  "version": "7.2.10",
+  "description": "OGIT ontology to sane application mappings",
+  "repository": "arago/hiro-graph-js",
+  "main": "lib/index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+    "prepublish": "yarn test && yarn build",
+    "test": "jest --silent"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@hiro-graph/client": "^7.2.10",
+    "lodash.isplainobject": "^4.0.6"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-jest": "^23.4.2",
+    "babel-preset-hiro": "^0.4.2",
+    "jest": "^23.5.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "hiro",
+        {
+          "library": true
         }
-    },
-    "publishConfig": {
-        "access": "public"
+      ]
+    ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
     }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

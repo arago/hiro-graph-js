@@ -6,7 +6,7 @@
  *  from queries.
  */
 import { notFound, badRequest } from '@hiro-graph/client/lib/errors';
-import parseLucene from '@hiro-graph/lucene';
+import { lucene as parseLucene } from '@hiro-graph/client';
 
 import { decodeResults, filter, mapIfArray } from '../utils';
 
