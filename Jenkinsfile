@@ -3,6 +3,7 @@ pipeline {
         docker {
             label 'slave-docker-7.7'
             image 'node:12'
+            args '-v yarn_cache:/.cache/yarn'
         }
     }
 
@@ -23,8 +24,6 @@ pipeline {
 			}
 
 			steps {
-                sh 'mkdir -p .yarn'
-                sh 'yarn config set cache-folder .yarn'
                 sh 'yarn install --frozen-lockfile'
 			}
         }
@@ -43,6 +42,7 @@ pipeline {
 
 	post {
         always {
+            sh 'rm -rf yarn_cache'
             deleteDir()
         }
     }
