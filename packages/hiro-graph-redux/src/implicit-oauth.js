@@ -2,7 +2,6 @@
  *  Helper functions for getting data from oauth implicit auth flow.
  */
 import createStrategy from './create-oauth-strategy';
-
 import {
     setToken,
     setOnLogoutHook,

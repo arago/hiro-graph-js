@@ -1,7 +1,20 @@
 /**
  *  Defines a Schema aware GraphIT client library
  */
+import isPlainObject from 'lodash.isplainobject';
+import Client from '@hiro-graph/client';
+
 import { queryBuilder } from '../gremlin';
+import { createVertex } from '../vertex/graph';
+import { mapPromiseIfArray, deprecationWarning } from '../utils';
+import Schema from '../schema';
+
+import {
+    getRelationQuery,
+    fetchVertices,
+    fetchIds,
+    fetchCount,
+} from './relations';
 import {
     find,
     findById,
@@ -18,17 +31,6 @@ import {
     naiveDetectRaw,
     vertexize,
 } from './graph';
-import { createVertex } from '../vertex/graph';
-import { mapPromiseIfArray, deprecationWarning } from '../utils';
-import {
-    getRelationQuery,
-    fetchVertices,
-    fetchIds,
-    fetchCount,
-} from './relations';
-import isPlainObject from 'lodash.isplainobject';
-import Schema from '../schema';
-import Client from '@hiro-graph/client';
 
 //shorthand for creating the getCount/Ids/Vertices fetching functions
 const relationFetch = (ctx, method, relations, options = {}) =>
@@ -45,9 +47,7 @@ const relationFetch = (ctx, method, relations, options = {}) =>
                         } else {
                             throw new TypeError(
                                 `Trying to call "${method}" on raw GraphVertex without Schema!\n` +
-                                    `Check whether you have defined Schema for "ogit/_type: ${
-                                        vertex['ogit/_type']
-                                    }"`,
+                                    `Check whether you have defined Schema for "ogit/_type: ${vertex['ogit/_type']}"`,
                             );
                         }
                     } else {
@@ -367,12 +367,7 @@ const mixinMethods = {
     create: (ctx, entity) => (data, options = {}) =>
         create(ctx, entity, data, options),
     connect: (ctx, entity) => (relation, source, target, options = {}) =>
-        connect(
-            ctx,
-            entity,
-            { relation, source, target },
-            options,
-        ),
+        connect(ctx, entity, { relation, source, target }, options),
     disconnect: (ctx, entity) => (relation, source, target, options = {}) =>
         disconnect(ctx, entity, { relation, source, target }, options),
     update: (ctx, entity) => (vertexId, appData, options = {}) =>

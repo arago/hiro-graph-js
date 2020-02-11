@@ -1,8 +1,9 @@
 /* eslint-env jest */
 
+import createMockClient from '@hiro-graph/client/lib/mock';
+
 import schema from '../__mocks__/schema';
 import Context from '../src/index';
-import createMockClient from '@hiro-graph/client/lib/mock';
 
 const client = createMockClient();
 const ctx = new Context(client, schema);

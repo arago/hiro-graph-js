@@ -1,5 +1,6 @@
-import createEntity, { $internal } from './entity';
 import { mapIfArray } from '../utils';
+
+import createEntity, { $internal } from './entity';
 
 const defaultOptions = {
     immutable: true,

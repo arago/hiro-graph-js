@@ -9,7 +9,6 @@ import { notFound, badRequest } from '@hiro-graph/client/lib/errors';
 import { lucene as parseLucene } from '@hiro-graph/client';
 
 import { decodeResults, filter, mapIfArray } from '../utils';
-
 import { createVertex, isVertex } from '../vertex/graph';
 
 // Structural helper
