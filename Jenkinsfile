@@ -1,7 +1,8 @@
 pipeline {
 	agent {
-        node {
+        docker {
             label 'slave-docker-7.7'
+            image 'node:12-alpine'
         }
     }
 
@@ -16,17 +17,22 @@ pipeline {
 			}
 		}
 
-    stage('Test') {
-            agent {
-                docker {  image 'node:12-alpine' }
-            }
-
-			options {
+        stage('Setup') {
+            options {
 				timeout(time: 1, unit: 'HOURS')
 			}
 
 			steps {
                 sh 'yarn'
+			}
+        }
+
+        stage('Test') {
+			options {
+				timeout(time: 1, unit: 'HOURS')
+			}
+
+			steps {
                 sh 'yarn test'
 			}
 		}
