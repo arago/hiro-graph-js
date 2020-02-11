@@ -33,7 +33,6 @@ pipeline {
 			}
 
 			steps {
-                sh 'ls -la && ls -la packages/*'
                 sh 'yarn test'
 			}
 		}
