@@ -23,7 +23,8 @@ pipeline {
 			}
 
 			steps {
-                sh 'mkdir -p /.yarn'
+                sh 'mkdir -p .yarn'
+                sh 'yarn config set cache-folder .yarn'
                 sh 'yarn install --frozen-lockfile'
 			}
         }
