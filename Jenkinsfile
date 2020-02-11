@@ -2,7 +2,6 @@ pipeline {
 	agent {
         node {
             label 'slave-docker-7.7'
-            image 'node:12-alpine'
         }
     }
 
@@ -18,6 +17,10 @@ pipeline {
 		}
 
     stage('Test') {
+            agent {
+                docker {  image 'node:12-alpine' }
+            }
+
 			options {
 				timeout(time: 1, unit: 'HOURS')
 			}
