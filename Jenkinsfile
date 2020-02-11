@@ -3,7 +3,6 @@ pipeline {
         docker {
             label 'slave-docker-7.7'
             image 'node:12'
-            args '-v yarn_cache:/.cache/yarn'
         }
     }
 
@@ -42,7 +41,6 @@ pipeline {
 
 	post {
         always {
-            sh 'rm -rf yarn_cache'
             deleteDir()
         }
     }
