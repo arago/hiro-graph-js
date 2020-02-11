@@ -227,9 +227,10 @@ const pluckVerticesSimple = (vertices, idShape) => {
     }
 
     if (isPlainObject(idShape)) {
-        // eslint-disable-next-line array-callback-return
         return Object.keys(idShape).reduce((final, key) => {
             final[key] = pluckVerticesSimple(vertices, idShape[key]);
+
+            return final;
         }, {});
     }
 
