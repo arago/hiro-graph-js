@@ -1,6 +1,7 @@
 /* eslint-env jest */
-import Client from '../src/client';
 import { mockFn } from 'isomorphic-fetch';
+
+import Client from '../src/client';
 import clientTestHelper from '../__mocks__/client-test-helper.js';
 
 const fakeTokenPromise = Promise.resolve('<token>');

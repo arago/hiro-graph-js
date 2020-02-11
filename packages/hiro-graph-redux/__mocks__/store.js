@@ -4,15 +4,16 @@
  *  Load our environment variables and configure the HIRO Graph pieces
  */
 import { combineReducers, createStore } from 'redux';
-
 import createMockClient from '@hiro-graph/client/lib/mock';
-import mappings, { createProfile, createAccount } from './mappings';
+
 import {
     createToken,
     graphReducer,
     createStoreEnhancer,
     implicitOauth,
 } from '../src/index';
+
+import mappings, { createProfile, createAccount } from './mappings';
 
 // but we need some globals that the implicit oauth uses.
 const noop = () => {};

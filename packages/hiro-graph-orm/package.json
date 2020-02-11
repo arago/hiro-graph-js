@@ -13,6 +13,7 @@
     "license": "MIT",
     "dependencies": {
         "@hiro-graph/client": "^7.3.1",
+        "js-yaml": "^3.13.1",
         "lodash.isplainobject": "^4.0.6"
     },
     "devDependencies": {

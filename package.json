@@ -1,4 +1,5 @@
 {
+    "name": "root",
     "private": true,
     "license": "MIT",
     "workspaces": {
@@ -12,14 +13,14 @@
         ]
     },
     "devDependencies": {
-        "@hiro-ui/eslint-config": "1.1.1",
-        "@hiro-ui/prettier-config": "1.0.1",
-        "husky": "^3.0.9",
-        "lerna": "^3.15.0",
-        "lint-staged": "^7.2.2"
+        "@hiro-ui/eslint-config": "1.4.1",
+        "@hiro-ui/prettier-config": "1.1.1",
+        "husky": "^4.2.1",
+        "lerna": "^3.20.2",
+        "lint-staged": "^10.0.7"
     },
     "scripts": {
-        "test": "lerna bootstrap --concurrency 1 && yarn lint && lerna run build && lerna run test",
+        "test": "yarn install --frozen-lockfile && yarn lint && lerna run build && lerna run test",
         "publish": "lerna publish",
         "format": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.js' --write",
         "lint-prettier": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.js' --list-different",
@@ -28,7 +29,10 @@
         "precommit": "yarn format"
     },
     "eslintConfig": {
-        "extends": "@hiro-ui"
+        "extends": "@hiro-ui",
+        "rules": {
+            "no-sequences": "off"
+        }
     },
     "prettier": "@hiro-ui/prettier-config",
     "lint-staged": {

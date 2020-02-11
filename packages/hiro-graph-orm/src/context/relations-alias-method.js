@@ -3,6 +3,7 @@
  */
 import { queryBuilder } from '../gremlin';
 import { mapPromiseIfArray } from '../utils';
+
 import { vertexize } from './graph';
 
 function createRelationMap(relations, keyFn = () => []) {

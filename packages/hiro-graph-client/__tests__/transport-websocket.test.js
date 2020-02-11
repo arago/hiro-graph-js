@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import { onNextSocket } from 'websocket'; // this is the mock!
+
 import WSTranport from '../src/transport-websocket';
 
 const fakeTokenPromise = Promise.resolve('<token>');

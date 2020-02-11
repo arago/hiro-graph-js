@@ -20,7 +20,6 @@ import { fixedToken } from './token';
 import EventStream from './eventstream';
 import subscriberFanout from './subscriber-fanout';
 import timer from './timer';
-
 import authServlet from './servlets/auth';
 import apiServlet from './servlets/api';
 

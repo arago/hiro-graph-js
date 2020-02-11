@@ -1,8 +1,9 @@
 /**
  *  Schema aware Gremlin wrapper.
  */
-import { gremlin } from '../context/graph';
 import { GremlinQueryBuilder, T } from '@hiro-graph/client';
+
+import { gremlin } from '../context/graph';
 
 export { T };
 

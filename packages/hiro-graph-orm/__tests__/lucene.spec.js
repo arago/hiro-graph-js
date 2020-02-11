@@ -2,8 +2,9 @@
 /**
  *  Testing the Lucene Query Generator
  */
-import schema from '../__mocks__/schema.js';
 import { lucene as parse, getPlaceholderKeyForIndex } from '@hiro-graph/client';
+
+import schema from '../__mocks__/schema.js';
 
 describe('Lucene Query Generator:', function() {
     const simple = schema.get('Simple');

@@ -1,5 +1,6 @@
 import { statSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+
 import { safeLoad } from 'js-yaml';
 
 import { $dangerouslyGetProps, $dangerouslyGetRelations } from './entity';

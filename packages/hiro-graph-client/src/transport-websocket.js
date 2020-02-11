@@ -1,8 +1,9 @@
 /**
  *  Websocket Transport for the GraphIT REST API.
  */
-import { create as createError, connectionClosedBeforeSend } from './errors';
 import { w3cwebsocket as WS } from 'websocket';
+
+import { create as createError, connectionClosedBeforeSend } from './errors';
 import timer from './timer';
 import { GRAPH_WS_API_BASE } from './api-version';
 

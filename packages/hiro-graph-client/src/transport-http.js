@@ -4,9 +4,9 @@
  *  But translates them to `fetch` methods.
  */
 import fetch from 'isomorphic-fetch';
+
 import { create as createError } from './errors';
 import { AUTH_API_BASE, GRAPH_API_BASE } from './api-version';
-
 import timer from './timer';
 
 const noop = () => {};
