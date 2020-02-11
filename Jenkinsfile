@@ -2,7 +2,7 @@ pipeline {
 	agent {
         docker {
             label 'slave-docker-7.7'
-            image 'node:12-alpine'
+            image 'node:12'
         }
     }
 
