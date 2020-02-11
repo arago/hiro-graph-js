@@ -23,7 +23,7 @@ pipeline {
 			}
 
 			steps {
-                sh 'yarn'
+                sh 'yarn install --frozen-lockfile'
 			}
         }
 
