@@ -512,19 +512,6 @@ interface BaseOptions {
   limit?: number;
 }
 
-interface HistoryResponse<T = any> {
-  action: string;
-  data: T;
-  identity: string;
-  meta: {
-    id: string;
-    nanotime: number;
-    timestamp: number;
-    version: number;
-    vid: string;
-  };
-}
-
 export default class Client {
   endpoint: string;
   token: Token;
@@ -596,6 +583,8 @@ export default class Client {
       from?: number;
       to?: number;
       limit?: number;
+      includeDeleted?: boolean;
+      with?: string[];
     },
   ) => Promise<TimeseriesResponse[]>;
 
@@ -608,8 +597,11 @@ export default class Client {
       to?: number;
       version?: number;
       type?: string;
+      listMeta?: boolean;
+      includeDeleted?: boolean;
+      vid?: string;
     },
-  ) => Promise<HistoryResponse<T>[]>;
+  ) => Promise<T[]>;
 
   addServlet(
     prefix: string,
