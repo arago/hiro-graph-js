@@ -588,31 +588,27 @@ export default class Client {
     /**
      *  Read timeseries values (only ogit/Timeseries vertices)
      */
-    streamts(timeseriesId, { from = false, to = false, limit = 50 } = {}) {
+    streamts(
+        timeseriesId,
+        opts = {
+            from: false,
+            to: false,
+            limit: 50,
+            includeDeleted: false,
+            with: [],
+        },
+    ) {
         const headers = {
             'ogit/_id': timeseriesId,
+            ...opts,
         };
         const body = {};
-
-        if (from !== false) {
-            body.from = from.toString();
-        }
-
-        if (to !== false) {
-            body.to = to.toString();
-        }
-
-        if (limit !== false) {
-            body.limit = limit.toString();
-        }
 
         return this.wrapTimedEvent(
             'streamts',
             {
                 id: timeseriesId,
-                from: from.toString(),
-                to: to.toString(),
-                limit: limit.toString(),
+                ...opts,
             },
             this.dedupedRequest({
                 type: 'streamts',
@@ -646,33 +642,40 @@ export default class Client {
             to = false,
             version = false,
             type = false,
+            listMeta = false,
+            includeDeleted = false,
+            vid = false,
         } = {},
     ) {
-        const headers = { 'ogit/_id': id };
+        const headers = { 'ogit/_id': id, listMeta, includeDeleted };
         const body = {};
 
         if (offset !== false) {
-            body.offset = offset;
+            headers.offset = offset;
         }
 
         if (limit !== false) {
-            body.limit = limit;
+            headers.limit = limit;
         }
 
         if (from !== false) {
-            body.from = from;
+            headers.from = from;
         }
 
         if (to !== false) {
-            body.to = to;
+            headers.to = to;
         }
 
         if (version !== false) {
-            body.version = version;
+            headers.version = version;
         }
 
         if (type !== false) {
-            body.type = type;
+            headers.type = type;
+        }
+
+        if (vid !== false) {
+            headers.vid = vid;
         }
 
         return this.wrapTimedEvent(

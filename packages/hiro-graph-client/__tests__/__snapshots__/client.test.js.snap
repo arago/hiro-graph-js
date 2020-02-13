@@ -94,14 +94,15 @@ Object {
 
 exports[`Client Requests should call history (with from + to + offset + limit) correctly 1`] = `
 Object {
-  "body": Object {
-    "from": 0,
-    "limit": 5,
-    "offset": 100,
-    "to": 1550597976759,
-  },
+  "body": Object {},
   "headers": Object {
+    "from": 0,
+    "includeDeleted": false,
+    "limit": 5,
+    "listMeta": false,
+    "offset": 100,
     "ogit/_id": "some-id",
+    "to": 1550597976759,
   },
   "type": "history",
 }
@@ -109,12 +110,13 @@ Object {
 
 exports[`Client Requests should call history (with from + to) correctly 1`] = `
 Object {
-  "body": Object {
-    "from": 0,
-    "to": 1550597976759,
-  },
+  "body": Object {},
   "headers": Object {
+    "from": 0,
+    "includeDeleted": false,
+    "listMeta": false,
     "ogit/_id": "some-id",
+    "to": 1550597976759,
   },
   "type": "history",
 }
@@ -122,10 +124,11 @@ Object {
 
 exports[`Client Requests should call history (with from) correctly 1`] = `
 Object {
-  "body": Object {
-    "from": 0,
-  },
+  "body": Object {},
   "headers": Object {
+    "from": 0,
+    "includeDeleted": false,
+    "listMeta": false,
     "ogit/_id": "some-id",
   },
   "type": "history",
@@ -134,10 +137,11 @@ Object {
 
 exports[`Client Requests should call history (with limit) correctly 1`] = `
 Object {
-  "body": Object {
-    "limit": 500,
-  },
+  "body": Object {},
   "headers": Object {
+    "includeDeleted": false,
+    "limit": 500,
+    "listMeta": false,
     "ogit/_id": "some-id",
   },
   "type": "history",
@@ -146,11 +150,12 @@ Object {
 
 exports[`Client Requests should call history (with offset + limit) correctly 1`] = `
 Object {
-  "body": Object {
-    "limit": 5,
-    "offset": 100,
-  },
+  "body": Object {},
   "headers": Object {
+    "includeDeleted": false,
+    "limit": 5,
+    "listMeta": false,
+    "offset": 100,
     "ogit/_id": "some-id",
   },
   "type": "history",
@@ -159,10 +164,11 @@ Object {
 
 exports[`Client Requests should call history (with offset) correctly 1`] = `
 Object {
-  "body": Object {
-    "offset": 10,
-  },
+  "body": Object {},
   "headers": Object {
+    "includeDeleted": false,
+    "listMeta": false,
+    "offset": 10,
     "ogit/_id": "some-id",
   },
   "type": "history",
@@ -171,11 +177,12 @@ Object {
 
 exports[`Client Requests should call history (with to) correctly 1`] = `
 Object {
-  "body": Object {
-    "to": 1550597976759,
-  },
+  "body": Object {},
   "headers": Object {
+    "includeDeleted": false,
+    "listMeta": false,
     "ogit/_id": "some-id",
+    "to": 1550597976759,
   },
   "type": "history",
 }
@@ -183,12 +190,13 @@ Object {
 
 exports[`Client Requests should call history (with version) correctly 1`] = `
 Object {
-  "body": Object {
-    "limit": 500,
-    "version": 123,
-  },
+  "body": Object {},
   "headers": Object {
+    "includeDeleted": false,
+    "limit": 500,
+    "listMeta": false,
     "ogit/_id": "some-id",
+    "version": 123,
   },
   "type": "history",
 }
@@ -198,6 +206,8 @@ exports[`Client Requests should call history correctly 1`] = `
 Object {
   "body": Object {},
   "headers": Object {
+    "includeDeleted": false,
+    "listMeta": false,
     "ogit/_id": "some-id",
   },
   "type": "history",
@@ -356,11 +366,9 @@ Object {
 
 exports[`Client Requests should call streamts (from only) correctly 1`] = `
 Object {
-  "body": Object {
-    "from": "1399999999999",
-    "limit": "50",
-  },
+  "body": Object {},
   "headers": Object {
+    "from": 1399999999999,
     "ogit/_id": "ts-id",
   },
   "type": "streamts",
@@ -369,13 +377,11 @@ Object {
 
 exports[`Client Requests should call streamts (to + from) correctly 1`] = `
 Object {
-  "body": Object {
-    "from": "1399999999999",
-    "limit": "50",
-    "to": "1400000000001",
-  },
+  "body": Object {},
   "headers": Object {
+    "from": 1399999999999,
     "ogit/_id": "ts-id",
+    "to": 1400000000001,
   },
   "type": "streamts",
 }
@@ -383,12 +389,10 @@ Object {
 
 exports[`Client Requests should call streamts (to only) correctly 1`] = `
 Object {
-  "body": Object {
-    "limit": "50",
-    "to": "1400000000001",
-  },
+  "body": Object {},
   "headers": Object {
     "ogit/_id": "ts-id",
+    "to": 1400000000001,
   },
   "type": "streamts",
 }
@@ -396,11 +400,14 @@ Object {
 
 exports[`Client Requests should call streamts correctly 1`] = `
 Object {
-  "body": Object {
-    "limit": "50",
-  },
+  "body": Object {},
   "headers": Object {
+    "from": false,
+    "includeDeleted": false,
+    "limit": 50,
     "ogit/_id": "ts-id",
+    "to": false,
+    "with": Array [],
   },
   "type": "streamts",
 }
