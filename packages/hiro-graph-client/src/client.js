@@ -675,7 +675,7 @@ export default class Client {
         }
 
         if (vid !== false) {
-            headers.vid = type;
+            headers.vid = vid;
         }
 
         return this.wrapTimedEvent(
