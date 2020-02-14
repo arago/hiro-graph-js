@@ -16,11 +16,13 @@
         "@hiro-ui/eslint-config": "1.4.1",
         "@hiro-ui/prettier-config": "1.1.1",
         "husky": "^4.2.1",
+        "jest-junit": "^10.0.0",
         "lerna": "^3.20.2",
         "lint-staged": "^10.0.7"
     },
     "scripts": {
-        "test": "yarn install --frozen-lockfile && yarn lint && lerna run build && lerna run test",
+        "test": "yarn install && yarn lint && lerna run build && lerna run test",
+        "test:ci": "yarn install --frozen-lockfile && yarn lint && lerna run build && lerna run test:ci",
         "publish": "lerna publish",
         "format": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.js' --write",
         "lint-prettier": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.js' --list-different",

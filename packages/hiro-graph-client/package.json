@@ -8,7 +8,8 @@
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
         "prepublish": "yarn test && yarn build",
-        "test": "jest --silent"
+        "test": "jest --silent",
+        "test:ci": "jest --silent --ci --reporters=default --reporters=jest-junit"
     },
     "license": "MIT",
     "dependencies": {
@@ -57,6 +58,11 @@
         "transform": {
             "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
         }
+    },
+    "jest-junit": {
+        "suiteName": "@hiro-graph/client",
+        "outputDirectory": "../../reports",
+        "outputName": "hiro-graph-client.xml"
     },
     "publishConfig": {
         "access": "public"

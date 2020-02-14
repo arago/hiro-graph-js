@@ -33,13 +33,14 @@ pipeline {
 			}
 
 			steps {
-                sh 'yarn test'
+                sh 'yarn test:ci'
 			}
 		}
 	}
 
 	post {
         always {
+			junit 'build/reports/**/*.xml'
             deleteDir()
         }
     }

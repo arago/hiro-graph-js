@@ -8,7 +8,8 @@
     "scripts": {
         "build": "TS_NODE_FILES=true ts-node ./src/index",
         "prepublish": "yarn test && yarn build",
-        "test": "echo no tests"
+        "test": "echo no tests",
+        "test:ci": "echo no tests"
     },
     "dependencies": {
         "@hiro-graph/orm": "^7.3.4"
