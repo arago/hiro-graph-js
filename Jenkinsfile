@@ -40,7 +40,7 @@ pipeline {
 
 	post {
         always {
-			junit 'build/reports/**/*.xml'
+			junit 'reports/*.xml'
             deleteDir()
         }
     }
