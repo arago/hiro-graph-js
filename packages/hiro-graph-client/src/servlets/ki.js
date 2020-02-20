@@ -18,7 +18,9 @@ export default function kiServletFactory(fetch, options) {
                         valid: response.code === 200,
                         response: {
                             ...response,
-                            error: response.code !== 200 && (response.error.message || response.error),
+                            error:
+                                response.code !== 200 &&
+                                (response.error.message || response.error),
                         },
                     };
                 })
