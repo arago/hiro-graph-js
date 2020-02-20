@@ -16,13 +16,18 @@ export default function kiServletFactory(fetch, options) {
                 .then((response) => {
                     return {
                         valid: response.code === 200,
-                        response,
+                        response: {
+                            ...response,
+                            error: response.code !== 200 && (response.error.message || response.error),
+                        },
                     };
                 })
-                .catch((error) => {
+                .catch((responseError) => {
                     return {
                         valid: false,
-                        response: error.message,
+                        response: {
+                            error: responseError.toString(),
+                        },
                     };
                 });
         },
