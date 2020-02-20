@@ -14,15 +14,24 @@ export default function kiServletFactory(fetch, options) {
             })
                 .then((response) => response.json())
                 .then((response) => {
+                    const valid = response.code === 200;
+
                     return {
-                        valid: response.code === 200,
-                        response,
+                        valid,
+                        response: {
+                            ...response,
+                            error:
+                                !valid &&
+                                (response.error.message || response.error),
+                        },
                     };
                 })
-                .catch((error) => {
+                .catch((responseError) => {
                     return {
                         valid: false,
-                        response: error.message,
+                        response: {
+                            error: responseError.toString(),
+                        },
                     };
                 });
         },
