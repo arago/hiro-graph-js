@@ -14,12 +14,14 @@ export default function kiServletFactory(fetch, options) {
             })
                 .then((response) => response.json())
                 .then((response) => {
+                    const valid = response.code === 200;
+
                     return {
-                        valid: response.code === 200,
+                        valid,
                         response: {
                             ...response,
                             error:
-                                response.code !== 200 &&
+                                !valid &&
                                 (response.error.message || response.error),
                         },
                     };
