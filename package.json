@@ -13,7 +13,7 @@
         ]
     },
     "devDependencies": {
-        "@hiro-ui/eslint-config": "1.4.1",
+        "@hiro-ui/eslint-config": "1.5.0",
         "@hiro-ui/prettier-config": "1.1.1",
         "husky": "^4.2.1",
         "jest-junit": "^10.0.0",
