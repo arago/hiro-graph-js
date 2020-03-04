@@ -5,10 +5,9 @@ import appsServletFactory from './servlets/app';
 import kiServletFactory from './servlets/ki';
 import variablesServletFactory from './servlets/variables';
 import lucene, { getPlaceholderKeyForIndex } from './lucene';
-import gremlin, { GremlinQueryBuilder, T } from './gremlin';
 
 export default Client;
-
+export * from './gremlin';
 export {
     Token,
     cannotGetToken,
@@ -19,8 +18,4 @@ export {
     // Lucene
     lucene,
     getPlaceholderKeyForIndex,
-    // Gremlin
-    gremlin,
-    GremlinQueryBuilder,
-    T, // support legacy ORM
 };
