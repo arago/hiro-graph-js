@@ -19,11 +19,8 @@ export type GremlinTransform = Record<string, GremlinBranch> | GremlinBranch[];
 
 /**
  *  Create a new query builder
- *
- *  @param {string|GremlinQueryBuilder} initialQuery - a starting point query
- *  @return {GremlinQueryBuilder} - a new query builder
  */
-export default function queryBuilder(initialQuery: GremlinQuery) {
+export function gremlin(initialQuery: GremlinQuery) {
   return new GremlinQueryBuilder(initialQuery);
 }
 
