@@ -18,7 +18,7 @@ const OP_CAN = '';
  *  @return {{ querystring: string, placeholders: object }} - the return value contains the string to be used
  *          as the query body and the placeholders to go with it (if any)
  */
-export default function createLuceneQuerystring(
+export function lucene(
     query = {},
     entity = nativeEntity, // the nativeEntity does no mapping of prop names, or encoding of values
 ) {
