@@ -4,10 +4,10 @@ import * as Errors from './errors';
 import appsServletFactory from './servlets/app';
 import kiServletFactory from './servlets/ki';
 import variablesServletFactory from './servlets/variables';
-import lucene, { getPlaceholderKeyForIndex } from './lucene';
 
 export default Client;
 export * from './gremlin';
+export * from './lucene';
 export {
     Token,
     cannotGetToken,
@@ -15,7 +15,4 @@ export {
     appsServletFactory,
     kiServletFactory,
     variablesServletFactory,
-    // Lucene
-    lucene,
-    getPlaceholderKeyForIndex,
 };
