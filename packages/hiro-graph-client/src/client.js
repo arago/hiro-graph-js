@@ -317,11 +317,17 @@ export default class Client {
             return this.me(reqOptions);
         }
 
+        const headers = { 'ogit/_id': id };
+
+        if (reqOptions.listMeta) {
+            headers.listMeta = true;
+        }
+
         return this.wrapTimedEvent(
             'get',
             { id },
             this.dedupedRequest(
-                { type: 'get', headers: { 'ogit/_id': id } },
+                { type: 'get', headers },
                 reqOptions,
             ),
         );
