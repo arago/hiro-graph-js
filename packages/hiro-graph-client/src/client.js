@@ -326,10 +326,7 @@ export default class Client {
         return this.wrapTimedEvent(
             'get',
             { id },
-            this.dedupedRequest(
-                { type: 'get', headers },
-                reqOptions,
-            ),
+            this.dedupedRequest({ type: 'get', headers }, reqOptions),
         );
     }
 
