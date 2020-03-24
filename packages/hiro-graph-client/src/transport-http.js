@@ -145,7 +145,10 @@ function createFetchOptions({ type, headers = {}, body = {} } = {}) {
             url = '/info';
             break;
         case 'get':
-            url = '/' + encodeURIComponent(headers['ogit/_id']);
+            url =
+                '/' +
+                encodeURIComponent(headers['ogit/_id']) +
+                qsKeys(headers, 'listMeta');
             break;
         case 'create':
             url =

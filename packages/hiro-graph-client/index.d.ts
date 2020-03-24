@@ -375,6 +375,7 @@ export default class Client {
       to?: number;
       version?: number;
       type?: string;
+      listMeta?: boolean;
     },
   ) => Promise<NodeHistory<T>[]>;
 
@@ -392,7 +393,12 @@ export default class Client {
     reqOptions?: ReqOptions,
   ): Promise<T>;
 
-  get<T = OGIT.SafeNode>(id: string): Promise<T>;
+  get<T = OGIT.SafeNode>(
+    id: string,
+    options?: {
+      listMeta?: boolean;
+    },
+  ): Promise<T>;
 }
 
 export type ClientWithServlets<
