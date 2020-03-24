@@ -8,6 +8,7 @@ import variablesServletFactory from './servlets/variables';
 export default Client;
 export * from './gremlin';
 export * from './lucene';
+export * from './ogit';
 export {
     Token,
     cannotGetToken,
