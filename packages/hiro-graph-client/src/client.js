@@ -5,9 +5,7 @@
  *  Event streams require WebSockets so those will not work witout websocket support.
  *  The connection requires a `Token`.
  */
-import WebsocketTransport, {
-    webSocketsAvailable,
-} from './transport-websocket-pool';
+import WebsocketTransport, { webSocketsAvailable } from './transport-websocket';
 import HttpTransport from './transport-http';
 import {
     isUnauthorized,
