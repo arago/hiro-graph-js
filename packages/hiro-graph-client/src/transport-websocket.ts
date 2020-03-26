@@ -3,15 +3,11 @@
  */
 import { w3cwebsocket as WS } from 'websocket';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
-import { map, filter, catchError, toArray } from 'rxjs/operators';
-import { Subject, of, Observable, Observer } from 'rxjs';
+import { map, catchError, toArray, mergeMap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
 import uid from 'uid';
 
-import { create as createError, connectionClosedBeforeSend } from './errors';
-import timer from './timer';
 import { GRAPH_WS_API_BASE } from './api-version';
-
-const noop = () => {};
 
 export const webSocketsAvailable = WS !== undefined && WS !== null;
 
@@ -57,7 +53,9 @@ export interface WebSocketResponse<T = any> {
 type Token = import('./token').default; // @todo - Replce with import type after updating eslint
 type RequestOptions = import('node-fetch').RequestInit;
 
-export interface WebSocketRequestOptions<T> extends RequestOptions {}
+export interface WebSocketRequestOptions<T> extends RequestOptions {
+  asStream?: boolean;
+}
 
 export default class WebSocketTransport {
   private endpoint: string;
@@ -73,88 +71,78 @@ export default class WebSocketTransport {
   /**
    *  Make a request. Most of the work is done by the connect function.
    */
-  async request<T = any>(
+  request<T = any>(
     token: Token,
     { type, headers = {}, body = {} }: WebSocketRequest,
     reqOptions: WebSocketRequestOptions<T> = {},
   ) {
     //the connect call ensures the websocket is connected before continuing.
-
-    const _token = await token.get();
-    const connection = await this.connect(token);
     const id = uid();
 
-    const response$: Observable<WebSocketResponse<
-      T
-    >> = (connection as WebSocketSubject<WebSocketResponse<T>>)
-      .multiplex(
-        () => ({
-          _TOKEN: _token,
-          id,
-          type,
-          headers: {
-            ...headers,
-            ...(reqOptions.headers || {}),
+    const response$ = new Observable<T>((subscriber) => {
+      of(token)
+        .pipe(
+          mergeMap((t) => t.get() as Promise<string>),
+          map(
+            (t) =>
+              [t, this.connect(t)] as [
+                string,
+                WebSocketSubject<WebSocketResponse<T>>,
+              ],
+          ),
+          mergeMap(([_TOKEN, connection]) =>
+            connection
+              .multiplex(
+                () => ({
+                  _TOKEN,
+                  id,
+                  type,
+                  headers: {
+                    ...headers,
+                    ...(reqOptions.headers || {}),
+                  },
+                  body,
+                }),
+                () => ({}),
+                (message) => message.id === id || message.error,
+              )
+              .pipe(
+                catchError((err) =>
+                  of({ error: { message: err.reason, code: err.code } }),
+                ),
+                map((res: WebSocketResponse<T>) => {
+                  if (res.error) {
+                    throw res.error;
+                  }
+
+                  return res;
+                }),
+              ),
+          ),
+        )
+        .subscribe({
+          next: (res) => {
+            if (res.body) {
+              subscriber.next(res.body);
+            }
+
+            if (!res.more) {
+              subscriber.complete();
+            }
           },
-          body,
-        }),
-        () => ({}),
-        (message) => message.id === id || message.error,
-      )
-      .pipe(
-        catchError((err) =>
-          of({ error: { message: err.reason, code: err.code } }),
-        ),
-        map((res) => {
-          if (res.error) {
-            throw res.error;
-          }
+          error: (err) => {
+            if (err.code === 401) {
+              token.invalidate();
+            }
 
-          return res;
-        }),
-      );
+            subscriber.error(err);
+          },
+        });
+    });
 
-    // connection
-    //   .pipe(
-    //     catchError((err) =>
-    //       of({ error: { message: err.reason, code: err.code } }),
-    //     ),
-    //     map((res) => {
-    //       if (res.error) {
-    //         throw res.error;
-    //       }
-
-    //       return res;
-    //     }),
-    //     filter((res) => res.id === id),
-    //   )
-    //   .subscribe({
-    //     next: (res) => {
-    //       subject$.next(res.body);
-
-    //       if (!res.more) {
-    //         subject$.complete();
-    //       }
-    //     },
-    //     error: (err) => {
-    //       if (err.code === 401) {
-    //         token.invalidate();
-    //       }
-
-    //       subject$.error(err);
-    //     },
-    //   });
-
-    // connection.next({
-    //   _TOKEN: _token,
-    //   id,
-    //   type,
-    //   headers: {
-    //     ...headers,
-    //     ...(reqOptions.headers || {}),
-    //   },
-    //   body,
-    // });
+    if (reqOptions.asStream) {
+      return response$;
+    }
 
     return response$.pipe(toArray()).toPromise();
   }
@@ -162,14 +150,12 @@ export default class WebSocketTransport {
   /**
    *  Return a promise for the connected websocket.
    */
-  async connect(token: Token) {
+  connect(token: string) {
     if (!this.connection) {
-      const _token = await token.get();
-
       this.connection = webSocket({
         url: this.endpoint,
         WebSocketCtor: WS as any,
-        protocol: [GRAPH_API_PROTOCOL, `token-${_token}`],
+        protocol: [GRAPH_API_PROTOCOL, `token-${token}`],
       });
     }
 
