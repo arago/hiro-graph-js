@@ -161,42 +161,6 @@ export default class Client {
         );
     }
 
-    // Deduplicates a request, but the request must be an Array returning one.
-    dedupedRequest(
-        { type, headers = {}, body = {} } = {},
-        reqOptions = {},
-        retries = 1,
-    ) {
-        try {
-            const requestKey = JSON.stringify({ type, headers, body });
-
-            if (requestKey in this._dedup) {
-                this._dedup[requestKey]._calls++;
-
-                return this._dedup[requestKey].then(dereference);
-            }
-
-            const cleanUp = passthru(() => {
-                const calls = this._dedup[requestKey]._calls;
-
-                delete this._dedup[requestKey];
-            });
-            const promise = (this._dedup[requestKey] = this.request(
-                { type, headers, body },
-                reqOptions,
-                retries,
-            )
-                .then(...cleanUp)
-                .then((res) => (promise._calls > 1 ? dereference(res) : res)));
-
-            promise._calls = 1;
-
-            return promise;
-        } catch (e) {
-            return Promise.reject(e);
-        }
-    }
-
     getToken() {
         return this.token;
     }
@@ -211,7 +175,7 @@ export default class Client {
      *  Get a single item by ID
      */
     get(id, reqOptions = {}) {
-        return this.dedupedRequest(
+        return this.request(
             { type: 'get', headers: { 'ogit/_id': id } },
             reqOptions,
         );
@@ -221,7 +185,7 @@ export default class Client {
      *  Get the node for the owner of this token
      */
     me(reqOptions = {}) {
-        return this.dedupedRequest(
+        return this.request(
             {
                 type: 'getme',
                 body: {},
@@ -341,7 +305,7 @@ export default class Client {
                 : String(fields);
         }
 
-        return this.dedupedRequest(
+        return this.request(
             {
                 type: 'query',
                 headers: { type: 'vertices' },
@@ -352,7 +316,7 @@ export default class Client {
     }
 
     ids(list, reqOptions = {}) {
-        return this.dedupedRequest(
+        return this.request(
             {
                 type: 'query',
                 headers: { type: 'ids' },
@@ -366,7 +330,7 @@ export default class Client {
      *  This is a gremlin query
      */
     gremlin(root, query, reqOptions = {}) {
-        return this.dedupedRequest(
+        return this.request(
             {
                 type: 'query',
                 headers: { type: 'gremlin' },
@@ -380,27 +344,25 @@ export default class Client {
      *  Connect two Nodes with an edge of `type`
      */
     connect(type, inId, outId, reqOptions = {}) {
-        returnthis
-            .request(
-                {
-                    type: 'connect',
-                    headers: { 'ogit/_type': type },
-                    body: { in: inId, out: outId },
-                },
-                reqOptions,
-            )
-            .then(
-                () => {}, //return nothing.
-                (err) => {
-                    //Conflict is OK here, just means that the edge was already connected.
-                    if (isConflict(err)) {
-                        return; //return nothing.
-                    }
+        return this.request(
+            {
+                type: 'connect',
+                headers: { 'ogit/_type': type },
+                body: { in: inId, out: outId },
+            },
+            reqOptions,
+        ).then(
+            () => {}, //return nothing.
+            (err) => {
+                //Conflict is OK here, just means that the edge was already connected.
+                if (isConflict(err)) {
+                    return; //return nothing.
+                }
 
-                    //real error.
-                    throw err;
-                },
-            );
+                //real error.
+                throw err;
+            },
+        );
     }
 
     /**
@@ -461,7 +423,7 @@ export default class Client {
         };
         const body = {};
 
-        return this.dedupedRequest({
+        return this.request({
             type: 'streamts',
             headers,
             body,
@@ -528,7 +490,7 @@ export default class Client {
             headers.vid = vid;
         }
 
-        return this.dedupedRequest({
+        return this.request({
             type: 'history',
             headers: headers,
             body,
