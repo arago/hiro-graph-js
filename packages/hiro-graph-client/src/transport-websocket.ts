@@ -79,6 +79,8 @@ export default class WebSocketTransport {
     //the connect call ensures the websocket is connected before continuing.
     const id = uid();
 
+    // @todo send requests to a pipe for deduping before triggering request?
+
     const response$ = new Observable<T>((subscriber) => {
       of(token)
         .pipe(
