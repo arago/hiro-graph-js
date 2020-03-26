@@ -12,12 +12,9 @@ import {
     isTransactionFail,
     isConflict,
     isNotFound,
-    connectionClosedBeforeSend,
 } from './errors';
 import { fixedToken } from './token';
 import EventStream from './eventstream';
-import subscriberFanout from './subscriber-fanout';
-import timer from './timer';
 import authServlet from './servlets/auth';
 import apiServlet from './servlets/api';
 
@@ -83,8 +80,6 @@ export default class Client {
         //keep this so we can duplicate them
         this._servlets = [];
 
-        this._pubsub = subscriberFanout();
-
         // Auth API
         this.addServlet(
             'auth',
@@ -128,16 +123,7 @@ export default class Client {
         return new EventStream(
             { endpoint: this.endpoint, token: this.token },
             { groupId, offset, filters: filtersArray },
-            this._pubsub.fanout,
         );
-    }
-
-    /**
-     *  Could be useful for more than just logging, all events emitted
-     *  have { name: "<event name>", data: <any> }
-     */
-    introspect(fn) {
-        return this._pubsub.subscribe(fn);
     }
 
     /**
@@ -168,68 +154,11 @@ export default class Client {
         reqOptions = {},
         retries = 1,
     ) {
-        this._pubsub.fanout({
-            name: 'client:pre-request',
-            data: { type, headers, body },
-        });
-
-        return this.transport
-            .request(
-                this.token,
-                { type, headers, body },
-                Object.assign({ debug: this._debug_requests }, reqOptions, {
-                    emit: this._pubsub.fanout,
-                }),
-            )
-            .catch((err) => {
-                this._pubsub.fanout({ name: 'client:error', data: err });
-
-                //these are the special cases.
-                //regular errors end up with code === undefined, so not retryable.
-                switch (true) {
-                    case err === connectionClosedBeforeSend:
-                        //this means unconditionally retry
-                        return this.request(
-                            { type, headers, body },
-                            reqOptions,
-                            retries,
-                        );
-                    case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
-                        this.token.invalidate();
-                        this._pubsub.fanout({
-                            name: 'client:unauthorized',
-                            data: null,
-                        });
-                        err.isRetryable = true;
-                        break;
-                    case isTransactionFail(err): //error persisting transaction. retryable.
-                        err.isRetryable = true;
-                        break;
-                    //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
-                    default:
-                        if ('isRetryable' in err === false) {
-                            err.isRetryable = false;
-                        }
-
-                        break;
-                }
-
-                //a chance to retry
-                if (err.isRetryable && retries > 0) {
-                    this._pubsub.fanout({
-                        name: 'client:retry',
-                        data: { type, headers, body },
-                    });
-
-                    return this.request(
-                        { type, headers, body },
-                        reqOptions,
-                        retries - 1,
-                    );
-                }
-
-                throw err;
-            });
+        return this.transport.request(
+            this.token,
+            { type, headers, body },
+            reqOptions,
+        );
     }
 
     // Deduplicates a request, but the request must be an Array returning one.
@@ -241,16 +170,6 @@ export default class Client {
         try {
             const requestKey = JSON.stringify({ type, headers, body });
 
-            this._pubsub.fanout({
-                name: 'client:deduping',
-                data: {
-                    key: requestKey,
-                    calls: this._dedup[requestKey]
-                        ? this._dedup[requestKey]._calls
-                        : 0,
-                },
-            });
-
             if (requestKey in this._dedup) {
                 this._dedup[requestKey]._calls++;
 
@@ -260,10 +179,6 @@ export default class Client {
             const cleanUp = passthru(() => {
                 const calls = this._dedup[requestKey]._calls;
 
-                this._pubsub.fanout({
-                    name: 'client:deduped',
-                    data: { key: requestKey, calls },
-                });
                 delete this._dedup[requestKey];
             });
             const promise = (this._dedup[requestKey] = this.request(
@@ -278,31 +193,12 @@ export default class Client {
 
             return promise;
         } catch (e) {
-            this._pubsub.fanout({
-                name: 'client:dedup-error',
-                data: e,
-            });
-
             return Promise.reject(e);
         }
     }
 
     getToken() {
         return this.token;
-    }
-
-    // helper to get debug info...
-    wrapTimedEvent(event, args, promise) {
-        const t = timer();
-
-        return promise.then(
-            ...passthru(() =>
-                this._pubsub.fanout({
-                    name: 'client:' + event,
-                    data: { time: t(), args },
-                }),
-            ),
-        );
     }
 
     /**
@@ -315,13 +211,9 @@ export default class Client {
      *  Get a single item by ID
      */
     get(id, reqOptions = {}) {
-        return this.wrapTimedEvent(
-            'get',
-            { id },
-            this.dedupedRequest(
-                { type: 'get', headers: { 'ogit/_id': id } },
-                reqOptions,
-            ),
+        return this.dedupedRequest(
+            { type: 'get', headers: { 'ogit/_id': id } },
+            reqOptions,
         );
     }
 
@@ -329,17 +221,13 @@ export default class Client {
      *  Get the node for the owner of this token
      */
     me(reqOptions = {}) {
-        return this.wrapTimedEvent(
-            'getme',
-            {},
-            this.dedupedRequest(
-                {
-                    type: 'getme',
-                    body: {},
-                    headers: { profile: true, 'me-type': 'account' },
-                },
-                reqOptions,
-            ),
+        return this.dedupedRequest(
+            {
+                type: 'getme',
+                body: {},
+                headers: { profile: true, 'me-type': 'account' },
+            },
+            reqOptions,
         );
     }
 
@@ -353,10 +241,9 @@ export default class Client {
             headers.waitForIndex = 'true';
         }
 
-        return this.wrapTimedEvent(
-            'create',
-            { data },
-            this.request({ type: 'create', headers, body: data }, reqOptions),
+        return this.request(
+            { type: 'create', headers, body: data },
+            reqOptions,
         );
     }
 
@@ -370,10 +257,9 @@ export default class Client {
             headers.waitForIndex = 'true';
         }
 
-        return this.wrapTimedEvent(
-            'update',
-            { id, data },
-            this.request({ type: 'update', headers, body: data }, reqOptions),
+        return this.request(
+            { type: 'update', headers, body: data },
+            reqOptions,
         );
     }
 
@@ -397,10 +283,9 @@ export default class Client {
             headers.waitForIndex = 'true';
         }
 
-        return this.wrapTimedEvent(
-            'replace',
-            { id, data },
-            this.request({ type: 'replace', headers, body: data }, reqOptions),
+        return his.request(
+            { type: 'replace', headers, body: data },
+            reqOptions,
         );
     }
 
@@ -417,11 +302,7 @@ export default class Client {
             headers.waitForIndex = 'true';
         }
 
-        return this.wrapTimedEvent(
-            'delete',
-            { id },
-            this.request({ type: 'delete', headers }, reqOptions),
-        );
+        return this.request({ type: 'delete', headers }, reqOptions);
     }
 
     /**
@@ -460,32 +341,24 @@ export default class Client {
                 : String(fields);
         }
 
-        return this.wrapTimedEvent(
-            'lucene',
-            body,
-            this.dedupedRequest(
-                {
-                    type: 'query',
-                    headers: { type: 'vertices' },
-                    body,
-                },
-                reqOptions,
-            ),
+        return this.dedupedRequest(
+            {
+                type: 'query',
+                headers: { type: 'vertices' },
+                body,
+            },
+            reqOptions,
         );
     }
 
     ids(list, reqOptions = {}) {
-        return this.wrapTimedEvent(
-            'ids',
-            { ids: list },
-            this.dedupedRequest(
-                {
-                    type: 'query',
-                    headers: { type: 'ids' },
-                    body: { query: list.join(',') }, // yes, it has to be a comma-seperated string
-                },
-                reqOptions,
-            ),
+        return this.dedupedRequest(
+            {
+                type: 'query',
+                headers: { type: 'ids' },
+                body: { query: list.join(',') }, // yes, it has to be a comma-seperated string
+            },
+            reqOptions,
         );
     }
 
@@ -493,17 +366,13 @@ export default class Client {
      *  This is a gremlin query
      */
     gremlin(root, query, reqOptions = {}) {
-        return this.wrapTimedEvent(
-            'gremlin',
-            { root, query: '' + query },
-            this.dedupedRequest(
-                {
-                    type: 'query',
-                    headers: { type: 'gremlin' },
-                    body: { root, query },
-                },
-                reqOptions,
-            ),
+        return this.dedupedRequest(
+            {
+                type: 'query',
+                headers: { type: 'gremlin' },
+                body: { root, query },
+            },
+            reqOptions,
         );
     }
 
@@ -511,17 +380,16 @@ export default class Client {
      *  Connect two Nodes with an edge of `type`
      */
     connect(type, inId, outId, reqOptions = {}) {
-        return this.wrapTimedEvent(
-            'connect',
-            { verb: type, in: inId, out: outId },
-            this.request(
+        returnthis
+            .request(
                 {
                     type: 'connect',
                     headers: { 'ogit/_type': type },
                     body: { in: inId, out: outId },
                 },
                 reqOptions,
-            ).then(
+            )
+            .then(
                 () => {}, //return nothing.
                 (err) => {
                     //Conflict is OK here, just means that the edge was already connected.
@@ -532,29 +400,24 @@ export default class Client {
                     //real error.
                     throw err;
                 },
-            ),
-        );
+            );
     }
 
     /**
      *  Disconnect two nodes, convenience for delete, generates the edge id for you.
      */
     disconnect(type, inId, outId, reqOptions = {}) {
-        return this.wrapTimedEvent(
-            'disconnect',
-            { verb: type, in: inId, out: outId },
-            this.delete(`${outId}$$${type}$$${inId}`, reqOptions).then(
-                () => {}, //return nothing.
-                (err) => {
-                    //Not Found or Conflict is OK here, just means that the edge was already deleted/didn't ever exist
-                    if (isNotFound(err) || isConflict(err)) {
-                        return; //return nothing.
-                    }
+        return this.delete(`${outId}$$${type}$$${inId}`, reqOptions).then(
+            () => {}, //return nothing.
+            (err) => {
+                //Not Found or Conflict is OK here, just means that the edge was already deleted/didn't ever exist
+                if (isNotFound(err) || isConflict(err)) {
+                    return; //return nothing.
+                }
 
-                    //real error.
-                    throw err;
-                },
-            ),
+                //real error.
+                throw err;
+            },
         );
     }
 
@@ -570,17 +433,13 @@ export default class Client {
             items = [values];
         }
 
-        return this.wrapTimedEvent(
-            'writets',
-            { id: timeseriesId, items },
-            this.request({
-                type: 'writets',
-                headers: {
-                    'ogit/_id': timeseriesId,
-                },
-                body: { items },
-            }),
-        );
+        return this.request({
+            type: 'writets',
+            headers: {
+                'ogit/_id': timeseriesId,
+            },
+            body: { items },
+        });
     }
 
     /**
@@ -602,18 +461,11 @@ export default class Client {
         };
         const body = {};
 
-        return this.wrapTimedEvent(
-            'streamts',
-            {
-                id: timeseriesId,
-                ...opts,
-            },
-            this.dedupedRequest({
-                type: 'streamts',
-                headers,
-                body,
-            }),
-        );
+        return this.dedupedRequest({
+            type: 'streamts',
+            headers,
+            body,
+        });
     }
 
     /**
@@ -676,15 +528,11 @@ export default class Client {
             headers.vid = vid;
         }
 
-        return this.wrapTimedEvent(
-            'history',
-            { id, ...body },
-            this.dedupedRequest({
-                type: 'history',
-                headers: headers,
-                body,
-            }),
-        );
+        return this.dedupedRequest({
+            type: 'history',
+            headers: headers,
+            body,
+        });
     }
 
     /**
@@ -729,37 +577,33 @@ export default class Client {
 
                 const callArgs = [...legacyArgs, ...args];
 
-                return this.wrapTimedEvent(
-                    `servlet-${prefix}-${method}`,
-                    { args },
-                    servletMethod(...callArgs).catch((err) => {
-                        //these are the special cases.
-                        //regular errors end up with code === undefined, so not retryable.
-                        switch (true) {
-                            case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
-                                this.token.invalidate();
-                                err.isRetryable = true;
-                                break;
-                            case isTransactionFail(err): //error persisting transaction. retryable.
-                                err.isRetryable = true;
-                                break;
-                            //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
-                            default:
-                                if (err.isRetryable === undefined) {
-                                    err.isRetryable = false;
-                                }
+                return servletMethod(...callArgs).catch((err) => {
+                    //these are the special cases.
+                    //regular errors end up with code === undefined, so not retryable.
+                    switch (true) {
+                        case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
+                            this.token.invalidate();
+                            err.isRetryable = true;
+                            break;
+                        case isTransactionFail(err): //error persisting transaction. retryable.
+                            err.isRetryable = true;
+                            break;
+                        //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
+                        default:
+                            if (err.isRetryable === undefined) {
+                                err.isRetryable = false;
+                            }
 
-                                break;
-                        }
+                            break;
+                    }
 
-                        //a chance to retry - only once.
-                        if (err.isRetryable) {
-                            return servletMethod(...callArgs);
-                        }
+                    //a chance to retry - only once.
+                    if (err.isRetryable) {
+                        return servletMethod(...callArgs);
+                    }
 
-                        throw err;
-                    }),
-                );
+                    throw err;
+                });
             };
 
             return acc;
