@@ -642,6 +642,7 @@ export default class Client {
             to = false,
             version = false,
             type = false,
+            listMeta = false,
         } = {},
     ) {
         const headers = { 'ogit/_id': id };
@@ -669,6 +670,10 @@ export default class Client {
 
         if (type !== false) {
             body.type = type;
+        }
+
+        if (listMeta !== false) {
+            headers.listMeta = listMeta;
         }
 
         return this.wrapTimedEvent(
