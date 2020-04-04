@@ -56,7 +56,12 @@ export default class HttpTransport {
       )
       .pipe(
         catchError((err) =>
-          of({ error: { message: err.reason, code: err.code } }),
+          of({
+            error: {
+              message: err.reason || err.message,
+              code: err.code || 500,
+            },
+          }),
         ),
         map((res) => {
           if (hasError<T>(res)) {
@@ -220,7 +225,7 @@ function sendJSON(
   method: RequestOptions['method'] = 'POST',
 ) {
   options.method = method;
-  options.body = JSON.stringify(body);
+  options.body = body;
 
   return options;
 }
