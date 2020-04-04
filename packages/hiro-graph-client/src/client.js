@@ -18,28 +18,6 @@ import EventStream from './eventstream';
 import authServlet from './servlets/auth';
 import apiServlet from './servlets/api';
 
-const passthru = (fn) => [
-    (r) => (fn(), r),
-    (e) => {
-        fn();
-        throw e;
-    },
-];
-
-//nb this isn't a deep clone, just a top level deref.
-//we only deal with primitives, arrays and plain objects.
-const dereference = (obj) => {
-    if (typeof obj !== 'object' || obj === null) {
-        return obj;
-    }
-
-    if (Array.isArray(obj)) {
-        return obj.slice();
-    }
-
-    return Object.assign({}, obj);
-};
-
 export default class Client {
     constructor({ endpoint, token }, transportOptions = {}, proxies = []) {
         this.endpoint = endpoint;
@@ -247,7 +225,7 @@ export default class Client {
             headers.waitForIndex = 'true';
         }
 
-        return his.request(
+        return this.request(
             { type: 'replace', headers, body: data },
             reqOptions,
         );
