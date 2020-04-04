@@ -89,7 +89,12 @@ export default class WebSocketTransport {
               )
               .pipe(
                 catchError((err) =>
-                  of({ error: { message: err.reason, code: err.code } }),
+                  of({
+                    error: {
+                      message: err.reason || err.message,
+                      code: err.code || 500,
+                    },
+                  }),
                 ),
                 map((res: WebSocketResponse<T>) => {
                   if (res.error) {
@@ -127,11 +132,7 @@ export default class WebSocketTransport {
       }, [] as T[]),
     );
 
-    if (reqOptions.asStream) {
-      return response$;
-    }
-
-    return response$.toPromise();
+    return response$;
   }
 
   /**

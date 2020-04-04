@@ -6,7 +6,7 @@ import Client, { OGIT, lucene, gremlin } from './src';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const token =
-  'V14MoAZSt5FsyIeElZRkMxu0UgbikbqI6peFA5ZUcMGAkiw0Lp794FNpSxPhyt9zL2Fsey5Z2ejAh5X8krQOY4UmRq8PN5TiG2GL9uTNWVnVPkpFaqaNqmmOg868ta2W';
+  'TZ2SVvoj0sHGCqVxy3olxejZb8gtcj3LDhsAQgCyoF7TOjzLoapOUl6guXvF9DDPP8LNZFAntnYF8JB05X8LDpih2gprOUxTRdtNYWgcCvcoYmYObgjCtLHQwNHqvR9Z';
 
 const client = new Client({
   endpoint: 'https://eu-stagegraph.arago.co',
@@ -14,7 +14,7 @@ const client = new Client({
 });
 
 const { querystring, placeholders } = lucene({
-  'ogit/_id': 'cjuwixjvq0xfc1q90xqn8jsvf_cjuwixjvq0xfg1q90asxz9lba',
+  'ogit/_id': 'cjuwixjvq0xfc1q90xqn8jsvf_ck74voksj077n0w46k0cf09xo',
 });
 
 const query = gremlin('')
@@ -24,30 +24,23 @@ const query = gremlin('')
   .count()
   .toString();
 
-const id$ = client
-  .lucene(
-    querystring,
-    {
-      limit: 1,
-      ...placeholders,
-    },
-    {
-      asStream: true,
-    },
-  )
+const name$ = client
+  .lucene(querystring, {
+    limit: 1,
+    ...placeholders,
+  })
   // @ts-ignore
-  .pipe(map((res) => res['ogit/_id']));
+  .pipe(map((res) => res && res.map((r) => r['ogit/name'])));
 
-const count$ = client.gremlin(
+const members$ = client.gremlin(
   'cjuwixjvq0xfc1q90xqn8jsvf_ck74voksj077n0w46k0cf09xo',
   query,
   {
     limit: 1,
-    asStream: true,
   },
 );
 
 forkJoin({
-  id: id$,
-  count: count$,
+  name: name$,
+  members: members$,
 }).subscribe(console.log);
