@@ -3,6 +3,7 @@
  *  It support the `request` method,
  *  But translates them to `fetch` methods.
  */
+import fetch from 'isomorphic-fetch';
 import { ajax } from 'rxjs/ajax';
 import { of } from 'rxjs';
 import { mergeMap, catchError, map } from 'rxjs/operators';
@@ -40,18 +41,20 @@ export default class HttpTransport {
     return of(tp)
       .pipe(
         mergeMap((t) => t),
-        mergeMap((t) => {
+        mergeMap(async (t) => {
           const headers = {
             ...(options.headers || {}),
             ...(reqOptions.headers || {}),
             Authorization: 'Bearer ' + t,
           };
 
-          return ajax({
-            url: _url,
+          const res = await fetch(_url, {
             ...options,
+            body: JSON.stringify(options.body),
             headers,
           });
+
+          return res.json();
         }),
       )
       .pipe(
