@@ -29,6 +29,7 @@
         "@babel/plugin-transform-spread": "^7.8.3",
         "@babel/preset-env": "^7.8.4",
         "@babel/preset-typescript": "^7.8.3",
+        "@types/isomorphic-fetch": "^0.0.35",
         "@types/node-fetch": "2.5.4",
         "@types/websocket": "1.0.0",
         "babel-jest": "^25.1.0",
