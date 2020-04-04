@@ -3,11 +3,14 @@
  */
 import { w3cwebsocket as WS } from 'websocket';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
-import { map, catchError, toArray, mergeMap } from 'rxjs/operators';
+import { map, catchError, toArray, mergeMap, reduce } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import uid from 'uid';
 
 import { GRAPH_WS_API_BASE } from './api-version';
+import { RequestOptions, GraphRequest } from './types';
+
+import { Token } from '.';
 
 export const webSocketsAvailable = WS !== undefined && WS !== null;
 
@@ -21,27 +24,6 @@ export const ensureWebSocketsAvailable = () => {
 // The graph websocket api accepts a protocol
 export const GRAPH_API_PROTOCOL = 'graph-2.0.0';
 
-export type WebSocketRequestType =
-  | 'get'
-  | 'ids'
-  | 'create'
-  | 'update'
-  | 'replace'
-  | 'delete'
-  | 'connect'
-  | 'disconnect'
-  | 'query'
-  | 'writets'
-  | 'streamts'
-  | 'history'
-  | 'getme';
-
-export interface WebSocketRequest {
-  type: WebSocketRequestType;
-  headers: any; // @todo
-  body: any; // @todo
-}
-
 export interface WebSocketResponse<T = any> {
   id: string;
   more: boolean;
@@ -49,9 +31,6 @@ export interface WebSocketResponse<T = any> {
   body: T | null;
   error?: any;
 }
-
-type Token = import('./token').default; // @todo - Replce with import type after updating eslint
-type RequestOptions = import('node-fetch').RequestInit;
 
 export interface WebSocketRequestOptions<T> extends RequestOptions {
   asStream?: boolean;
@@ -73,7 +52,7 @@ export default class WebSocketTransport {
    */
   request<T = any>(
     token: Token,
-    { type, headers = {}, body = {} }: WebSocketRequest,
+    { type, headers = {}, body = {} }: GraphRequest,
     reqOptions: WebSocketRequestOptions<T> = {},
   ) {
     //the connect call ensures the websocket is connected before continuing.
@@ -84,7 +63,7 @@ export default class WebSocketTransport {
     const response$ = new Observable<T>((subscriber) => {
       of(token)
         .pipe(
-          mergeMap((t) => t.get() as Promise<string>),
+          mergeMap((t) => t.get()),
           map(
             (t) =>
               [t, this.connect(t)] as [
@@ -140,13 +119,19 @@ export default class WebSocketTransport {
             subscriber.error(err);
           },
         });
-    });
+    }).pipe(
+      reduce((acc, res) => {
+        acc.push(res);
+
+        return acc;
+      }, [] as T[]),
+    );
 
     if (reqOptions.asStream) {
       return response$;
     }
 
-    return response$.pipe(toArray()).toPromise();
+    return response$.toPromise();
   }
 
   /**
