@@ -8,10 +8,13 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const token =
   'TZ2SVvoj0sHGCqVxy3olxejZb8gtcj3LDhsAQgCyoF7TOjzLoapOUl6guXvF9DDPP8LNZFAntnYF8JB05X8LDpih2gprOUxTRdtNYWgcCvcoYmYObgjCtLHQwNHqvR9Z';
 
-const client = new Client({
-  endpoint: 'https://eu-stagegraph.arago.co',
-  token,
-});
+const client = new Client(
+  {
+    endpoint: 'https://eu-stagegraph.arago.co',
+    token,
+  },
+  { forceHTTP: true },
+);
 
 const { querystring, placeholders } = lucene({
   'ogit/_id': 'cjuwixjvq0xfc1q90xqn8jsvf_ck74voksj077n0w46k0cf09xo',
