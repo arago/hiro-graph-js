@@ -7,12 +7,7 @@
  */
 import WebsocketTransport, { webSocketsAvailable } from './transport-websocket';
 import HttpTransport from './transport-http';
-import {
-    isUnauthorized,
-    isTransactionFail,
-    isConflict,
-    isNotFound,
-} from './errors';
+import { isConflict, isNotFound } from './errors';
 import { fixedToken } from './token';
 import EventStream from './eventstream';
 

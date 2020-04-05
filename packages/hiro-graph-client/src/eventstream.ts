@@ -88,8 +88,6 @@ export class StreamFilter {
 export default class EventStream {
   private _token: Token;
   private _scopeId?: string;
-  private _groupId?: string;
-  private _offset?: OFFSET_MSG;
   private _filters: EventStreamFilter[];
   private _transport: WebSocketTransport;
 
@@ -124,8 +122,6 @@ export default class EventStream {
 
     const path = Object.keys(query).length > 0 ? `?${qs.stringify(query)}` : '';
 
-    this._groupId = groupId;
-    this._offset = offset;
     this._filters = filters.map((content) => ({
       'filter-id': content,
       'filter-type': 'jfilter',

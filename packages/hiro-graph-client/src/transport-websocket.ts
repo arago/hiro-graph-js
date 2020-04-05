@@ -47,7 +47,6 @@ export default class WebSocketTransport {
   ) {
     ensureWebSocketsAvailable();
     this.url = new Endpoint(endpoint, true).api(api);
-    console.log(this.url, api, path);
   }
 
   /**
