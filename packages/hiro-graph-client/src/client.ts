@@ -16,14 +16,18 @@ import HttpTransport from './transport-http';
 import { isConflict, isNotFound } from './errors';
 import { fixedToken } from './token';
 import EventStream, { EventStreamRequest } from './eventstream';
-import { GraphTransport, GraphRequest, TimeseriesResponse } from './types';
+import {
+  GraphTransport,
+  GraphRequest,
+  TimeseriesResponse,
+  HistoryQueryOptions,
+} from './types';
 import {
   GremlinQueryFunction,
   GremlinQuery,
   gremlin as CreateGremlin,
 } from './gremlin';
 import { Lucene, LuceneQueryOptions, lucene as CreateLucene } from './lucene';
-import { HistoryQueryOptions } from './types/history';
 
 import { Token } from '.';
 

@@ -6,7 +6,7 @@ import * as Errors from './errors';
 export default Client;
 export * from './gremlin';
 export * from './lucene';
-export * from './types/ogit';
+export * from './types';
 export { Token, cannotGetToken, Errors, StreamFilter };
 
 /*
