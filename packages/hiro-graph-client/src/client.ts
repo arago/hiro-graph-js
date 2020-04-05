@@ -23,6 +23,7 @@ import {
   gremlin as CreateGremlin,
 } from './gremlin';
 import { Lucene, LuceneQueryOptions, lucene as CreateLucene } from './lucene';
+import { HistoryQueryOptions } from './types/history';
 
 import { Token } from '.';
 
@@ -397,56 +398,22 @@ export default class Client {
   history(
     id: string,
     {
-      offset = false,
-      limit = false,
-      from = false,
-      to = false,
-      version = false,
-      type = false,
       listMeta = false,
       includeDeleted = false,
-      vid = false,
-    } = {},
+      ...options
+    }: HistoryQueryOptions = {},
   ) {
     const headers: Record<string, any> = {
       'ogit/_id': id,
       listMeta,
       includeDeleted,
+      ...options,
     };
-    const body = {};
-
-    if (offset !== false) {
-      headers.offset = offset;
-    }
-
-    if (limit !== false) {
-      headers.limit = limit;
-    }
-
-    if (from !== false) {
-      headers.from = from;
-    }
-
-    if (to !== false) {
-      headers.to = to;
-    }
-
-    if (version !== false) {
-      headers.version = version;
-    }
-
-    if (type !== false) {
-      headers.type = type;
-    }
-
-    if (vid !== false) {
-      headers.vid = vid;
-    }
 
     return this.request({
       type: 'history',
       headers: headers,
-      body,
+      body: {},
     });
   }
 }
