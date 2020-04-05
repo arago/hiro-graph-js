@@ -124,7 +124,7 @@ export default class EventStream {
       'filter-content': content,
     }));
 
-    this._transport = new WebSocketTransport(endpoint, 'events', path);
+    this._transport = new WebSocketTransport(endpoint, { api: 'events', path });
 
     const stream$ = new Observable<any>((subscriber) => {
       of(this._token)

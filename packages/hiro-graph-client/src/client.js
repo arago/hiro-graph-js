@@ -387,18 +387,6 @@ export default class Client {
     }
 
     /**
-     * Placeholders here for reading/writing log files (ogit/Log)
-     */
-    //eslint-disable-next-line no-unused-vars
-    writelog(logId, entries) {
-        return Promise.reject(new Error('Log writing is not implemented yet'));
-    }
-    //eslint-disable-next-line no-unused-vars
-    readlog(logId, options) {
-        return Promise.reject(new Error('Log reading is not implemented yet'));
-    }
-
-    /**
      *  Returns previous versions of a vertex
      */
     history(
@@ -451,83 +439,5 @@ export default class Client {
             headers: headers,
             body,
         });
-    }
-
-    /**
-     *  Custom servlet endpoints
-     *  always use HTTP transport, which knows how to handle these types.
-     *
-     *  The servletMethods are passed:
-     *  - `fetch` a token/endpoint aware HTTP fetch API.
-     *  - `options` the default fetch options you can override
-     *  - `...args` the rest of the args passed in by the user for that method
-     */
-    addServlet(prefix, servletMethods, proxy) {
-        if (!prefix) {
-            throw new Error('[GRAPH] Must give prefix for servlet');
-        }
-
-        if (prefix in this) {
-            throw new Error(
-                '[GRAPH] Sevlet Extensions must have unique prefixes. Attempted to re-add `' +
-                    prefix +
-                    '`',
-            );
-        }
-
-        const fetch = proxy ? this.proxyFetch(proxy) : this.fetch;
-        const isFactory = typeof servletMethods === 'function';
-
-        const servletDefinition = isFactory
-            ? servletMethods(fetch, this.http.defaultOptions())
-            : servletMethods;
-
-        //create namespace.
-        this[prefix] = {};
-        //add servlet methods
-        Object.keys(servletDefinition).reduce((acc, method) => {
-            acc[method] = (...args) => {
-                const servletMethod = servletDefinition[method];
-
-                const legacyArgs = isFactory
-                    ? []
-                    : [fetch, this.http.defaultOptions()];
-
-                const callArgs = [...legacyArgs, ...args];
-
-                return servletMethod(...callArgs).catch((err) => {
-                    //these are the special cases.
-                    //regular errors end up with code === undefined, so not retryable.
-                    switch (true) {
-                        case isUnauthorized(err): //unauthorized (which means unauthenticated) invalidate TOKEN.
-                            this.token.invalidate();
-                            err.isRetryable = true;
-                            break;
-                        case isTransactionFail(err): //error persisting transaction. retryable.
-                            err.isRetryable = true;
-                            break;
-                        //there are other known errors, e.g. 403, 400, etc... but they are not retryable.
-                        default:
-                            if (err.isRetryable === undefined) {
-                                err.isRetryable = false;
-                            }
-
-                            break;
-                    }
-
-                    //a chance to retry - only once.
-                    if (err.isRetryable) {
-                        return servletMethod(...callArgs);
-                    }
-
-                    throw err;
-                });
-            };
-
-            return acc;
-        }, this[prefix]);
-
-        //chainable? might be useful.
-        return this;
     }
 }

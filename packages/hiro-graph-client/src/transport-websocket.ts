@@ -8,7 +8,7 @@ import { of, Observable } from 'rxjs';
 import uid from 'uid';
 
 import { RequestOptions, GraphRequest } from './types';
-import { Endpoint } from './endpoint';
+import { Endpoint, WS_API } from './endpoint';
 
 import { Token } from '.';
 
@@ -32,8 +32,9 @@ export interface WebSocketResponse<T = any> {
   error?: any;
 }
 
-export interface WebSocketRequestOptions<T> extends RequestOptions {
-  asStream?: boolean;
+export interface WebSocketRequestOptions extends RequestOptions {
+  api?: WS_API;
+  path?: string;
 }
 
 export default class WebSocketTransport {
@@ -42,11 +43,11 @@ export default class WebSocketTransport {
 
   constructor(
     endpoint: string,
-    type: 'graph' | 'events' = 'graph',
-    path?: string,
+    { api = 'graph', path }: WebSocketRequestOptions,
   ) {
     ensureWebSocketsAvailable();
-    this.url = new Endpoint(endpoint, true).api(type, path);
+    this.url = new Endpoint(endpoint, true).api(api);
+    console.log(this.url, api, path);
   }
 
   /**
@@ -55,7 +56,7 @@ export default class WebSocketTransport {
   request<T = any>(
     token: Token,
     { type, headers = {}, body = {} }: GraphRequest,
-    reqOptions: WebSocketRequestOptions<T> = {},
+    reqOptions: WebSocketRequestOptions = {},
   ) {
     //the connect call ensures the websocket is connected before continuing.
     const id = uid();
@@ -90,14 +91,23 @@ export default class WebSocketTransport {
                 (message) => message.id === id || message.error,
               )
               .pipe(
-                catchError((err) =>
-                  of({
+                catchError((err) => {
+                  if (err.type === 'error') {
+                    return of({
+                      error: {
+                        message: `Error creating websocket for ${this.url}`,
+                        code: 500,
+                      },
+                    });
+                  }
+
+                  return of({
                     error: {
                       message: err.reason || err.message,
                       code: err.code || 500,
                     },
-                  }),
-                ),
+                  });
+                }),
                 map((res: WebSocketResponse<T>) => {
                   if (res.error) {
                     throw res.error;

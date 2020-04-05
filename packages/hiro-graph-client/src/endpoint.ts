@@ -15,8 +15,8 @@ export const APIs = {
   },
 };
 
-type WS_API = keyof typeof APIs['ws'];
-type HTTP_API = keyof typeof APIs['http'];
+export type WS_API = keyof typeof APIs['ws'];
+export type HTTP_API = keyof typeof APIs['http'];
 
 export class Endpoint<WS extends boolean = false> {
   private _value: string;
