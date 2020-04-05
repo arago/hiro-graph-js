@@ -7,7 +7,7 @@ import { map, catchError, mergeMap, reduce } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import uid from 'uid';
 
-import { RequestOptions, GraphRequest } from './types';
+import { GraphRequest, GraphTransport } from './types/graph';
 import { Endpoint, WS_API } from './endpoint';
 
 import { Token } from '.';
@@ -32,12 +32,14 @@ export interface WebSocketResponse<T = any> {
   error?: any;
 }
 
-export interface WebSocketRequestOptions extends RequestOptions {
+export interface WebSocketRequestOptions {
   api?: WS_API;
   path?: string;
+  forceHTTP?: boolean;
 }
 
-export default class WebSocketTransport {
+export default class WebSocketTransport implements GraphTransport {
+  private endpoint: Endpoint<true>;
   private url: string;
   private connection: WebSocketSubject<any> | undefined;
 
@@ -46,7 +48,8 @@ export default class WebSocketTransport {
     { api = 'graph', path }: WebSocketRequestOptions,
   ) {
     ensureWebSocketsAvailable();
-    this.url = new Endpoint(endpoint, true).api(api);
+    this.endpoint = new Endpoint(endpoint, true);
+    this.url = this.endpoint.api(api, path);
   }
 
   /**
@@ -80,10 +83,7 @@ export default class WebSocketTransport {
                   _TOKEN,
                   id,
                   type,
-                  headers: {
-                    ...headers,
-                    ...(reqOptions.headers || {}),
-                  },
+                  headers,
                   body,
                 }),
                 () => ({}),

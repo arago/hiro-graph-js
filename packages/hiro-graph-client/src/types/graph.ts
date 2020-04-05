@@ -1,4 +1,4 @@
-import { RequestInit } from 'node-fetch';
+import { Observable } from 'rxjs';
 
 export type GraphRequestType =
   | 'get'
@@ -18,11 +18,12 @@ export type GraphRequestType =
 
 export interface GraphRequest {
   type: GraphRequestType;
-  headers: any; // @todo
-  body: any; // @todo
+  headers?: any; // @todo
+  body?: any; // @todo
 }
 
-export interface RequestOptions extends globalThis.RequestInit {
-  token?: string;
-  raw?: boolean;
+export type RequestOptions = globalThis.RequestInit;
+
+export interface GraphTransport {
+  request: <T = any>(token: any, request: GraphRequest) => Observable<T[]>;
 }

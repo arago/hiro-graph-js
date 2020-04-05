@@ -6,7 +6,7 @@
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
     "scripts": {
-        "build": "rm -rf lib/* && yarn build:types && BABEL_ENV=production babel src --out-dir lib --source-maps --extensions '.js,.ts'",
+        "build": "rm -rf lib/* && yarn tsc",
         "build:types": "tsc --emitDeclarationOnly",
         "prepublish": "yarn test && yarn build",
         "test": "jest --silent",
@@ -25,6 +25,7 @@
         "@types/node-fetch": "2.5.4",
         "@types/websocket": "1.0.0",
         "jest": "^25.1.0",
+        "madge": "^3.8.0",
         "ts-jest": "^25.3.1",
         "typescript": "^3.8.3"
     },

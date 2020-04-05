@@ -1,12 +1,12 @@
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import Client, { lucene, gremlin } from './src';
+import Client from './src';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const token =
-  'vwcv0ofygAZbhAXmJxeaiBMdaTgK5o49MGh21YXTFVKYoAvMaOvbCMr7xJEUtbo81YkMyscheudyHUyEIp38vo74qr2KDBMAngSd6XDy0mRDkMeAVUhL0AA02wbE2SwK';
+  'TDsmg5Y4mJjUjM3tVeSjlVnpae2knHOKgx483WU2Z847k38OVuFN3cfk2aRVtF17rJejIgXsJZRTiaBcywH7RNsO047JpRKtjQdPhYxRCpf6chk3JWiZcJuWXZFsRyDi';
 
 const client = new Client({
   endpoint: 'https://eu-stagegraph.arago.co',
@@ -25,31 +25,26 @@ const client = new Client({
 
 // es.register(issueFilter).subscribe(console.log);
 
-const { querystring, placeholders } = lucene({
-  'ogit/_id': 'cjuwixjvq0xfc1q90xqn8jsvf_ck74voksj077n0w46k0cf09xo',
-});
-
-const query = gremlin('')
-  .inE('ogit/Auth/isMemberOf')
-  .has('ogit/_out-type', 'ogit/Auth/Account')
-  .outV()
-  .count()
-  .toString();
-
 const name$ = client
-  .lucene(querystring, {
-    limit: 1,
-    ...placeholders,
-  })
+  .lucene(
+    {
+      'ogit/_id': 'cjuwixjvq0xfc1q90xqn8jsvf_ck74voksj077n0w46k0cf09xo',
+    },
+    {
+      limit: 1,
+    },
+  )
   // @ts-ignore
   .pipe(map((res) => res && res.map((r) => r['ogit/name'])));
 
 const members$ = client.gremlin(
   'cjuwixjvq0xfc1q90xqn8jsvf_ck74voksj077n0w46k0cf09xo',
-  query,
-  {
-    limit: 1,
-  },
+  (g) =>
+    g
+      .inE('ogit/Auth/isMemberOf')
+      .has('ogit/_out-type', 'ogit/Auth/Account')
+      .outV()
+      .count(),
 );
 
 forkJoin({
