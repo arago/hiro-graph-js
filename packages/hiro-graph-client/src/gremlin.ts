@@ -1,15 +1,22 @@
 const $placeholder = Symbol('gremlin-placeholder');
 
+export type GremlinQueryFunction = (
+  gremlin: GremlinQueryBuilder,
+) => GremlinQueryBuilder;
+
 export type GremlinQuery = string | GremlinQueryBuilder;
 export interface PlaceholderObject {
   [$placeholder]: true;
   toString: () => string;
 }
+
 export type MethodArgument =
   | string
   | boolean
   | PlaceholderObject
-  | MethodArgument[];
+  | MethodArgumentArray;
+
+interface MethodArgumentArray extends Array<MethodArgument> {}
 
 export type GremlinBranch = (branch: GremlinQuery) => GremlinQuery;
 

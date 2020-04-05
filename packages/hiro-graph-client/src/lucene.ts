@@ -88,6 +88,14 @@ export declare namespace Lucene {
   }
 }
 
+export interface LuceneQueryOptions {
+  limit?: number;
+  offset?: number;
+  order?: string | string[];
+  fields?: string[];
+  count?: boolean;
+}
+
 type NormalisedQuery = {
   key: string;
   values: (string | NormalisedQuery)[];
@@ -418,7 +426,7 @@ const mapOperator = (
 // help" -> "help\""
 // help \" -> "help \\\""
 // help \ -> "help \\"
-const quote = function(string: string) {
+const quote = function (string: string) {
   return `"${slashString(string)}"`;
 };
 
@@ -446,7 +454,7 @@ const slashString = (input: string) =>
     'something"with a quote' => ["something\"with", "a", "quote"]
     '"with \"embedded\" quotes"' => ["with \"embedded\" quotes"]
 */
-const findQuotedTerms = function(str: string) {
+const findQuotedTerms = function (str: string) {
   const input = str.trim(); //ensure no trailing space.
   const terms = [];
   const l = input.length;

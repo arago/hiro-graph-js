@@ -6,7 +6,7 @@ import * as Errors from './errors';
 export default Client;
 export * from './gremlin';
 export * from './lucene';
-export * from './ogit';
+export * from './types/ogit';
 export { Token, cannotGetToken, Errors, StreamFilter };
 
 /*
@@ -18,5 +18,7 @@ export { Token, cannotGetToken, Errors, StreamFilter };
 * Websocket reconnect?
 * Lucene/gremlin helpers built in to client function
 * Servlets back in
+* Improve function generics
+* Add rollup
 
 */

@@ -7,9 +7,10 @@ import fetch from 'isomorphic-fetch';
 import { of } from 'rxjs';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 
-import { RequestOptions, GraphRequest } from './types';
+import { GraphRequest, GraphTransport } from './types';
 import { Endpoint } from './endpoint';
 import { extract } from './utils';
+import { RequestOptions } from './types';
 
 import { Token } from '.';
 
@@ -20,7 +21,7 @@ interface Response<T> {
 
 const hasError = <T>(res: any): res is Response<T> => !!res.error;
 
-export default class HttpTransport {
+export default class HttpTransport implements GraphTransport {
   private endpoint: Endpoint;
 
   constructor(endpoint: string) {
@@ -28,14 +29,8 @@ export default class HttpTransport {
   }
 
   //this is basically window.fetch with a token.get() before it.
-  fetch<T>(
-    token: Token,
-    url: string,
-    options: RequestOptions = {},
-    reqOptions: RequestOptions = {},
-  ) {
-    const tp =
-      'token' in reqOptions ? Promise.resolve(reqOptions.token) : token.get();
+  fetch<T>(token: Token, url: string, options: RequestOptions = {}) {
+    const tp = token.get();
 
     return of(tp)
       .pipe(
@@ -43,7 +38,6 @@ export default class HttpTransport {
         mergeMap(async (t) => {
           const headers = {
             ...(options.headers || {}),
-            ...(reqOptions.headers || {}),
             Authorization: 'Bearer ' + t,
           };
 
@@ -76,10 +70,9 @@ export default class HttpTransport {
   }
 
   //request has to translate the base request objects to fetch.
-  request(
+  request<T = any>(
     token: Token,
     { type, headers = {}, body = {} }: GraphRequest,
-    reqOptions: RequestOptions = {},
   ) {
     const [url, options] = createFetchOptions(this.endpoint, {
       type,
@@ -87,7 +80,7 @@ export default class HttpTransport {
       body,
     });
 
-    return this.fetch(token, url, options, reqOptions);
+    return this.fetch<T>(token, url, options);
   }
 
   defaultOptions() {
