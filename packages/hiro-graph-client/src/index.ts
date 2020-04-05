@@ -16,9 +16,7 @@ export { Token, cannotGetToken, Errors, StreamFilter };
 * Ensure old tests pass
 * Dedup?
 * Websocket reconnect?
-* Lucene/gremlin helpers built in to client function
 * Servlets back in
-* Improve function generics
 * Add rollup
-
+* body/query typings
 */
