@@ -120,8 +120,8 @@ export default class Client {
    *  Make a generic request. The transport will handle the details, we handle the retry.
    *  We use `this.transport` which is websocket if available.
    */
-  request({ type, headers = {}, body = {} }: GraphRequest) {
-    return this.transport.request(this.token, { type, headers, body });
+  request<T>({ type, headers = {}, body = {} }: GraphRequest) {
+    return this.transport.request<T>(this.token, { type, headers, body });
   }
 
   getToken() {
@@ -137,15 +137,15 @@ export default class Client {
   /**
    *  Get a single item by ID
    */
-  get(id: string) {
-    return this.request({ type: 'get', headers: { 'ogit/_id': id } });
+  get<T>(id: string) {
+    return this.request<T>({ type: 'get', headers: { 'ogit/_id': id } });
   }
 
   /**
    *  Get the node for the owner of this token
    */
-  me() {
-    return this.request({
+  me<T>() {
+    return this.request<T>({
       type: 'getme',
       body: {},
       headers: { profile: true, 'me-type': 'account' },
@@ -155,33 +155,33 @@ export default class Client {
   /**
    *  Create a new node
    */
-  create(type: string, data = {}, options: { waitForIndex?: boolean } = {}) {
+  create<T>(type: string, data = {}, options: { waitForIndex?: boolean } = {}) {
     const headers: Record<string, string> = { 'ogit/_type': type };
 
     if (options.waitForIndex) {
       headers.waitForIndex = 'true';
     }
 
-    return this.request({ type: 'create', headers, body: data });
+    return this.request<T>({ type: 'create', headers, body: data });
   }
 
   /**
    *  Update a Node
    */
-  update(id: string, data = {}, options: { waitForIndex?: boolean } = {}) {
+  update<T>(id: string, data = {}, options: { waitForIndex?: boolean } = {}) {
     const headers: Record<string, string> = { 'ogit/_id': id };
 
     if (options.waitForIndex) {
       headers.waitForIndex = 'true';
     }
 
-    return this.request({ type: 'update', headers, body: data });
+    return this.request<T>({ type: 'update', headers, body: data });
   }
 
   /**
    *  Replace a Node, optionally `upsert`
    */
-  replace<T extends object>(
+  replace<T>(
     id: string,
     data: Partial<T> = {},
     options: { waitForIndex?: boolean; createIfNotExists?: boolean } = {},
@@ -202,7 +202,7 @@ export default class Client {
       headers.waitForIndex = 'true';
     }
 
-    return this.request({ type: 'replace', headers, body: data });
+    return this.request<T>({ type: 'replace', headers, body: data });
   }
 
   /**
@@ -210,7 +210,7 @@ export default class Client {
    *
    *  We don't handle the 404/409 here. or should we?
    */
-  delete(id: string, options: { waitForIndex?: boolean } = {}) {
+  delete<T>(id: string, options: { waitForIndex?: boolean } = {}) {
     const { waitForIndex = false } = options;
     const headers: Record<string, string> = { 'ogit/_id': id };
 
@@ -218,14 +218,14 @@ export default class Client {
       headers.waitForIndex = 'true';
     }
 
-    return this.request({ type: 'delete', headers });
+    return this.request<T>({ type: 'delete', headers });
   }
 
   /**
    *  This is a vertices query
    */
 
-  lucene(
+  lucene<T>(
     query: string | Lucene.Query = '',
     {
       limit = 50,
@@ -278,15 +278,15 @@ export default class Client {
       body.fields = Array.isArray(fields) ? fields.join(',') : String(fields);
     }
 
-    return this.request({
+    return this.request<T>({
       type: 'query',
       headers: { type: 'vertices' },
       body,
     });
   }
 
-  ids(list: string[]) {
-    return this.request({
+  ids<T>(list: string[]) {
+    return this.request<T>({
       type: 'query',
       headers: { type: 'ids' },
       body: { query: list.join(',') }, // yes, it has to be a comma-seperated string
@@ -297,13 +297,16 @@ export default class Client {
    *  This is a gremlin query
    */
 
-  gremlin(root: string, queryOrBuilder: GremlinQuery | GremlinQueryFunction) {
+  gremlin<T>(
+    root: string,
+    queryOrBuilder: GremlinQuery | GremlinQueryFunction,
+  ) {
     const query =
       typeof queryOrBuilder === 'function'
         ? queryOrBuilder(CreateGremlin(''))
         : queryOrBuilder;
 
-    return this.request({
+    return this.request<T>({
       type: 'query',
       headers: { type: 'gremlin' },
       body: { root, query: query.toString() },
@@ -313,8 +316,8 @@ export default class Client {
   /**
    *  Connect two Nodes with an edge of `type`
    */
-  connect(type: string, inId: string, outId: string) {
-    return this.request({
+  connect<T>(type: string, inId: string, outId: string) {
+    return this.request<T>({
       type: 'connect',
       headers: { 'ogit/_type': type },
       body: { in: inId, out: outId },
@@ -333,8 +336,8 @@ export default class Client {
   /**
    *  Disconnect two nodes, convenience for delete, generates the edge id for you.
    */
-  disconnect(type: string, inId: string, outId: string) {
-    return this.delete(`${outId}$$${type}$$${inId}`).pipe(
+  disconnect<T>(type: string, inId: string, outId: string) {
+    return this.delete<T>(`${outId}$$${type}$$${inId}`).pipe(
       catchError((err) => {
         if (isNotFound(err) || isConflict(err)) {
           return of({});
@@ -351,13 +354,13 @@ export default class Client {
    *
    *  values are { timestamp: millisecond unix, value: string value }
    */
-  writets(
+  writets<T>(
     timeseriesId: string,
     values: TimeseriesResponse | TimeseriesResponse[],
   ) {
     const items = Array.isArray(values) ? values : [values];
 
-    return this.request({
+    return this.request<T>({
       type: 'writets',
       headers: {
         'ogit/_id': timeseriesId,
@@ -369,7 +372,7 @@ export default class Client {
   /**
    *  Read timeseries values (only ogit/Timeseries vertices)
    */
-  streamts(
+  streamts<T>(
     timeseriesId: string,
     options = {
       from: false,
@@ -385,7 +388,7 @@ export default class Client {
     };
     const body = {};
 
-    return this.request({
+    return this.request<T>({
       type: 'streamts',
       headers,
       body,
@@ -395,7 +398,7 @@ export default class Client {
   /**
    *  Returns previous versions of a vertex
    */
-  history(
+  history<T>(
     id: string,
     {
       listMeta = false,
@@ -410,7 +413,7 @@ export default class Client {
       ...options,
     };
 
-    return this.request({
+    return this.request<T>({
       type: 'history',
       headers: headers,
       body: {},
