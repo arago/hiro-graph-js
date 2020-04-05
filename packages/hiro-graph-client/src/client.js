@@ -15,8 +15,6 @@ import {
 } from './errors';
 import { fixedToken } from './token';
 import EventStream from './eventstream';
-import authServlet from './servlets/auth';
-import apiServlet from './servlets/api';
 
 export default class Client {
     constructor({ endpoint, token }, transportOptions = {}, proxies = []) {
@@ -57,20 +55,6 @@ export default class Client {
 
         //keep this so we can duplicate them
         this._servlets = [];
-
-        // Auth API
-        this.addServlet(
-            'auth',
-            authServlet,
-            proxies.length >= 1 ? proxies[0] : '',
-        );
-
-        // Global API
-        this.addServlet(
-            'api',
-            apiServlet,
-            proxies.length >= 2 ? proxies[1] : '',
-        );
     }
 
     setToken(token) {
