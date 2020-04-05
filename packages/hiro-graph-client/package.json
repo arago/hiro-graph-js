@@ -9,7 +9,7 @@
         "build": "rm -rf lib/* && yarn tsc",
         "build:types": "tsc --emitDeclarationOnly",
         "prepublish": "yarn test && yarn build",
-        "test": "jest --silent",
+        "test": "madge --circular src/index.ts && jest --silent",
         "test:ci": "jest --silent --ci --reporters=default --reporters=jest-junit"
     },
     "license": "MIT",
