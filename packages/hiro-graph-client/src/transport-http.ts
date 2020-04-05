@@ -4,12 +4,11 @@
  *  But translates them to `fetch` methods.
  */
 import fetch from 'isomorphic-fetch';
-import { ajax } from 'rxjs/ajax';
 import { of } from 'rxjs';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 
-import { AUTH_API_BASE, GRAPH_API_BASE } from './api-version';
 import { RequestOptions, GraphRequest } from './types';
+import { Endpoint } from './endpoint';
 
 import { Token } from '.';
 
@@ -21,10 +20,10 @@ interface Response<T> {
 const hasError = <T>(res: any): res is Response<T> => !!res.error;
 
 export default class HttpTransport {
-  private endpoint: string;
+  private endpoint: Endpoint;
 
   constructor(endpoint: string) {
-    this.endpoint = endpoint.replace(/\/$/, ''); //remove trailing slash.
+    this.endpoint = new Endpoint(endpoint);
   }
 
   //this is basically window.fetch with a token.get() before it.
@@ -34,7 +33,6 @@ export default class HttpTransport {
     options: RequestOptions = {},
     reqOptions: RequestOptions = {},
   ) {
-    const _url = url.indexOf('http') === 0 ? url : this.endpoint + url;
     const tp =
       'token' in reqOptions ? Promise.resolve(reqOptions.token) : token.get();
 
@@ -48,7 +46,7 @@ export default class HttpTransport {
             Authorization: 'Bearer ' + t,
           };
 
-          const res = await fetch(_url, {
+          const res = await fetch(url, {
             ...options,
             body: JSON.stringify(options.body),
             headers,
@@ -82,7 +80,11 @@ export default class HttpTransport {
     { type, headers = {}, body = {} }: GraphRequest,
     reqOptions: RequestOptions = {},
   ) {
-    const [url, options] = createFetchOptions({ type, headers, body });
+    const [url, options] = createFetchOptions(this.endpoint, {
+      type,
+      headers,
+      body,
+    });
 
     return this.fetch(token, url, options, reqOptions);
   }
@@ -103,63 +105,74 @@ export const defaultFetchOptions = (): RequestOptions => ({
 });
 
 //here are the mappings to fetch options from the websocket payloads.
-function createFetchOptions({
-  type,
-  headers = {},
-  body = {},
-}: GraphRequest): [string, RequestOptions] {
+function createFetchOptions(
+  endpoint: Endpoint,
+  { type, headers = {}, body = {} }: GraphRequest,
+): [string, RequestOptions] {
   let url;
   const options = defaultFetchOptions();
 
   switch (type) {
     case 'getme':
-      url = `${AUTH_API_BASE}/me/account?profile=true`;
+      url = endpoint.api('auth', '/me/account', { profile: true });
       break;
     case 'get':
-      url = `${GRAPH_API_BASE}/${encodeURIComponent(headers['ogit/_id'])}`;
+      url = endpoint.api('graph', encodeURIComponent(headers['ogit/_id']));
       break;
     case 'create':
-      url =
-        `${GRAPH_API_BASE}/new/` +
-        encodeURIComponent(headers['ogit/_type']) +
-        qsKeys(headers, 'waitForIndex');
+      url = endpoint.api(
+        'graph',
+        `/new/${encodeURIComponent(headers['ogit/_type'])}`,
+        extract(headers, 'waitForIndex'),
+      );
       sendJSON(options, body);
       break;
     case 'update':
-      url =
-        `${GRAPH_API_BASE}/${encodeURIComponent(headers['ogit/_id'])}` +
-        qsKeys(headers, 'waitForIndex');
+      url = endpoint.api(
+        'graph',
+        `${encodeURIComponent(headers['ogit/_id'])}`,
+        extract(headers, 'waitForIndex'),
+      );
+
       sendJSON(options, body);
       break;
     case 'replace':
       const t = headers.createIfNotExists ? headers['ogit/_type'] : undefined;
-      const obj = Object.assign({ 'ogit/_type': t }, headers);
+      const query = {
+        'ogit/_type': t,
+        ...extract(headers, 'createIfNotExists', 'waitForIndex'),
+      };
 
-      url =
-        `${GRAPH_API_BASE}/${encodeURIComponent(headers['ogit/_id'])}` +
-        qsKeys(obj, 'createIfNotExists', 'ogit/_type', 'waitForIndex');
+      url = endpoint.api(
+        'graph',
+        `${encodeURIComponent(headers['ogit/_id'])}`,
+        query,
+      );
+
       sendJSON(options, body, 'PUT');
       break;
     case 'delete':
-      url = `${GRAPH_API_BASE}/${encodeURIComponent(headers['ogit/_id'])}`;
+      url = endpoint.api('graph', `${encodeURIComponent(headers['ogit/_id'])}`);
       options.method = 'DELETE';
       break;
     case 'connect':
-      url = `${GRAPH_API_BASE}/connect/${encodeURIComponent(
-        headers['ogit/_type'],
-      )}`;
+      url = endpoint.api(
+        'graph',
+        `/connect/${encodeURIComponent(headers['ogit/_type'])}`,
+      );
+
       sendJSON(options, body);
       break;
     case 'query':
-      url = `${GRAPH_API_BASE}/query/` + headers.type;
+      url = endpoint.api('graph', `/query/${headers.type}`);
+
       sendJSON(options, body);
       break;
     case 'streamts':
-      url =
-        `${GRAPH_API_BASE}/` +
-        encodeURIComponent(headers['ogit/_id']) +
-        '/values' +
-        qsKeys(
+      url = endpoint.api(
+        'graph',
+        `/${encodeURIComponent(headers['ogit/_id'])}/values`,
+        extract(
           headers,
           'offset',
           'limit',
@@ -167,21 +180,23 @@ function createFetchOptions({
           'to',
           'includeDeleted',
           'with',
-        );
+        ),
+      );
+
       break;
     case 'writets':
-      url =
-        `${GRAPH_API_BASE}/` +
-        encodeURIComponent(headers['ogit/_id']) +
-        '/values';
+      url = endpoint.api(
+        'graph',
+        `/${encodeURIComponent(headers['ogit/_id'])}/values`,
+      );
+
       sendJSON(options, body);
       break;
     case 'history':
-      url =
-        `${GRAPH_API_BASE}/` +
-        encodeURIComponent(headers['ogit/_id']) +
-        '/history' +
-        qsKeys(
+      url = endpoint.api(
+        'graph',
+        `/${encodeURIComponent(headers['ogit/_id'])}/history`,
+        extract(
           headers,
           'offset',
           'limit',
@@ -192,13 +207,16 @@ function createFetchOptions({
           'includeDeleted',
           'listMeta',
           'vid',
-        );
+        ),
+      );
+
       break;
     case 'meta':
-      url =
-        `${GRAPH_API_BASE}/` +
-        encodeURIComponent(headers['ogit/_id']) +
-        '/meta';
+      url = endpoint.api(
+        'graph',
+        `/${encodeURIComponent(headers['ogit/_id'])}/meta`,
+      );
+
       break;
     default:
       throw new Error(`[HTTP] Unknown API call: ${type}`);
@@ -207,19 +225,14 @@ function createFetchOptions({
   return [url, options];
 }
 
-function qsKeys(obj: Record<string, string> = {}, ...keys: string[]) {
-  const qs = keys
-    .map((k) => {
-      if (k in obj && obj[k] !== undefined) {
-        return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`;
-      }
+function extract(obj: Record<string, string> = {}, ...keys: string[]) {
+  return keys.reduce((acc, k) => {
+    if (k in obj && obj[k] !== undefined) {
+      acc[k] = obj[k];
+    }
 
-      return false;
-    })
-    .filter(Boolean)
-    .join('&');
-
-  return qs.length ? '?' + qs : '';
+    return acc;
+  }, {} as Record<string, string>);
 }
 
 function sendJSON(

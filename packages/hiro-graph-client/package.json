@@ -21,19 +21,12 @@
         "websocket": "^1.0.25"
     },
     "devDependencies": {
-        "@babel/cli": "^7.8.4",
-        "@babel/core": "^7.8.4",
-        "@babel/plugin-proposal-class-properties": "^7.8.3",
-        "@babel/plugin-transform-regenerator": "^7.8.3",
-        "@babel/plugin-transform-runtime": "^7.8.3",
-        "@babel/plugin-transform-spread": "^7.8.3",
-        "@babel/preset-env": "^7.8.4",
-        "@babel/preset-typescript": "^7.8.3",
         "@types/isomorphic-fetch": "^0.0.35",
+        "@types/jest": "^25.2.1",
         "@types/node-fetch": "2.5.4",
         "@types/websocket": "1.0.0",
-        "babel-jest": "^25.1.0",
         "jest": "^25.1.0",
+        "ts-jest": "^25.3.1",
         "typescript": "^3.8.3"
     },
     "browserslist": [
@@ -41,32 +34,6 @@
         "ie 11",
         "edge >= 15"
     ],
-    "babel": {
-        "presets": [
-            [
-                "@babel/preset-env",
-                {
-                    "modules": "commonjs"
-                }
-            ],
-            "@babel/preset-typescript"
-        ],
-        "plugins": [
-            "@babel/plugin-proposal-class-properties",
-            "@babel/plugin-transform-regenerator",
-            "@babel/plugin-transform-runtime"
-        ]
-    },
-    "jest": {
-        "testPathIgnorePatterns": [
-            "<rootDir>[/\\\\](lib|node_modules)[/\\\\]"
-        ],
-        "testEnvironment": "node",
-        "testURL": "http://localhost",
-        "transform": {
-            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
-        }
-    },
     "jest-junit": {
         "suiteName": "@hiro-graph/client",
         "outputDirectory": "../../reports",

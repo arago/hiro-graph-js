@@ -87,12 +87,6 @@ export default class Client {
             filtersArray = [filters];
         }
 
-        if (filtersArray.some((f) => typeof f !== 'string')) {
-            throw new Error(
-                'All filters must be strings representing `jfilter` filters',
-            );
-        }
-
         if (filtersArray.length === 0) {
             // add a default one that catches everything
             filtersArray.push('(element.ogit/_id = *)');

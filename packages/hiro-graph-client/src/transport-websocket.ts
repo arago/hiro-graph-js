@@ -3,12 +3,12 @@
  */
 import { w3cwebsocket as WS } from 'websocket';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
-import { map, catchError, toArray, mergeMap, reduce } from 'rxjs/operators';
+import { map, catchError, mergeMap, reduce } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import uid from 'uid';
 
-import { GRAPH_WS_API_BASE } from './api-version';
 import { RequestOptions, GraphRequest } from './types';
+import { Endpoint } from './endpoint';
 
 import { Token } from '.';
 
@@ -37,14 +37,16 @@ export interface WebSocketRequestOptions<T> extends RequestOptions {
 }
 
 export default class WebSocketTransport {
-  private endpoint: string;
+  private url: string;
   private connection: WebSocketSubject<any> | undefined;
 
-  constructor(endpoint: string) {
+  constructor(
+    endpoint: string,
+    type: 'graph' | 'events' = 'graph',
+    path?: string,
+  ) {
     ensureWebSocketsAvailable();
-    this.endpoint = endpoint
-      .replace(/^http/, 'ws') //replace http(s) with ws(s)
-      .replace(/\/?$/, `${GRAPH_WS_API_BASE}/`); // replace possible trailing slash with api endpoint
+    this.url = new Endpoint(endpoint, true).api(type, path);
   }
 
   /**
@@ -138,12 +140,12 @@ export default class WebSocketTransport {
   /**
    *  Return a promise for the connected websocket.
    */
-  connect(token: string) {
+  connect(token: string, protocol?: string) {
     if (!this.connection) {
       this.connection = webSocket({
-        url: this.endpoint,
+        url: this.url,
         WebSocketCtor: WS as any,
-        protocol: [GRAPH_API_PROTOCOL, `token-${token}`],
+        protocol: [protocol || GRAPH_API_PROTOCOL, `token-${token}`],
       });
     }
 
