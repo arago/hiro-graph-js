@@ -8,15 +8,3 @@ export * from './gremlin';
 export * from './lucene';
 export * from './types';
 export { Token, cannotGetToken, Errors, StreamFilter };
-
-/*
-@todo
-
-* Add testing
-* Ensure old tests pass
-* Dedup?
-* Websocket reconnect?
-* Servlets back in
-* Add rollup
-* body/query typings
-*/
