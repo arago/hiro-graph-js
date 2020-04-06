@@ -13,9 +13,11 @@ import { WebSocketSubject } from 'rxjs/webSocket';
 import { of, Observable, PartialObserver, Subscription, timer } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
-import WebSocketTransport, {
+import {
+  WebSocketTransport,
   ensureWebSocketsAvailable,
 } from './transport-websocket';
+import { StreamFilter } from './streamfilter';
 
 import { Token } from '.';
 
@@ -50,41 +52,7 @@ export interface EventStreamFilter {
   'filter-content': string;
 }
 
-export class StreamFilter {
-  private value = '';
-
-  constructor(value?: string) {
-    if (value) {
-      this.value = value;
-    }
-  }
-
-  private reduce(text: (string | StreamFilter)[]) {
-    return text.reduce((acc, t) => acc + `(${t.toString()})`, '');
-  }
-
-  or(...text: (string | StreamFilter)[]) {
-    const v = this.reduce(text);
-
-    this.value += `|${v}`;
-
-    return this;
-  }
-
-  and(...text: (string | StreamFilter)[]) {
-    const v = this.reduce(text);
-
-    this.value += `&${v}`;
-
-    return this;
-  }
-
-  toString() {
-    return `${this.value}`;
-  }
-}
-
-export default class EventStream {
+export class EventStream {
   private _token: Token;
   private _filters: EventStreamFilter[];
   private _transport: WebSocketTransport;

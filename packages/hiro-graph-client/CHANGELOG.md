@@ -49,3 +49,4 @@ client.lucene({ '/hello': 'world' });
 ```
 
 * Remove internal un-used code - such as dedup, extra logging, internal emitting of events etc.
+* Remove internal default exports for consistency.

@@ -20,7 +20,7 @@ export interface TokenOptions<Meta> {
   onInvalidate?: () => void;
 }
 
-export default class Token<Meta = any> {
+export class Token<Meta = any> {
   private _invalidated?: boolean;
   private _tokenPromise?: Promise<string>;
 

@@ -8,14 +8,15 @@
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import WebsocketTransport, {
+import {
+  WebSocketTransport,
   webSocketsAvailable,
   WebSocketRequestOptions,
 } from './transport-websocket';
-import HttpTransport from './transport-http';
+import { HttpTransport } from './transport-http';
 import { isConflict, isNotFound } from './errors';
 import { fixedToken } from './token';
-import EventStream, { EventStreamRequest } from './eventstream';
+import { EventStream, EventStreamRequest } from './eventstream';
 import {
   GraphTransport,
   GraphRequest,
@@ -41,7 +42,7 @@ export type TransportOrOptions = WebSocketRequestOptions | GraphTransport;
 const isTransport = (t: TransportOrOptions): t is GraphTransport =>
   'request' in t && typeof t.request === 'function';
 
-export default class Client {
+export class Client {
   private endpoint: string;
   private http: HttpTransport;
   private transport: GraphTransport;
@@ -67,7 +68,7 @@ export default class Client {
       this.transport = transportOrOptions;
     } else if (webSocketsAvailable && !transportOrOptions.forceHTTP) {
       //All a transport needs to implement is "request"
-      this.transport = new WebsocketTransport(endpoint, transportOrOptions);
+      this.transport = new WebSocketTransport(endpoint, transportOrOptions);
     } else {
       if (!webSocketsAvailable) {
         console.warn(
