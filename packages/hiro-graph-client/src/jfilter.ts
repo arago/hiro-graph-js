@@ -1,4 +1,4 @@
-export class StreamFilter {
+export class JFilter {
   private value = '';
 
   constructor(value?: string) {
@@ -7,11 +7,11 @@ export class StreamFilter {
     }
   }
 
-  private reduce(text: (string | StreamFilter)[]) {
+  private reduce(text: (string | JFilter)[]) {
     return text.reduce((acc, t) => acc + `(${t.toString()})`, '');
   }
 
-  or(...text: (string | StreamFilter)[]) {
+  or(...text: (string | JFilter)[]) {
     const v = this.reduce(text);
 
     this.value += `|${v}`;
@@ -19,7 +19,7 @@ export class StreamFilter {
     return this;
   }
 
-  and(...text: (string | StreamFilter)[]) {
+  and(...text: (string | JFilter)[]) {
     const v = this.reduce(text);
 
     this.value += `&${v}`;

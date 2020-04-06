@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JFilter snapshots 1`] = `"&(a = b)(d = e)"`;
+
+exports[`JFilter snapshots 2`] = `"|(a = b)(d = e)"`;
+
+exports[`JFilter snapshots 3`] = `"&(a = b)(d = e)"`;
+
+exports[`JFilter snapshots 4`] = `"&(a = b)(|(e = f)&(d = c)(g = f))"`;

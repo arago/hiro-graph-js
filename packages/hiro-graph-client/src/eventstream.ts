@@ -17,7 +17,7 @@ import {
   WebSocketTransport,
   ensureWebSocketsAvailable,
 } from './transport-websocket';
-import { StreamFilter } from './streamfilter';
+import { JFilter } from './jfilter';
 
 import { Token } from '.';
 
@@ -121,7 +121,7 @@ export class EventStream {
    * @param filter - String
    */
 
-  register(filter: string | StreamFilter) {
+  register(filter: string | JFilter) {
     const filterObj: EventStreamFilter = {
       'filter-id': filter.toString(),
       'filter-type': 'jfilter',
