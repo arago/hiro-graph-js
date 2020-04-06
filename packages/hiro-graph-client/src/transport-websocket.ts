@@ -9,8 +9,7 @@ import uid from 'uid';
 
 import { GraphRequest, GraphTransport } from './types/graph';
 import { Endpoint, WS_API } from './endpoint';
-
-import { Token } from '.';
+import { Token } from './token';
 
 export const webSocketsAvailable = WS !== undefined && WS !== null;
 
@@ -38,7 +37,7 @@ export interface WebSocketRequestOptions {
   forceHTTP?: boolean;
 }
 
-export default class WebSocketTransport implements GraphTransport {
+export class WebSocketTransport implements GraphTransport {
   private endpoint: Endpoint<true>;
   private url: string;
   private connection: WebSocketSubject<any> | undefined;
@@ -58,7 +57,6 @@ export default class WebSocketTransport implements GraphTransport {
   request<T = any>(
     token: Token,
     { type, headers = {}, body = {} }: GraphRequest,
-    reqOptions: WebSocketRequestOptions = {},
   ) {
     //the connect call ensures the websocket is connected before continuing.
     const id = uid();

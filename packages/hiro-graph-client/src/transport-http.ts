@@ -21,7 +21,7 @@ interface Response<T> {
 
 const hasError = <T>(res: any): res is Response<T> => !!res.error;
 
-export default class HttpTransport implements GraphTransport {
+export class HttpTransport implements GraphTransport {
   private endpoint: Endpoint;
 
   constructor(endpoint: string) {
