@@ -12,13 +12,16 @@ export interface PlaceholderObject {
 
 export type MethodArgument =
   | string
+  | number
   | boolean
   | PlaceholderObject
   | MethodArgumentArray;
 
 interface MethodArgumentArray extends Array<MethodArgument> {}
 
-export type GremlinBranch = (branch: GremlinQuery) => GremlinQuery;
+export type GremlinBranch = (
+  branch: GremlinQueryBuilder,
+) => GremlinQueryBuilder;
 
 export type MethodArgumentObject = Record<string, string>;
 
@@ -27,7 +30,7 @@ export type GremlinTransform = Record<string, GremlinBranch> | GremlinBranch[];
 /**
  *  Create a new query builder
  */
-export function gremlin(initialQuery: GremlinQuery) {
+export function gremlin(initialQuery?: GremlinQuery) {
   return new GremlinQueryBuilder(initialQuery);
 }
 
@@ -126,9 +129,9 @@ export class GremlinQueryBuilder {
       }
 
       return this.raw(chunk.toString() + query);
-    } else {
-      this.raw(query);
     }
+
+    return this.raw(query);
   }
 
   /**
@@ -269,12 +272,13 @@ export class GremlinQueryBuilder {
    */
   addTempProp(name: string, value: string) {
     ensureTemporaryPropNameOK(name);
-    this.raw(`transform{it.${name}=${quote(value)};it}`);
+
+    return this.raw(`transform{it.${name}=${quote(value)};it}`);
   }
   /**
    *  Shorthand for a transform that adds a dynamic temporary property to each result in the pipeline
    */
-  addComputedProp(name: string, query: GremlinBranch) {
+  addComputedProp(name: string, query: string | GremlinBranch) {
     ensureTemporaryPropNameOK(name);
 
     const subQuery = createBrancher('it')(query);
@@ -496,7 +500,7 @@ const ensureTemporaryPropNameOK = (name: string) => {
 
 //creates a branched structure with subQueries
 const createBrancher = (prefix: string) => (
-  value: GremlinBranch,
+  value: string | GremlinBranch,
   key?: string,
 ) => {
   const subQuery = new GremlinQueryBuilder(prefix);
