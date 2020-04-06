@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StreamFilter snapshots 1`] = `"&(a = b)(d = e)"`;
+
+exports[`StreamFilter snapshots 2`] = `"|(a = b)(d = e)"`;
+
+exports[`StreamFilter snapshots 3`] = `"&(a = b)(d = e)"`;
+
+exports[`StreamFilter snapshots 4`] = `"&(a = b)(|(e = f)&(d = c)(g = f))"`;
