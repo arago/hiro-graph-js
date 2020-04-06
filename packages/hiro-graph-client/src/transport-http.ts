@@ -29,7 +29,7 @@ export class HttpTransport implements GraphTransport {
   }
 
   //this is basically window.fetch with a token.get() before it.
-  fetch<T>(token: Token, url: string, options: RequestOptions = {}) {
+  private fetch<T>(token: Token, url: string, options: RequestOptions = {}) {
     const tp = token.get();
 
     return of(tp)
@@ -41,13 +41,25 @@ export class HttpTransport implements GraphTransport {
             Authorization: 'Bearer ' + t,
           };
 
-          const res = await fetch(url, {
+          let req = {
             ...options,
-            body: JSON.stringify(options.body),
             headers,
-          });
+          };
 
-          return res.json();
+          if (options.body) {
+            req.body = JSON.stringify(options.body);
+          }
+
+          const res = await fetch(url, req);
+
+          return res.json().catch(() => {
+            if (res.status === 202) {
+              // Special case when there is potentially no body
+              return {};
+            }
+
+            throw new Error('Invalid JSON in response from Graph');
+          });
         }),
       )
       .pipe(
@@ -83,13 +95,13 @@ export class HttpTransport implements GraphTransport {
     return this.fetch<T>(token, url, options);
   }
 
-  defaultOptions() {
+  getDefaultOptions() {
     return defaultFetchOptions();
   }
 }
 
 //exported for use in the connection
-export const defaultFetchOptions = (): RequestOptions => ({
+const defaultFetchOptions = (): RequestOptions => ({
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',

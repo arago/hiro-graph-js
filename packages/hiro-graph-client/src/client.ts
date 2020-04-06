@@ -195,7 +195,7 @@ export class Client {
   replace<T>(
     id: string,
     data: Partial<T> = {},
-    options: { waitForIndex?: boolean; createIfNotExists?: boolean } = {},
+    options: { waitForIndex?: boolean; createIfNotExists?: string } = {},
   ) {
     const { createIfNotExists = false, waitForIndex = false } = options;
     //createIfNotExists should contain the "ogit/_type" to create if the node doesn't exist,
@@ -385,11 +385,14 @@ export class Client {
    */
   streamts<T>(
     timeseriesId: string,
-    options = {
-      from: false,
-      to: false,
+    options: {
+      from?: number;
+      to?: number;
+      limit?: number;
+      includeDeleted?: boolean;
+      with?: string[];
+    } = {
       limit: 50,
-      includeDeleted: false,
       with: [],
     },
   ) {

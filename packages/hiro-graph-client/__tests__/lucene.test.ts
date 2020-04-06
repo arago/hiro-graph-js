@@ -2,7 +2,11 @@
 /**
  *  Testing the Lucene Query Generator
  */
-import { lucene as parse, getPlaceholderKeyForIndex, Lucene } from './lucene';
+import {
+  lucene as parse,
+  getPlaceholderKeyForIndex,
+  Lucene,
+} from '../src/lucene';
 
 describe('Lucene Query Generator:', function () {
   const tests = [

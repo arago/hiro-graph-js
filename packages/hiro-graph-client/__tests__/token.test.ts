@@ -1,4 +1,4 @@
-import { Token } from './token';
+import { Token } from '../src/token';
 
 test('Create token', async () => {
   const token = new Token({ getToken: () => Promise.resolve('test') });
