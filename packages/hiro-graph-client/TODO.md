@@ -7,3 +7,4 @@
 * Servlets back in
 * Add rollup (and babel?)
 * body/query typings
+* Ensure eventstream stays open
