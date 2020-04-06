@@ -1,4 +1,4 @@
-import { Endpoint } from './endpoint';
+import { Endpoint } from '../src/endpoint';
 
 test('Create endpoint', () => {
   const tests: Array<[Endpoint<any>, string]> = [

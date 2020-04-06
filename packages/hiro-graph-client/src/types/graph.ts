@@ -2,13 +2,11 @@ import { Observable } from 'rxjs';
 
 export type GraphRequestType =
   | 'get'
-  | 'ids'
   | 'create'
   | 'update'
   | 'replace'
   | 'delete'
   | 'connect'
-  | 'disconnect'
   | 'query'
   | 'writets'
   | 'streamts'

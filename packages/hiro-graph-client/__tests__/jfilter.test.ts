@@ -1,4 +1,4 @@
-import { JFilter } from './jfilter';
+import { JFilter } from '../src/jfilter';
 
 test('JFilter snapshots', () => {
   const tests = [

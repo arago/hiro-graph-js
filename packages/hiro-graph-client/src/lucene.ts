@@ -94,6 +94,7 @@ export interface LuceneQueryOptions {
   order?: string | string[];
   fields?: string[];
   count?: boolean;
+  [index: string]: any;
 }
 
 type NormalisedQuery = {

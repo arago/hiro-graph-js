@@ -2,7 +2,11 @@
 /**
  *  Testing the Gremlin Query Builder
  */
-import { gremlin as queryBuilder, GremlinQueryBuilder, T } from './gremlin';
+import {
+  gremlin as queryBuilder,
+  GremlinQueryBuilder,
+  T,
+} from '../src/gremlin';
 
 interface GremlinTest {
   name: string;

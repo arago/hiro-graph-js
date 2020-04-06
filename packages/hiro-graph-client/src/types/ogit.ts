@@ -139,3 +139,9 @@ export namespace OGIT {
     }
   }
 }
+
+export interface AccountWithProfile {
+  account: OGIT.Auth.Account;
+  avatar: string;
+  profile: OGIT.Auth.AccountProfile;
+}

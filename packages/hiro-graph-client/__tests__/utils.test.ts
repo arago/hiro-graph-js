@@ -1,4 +1,4 @@
-import { extract } from './utils';
+import { extract } from '../src/utils';
 
 type O = Record<string, any>;
 
