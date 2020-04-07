@@ -30,7 +30,6 @@ describe('transport-http', () => {
       mockFn.mockReturnValueOnce([200, {}]);
       await fn().toPromise();
       expect(mockFn).toHaveBeenCalledTimes(1);
-      // @IMPORTANT check the snapshots! They must be correct the first time or these tests are worthless!
       expect(mockFn.mock.calls[0]).toMatchSnapshot(); //i.e. correct options created
     });
   });
