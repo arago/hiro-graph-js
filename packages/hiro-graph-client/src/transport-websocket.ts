@@ -4,10 +4,10 @@
 import { w3cwebsocket as WS } from 'websocket';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 import { map, catchError, mergeMap, reduce } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
+import { of, Observable, iif } from 'rxjs';
 import uid from 'uid';
 
-import { GraphRequest, GraphTransport } from './types/graph';
+import { GraphRequest, GraphTransport } from './types';
 import { Endpoint, WS_API } from './endpoint';
 import { Token } from './token';
 
@@ -44,7 +44,7 @@ export class WebSocketTransport implements GraphTransport {
 
   constructor(
     endpoint: string,
-    { api = 'graph', path }: WebSocketRequestOptions,
+    { api = 'graph', path }: WebSocketRequestOptions = {},
   ) {
     ensureWebSocketsAvailable();
     this.endpoint = new Endpoint(endpoint, true);
@@ -63,7 +63,7 @@ export class WebSocketTransport implements GraphTransport {
 
     // @todo send requests to a pipe for deduping before triggering request?
 
-    const response$ = new Observable<T>((subscriber) => {
+    const response$ = new Observable<WebSocketResponse<T>>((subscriber) => {
       of(token)
         .pipe(
           mergeMap((t) => t.get()),
@@ -85,7 +85,7 @@ export class WebSocketTransport implements GraphTransport {
                   body,
                 }),
                 () => ({}),
-                (message) => message.id === id || message.error,
+                (message) => message && (message.id === id || message.error),
               )
               .pipe(
                 catchError((err) => {
@@ -117,11 +117,11 @@ export class WebSocketTransport implements GraphTransport {
         )
         .subscribe({
           next: (res) => {
-            if (res.body) {
-              subscriber.next(res.body);
+            if (res.body !== null && res.body !== undefined) {
+              subscriber.next(res);
             }
 
-            if (!res.more) {
+            if (res.multi === false || !res.more) {
               subscriber.complete();
             }
           },
@@ -133,15 +133,25 @@ export class WebSocketTransport implements GraphTransport {
             subscriber.error(err);
           },
         });
-    }).pipe(
-      reduce((acc, res) => {
-        acc.push(res);
+    });
 
-        return acc;
-      }, [] as T[]),
+    const items: T[] = [];
+
+    return response$.pipe(
+      mergeMap((res) =>
+        iif(
+          () => res.multi,
+          of(res).pipe(
+            reduce((acc, r) => {
+              acc.push(r.body as T);
+
+              return acc;
+            }, items),
+          ),
+          of(res.body as T),
+        ),
+      ),
     );
-
-    return response$;
   }
 
   /**
@@ -153,6 +163,17 @@ export class WebSocketTransport implements GraphTransport {
         url: this.url,
         WebSocketCtor: WS as any,
         protocol: [protocol || GRAPH_API_PROTOCOL, `token-${token}`],
+        deserializer: ({ data }) => {
+          if (typeof data !== 'string') {
+            return;
+          }
+
+          try {
+            return JSON.parse(data);
+          } catch {
+            return;
+          }
+        },
       });
     }
 
