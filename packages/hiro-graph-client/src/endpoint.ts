@@ -63,7 +63,17 @@ export class Endpoint<WS extends boolean = false> {
     }
 
     if (query && Object.keys(query).length > 0) {
-      url += `?${qs.stringify(query)}`;
+      const q = Object.keys(query)
+        .filter((k) => query[k] !== undefined && query[k] !== null)
+        .reduce((acc, k) => {
+          acc[k] = query[k];
+
+          return acc;
+        }, {} as qs.ParsedUrlQueryInput);
+
+      if (Object.keys(q).length > 0) {
+        url += `?${qs.stringify(q)}`;
+      }
     }
 
     return url;
