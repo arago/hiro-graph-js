@@ -545,20 +545,20 @@ Array [
 exports[`transport-http should handle bad http responses appropriately 1`] = `
 Object {
   "code": 502,
-  "message": "Invalid JSON in response from Graph",
+  "message": "[HTTP] Error: Invalid JSON in response from Graph",
 }
 `;
 
 exports[`transport-http should handle bad http responses appropriately 2`] = `
 Object {
   "code": 403,
-  "message": "forbidden",
+  "message": "[HTTP] Error: forbidden",
 }
 `;
 
 exports[`transport-http should handle bad http responses appropriately 3`] = `
 Object {
   "code": 404,
-  "message": "not found",
+  "message": "[HTTP] Error: not found",
 }
 `;

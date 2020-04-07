@@ -72,7 +72,17 @@ export class HttpTransport implements GraphTransport {
         ),
         map((res) => {
           if (hasError<T>(res)) {
-            throw res.error;
+            let msg = 'Unknown GraphIT Error';
+            let code = 500;
+
+            if (typeof res.error === 'string') {
+              msg = res.error;
+            } else if (typeof res.error === 'object') {
+              msg = res.error.message || msg;
+              code = res.error.code || code;
+            }
+
+            throw createError(code, `[HTTP] Error: ${msg}`);
           }
 
           if ('items' in res) {
