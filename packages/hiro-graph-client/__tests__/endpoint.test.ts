@@ -79,18 +79,18 @@ test('Get API with query', () => {
       new Endpoint('https://example.com').api('graph', '/test', {
         a: 'hello',
       }),
-      'https://example.com/api/graph/7.1/test/?a=hello',
+      'https://example.com/api/graph/7.1/test?a=hello',
     ],
     [
       new Endpoint('https://example.com').api('graph', 'test', { a: 'hello' }),
-      'https://example.com/api/graph/7.1/test/?a=hello',
+      'https://example.com/api/graph/7.1/test?a=hello',
     ],
     [
       new Endpoint('https://example.com').api('graph', 'test', {
         a: 'hello',
         b: 'world',
       }),
-      'https://example.com/api/graph/7.1/test/?a=hello&b=world',
+      'https://example.com/api/graph/7.1/test?a=hello&b=world',
     ],
     [
       new Endpoint('https://example.com').api('graph', 'test', {}),

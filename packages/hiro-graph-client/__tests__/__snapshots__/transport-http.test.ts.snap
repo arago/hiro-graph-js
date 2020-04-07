@@ -18,7 +18,7 @@ Array [
 
 exports[`transport-http should create the right options for: create (waitForIndex) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/new/some-type/?waitForIndex=true",
+  "https://graphit/api/graph/7.1/new/some-type?waitForIndex=true",
   Object {
     "body": "{\\"some\\":\\"prop\\"}",
     "headers": Object {
@@ -126,7 +126,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with from + to + offset + limit) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?offset=100&limit=5&from=0&to=1550597976759&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?offset=100&limit=5&from=0&to=1550597976759&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -141,7 +141,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with from + to) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?from=0&to=1550597976759&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?from=0&to=1550597976759&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -156,7 +156,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with from) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?from=0&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?from=0&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -171,7 +171,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with limit) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?limit=500&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?limit=500&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -186,7 +186,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with offset + limit) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?offset=100&limit=5&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?offset=100&limit=5&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -201,7 +201,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with offset) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?offset=10&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?offset=10&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -216,7 +216,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with to) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?to=1550597976759&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?to=1550597976759&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -231,7 +231,7 @@ Array [
 
 exports[`transport-http should create the right options for: history (with version) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?limit=500&version=123&includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?limit=500&version=123&includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -246,7 +246,7 @@ Array [
 
 exports[`transport-http should create the right options for: history 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/history/?includeDeleted=false&listMeta=false",
+  "https://graphit/api/graph/7.1/some-id/history?includeDeleted=false&listMeta=false",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -373,7 +373,7 @@ Array [
 
 exports[`transport-http should create the right options for: me 1`] = `
 Array [
-  "https://graphit/api/auth/6.1/me/account/?profile=true",
+  "https://graphit/api/auth/6.1/me/account?profile=true",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -388,7 +388,7 @@ Array [
 
 exports[`transport-http should create the right options for: replace (createIfNotExists) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/?ogit%2F_type=some-type&createIfNotExists=true",
+  "https://graphit/api/graph/7.1/some-id?ogit%2F_type=some-type&createIfNotExists=true",
   Object {
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
@@ -404,7 +404,7 @@ Array [
 
 exports[`transport-http should create the right options for: replace (waitForIndex) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/?ogit%2F_type=&waitForIndex=true",
+  "https://graphit/api/graph/7.1/some-id?ogit%2F_type=&waitForIndex=true",
   Object {
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
@@ -420,7 +420,7 @@ Array [
 
 exports[`transport-http should create the right options for: replace 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/?ogit%2F_type=",
+  "https://graphit/api/graph/7.1/some-id?ogit%2F_type=",
   Object {
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
@@ -436,7 +436,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts (from only) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/ts-id/values/?from=1399999999999",
+  "https://graphit/api/graph/7.1/ts-id/values?from=1399999999999",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -451,7 +451,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts (to + from) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/ts-id/values/?from=1399999999999&to=1400000000001",
+  "https://graphit/api/graph/7.1/ts-id/values?from=1399999999999&to=1400000000001",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -466,7 +466,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts (to only) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/ts-id/values/?to=1400000000001",
+  "https://graphit/api/graph/7.1/ts-id/values?to=1400000000001",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -481,7 +481,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/ts-id/values/?limit=50&",
+  "https://graphit/api/graph/7.1/ts-id/values?limit=50&",
   Object {
     "headers": Object {
       "Accept": "application/json",
@@ -496,7 +496,7 @@ Array [
 
 exports[`transport-http should create the right options for: update (waitForIndex) 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/some-id/?waitForIndex=true",
+  "https://graphit/api/graph/7.1/some-id?waitForIndex=true",
   Object {
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {

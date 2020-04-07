@@ -63,7 +63,7 @@ export class Endpoint<WS extends boolean = false> {
     }
 
     if (query && Object.keys(query).length > 0) {
-      url += `/?${qs.stringify(query)}`;
+      url += `?${qs.stringify(query)}`;
     }
 
     return url;
