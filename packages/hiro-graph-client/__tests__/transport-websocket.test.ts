@@ -16,6 +16,8 @@ const fakeToken = new Token({
   onInvalidate,
 });
 
+const nextTick = () => new Promise((resolve) => process.nextTick(resolve));
+
 // These tests are run with the transport directly, because the onus is on correct handling of the
 // websockets themselves
 describe('transport-websocket', () => {
@@ -38,6 +40,10 @@ describe('transport-websocket', () => {
           if (msg.id === id || msg.error) {
             sub$.next(msg);
           }
+        });
+
+        sock.on('error', (msg: any) => {
+          sub$.error(msg);
         });
 
         return sub$;
@@ -162,26 +168,26 @@ describe('transport-websocket', () => {
     expect(await res1).toEqual([10, 11, 12, 13, 14]);
   });
 
-  // it('should handle connection failure', async () => {
-  //   const { id, res } = await getIdAndResPromise({ type: 'fail' });
+  it('should handle connection failure', async () => {
+    const { id, res } = await getIdAndResPromise({ type: 'fail' });
 
-  //   // send one response and then fail the connection.
-  //   emitResponse({ id, multi: true, more: true, body: 'foo' });
+    // send one response and then fail the connection.
+    emitResponse({ id, multi: true, more: true, body: 'foo' });
 
-  //   // now fail.
-  //   sock.emit('error', new Error('Mock Closed Connection'));
-  //   sock.emit('close');
-  //   await expect(res).rejects.toBeDefined();
+    // now fail.
+    sock.emit('error', { code: 500, reason: 'Mock Closed Connection' });
+    sock.emit('close', {});
+    await expect(res).rejects.toBeDefined();
 
-  //   // the key is also being able to reconnect.
-  //   const lastSock = sock;
+    // the key is also being able to reconnect.
+    const lastSock = sock;
 
-  //   await connect();
-  //   // we have to do this one manually.
-  //   transport.request(fakeToken, { type: 'getme' }).toPromise();
-  //   // and leave the promise hanging... but we also have to wait for a bunch of
-  //   // promises to resolve...
-
-  //   expect(lastSock).not.toBe(sock);
-  // });
+    await connect();
+    // we have to do this one manually.
+    transport.request(fakeToken, { type: 'getme' }).toPromise();
+    // and leave the promise hanging... but we also have to wait for a bunch of
+    // promises to resolve...
+    await nextTick();
+    expect(lastSock).not.toBe(sock);
+  });
 });
