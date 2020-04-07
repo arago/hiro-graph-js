@@ -6,8 +6,7 @@
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
     "scripts": {
-        "build": "rm -rf lib/* && yarn tsc -p tsconfig.build.json",
-        "build:types": "tsc --emitDeclarationOnly",
+        "build": "rm -rf lib/* && yarn tsc",
         "prepublish": "yarn test && yarn build",
         "test": "madge --circular src/index.ts && jest --silent",
         "test:ci": "jest --silent --ci --reporters=default --reporters=jest-junit"

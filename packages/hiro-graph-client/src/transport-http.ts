@@ -76,7 +76,11 @@ export class HttpTransport implements GraphTransport {
             throw res.error;
           }
 
-          return (res as Response<T>).items || [];
+          if ('items' in res) {
+            return res.items;
+          }
+
+          return res || {};
         }),
       );
   }
