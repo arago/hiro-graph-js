@@ -149,8 +149,8 @@ function createFetchOptions(
     case 'replace':
       const t = headers.createIfNotExists ? headers['ogit/_type'] : undefined;
       const query = {
-        'ogit/_type': t,
         ...extract(headers, 'createIfNotExists', 'waitForIndex'),
+        'ogit/_type': t,
       };
 
       url = endpoint.api(
