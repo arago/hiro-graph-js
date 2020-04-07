@@ -25,12 +25,6 @@ export default function fetch(...args: any[]) {
 
   if (body instanceof Error) {
     return Promise.reject(body);
-  } else if (status >= 400) {
-    return Promise.resolve(
-      new Response(JSON.stringify({ error: { message: body, code: status } }), {
-        status,
-      }),
-    );
   } else if (typeof body === 'string') {
     return Promise.resolve(new Response(body, { status }));
   } else {
