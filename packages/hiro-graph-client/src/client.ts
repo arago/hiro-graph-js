@@ -386,13 +386,16 @@ export class Client {
   streamts<T>(
     timeseriesId: string,
     options: {
-      from?: number;
-      to?: number;
-      limit?: number;
+      from?: number | false;
+      to?: number | false;
+      limit?: number | false;
       includeDeleted?: boolean;
       with?: string[];
     } = {
+      from: false,
+      to: false,
       limit: 50,
+      includeDeleted: false,
       with: [],
     },
   ) {

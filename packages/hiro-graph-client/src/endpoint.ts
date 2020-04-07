@@ -1,5 +1,3 @@
-import qs, { ParsedUrlQueryInput } from 'querystring';
-
 export const APIs = {
   http: {
     app: '/api/app/7.0',
@@ -40,7 +38,7 @@ export class Endpoint<WS extends boolean = false> {
   api(
     name: WS extends true ? WS_API : HTTP_API,
     path?: string,
-    query?: ParsedUrlQueryInput,
+    query?: Record<string, any>,
   ) {
     if (!this.APIs) {
       throw new Error(`No APIs defined for this endpoint: ${this.value}`);
@@ -62,20 +60,25 @@ export class Endpoint<WS extends boolean = false> {
       }
     }
 
-    if (query && Object.keys(query).length > 0) {
-      const q = Object.keys(query)
-        .filter((k) => query[k] !== undefined && query[k] !== null)
-        .reduce((acc, k) => {
-          acc[k] = query[k];
-
-          return acc;
-        }, {} as qs.ParsedUrlQueryInput);
-
-      if (Object.keys(q).length > 0) {
-        url += `?${qs.stringify(q)}`;
-      }
+    if (query) {
+      url += stringify(query);
     }
 
     return url;
   }
+}
+
+function stringify(obj: Record<string, any>) {
+  const qs = Object.keys(obj)
+    .map((k) => {
+      if (obj[k] !== undefined && obj[k] !== null) {
+        return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`;
+      }
+
+      return false;
+    })
+    .filter(Boolean)
+    .join('&');
+
+  return qs.length > 0 ? '?' + qs : '';
 }

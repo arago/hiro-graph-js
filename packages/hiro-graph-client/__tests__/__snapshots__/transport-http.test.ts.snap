@@ -481,7 +481,7 @@ Array [
 
 exports[`transport-http should create the right options for: streamts 1`] = `
 Array [
-  "https://graphit/api/graph/7.1/ts-id/values?limit=50&",
+  "https://graphit/api/graph/7.1/ts-id/values?limit=50&from=false&to=false&includeDeleted=false&with=",
   Object {
     "headers": Object {
       "Accept": "application/json",
