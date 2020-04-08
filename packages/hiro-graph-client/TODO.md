@@ -1,6 +1,5 @@
 # ToDo
 
-* Add testing
 * Ensure old tests pass
 * Dedup?
 * Websocket reconnect?

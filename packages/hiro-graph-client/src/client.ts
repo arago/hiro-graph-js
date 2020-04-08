@@ -5,8 +5,8 @@
  *  Event streams require WebSockets so those will not work witout websocket support.
  *  The connection requires a `Token`.
  */
-import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, map, retryWhen, concatMap, delay } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -125,8 +125,30 @@ export class Client {
    *  Make a generic request. The transport will handle the details, we handle the retry.
    *  We use `this.transport` which is websocket if available.
    */
-  request<T>({ type, headers = {}, body = {} }: GraphRequest) {
-    return this.transport.request<T>(this.token, { type, headers, body });
+  request<T>({ type, headers = {}, body = {} }: GraphRequest, maxRetries = 1) {
+    let retries = 0;
+
+    return this.transport
+      .request<T>(this.token, { type, headers, body })
+      .pipe(
+        retryWhen((err$) =>
+          err$.pipe(
+            concatMap((res) => {
+              if (
+                retries < maxRetries &&
+                (res.isRetryable || res.code === 888 || res.code === 401)
+              ) {
+                retries += 1;
+
+                return of(res);
+              }
+
+              return throwError(res);
+            }),
+            delay(1000),
+          ),
+        ),
+      );
   }
 
   getToken() {

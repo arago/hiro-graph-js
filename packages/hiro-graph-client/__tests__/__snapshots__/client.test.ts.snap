@@ -40,6 +40,7 @@ Object {
 
 exports[`Client Requests should call delete (waitForIndex) correctly 1`] = `
 Object {
+  "body": Object {},
   "headers": Object {
     "ogit/_id": "some-id",
     "waitForIndex": "true",
@@ -50,6 +51,7 @@ Object {
 
 exports[`Client Requests should call delete correctly 1`] = `
 Object {
+  "body": Object {},
   "headers": Object {
     "ogit/_id": "some-id",
   },
@@ -59,6 +61,7 @@ Object {
 
 exports[`Client Requests should call disconnect correctly 1`] = `
 Object {
+  "body": Object {},
   "headers": Object {
     "ogit/_id": "the-out-id$$some-verb$$the-in-id",
   },
@@ -68,6 +71,7 @@ Object {
 
 exports[`Client Requests should call get correctly 1`] = `
 Object {
+  "body": Object {},
   "headers": Object {
     "ogit/_id": "some-id",
   },
