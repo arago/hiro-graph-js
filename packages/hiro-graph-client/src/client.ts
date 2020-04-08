@@ -6,7 +6,7 @@
  *  The connection requires a `Token`.
  */
 import { catchError, map, retryWhen, concatMap, delay } from 'rxjs/operators';
-import { of, throwError } from 'rxjs';
+import { of, throwError, EMPTY } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -14,7 +14,7 @@ import {
   WebSocketRequestOptions,
 } from './transport-websocket';
 import { HttpTransport } from './transport-http';
-import { isConflict, isNotFound } from './errors';
+import * as Errors from './errors';
 import { fixedToken } from './token';
 import { EventStream, EventStreamRequest } from './eventstream';
 import {
@@ -134,6 +134,18 @@ export class Client {
         retryWhen((err$) =>
           err$.pipe(
             concatMap((res) => {
+              const closed = res === Errors.connectionClosedBeforeSend;
+
+              // Always handle early close
+              if (closed) {
+                return of(res);
+              }
+
+              if (res.code === 401) {
+                this.token.invalidate();
+              }
+
+              // Retry retryable error until max retries
               if (
                 retries < maxRetries &&
                 (res.isRetryable || res.code === 888 || res.code === 401)
@@ -350,13 +362,13 @@ export class Client {
       body: { in: inId, out: outId },
     }).pipe(
       catchError((err) => {
-        if (isConflict(err)) {
-          return of({});
+        if (Errors.isConflict(err)) {
+          return EMPTY;
         }
 
         throw err;
       }),
-      map(() => ({})),
+      map(() => {}),
     );
   }
 
@@ -366,13 +378,13 @@ export class Client {
   disconnect<T>(type: string, inId: string, outId: string) {
     return this.delete<T>(`${outId}$$${type}$$${inId}`).pipe(
       catchError((err) => {
-        if (isNotFound(err) || isConflict(err)) {
-          return of({});
+        if (Errors.isNotFound(err) || Errors.isConflict(err)) {
+          return EMPTY;
         }
 
         throw err;
       }),
-      map(() => ({})),
+      map(() => {}),
     );
   }
 
