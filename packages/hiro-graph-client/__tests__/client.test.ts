@@ -1,7 +1,6 @@
 // @ts-ignore
 import { mockFn } from 'isomorphic-fetch';
-import { Subject, BehaviorSubject, of, Observable, throwError } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
 
 import { Token } from '../src/token';
 import * as errors from '../src/errors';
