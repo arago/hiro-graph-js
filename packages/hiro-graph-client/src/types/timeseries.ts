@@ -1,4 +1,4 @@
-export namespace TimeSeries {
+export declare namespace TimeSeries {
   export interface Value<VariableNames extends string = string> {
     Entries: Entry[];
     Type: 'start' | 'execute' | 'move' | 'finish';
