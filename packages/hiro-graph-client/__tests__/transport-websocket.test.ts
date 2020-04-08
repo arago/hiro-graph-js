@@ -3,8 +3,6 @@
 import EventEmitter from 'events';
 
 // @ts-ignore
-import { onNextSocket, w3cwebsocket } from 'websocket'; // this is the mock!
-import { WebSocketSubject } from 'rxjs/webSocket';
 import { Subject } from 'rxjs';
 
 import { WebSocketTransport } from '../src/transport-websocket';
