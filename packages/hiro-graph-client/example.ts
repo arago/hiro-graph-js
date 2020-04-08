@@ -1,7 +1,7 @@
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import Client from './src';
+import Client from '.';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -51,3 +51,5 @@ forkJoin({
   name: name$,
   members: members$,
 }).subscribe(console.log);
+
+// TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' yarn ts-node example.ts
