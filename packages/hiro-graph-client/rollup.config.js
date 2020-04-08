@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import typescript from 'rollup-plugin-typescript2';
 import babel from 'rollup-plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
@@ -38,6 +39,7 @@ const config = {
                 'websocket/lib/browser.js': ['w3cwebsocket'],
             },
         }),
+        typescript(),
         babel({ extensions, exclude: 'node_modules/**' }),
     ],
 };
