@@ -11,12 +11,12 @@ import { GraphRequest, GraphTransport } from './types';
 import { Endpoint } from './endpoint';
 import { extract } from './utils';
 import { RequestOptions } from './types';
-import { create as createError, ClientError } from './errors';
+import * as Errors from './errors';
 import { Token } from './token';
 
 interface Response<T> {
   items?: T[] | null;
-  error?: string | ClientError;
+  error?: string | Errors.ClientError;
 }
 
 const hasError = <T>(res: any): res is Required<Response<T>> => !!res.error;
@@ -59,7 +59,7 @@ export class HttpTransport implements GraphTransport {
             }
 
             return {
-              error: createError(502, 'Invalid JSON in response from Graph'),
+              error: Errors.create(502, 'Invalid JSON in response from Graph'),
             };
           });
         }),
@@ -67,7 +67,7 @@ export class HttpTransport implements GraphTransport {
       .pipe(
         catchError((err) =>
           of({
-            error: createError(err.code || 500, err.reason || err.message),
+            error: Errors.create(err.code || 500, err.reason || err.message),
           }),
         ),
         map((res) => {
@@ -82,7 +82,7 @@ export class HttpTransport implements GraphTransport {
               code = res.error.code || code;
             }
 
-            throw createError(code, `[HTTP] Error: ${msg}`);
+            throw Errors.create(code, `[HTTP] Error: ${msg}`);
           }
 
           if ('items' in res) {

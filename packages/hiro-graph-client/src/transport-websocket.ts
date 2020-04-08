@@ -126,10 +126,6 @@ export class WebSocketTransport implements GraphTransport {
             }
           },
           error: (err) => {
-            if (err.code === 401) {
-              token.invalidate();
-            }
-
             subscriber.error(err);
           },
         });
