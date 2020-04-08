@@ -2,30 +2,48 @@
     "name": "@hiro-graph/client",
     "repository": "arago/hiro-graph-js",
     "version": "7.3.15",
-    "types": "lib/index.d.ts",
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
+    "module": "lib/index.es.js",
+    "unpkg": "lib/index.min.js",
+    "types": "lib/index.d.ts",
+    "sideEffects": false,
+    "files": [
+        "lib"
+    ],
     "scripts": {
-        "build": "rm -rf lib/* && yarn tsc",
+        "build": "rm -rf lib/* && yarn rollup -c",
         "prepublish": "yarn test && yarn build",
         "test": "madge --circular src/index.ts && jest --silent",
         "test:ci": "jest --silent --ci --reporters=default --reporters=jest-junit"
     },
     "license": "MIT",
     "dependencies": {
-        "@babel/runtime": "^7.8.7",
+        "@babel/runtime": "^7.9.2",
         "isomorphic-fetch": "^2.2.1",
         "rxjs": "^6.5.4",
         "uid": "^1.0.0",
         "websocket": "^1.0.25"
     },
     "devDependencies": {
+        "@babel/core": "^7.9.0",
+        "@babel/plugin-proposal-class-properties": "^7.8.3",
+        "@babel/plugin-proposal-export-default-from": "^7.8.3",
+        "@babel/plugin-transform-regenerator": "^7.8.3",
+        "@babel/preset-env": "^7.9.5",
+        "@babel/preset-typescript": "^7.9.0",
+        "@rollup/plugin-commonjs": "^11.0.2",
+        "@rollup/plugin-json": "^4.0.2",
+        "@rollup/plugin-node-resolve": "^7.1.1",
         "@types/isomorphic-fetch": "^0.0.35",
         "@types/jest": "^25.2.1",
         "@types/node-fetch": "2.5.4",
         "@types/websocket": "1.0.0",
         "jest": "^25.1.0",
         "madge": "^3.8.0",
+        "rollup": "^2.3.4",
+        "rollup-plugin-babel": "^4.4.0",
+        "rollup-plugin-terser": "^5.3.0",
         "ts-jest": "^25.3.1",
         "typescript": "^3.8.3"
     },
@@ -34,6 +52,21 @@
         "ie 11",
         "edge >= 15"
     ],
+    "babel": {
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "modules": false
+                }
+            ],
+            "@babel/preset-typescript"
+        ],
+        "plugins": [
+            "@babel/plugin-proposal-class-properties",
+            "@babel/plugin-transform-regenerator"
+        ]
+    },
     "jest-junit": {
         "suiteName": "@hiro-graph/client",
         "outputDirectory": "../../reports",

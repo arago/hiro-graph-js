@@ -1,4 +1,4 @@
-export namespace OGIT {
+export declare namespace OGIT {
   export interface SafeNode {
     'ogit/_id': string;
     'ogit/_type': string;

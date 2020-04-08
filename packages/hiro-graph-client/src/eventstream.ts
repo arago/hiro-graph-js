@@ -7,7 +7,6 @@
  *  if it is renewed by any other part of the app that shares the `Token` object, it will reconnect
  *  and continue to emit events.
  */
-import qs from 'querystring';
 
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { of, Observable, PartialObserver, Subscription, timer } from 'rxjs';
@@ -88,15 +87,16 @@ export class EventStream {
       query.offset = offset;
     }
 
-    const path = Object.keys(query).length > 0 ? `?${qs.stringify(query)}` : '';
-
     this._filters = filters.map((content) => ({
       'filter-id': content,
       'filter-type': 'jfilter',
       'filter-content': content,
     }));
 
-    this._transport = new WebSocketTransport(endpoint, { api: 'events', path });
+    this._transport = new WebSocketTransport(endpoint, {
+      api: 'events',
+      query,
+    });
 
     const stream$ = new Observable<any>((subscriber) => {
       of(this._token)

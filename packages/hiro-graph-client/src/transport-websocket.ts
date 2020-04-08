@@ -34,6 +34,7 @@ export interface WebSocketResponse<T = any> {
 export interface WebSocketRequestOptions {
   api?: WS_API;
   path?: string;
+  query?: Record<string, any>;
   forceHTTP?: boolean;
 }
 
@@ -44,11 +45,11 @@ export class WebSocketTransport implements GraphTransport {
 
   constructor(
     endpoint: string,
-    { api = 'graph', path }: WebSocketRequestOptions = {},
+    { api = 'graph', path, query }: WebSocketRequestOptions = {},
   ) {
     ensureWebSocketsAvailable();
     this.endpoint = new Endpoint(endpoint, true);
-    this.url = this.endpoint.api(api, path);
+    this.url = this.endpoint.api(api, path, query);
   }
 
   /**
