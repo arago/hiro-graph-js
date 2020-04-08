@@ -21,7 +21,7 @@ import {
   GraphTransport,
   GraphRequest,
   TimeseriesResponse,
-  HistoryQueryOptions,
+  GraphRequestType,
 } from './types';
 import {
   GremlinQueryFunction,
@@ -125,7 +125,10 @@ export class Client {
    *  Make a generic request. The transport will handle the details, we handle the retry.
    *  We use `this.transport` which is websocket if available.
    */
-  request<T>({ type, headers = {}, body = {} }: GraphRequest, maxRetries = 1) {
+  request<T>(
+    { type, headers = {}, body = {} }: GraphRequestType,
+    maxRetries = 1,
+  ) {
     let retries = 0;
 
     return this.transport
@@ -195,7 +198,7 @@ export class Client {
    *  Create a new node
    */
   create<T>(type: string, data = {}, options: { waitForIndex?: boolean } = {}) {
-    const headers: Record<string, string> = { 'ogit/_type': type };
+    const headers: GraphRequest.Create['headers'] = { 'ogit/_type': type };
 
     if (options.waitForIndex) {
       headers.waitForIndex = 'true';
@@ -208,7 +211,7 @@ export class Client {
    *  Update a Node
    */
   update<T>(id: string, data = {}, options: { waitForIndex?: boolean } = {}) {
-    const headers: Record<string, string> = { 'ogit/_id': id };
+    const headers: GraphRequest.Update['headers'] = { 'ogit/_id': id };
 
     if (options.waitForIndex) {
       headers.waitForIndex = 'true';
@@ -228,7 +231,7 @@ export class Client {
     const { createIfNotExists = false, waitForIndex = false } = options;
     //createIfNotExists should contain the "ogit/_type" to create if the node doesn't exist,
     //and nothing otherwise
-    const headers: Record<string, string> = { 'ogit/_id': id };
+    const headers: GraphRequest.Replace['headers'] = { 'ogit/_id': id };
 
     if (createIfNotExists) {
       Object.assign(headers, {
@@ -251,7 +254,7 @@ export class Client {
    */
   delete<T>(id: string, options: { waitForIndex?: boolean } = {}) {
     const { waitForIndex = false } = options;
-    const headers: Record<string, string> = { 'ogit/_id': id };
+    const headers: GraphRequest.Delete['headers'] = { 'ogit/_id': id };
 
     if (waitForIndex) {
       headers.waitForIndex = 'true';
@@ -413,13 +416,7 @@ export class Client {
    */
   streamts<T>(
     timeseriesId: string,
-    options: {
-      from?: number | false;
-      to?: number | false;
-      limit?: number | false;
-      includeDeleted?: boolean;
-      with?: string[];
-    } = {
+    options: Omit<GraphRequest.Streamts['headers'], 'ogit/_id'> = {
       from: false,
       to: false,
       limit: 50,
@@ -449,9 +446,9 @@ export class Client {
       listMeta = false,
       includeDeleted = false,
       ...options
-    }: HistoryQueryOptions = {},
+    }: Omit<GraphRequest.History['headers'], 'ogit/_id'> = {},
   ) {
-    const headers: Record<string, any> = {
+    const headers: GraphRequest.History['headers'] = {
       'ogit/_id': id,
       listMeta,
       includeDeleted,

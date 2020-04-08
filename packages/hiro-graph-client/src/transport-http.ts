@@ -7,7 +7,7 @@ import fetch from 'isomorphic-fetch';
 import { of } from 'rxjs';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 
-import { GraphRequest, GraphTransport } from './types';
+import { GraphTransport, GraphRequestType } from './types';
 import { Endpoint } from './endpoint';
 import { extract } from './utils';
 import { RequestOptions } from './types';
@@ -97,7 +97,7 @@ export class HttpTransport implements GraphTransport {
   //request has to translate the base request objects to fetch.
   request<T = any>(
     token: Token,
-    { type, headers = {}, body = {} }: GraphRequest,
+    { type, headers = {}, body = {} }: GraphRequestType,
   ) {
     const [url, options] = createFetchOptions(this.endpoint, {
       type,
@@ -126,7 +126,7 @@ const defaultFetchOptions = (): RequestOptions => ({
 //here are the mappings to fetch options from the websocket payloads.
 function createFetchOptions(
   endpoint: Endpoint,
-  { type, headers = {}, body = {} }: GraphRequest,
+  { type, headers = {}, body = {} }: GraphRequestType,
 ): [string, RequestOptions] {
   let url;
   const options = defaultFetchOptions();
