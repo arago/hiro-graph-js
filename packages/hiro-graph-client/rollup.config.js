@@ -1,10 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import typescript from 'rollup-plugin-typescript2';
-import babel from 'rollup-plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { terser } from 'rollup-plugin-terser';
+import ts from '@wessberg/rollup-plugin-ts';
+import { eslint } from 'rollup-plugin-eslint';
 
 import pkg from './package.json';
 
@@ -32,6 +32,7 @@ const config = {
         },
     ],
     plugins: [
+        eslint(),
         resolve({ browser: true, extensions }),
         json(),
         commonjs({
@@ -39,8 +40,9 @@ const config = {
                 'websocket/lib/browser.js': ['w3cwebsocket'],
             },
         }),
-        typescript(),
-        babel({ extensions, exclude: 'node_modules/**' }),
+        ts({
+            transpiler: 'babel',
+        }),
     ],
 };
 
