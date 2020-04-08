@@ -3,7 +3,7 @@
  */
 import { w3cwebsocket as WS } from 'websocket';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
-import { map, catchError, mergeMap, reduce } from 'rxjs/operators';
+import { map, catchError, mergeMap, scan } from 'rxjs/operators';
 import { of, Observable, iif } from 'rxjs';
 import uid from 'uid';
 
@@ -142,7 +142,7 @@ export class WebSocketTransport implements GraphTransport {
         iif(
           () => res.multi,
           of(res).pipe(
-            reduce((acc, r) => {
+            scan((acc, r) => {
               acc.push(r.body as T);
 
               return acc;

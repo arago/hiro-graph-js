@@ -1,31 +1,37 @@
 // @ts-ignore
 import { mockFn } from 'isomorphic-fetch';
-import { Subject, BehaviorSubject, of } from 'rxjs';
+import { Subject, BehaviorSubject, of, Observable, throwError } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { Token } from '../src/token';
 import * as errors from '../src/errors';
 import clientTestHelper from '../__mocks__/client-test-helper';
 import Client from '../src';
 
-const onInvalidate = jest.fn();
-const fakeToken = new Token({
-  getToken: () => Promise.resolve('<token>'),
-  onInvalidate,
-});
+const getClient = (mockTransport?: boolean) => {
+  const mockRequest = jest.fn();
+  const mockInvalidate = jest.fn();
+  const token = new Token({
+    getToken: () => 'token',
+    onInvalidate: mockInvalidate,
+  });
+  const client = new Client(
+    { endpoint: 'https://graphit/', token },
+    { forceHTTP: true },
+  );
 
-const mockRequest = jest.fn();
+  // @ts-ignore
+  client.transport.request = mockRequest;
+
+  return { client, token, mockInvalidate, mockRequest };
+};
 
 // test all know good response types. all known error types.
 // edge cases like 404, or 409 being OK responses (connect/disconnect)
 // bad token causing failure
 // etc...
 describe('Client Requests', () => {
-  const client = new Client(
-    { endpoint: 'https://graphit/', token: fakeToken },
-    { forceHTTP: true },
-  );
-
-  client.request = mockRequest;
+  const { client, mockRequest } = getClient();
 
   const tests = clientTestHelper(client);
 
@@ -47,147 +53,149 @@ describe('Client Requests', () => {
           .toPromise()
           .then(() => true),
       ).resolves.toEqual(true);
-
-      // we only want the three main properties of the request
-      //const { type, headers, body } = client.retrieveLastRequest();
-
-      //  expect({ type, headers, body }).toMatchSnapshot();
-
-      // @IMPORTANT check the snapshots! They must be correct the first time or these tests are worthless!
-      expect(mockRequest.mock.calls[0][0]).toMatchSnapshot(); //i.e. correct options created
+      expect(mockRequest.mock.calls[0][1]).toMatchSnapshot(); //i.e. correct options created
     });
   });
 });
 
-// describe('Client Response handling', () => {
-//   const fn = jest.fn();
-//   const token = new Token({
-//     getToken: () => 'token',
-//     onInvalidate: fn,
-//   });
-//   const client = createMockClient(token);
+describe('Client Response handling', () => {
+  const { client, token, mockInvalidate, mockRequest } = getClient(true);
 
-//   beforeEach(async () => {
-//     client.resetMockTransport();
-//     await token.get(); // we want to ensure the token invalidation state is reset each time.
-//     fn.mockClear();
-//   });
+  beforeEach(async () => {
+    mockRequest.mockReset();
+    await token.get(); // we want to ensure the token invalidation state is reset each time.
+    mockInvalidate.mockClear();
+  });
 
-//   const retryableErrors = [
-//     {
-//       name: 'transaction fail (888)',
-//       err: errors.transactionFail(),
-//     },
-//     {
-//       name: 'unauthorized (401)',
-//       err: errors.unauthorized(),
-//     },
-//     {
-//       name: 'generic retryable error',
-//       err: Object.assign(new Error(), { isRetryable: true }),
-//     },
-//   ];
+  const retryableErrors = [
+    {
+      name: 'transaction fail (888)',
+      err: errors.transactionFail(),
+    },
+    {
+      name: 'unauthorized (401)',
+      err: errors.unauthorized(),
+    },
+    {
+      name: 'generic retryable error',
+      err: Object.assign(new Error(), { isRetryable: true }),
+    },
+  ];
 
-//   retryableErrors.forEach(({ name, err }) => {
-//     it(`should retry once on '${name}'`, async () => {
-//       client.enqueueMockResponse(err, 'ok');
-//       await expect(client.me()).resolves.toBe('ok');
+  retryableErrors.forEach(({ name, err }) => {
+    it(`should retry once on '${name}'`, async () => {
+      mockRequest.mockReturnValueOnce(
+        new Observable((subscriber) => {
+          subscriber.error(err);
+          subscriber.next('ok');
+          subscriber.complete();
+        }),
+      );
 
-//       client.enqueueMockResponse(err, err);
-//       await expect(client.me()).rejects.toBe(err);
-//     });
-//   });
+      await expect(client.me().toPromise()).resolves.toBe('ok');
 
-//   it('should unconditionally retry for `connection closed before send`', async () => {
-//     const err = errors.connectionClosedBeforeSend;
+      mockRequest.mockReturnValueOnce(
+        new Observable((subscriber) => {
+          subscriber.error(err);
+          subscriber.error(err);
+          subscriber.complete();
+        }),
+      );
 
-//     // many connection closed, one other error in the middle, should still resolve "ok"
-//     /* prettier-ignore */
-//     client.enqueueMockResponse(err, err, err, err, errors.transactionFail(), err, err, err, err, "ok");
-//     await expect(client.me()).resolves.toBe('ok');
-//   });
+      await expect(client.me().toPromise()).rejects.toBe(err);
+    });
+  });
 
-//   it('should handle `conflict` as OK for connect', async () => {
-//     const conflict = errors.conflict();
-//     const forbidden = errors.forbidden();
+  //   it('should unconditionally retry for `connection closed before send`', async () => {
+  //     const err = errors.connectionClosedBeforeSend;
 
-//     client.enqueueMockResponse(conflict, forbidden);
-//     await expect(client.connect('foo', 'bar', 'baz')).resolves.toBeUndefined(); // connect returns nothing on success
-//     await expect(client.connect('foo', 'bar', 'baz')).rejects.toBe(forbidden);
-//   });
+  //     // many connection closed, one other error in the middle, should still resolve "ok"
+  //     /* prettier-ignore */
+  //     client.enqueueMockResponse(err, err, err, err, errors.transactionFail(), err, err, err, err, "ok");
+  //     await expect(client.me()).resolves.toBe('ok');
+  //   });
 
-//   it('should handle `conflict` and `not found` as OK for disconnect', async () => {
-//     const conflict = errors.conflict();
-//     const notFound = errors.notFound();
-//     const forbidden = errors.forbidden();
+  //   it('should handle `conflict` as OK for connect', async () => {
+  //     const conflict = errors.conflict();
+  //     const forbidden = errors.forbidden();
 
-//     client.enqueueMockResponse(conflict, forbidden, notFound);
-//     await expect(
-//       client.disconnect('foo', 'bar', 'baz'),
-//     ).resolves.toBeUndefined(); // disconnect returns nothing on success
+  //     client.enqueueMockResponse(conflict, forbidden);
+  //     await expect(client.connect('foo', 'bar', 'baz')).resolves.toBeUndefined(); // connect returns nothing on success
+  //     await expect(client.connect('foo', 'bar', 'baz')).rejects.toBe(forbidden);
+  //   });
 
-//     await expect(client.disconnect('foo', 'bar', 'baz')).rejects.toBe(
-//       forbidden,
-//     );
-//     await expect(
-//       client.disconnect('foo', 'bar', 'baz'),
-//     ).resolves.toBeUndefined(); // disconnect returns nothing on success
-//   });
+  //   it('should handle `conflict` and `not found` as OK for disconnect', async () => {
+  //     const conflict = errors.conflict();
+  //     const notFound = errors.notFound();
+  //     const forbidden = errors.forbidden();
 
-//   const dedupableMethods = [
-//     ['me'],
-//     ['get', 'some-id'],
-//     ['lucene', '*:*'],
-//     ['ids', ['a', 'b']],
-//     ['gremlin', 'root-id', 'outE()'],
-//   ];
+  //     client.enqueueMockResponse(conflict, forbidden, notFound);
+  //     await expect(
+  //       client.disconnect('foo', 'bar', 'baz'),
+  //     ).resolves.toBeUndefined(); // disconnect returns nothing on success
 
-//   dedupableMethods.forEach(([method, ...args]) => {
-//     it(
-//       'should correctly dedup the requests for method: ' + method,
-//       async () => {
-//         let resolve;
-//         const promise = new Promise((r) => (resolve = r));
+  //     await expect(client.disconnect('foo', 'bar', 'baz')).rejects.toBe(
+  //       forbidden,
+  //     );
+  //     await expect(
+  //       client.disconnect('foo', 'bar', 'baz'),
+  //     ).resolves.toBeUndefined(); // disconnect returns nothing on success
+  //   });
 
-//         // note that we only enqueue a single result
-//         // so both client methods MUST only make a single
-//         // request or it will fail Bad Request
-//         client.enqueueMockResponse(promise);
+  //   const dedupableMethods = [
+  //     ['me'],
+  //     ['get', 'some-id'],
+  //     ['lucene', '*:*'],
+  //     ['ids', ['a', 'b']],
+  //     ['gremlin', 'root-id', 'outE()'],
+  //   ];
 
-//         const req1 = client[method](...args);
-//         const req2 = client[method](...args);
+  //   dedupableMethods.forEach(([method, ...args]) => {
+  //     it(
+  //       'should correctly dedup the requests for method: ' + method,
+  //       async () => {
+  //         let resolve;
+  //         const promise = new Promise((r) => (resolve = r));
 
-//         resolve({ foo: 'bar' });
+  //         // note that we only enqueue a single result
+  //         // so both client methods MUST only make a single
+  //         // request or it will fail Bad Request
+  //         client.enqueueMockResponse(promise);
 
-//         const res1 = await req1;
-//         const res2 = await req2;
+  //         const req1 = client[method](...args);
+  //         const req2 = client[method](...args);
 
-//         // these expectations is that bot res1 and res2 returned the same result
-//         // but not the same object.
-//         expect(res1).toEqual(res2);
-//         expect(res1).not.toBe(res2);
-//       },
-//     );
-//   });
-//   it('should invalidate the token on `unauthorized`', async () => {
-//     // ok first, then non invalidation error, then invalidation error, then notfound.
-//     // we need another error after, so the retry can pick it up
-//     const notFound = errors.notFound();
-//     const unauthorized = errors.unauthorized();
+  //         resolve({ foo: 'bar' });
 
-//     client.enqueueMockResponse('OK', notFound, unauthorized, notFound, 'OK');
+  //         const res1 = await req1;
+  //         const res2 = await req2;
 
-//     await expect(client.me()).resolves.toBe('OK');
-//     expect(fn).not.toHaveBeenCalled();
+  //         // these expectations is that bot res1 and res2 returned the same result
+  //         // but not the same object.
+  //         expect(res1).toEqual(res2);
+  //         expect(res1).not.toBe(res2);
+  //       },
+  //     );
+  //   });
+  //   it('should invalidate the token on `unauthorized`', async () => {
+  //     // ok first, then non invalidation error, then invalidation error, then notfound.
+  //     // we need another error after, so the retry can pick it up
+  //     const notFound = errors.notFound();
+  //     const unauthorized = errors.unauthorized();
 
-//     await expect(client.me()).rejects.toBe(notFound);
-//     expect(fn).not.toHaveBeenCalled();
+  //     client.enqueueMockResponse('OK', notFound, unauthorized, notFound, 'OK');
 
-//     //this one should invalidate
-//     await expect(client.me()).rejects.toBe(notFound);
-//     expect(fn).toHaveBeenCalledTimes(1);
+  //     await expect(client.me()).resolves.toBe('OK');
+  //     expect(fn).not.toHaveBeenCalled();
 
-//     await expect(client.me()).resolves.toBe('OK');
-//     expect(fn).toHaveBeenCalledTimes(1);
-//   });
-// });
+  //     await expect(client.me()).rejects.toBe(notFound);
+  //     expect(fn).not.toHaveBeenCalled();
+
+  //     //this one should invalidate
+  //     await expect(client.me()).rejects.toBe(notFound);
+  //     expect(fn).toHaveBeenCalledTimes(1);
+
+  //     await expect(client.me()).resolves.toBe('OK');
+  //     expect(fn).toHaveBeenCalledTimes(1);
+  //   });
+});
