@@ -7,7 +7,7 @@ import { map, catchError, mergeMap, scan } from 'rxjs/operators';
 import { of, Observable, iif } from 'rxjs';
 import uid from 'uid';
 
-import { GraphRequest, GraphTransport } from './types';
+import { GraphTransport, GraphRequestType } from './types';
 import { Endpoint, WS_API } from './endpoint';
 import { Token } from './token';
 
@@ -57,7 +57,7 @@ export class WebSocketTransport implements GraphTransport {
    */
   request<T = any>(
     token: Token,
-    { type, headers = {}, body = {} }: GraphRequest,
+    { type, headers = {}, body = {} }: GraphRequestType,
   ) {
     //the connect call ensures the websocket is connected before continuing.
     const id = uid();
