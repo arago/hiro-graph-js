@@ -43,7 +43,7 @@ const isTransport = (t: TransportOrOptions): t is GraphTransport =>
   'request' in t && typeof t.request === 'function';
 
 export class Client {
-  private endpoint: string;
+  public readonly endpoint: string;
   private http: HttpTransport;
   private transport: GraphTransport;
   private token: Token;
@@ -119,6 +119,10 @@ export class Client {
     );
 
     return cloned;
+  }
+
+  fetch<T>(url: string, options?: globalThis.RequestInit) {
+    return this.http.fetch<T>(this.token, url, options);
   }
 
   /**
@@ -461,4 +465,26 @@ export class Client {
       body: {},
     });
   }
+
+  addServlet<T extends ServletFactory>(factory: T) {
+    const { name, create } = factory;
+
+    // @ts-ignore
+    this[name] = create.call(this);
+
+    return this as this & GetServlet<T>;
+  }
+}
+
+type GetServlet<T extends ServletFactory> = {
+  [K in T['name']]: ReturnType<T['create']>;
+};
+
+export interface Servlet {
+  [index: string]: Function;
+}
+
+export interface ServletFactory {
+  name: string;
+  create: (this: Client) => Servlet;
 }

@@ -1,7 +1,7 @@
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import Client from '.';
+import Client, { Servlets } from './src';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -11,7 +11,9 @@ const token =
 const client = new Client({
   endpoint: 'https://eu-stagegraph.arago.co',
   token,
-});
+}).addServlet(Servlets.Variables);
+
+client.variables.add({}).subscribe(console.log);
 
 // const issueFilter = new StreamFilter().and(
 //   `element.ogit/_type = ogit/Automation/AutomationIssue`,
