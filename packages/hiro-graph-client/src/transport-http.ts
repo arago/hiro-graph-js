@@ -29,7 +29,7 @@ export class HttpTransport implements GraphTransport {
   }
 
   //this is basically window.fetch with a token.get() before it.
-  private fetch<T>(token: Token, url: string, options: RequestOptions = {}) {
+  fetch<T>(token: Token, url: string, options: RequestOptions = {}) {
     const tp = token.get();
 
     return of(tp)
