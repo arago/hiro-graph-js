@@ -4,13 +4,17 @@
  *  But translates them to `fetch` methods.
  */
 import fetch from 'isomorphic-fetch';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 
 import { GraphTransport, GraphRequestType } from './types';
 import { Endpoint } from './endpoint';
 import { extract } from './utils';
-import { RequestOptions } from './types';
+import {
+  RequestOptions,
+  RequestOptionsRaw,
+  RequestOptionsDefault,
+} from './types';
 import * as Errors from './errors';
 import { Token } from './token';
 
@@ -19,6 +23,12 @@ interface Response<T> {
   error?: string | Errors.ClientError;
 }
 
+export type FetchReturnType<T, O extends RequestOptions> = O['raw'] extends true
+  ? Observable<globalThis.Response>
+  : Observable<T | T[]>;
+
+const hasRaw = (options: RequestOptions): options is RequestOptionsRaw =>
+  options.raw === true;
 const hasError = <T>(res: any): res is Required<Response<T>> => !!res.error;
 
 export class HttpTransport implements GraphTransport {
@@ -29,29 +39,42 @@ export class HttpTransport implements GraphTransport {
   }
 
   //this is basically window.fetch with a token.get() before it.
-  fetch<T>(token: Token, url: string, options: RequestOptions = {}) {
+  fetch<T, O extends RequestOptions = RequestOptions>(
+    token: Token,
+    url: string,
+    // @ts-ignore - We have plenty of safety here...
+    options: O = {},
+  ): FetchReturnType<T, O> {
     const tp = token.get();
 
-    return of(tp)
+    const fetch$ = of(tp).pipe(
+      mergeMap((t) => t),
+      mergeMap(async (t) => {
+        const headers = {
+          ...(options.headers || {}),
+          Authorization: 'Bearer ' + t,
+        };
+
+        let req = {
+          ...options,
+          headers,
+        };
+
+        if (options.body) {
+          req.body = JSON.stringify(options.body);
+        }
+
+        return fetch(url, req);
+      }),
+    );
+
+    if (hasRaw(options)) {
+      return fetch$ as FetchReturnType<T, O>;
+    }
+
+    return fetch$
       .pipe(
-        mergeMap((t) => t),
-        mergeMap(async (t) => {
-          const headers = {
-            ...(options.headers || {}),
-            Authorization: 'Bearer ' + t,
-          };
-
-          let req = {
-            ...options,
-            headers,
-          };
-
-          if (options.body) {
-            req.body = JSON.stringify(options.body);
-          }
-
-          const res = await fetch(url, req);
-
+        mergeMap((res) => {
           return res.json().catch(() => {
             if (res.status === 202) {
               // Special case when there is potentially no body
@@ -70,7 +93,7 @@ export class HttpTransport implements GraphTransport {
             error: Errors.create(err.code || 500, err.reason || err.message),
           }),
         ),
-        map((res) => {
+        map((res): T | T[] => {
           if (hasError<T>(res)) {
             let msg = 'Unknown GraphIT Error';
             let code = 500;
@@ -91,7 +114,7 @@ export class HttpTransport implements GraphTransport {
 
           return res || {};
         }),
-      );
+      ) as FetchReturnType<T, O>;
   }
 
   //request has to translate the base request objects to fetch.
@@ -114,7 +137,7 @@ export class HttpTransport implements GraphTransport {
 }
 
 //exported for use in the connection
-const defaultFetchOptions = (): RequestOptions => ({
+const defaultFetchOptions = (): RequestOptionsDefault => ({
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
@@ -127,7 +150,7 @@ const defaultFetchOptions = (): RequestOptions => ({
 function createFetchOptions(
   endpoint: Endpoint,
   { type, headers = {}, body = {} }: GraphRequestType,
-): [string, RequestOptions] {
+): [string, RequestOptionsDefault] {
   let url;
   const options = defaultFetchOptions();
 

@@ -125,7 +125,19 @@ export type GraphRequestType =
   | GraphRequest.Update
   | GraphRequest.Writets;
 
-export type RequestOptions = globalThis.RequestInit;
+interface RequestOptionsBase extends globalThis.RequestInit {
+  raw?: boolean;
+}
+
+export interface RequestOptionsRaw extends RequestOptionsBase {
+  raw: true;
+}
+
+export interface RequestOptionsDefault extends RequestOptionsBase {
+  raw?: false;
+}
+
+export type RequestOptions = RequestOptionsDefault | RequestOptionsRaw;
 
 export interface GraphTransport {
   request: <T = any>(
