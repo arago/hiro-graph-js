@@ -22,6 +22,7 @@ import {
   GraphRequest,
   TimeseriesResponse,
   GraphRequestType,
+  RequestOptions,
 } from './types';
 import {
   GremlinQueryFunction,
@@ -121,8 +122,11 @@ export class Client {
     return cloned;
   }
 
-  fetch<T>(url: string, options?: globalThis.RequestInit) {
-    return this.http.fetch<T>(this.token, url, options);
+  fetch<T, O extends RequestOptions = RequestOptions>(
+    url: string,
+    options?: O,
+  ) {
+    return this.http.fetch<T, O>(this.token, url, options);
   }
 
   /**
