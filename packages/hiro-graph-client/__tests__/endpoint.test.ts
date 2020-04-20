@@ -73,6 +73,44 @@ test('Get API with path', () => {
   });
 });
 
+test('Re-use API', () => {
+  const endpoint = new Endpoint('https://example.com').use('graph');
+
+  const tests: Array<[string, string]> = [
+    [endpoint.path('/test'), 'https://example.com/api/graph/7.1/test'],
+    [endpoint.path('test'), 'https://example.com/api/graph/7.1/test'],
+  ];
+
+  tests.forEach(([res, expected]) => {
+    expect(res).toEqual(expected);
+  });
+});
+
+test('Get path without API', () => {
+  const endpoint = new Endpoint('https://example.com');
+
+  const tests: Array<[string, string]> = [
+    [endpoint.path('/test'), 'https://example.com/test'],
+    [endpoint.path('test'), 'https://example.com/test'],
+  ];
+
+  tests.forEach(([res, expected]) => {
+    expect(res).toEqual(expected);
+  });
+});
+
+test('Get API with path array', () => {
+  const endpoint = new Endpoint('https://example.com').use('graph');
+
+  const tests: Array<[string, string]> = [
+    [endpoint.path(['a', 'b', 'c']), 'https://example.com/api/graph/7.1/a/b/c'],
+  ];
+
+  tests.forEach(([res, expected]) => {
+    expect(res).toEqual(expected);
+  });
+});
+
 test('Get API with query', () => {
   const tests: Array<[string, string]> = [
     [
