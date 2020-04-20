@@ -7,5 +7,6 @@ export * from './gremlin';
 export * from './lucene';
 export * from './types';
 export * from './jfilter';
+export * from './endpoint';
 export * as Servlets from './servlets';
 export { Token, cannotGetToken, Errors };

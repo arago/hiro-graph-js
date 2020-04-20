@@ -175,7 +175,7 @@ function createFetchOptions(
     case 'create':
       url = endpoint.api(
         'graph',
-        `/new/${encodeURIComponent(headers['ogit/_type'])}`,
+        ['new', encodeURIComponent(headers['ogit/_type'])],
         extract(headers, 'waitForIndex'),
       );
       sendJSON(options, body);
@@ -183,7 +183,7 @@ function createFetchOptions(
     case 'update':
       url = endpoint.api(
         'graph',
-        `${encodeURIComponent(headers['ogit/_id'])}`,
+        encodeURIComponent(headers['ogit/_id']),
         extract(headers, 'waitForIndex'),
       );
 
@@ -205,26 +205,26 @@ function createFetchOptions(
       sendJSON(options, body, 'PUT');
       break;
     case 'delete':
-      url = endpoint.api('graph', `${encodeURIComponent(headers['ogit/_id'])}`);
+      url = endpoint.api('graph', encodeURIComponent(headers['ogit/_id']));
       options.method = 'DELETE';
       break;
     case 'connect':
-      url = endpoint.api(
-        'graph',
-        `/connect/${encodeURIComponent(headers['ogit/_type'])}`,
-      );
+      url = endpoint.api('graph', [
+        'connect',
+        encodeURIComponent(headers['ogit/_type']),
+      ]);
 
       sendJSON(options, body);
       break;
     case 'query':
-      url = endpoint.api('graph', `/query/${headers.type}`);
+      url = endpoint.api('graph', ['query', headers.type]);
 
       sendJSON(options, body);
       break;
     case 'streamts':
       url = endpoint.api(
         'graph',
-        `/${encodeURIComponent(headers['ogit/_id'])}/values`,
+        [encodeURIComponent(headers['ogit/_id']), 'values'],
         extract(
           headers,
           'offset',
@@ -238,17 +238,17 @@ function createFetchOptions(
 
       break;
     case 'writets':
-      url = endpoint.api(
-        'graph',
-        `/${encodeURIComponent(headers['ogit/_id'])}/values`,
-      );
+      url = endpoint.api('graph', [
+        encodeURIComponent(headers['ogit/_id']),
+        'values',
+      ]);
 
       sendJSON(options, body);
       break;
     case 'history':
       url = endpoint.api(
         'graph',
-        `/${encodeURIComponent(headers['ogit/_id'])}/history`,
+        [encodeURIComponent(headers['ogit/_id']), 'history'],
         extract(
           headers,
           'offset',
@@ -265,10 +265,10 @@ function createFetchOptions(
 
       break;
     case 'meta':
-      url = endpoint.api(
-        'graph',
-        `/${encodeURIComponent(headers['ogit/_id'])}/meta`,
-      );
+      url = endpoint.api('graph', [
+        encodeURIComponent(headers['ogit/_id']),
+        'meta',
+      ]);
 
       break;
     default:
