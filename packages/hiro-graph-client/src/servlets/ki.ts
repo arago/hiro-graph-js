@@ -40,14 +40,14 @@ interface KiValidationResponse {
 export const KI = {
   name: 'ki' as const,
   create: function (this: Client) {
-    const endpoint = new Endpoint(this.endpoint);
+    const endpoint = new Endpoint(this.endpoint).use('ki');
 
     return {
       validate: ({
         ki,
         ...rest
       }: KiValidateOptions): Observable<KiValidationResponse> => {
-        const url = endpoint.api('ki', 'check');
+        const url = endpoint.path('check');
 
         return this.fetch(url, {
           method: 'POST',

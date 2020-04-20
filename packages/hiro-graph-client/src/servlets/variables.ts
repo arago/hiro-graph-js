@@ -23,11 +23,11 @@ interface DefineData {
 export const Variables = {
   name: 'variables' as const,
   create: function (this: Client) {
-    const endpoint = new Endpoint(this.endpoint);
+    const endpoint = new Endpoint(this.endpoint).use('variables');
 
     return {
       add: (data: AddData) => {
-        const url = endpoint.api('variables');
+        const url = endpoint.path();
 
         return this.fetch(url, {
           method: 'PUT',
@@ -36,13 +36,13 @@ export const Variables = {
       },
 
       suggest: (data: SuggestData) => {
-        const url = endpoint.api('variables', 'suggest', data);
+        const url = endpoint.path('suggest', data);
 
         return this.fetch(url);
       },
 
       define: (data: DefineData) => {
-        const url = endpoint.api('variables', 'define', data);
+        const url = endpoint.path('define', data);
 
         return fetch(url);
       },
