@@ -44,7 +44,7 @@ export const Variables = {
       define: (data: DefineData) => {
         const url = endpoint.path('define', data);
 
-        return fetch(url);
+        return this.fetch(url);
       },
     };
   },
