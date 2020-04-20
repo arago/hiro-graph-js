@@ -34,7 +34,7 @@ export const Auth = {
         });
       },
 
-      meTeams: () => fetch(endpoint.path(['me', 'teams'])),
+      meTeams: () => this.fetch(endpoint.path(['me', 'teams'])),
 
       updateMeAvatar: (data: File) => {
         return this.fetch(endpoint.path(['me', 'avatar']), {
