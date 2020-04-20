@@ -85,9 +85,7 @@ export class Endpoint<WS extends boolean = false> {
     path?: string | string[],
     query?: Record<string, any>,
   ) {
-    this.use(name);
-
-    return this.path(path, query);
+    return this.use(name).path(path, query);
   }
 }
 
