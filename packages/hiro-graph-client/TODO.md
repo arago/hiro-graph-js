@@ -2,5 +2,5 @@
 
 - Dedup?
 - Websocket reconnect?
-- Servlets back in
 - Ensure eventstream stays open
+- Servlet return types

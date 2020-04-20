@@ -31,6 +31,15 @@ const hasRaw = (options: RequestOptions): options is RequestOptionsRaw =>
   options.raw === true;
 const hasError = <T>(res: any): res is Required<Response<T>> => !!res.error;
 
+const filterUndef = (obj: any) =>
+  Object.keys(obj).reduce((ret, k) => {
+    if (obj[k] !== undefined) {
+      ret[k] = obj[k];
+    }
+
+    return ret;
+  }, {} as any);
+
 export class HttpTransport implements GraphTransport {
   private endpoint: Endpoint;
 
@@ -55,13 +64,15 @@ export class HttpTransport implements GraphTransport {
           Authorization: 'Bearer ' + t,
         };
 
+        const { json, ...rest } = options;
+
         let req = {
-          ...options,
+          ...rest,
           headers,
         };
 
-        if (options.body) {
-          req.body = JSON.stringify(options.body);
+        if (json) {
+          req.body = JSON.stringify(filterUndef(json));
         }
 
         return fetch(url, req);
@@ -273,7 +284,7 @@ function sendJSON(
   method: RequestOptions['method'] = 'POST',
 ) {
   options.method = method;
-  options.body = body;
+  options.json = body;
 
   return options;
 }

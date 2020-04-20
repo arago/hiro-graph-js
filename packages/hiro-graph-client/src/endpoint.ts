@@ -18,6 +18,7 @@ export type HTTP_API = keyof typeof APIs['http'];
 
 export class Endpoint<WS extends boolean = false> {
   private _value: string;
+  private _api?: WS extends true ? WS_API : HTTP_API;
   protected readonly APIs?: Record<string, string>;
 
   constructor(value: string, isWebsocket?: WS) {
@@ -35,22 +36,34 @@ export class Endpoint<WS extends boolean = false> {
     return this._value;
   }
 
-  api(
-    name: WS extends true ? WS_API : HTTP_API,
-    path?: string,
-    query?: Record<string, any>,
-  ) {
+  get currentApi() {
     if (!this.APIs) {
-      throw new Error(`No APIs defined for this endpoint: ${this.value}`);
+      throw new Error(`No APIs defined for this endpoint: ${this._value}`);
     }
 
-    let url = this._value + this.APIs[name];
+    if (this._api) {
+      return this.APIs[this._api];
+    }
+
+    return '';
+  }
+
+  use(name: WS extends true ? WS_API : HTTP_API) {
+    this._api = name;
+
+    return this;
+  }
+
+  path(path?: string | string[], query?: Record<string, any>) {
+    let url = this._value + this.currentApi;
 
     if (path) {
+      let _path = Array.isArray(path) ? path.join('/') : path;
+
       if (path.indexOf('http') === 0) {
-        url = path;
+        url = _path;
       } else {
-        let p = path.replace(/\/$/, '');
+        let p = _path.replace(/\/$/, '');
 
         if (!p.startsWith('/')) {
           p = `/${p}`;
@@ -66,9 +79,19 @@ export class Endpoint<WS extends boolean = false> {
 
     return url;
   }
+
+  api(
+    name: WS extends true ? WS_API : HTTP_API,
+    path?: string | string[],
+    query?: Record<string, any>,
+  ) {
+    this.use(name);
+
+    return this.path(path, query);
+  }
 }
 
-function stringify(obj: Record<string, any>) {
+export function stringify(obj: Record<string, any>) {
   const qs = Object.keys(obj)
     .map((k) => {
       if (obj[k] !== undefined && obj[k] !== null) {

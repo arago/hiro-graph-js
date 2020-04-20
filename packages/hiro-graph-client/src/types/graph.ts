@@ -127,6 +127,7 @@ export type GraphRequestType =
 
 interface RequestOptionsBase extends globalThis.RequestInit {
   raw?: boolean;
+  json?: object;
 }
 
 export interface RequestOptionsRaw extends RequestOptionsBase {
