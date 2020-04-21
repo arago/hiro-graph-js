@@ -4,15 +4,13 @@
     "version": "7.3.5",
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
-    "module": "lib/index.es.js",
-    "unpkg": "lib/index.min.js",
     "types": "lib/index.d.ts",
     "sideEffects": false,
     "files": [
         "lib"
     ],
     "scripts": {
-        "build": "rm -rf lib/* && yarn rollup -c",
+        "build": "rm -rf lib/* && yarn tsc",
         "prepublish": "yarn test && yarn build",
         "test": "madge --circular src/index.ts && jest --silent",
         "test:ci": "jest --silent --ci --reporters=default --reporters=jest-junit"
@@ -26,29 +24,12 @@
         "websocket": "^1.0.25"
     },
     "devDependencies": {
-        "@babel/core": "^7.9.0",
-        "@babel/helper-call-delegate": "^7.8.7",
-        "@babel/plugin-proposal-class-properties": "^7.8.3",
-        "@babel/plugin-proposal-export-default-from": "^7.8.3",
-        "@babel/plugin-transform-regenerator": "^7.8.3",
-        "@babel/preset-env": "^7.9.5",
-        "@babel/preset-typescript": "^7.9.0",
-        "@rollup/plugin-commonjs": "^11.0.2",
-        "@rollup/plugin-json": "^4.0.2",
-        "@rollup/plugin-node-resolve": "^7.1.1",
         "@types/isomorphic-fetch": "^0.0.35",
         "@types/jest": "^25.2.1",
         "@types/node-fetch": "2.5.4",
         "@types/websocket": "1.0.0",
-        "@wessberg/rollup-plugin-ts": "^1.2.24",
         "jest": "^25.1.0",
         "madge": "^3.8.0",
-        "rollup": "^2.3.4",
-        "rollup-plugin-babel": "^4.4.0",
-        "rollup-plugin-eslint": "^7.0.0",
-        "rollup-plugin-terser": "^5.3.0",
-        "rollup-plugin-ts": "^1.2.24",
-        "rollup-plugin-typescript2": "^0.27.0",
         "ts-jest": "^25.3.1",
         "ts-node": "^8.8.2",
         "typescript": "^3.8.3"
