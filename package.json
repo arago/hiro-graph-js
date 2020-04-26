@@ -9,7 +9,9 @@
         "nohoist": [
             "**/babel-jest",
             "**/hiro-*",
-            "**/@arago/OGIT"
+            "**/@arago/OGIT",
+            "**/websocket",
+            "**/isomorphic-fetch"
         ]
     },
     "devDependencies": {

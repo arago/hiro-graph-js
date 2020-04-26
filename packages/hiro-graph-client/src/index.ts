@@ -8,5 +8,6 @@ export * from './lucene';
 export * from './types';
 export * from './jfilter';
 export * from './endpoint';
-export * as Servlets from './servlets';
+// @todo Fix servlet export
+
 export { Token, cannotGetToken, Errors };
