@@ -11,6 +11,7 @@
     ],
     "scripts": {
         "build": "pika build",
+        "version": "yarn build",
         "prepublish": "yarn test && yarn build",
         "test": "madge --circular src/index.ts && jest --silent",
         "test:ci": "jest --silent --ci --reporters=default --reporters=jest-junit"
