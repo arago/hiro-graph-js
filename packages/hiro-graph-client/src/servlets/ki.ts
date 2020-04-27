@@ -65,8 +65,9 @@ export const KI = {
               valid,
               response: {
                 ...res,
-                // @ts-ignore
-                error: !valid && (res.error?.message || res.error),
+                error:
+                  // @ts-ignore
+                  !valid && ((res.error && res.error.message) || res.error),
               },
             };
           }),
