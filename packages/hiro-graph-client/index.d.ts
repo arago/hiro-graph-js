@@ -621,7 +621,10 @@ export default class Client {
     reqOptions: ReqOptions,
   ): Promise<OGIT.Node>;
 
-  get<T extends OGIT.SafeNode = OGIT.Node>(id: string): Promise<T>;
+  get<T extends OGIT.SafeNode = OGIT.Node>(
+    id: string,
+    opts?: { listMeta?: boolean },
+  ): Promise<T>;
 }
 
 /** Lucene */
