@@ -19,9 +19,10 @@
     "dependencies": {
         "@babel/runtime": "^7.9.2",
         "isomorphic-fetch": "^2.2.1",
+        "isomorphic-ws": "^4.0.1",
+        "nanoid": "^3.1.6",
         "rxjs": "^6.5.4",
-        "uid": "^1.0.0",
-        "websocket": "^1.0.25"
+        "ws": "^7.2.5"
     },
     "devDependencies": {
         "@pika/pack": "^0.5.0",
@@ -34,7 +35,7 @@
         "@types/isomorphic-fetch": "^0.0.35",
         "@types/jest": "^25.2.1",
         "@types/node-fetch": "2.5.4",
-        "@types/websocket": "1.0.0",
+        "@types/ws": "^7.2.4",
         "jest": "^25.1.0",
         "madge": "^3.8.0",
         "ts-jest": "^25.3.1",
@@ -66,8 +67,8 @@
                 {
                     "browser": true,
                     "namedExports": {
-                        "websocket/lib/browser.js": [
-                            "w3cwebsocket"
+                        "node_modules/isomorphic-ws/browser.js": [
+                            "default"
                         ]
                     }
                 }
