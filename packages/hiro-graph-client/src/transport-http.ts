@@ -3,7 +3,6 @@
  *  It support the `request` method,
  *  But translates them to `fetch` methods.
  */
-import fetch from 'isomorphic-fetch';
 import { of, Observable } from 'rxjs';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 
@@ -17,6 +16,8 @@ import {
 } from './types';
 import * as Errors from './errors';
 import { Token } from './token';
+
+const fetch = require('isomorphic-fetch').default;
 
 interface Response<T> {
   items?: T[] | null;
@@ -104,7 +105,7 @@ export class HttpTransport implements GraphTransport {
             error: Errors.create(err.code || 500, err.reason || err.message),
           }),
         ),
-        map((res): T | T[] => {
+        map((res: any): T | T[] => {
           if (hasError<T>(res)) {
             let msg = 'Unknown GraphIT Error';
             let code = 500;

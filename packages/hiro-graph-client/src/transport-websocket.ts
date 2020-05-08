@@ -1,11 +1,11 @@
 /**
  *  Websocket Transport for the GraphIT REST API.
  */
-import { w3cwebsocket as WS } from 'websocket';
+import * as WS from 'isomorphic-ws';
+import { nanoid } from 'nanoid';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 import { map, catchError, mergeMap, scan } from 'rxjs/operators';
 import { of, Observable, iif } from 'rxjs';
-import uid from 'uid';
 
 import { GraphTransport, GraphRequestType } from './types';
 import { Endpoint, WS_API } from './endpoint';
@@ -60,7 +60,7 @@ export class WebSocketTransport implements GraphTransport {
     { type, headers = {}, body = {} }: GraphRequestType,
   ) {
     //the connect call ensures the websocket is connected before continuing.
-    const id = uid();
+    const id = nanoid();
 
     // @todo send requests to a pipe for deduping before triggering request?
 
