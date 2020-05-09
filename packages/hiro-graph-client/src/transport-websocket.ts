@@ -1,7 +1,7 @@
 /**
  *  Websocket Transport for the GraphIT REST API.
  */
-import * as WS from 'isomorphic-ws';
+import * as WebSocket from 'isomorphic-ws';
 import { nanoid } from 'nanoid';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 import { map, catchError, mergeMap, scan } from 'rxjs/operators';
@@ -10,6 +10,9 @@ import { of, Observable, iif } from 'rxjs';
 import { GraphTransport, GraphRequestType } from './types';
 import { Endpoint, WS_API } from './endpoint';
 import { Token } from './token';
+
+// @ts-ignore - Try to make all build types happy
+const WS = WebSocket.default;
 
 export const webSocketsAvailable = WS !== undefined && WS !== null;
 
