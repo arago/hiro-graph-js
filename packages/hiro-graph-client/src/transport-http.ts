@@ -3,6 +3,7 @@
  *  It support the `request` method,
  *  But translates them to `fetch` methods.
  */
+import * as f from 'isomorphic-fetch';
 import { of, Observable } from 'rxjs';
 import { mergeMap, catchError, map } from 'rxjs/operators';
 
@@ -17,7 +18,8 @@ import {
 import * as Errors from './errors';
 import { Token } from './token';
 
-const fetch = require('isomorphic-fetch').default;
+// @ts-ignore - Try to make all build types happy
+const fetch = f.default;
 
 interface Response<T> {
   items?: T[] | null;
