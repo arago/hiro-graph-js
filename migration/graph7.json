@@ -234,21 +234,21 @@
     "timeseries": {
       "/DataName": "RawReports",
       "/instanceId": "haas1000",
-      "ogit/_created-on": "Mon, 06 Jul 2020 09:40:50 GMT",
+      "ogit/_created-on": "Thu, 21 May 2020 09:55:15 GMT",
       "ogit/_creator": "cju16o7ci0002mz77vlvps1bw_ckcabbhbp08er0j23zc794pa4",
       "ogit/_creator-app": "cju16o7cg0001mz775fnoq66i_cjix82rxi000gu473w5kvkpqv",
       "ogit/_graphtype": "vertex",
-      "ogit/_id": "ckcabbuuv08qq0j23bdixlw8g_ckcabdrxf09fd0j23scco4d2j",
+      "ogit/_id": "fake id",
       "ogit/_is-deleted": "false",
       "ogit/_modified-by": "cju16o7ci0002mz77vlvps1bw_ckcabbhbp08er0j23zc794pa4",
-      "ogit/_modified-by-app": "cju16o7cg0001mz775fnoq66i_cjix82rxi000gu473w5kvkpqv",
-      "ogit/_modified-on": "Mon, 06 Jul 2020 09:40:50 GMT",
+      "ogit/_modified-by-app": "fake app id",
+      "ogit/_modified-on": "Thu, 21 May 2020 09:55:15 GMT",
       "ogit/_organization": "cju16o7ci0002mz77vlvps1bw_cjsbrbdcu0000zj77hcebas1q",
       "ogit/_owner": "cju16o7ci0002mz77vlvps1bw_cjsbrf8je00000077zzt6wgyo",
       "ogit/_scope": "cju16o7ci0002mz77vlvps1bw_ckcabbuuv08qq0j23bdixlw8g",
       "ogit/_type": "ogit/Timeseries",
       "ogit/_v": "1",
-      "ogit/_v-id": "1594028450211-1qMp1f"
+      "ogit/_v-id": "fake version id"
     }
   }
 }
