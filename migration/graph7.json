@@ -228,7 +228,32 @@
         "ogit/_v": "16",
         "ogit/_v-id": "fake version id"
       }
-    ]
+    ],
+    "message": {
+      "/kat_channel_id": "fake channel id",
+      "/kat_client_id": "fake client id",
+      "/kat_ref": "fake ref",
+      "/kat_room_id": "fake id",
+      "/kat_type": "message",
+      "/kat_user_id": "ckbw13ila0b0t0j94knkvc9nb_ckc0i1jft6q4e0j94kfw0jj7t",
+      "/kat_username": "SME",
+      "ogit/_created-on": "Mon, 29 Jun 2020 14:51:21 GMT",
+      "ogit/_creator": "ckbw13ila0b0t0j94knkvc9nb_ckc0i1jft6q4e0j94kfw0jj7t",
+      "ogit/_creator-app": "fake app id",
+      "ogit/_graphtype": "vertex",
+      "ogit/_id": "fake id",
+      "ogit/_is-deleted": "false",
+      "ogit/_modified-by": "ckbw13ila0b0t0j94knkvc9nb_ckc0i1jft6q4e0j94kfw0jj7t",
+      "ogit/_modified-by-app": "fake app id",
+      "ogit/_modified-on": "Mon, 29 Jun 2020 14:51:21 GMT",
+      "ogit/_organization": "ckbw13ila0b0t0j94knkvc9nb_ckbw13ila0b0x0j947gcq8wxc",
+      "ogit/_owner": "ckbw13ila0b0t0j94knkvc9nb_ckbw13ila0b0v0j948kmpnvcg",
+      "ogit/_scope": "ckbw13ila0b0t0j94knkvc9nb_ckbw13r0m0b9p0j94p7hlez9b",
+      "ogit/_type": "ogit/Comment",
+      "ogit/_v": "1",
+      "ogit/_v-id": "fake version id",
+      "ogit/content": "Done"
+    }
   },
   "ogit/generates": {
     "timeseries": {

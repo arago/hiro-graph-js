@@ -223,7 +223,31 @@
         "ogit/_v": "16",
         "ogit/_v-id": "fake version id"
       }
-    ]
+    ],
+    "message": {
+      "/kat_channel_id": "fake channel id",
+      "/kat_client_id": "fake client id",
+      "/kat_ref": "fake ref",
+      "/kat_room_id": "fake id",
+      "/kat_type": "nextRoom",
+      "/kat_user_id": "hiro-bot@arago.co",
+      "/kat_username": "HIRO Chatbot",
+      "ogit/_created-on": "Mon, 29 Jun 2020 14:51:21 GMT",
+      "ogit/_creator": "sme@arago.co",
+      "ogit/_creator-app": "fake app id",
+      "ogit/_graphtype": "vertex",
+      "ogit/_id": "fake id",
+      "ogit/_is-deleted": "false",
+      "ogit/_modified-by": "sme@arago.co",
+      "ogit/_modified-by-app": "fake app id",
+      "ogit/_modified-on": "Mon, 29 Jun 2020 14:51:21 GMT",
+      "ogit/_owner": "sme@arago.co",
+      "ogit/_reader": "arago.co",
+      "ogit/_type": "ogit/Comment",
+      "ogit/_v": "1",
+      "ogit/_v-id": "fake version id",
+      "ogit/content": "{\"text\":\"Let's jump over to the next step. In case you want to add another step, you can always go back to the first tab and add one by clicking on the plus icon!\",\"defaultRoom\":{\"id\":\"ckc0mbr26jb8g0e62jigrsqqt\",\"title\":\"Description\"},\"blankRoom\":{\"id\":\"ckc0mcblzjbb70e62jfrxe1zs\",\"title\":\"You jean\"}}"
+    }
   },
   "ogit/generates": {
     "timeseries": {
