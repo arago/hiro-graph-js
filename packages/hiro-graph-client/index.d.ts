@@ -71,6 +71,13 @@ export namespace OGIT {
     'ogit/_tags'?: string;
   }
 
+  export interface Tag extends SafeNode {
+    'ogit/_id': string;
+    '/slug': string;
+    'ogit/name': string;
+    'ogit/color': string;
+  }
+
   export interface KnowledgePool extends SafeNode {
     'ogit/_creator-app'?: string;
     'ogit/_modified-by-app'?: string;
