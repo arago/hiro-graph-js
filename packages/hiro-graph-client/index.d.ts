@@ -68,6 +68,7 @@ export namespace OGIT {
     'ogit/name'?: string;
     'ogit/_organization'?: string;
     'ogit/_scope'?: string;
+    'ogit/_tags'?: string;
   }
 
   export interface KnowledgePool extends SafeNode {
