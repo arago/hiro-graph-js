@@ -72,7 +72,6 @@ export namespace OGIT {
   }
 
   export interface Tag extends SafeNode {
-    'ogit/_id': string;
     '/slug': string;
     'ogit/name': string;
     'ogit/color': string;
