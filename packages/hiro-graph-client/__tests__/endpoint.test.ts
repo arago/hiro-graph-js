@@ -140,3 +140,22 @@ test('Get API with query', () => {
     expect(res).toEqual(expected);
   });
 });
+
+test('Use custom APIs', () => {
+  const endpoint = new Endpoint('https://example.com', false, {
+    provider: '/services/provider/1.0/codes',
+  });
+
+  const tests: Array<[string, string]> = [
+    [
+      endpoint.api('provider', '/test', {
+        a: 'hello',
+      }),
+      'https://example.com/services/provider/1.0/codes/test?a=hello',
+    ],
+  ];
+
+  tests.forEach(([res, expected]) => {
+    expect(res).toEqual(expected);
+  });
+});
