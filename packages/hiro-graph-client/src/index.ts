@@ -5,7 +5,7 @@ import * as Errors from './errors';
 export default Client;
 export * from './gremlin';
 export * from './lucene';
-export * from './types';
+export * from './types/index';
 export * from './jfilter';
 export * from './endpoint';
 export * as Servlets from './servlets/index';
