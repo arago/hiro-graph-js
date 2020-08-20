@@ -11,7 +11,8 @@
             "**/hiro-*",
             "**/@arago/OGIT",
             "**/websocket",
-            "**/isomorphic-fetch"
+            "**/isomorphic-fetch",
+            "**/isomorphic-ws"
         ]
     },
     "devDependencies": {

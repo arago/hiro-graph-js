@@ -16,19 +16,22 @@ export const APIs = {
 export type WS_API = keyof typeof APIs['ws'];
 export type HTTP_API = keyof typeof APIs['http'];
 
-export class Endpoint<WS extends boolean = false> {
+export class Endpoint<
+  WS extends boolean = false,
+  TExtraAPIs extends Record<string, string> | undefined = {}
+> {
   private _value: string;
-  private _api?: WS extends true ? WS_API : HTTP_API;
+  private _api?: (WS extends true ? WS_API : HTTP_API) | keyof TExtraAPIs;
   protected readonly APIs?: Record<string, string>;
 
-  constructor(value: string, isWebsocket?: WS) {
+  constructor(value: string, isWebsocket?: WS, extraAPIs?: TExtraAPIs) {
     this._value = value.replace(/\/$/, '');
 
     if (isWebsocket) {
       this._value = this._value.replace(/^http/, 'ws');
-      this.APIs = APIs.ws;
+      this.APIs = { ...APIs.ws, ...extraAPIs };
     } else {
-      this.APIs = APIs.http;
+      this.APIs = { ...APIs.http, ...extraAPIs };
     }
   }
 
@@ -42,13 +45,15 @@ export class Endpoint<WS extends boolean = false> {
     }
 
     if (this._api) {
+      // @ts-ignore
       return this.APIs[this._api];
     }
 
     return '';
   }
 
-  use(name: WS extends true ? WS_API : HTTP_API) {
+  use(name: (WS extends true ? WS_API : HTTP_API) | keyof TExtraAPIs) {
+    // @ts-ignore
     this._api = name;
 
     return this;
@@ -81,7 +86,7 @@ export class Endpoint<WS extends boolean = false> {
   }
 
   api(
-    name: WS extends true ? WS_API : HTTP_API,
+    name: (WS extends true ? WS_API : HTTP_API) | keyof TExtraAPIs,
     path?: string | string[],
     query?: Record<string, any>,
   ) {
