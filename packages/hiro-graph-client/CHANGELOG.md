@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `Endpoint` helper class for easy creation of API urls and queries.
+- Add `Endpoint` helper class for easy creation of API urls and queries. Additional endpoints can be passed in.
 
 ```ts
 const url = new Endpoint('https://graphit.co').api('auth', ['me', 'account'], {
