@@ -43,7 +43,6 @@ export interface EventStreamRequest {
   groupId?: string;
   scopeId?: string;
   offset?: OFFSET_MSG;
-  filters?: string[];
 }
 
 export interface EventStreamFilter {
@@ -55,19 +54,11 @@ export interface EventStreamFilter {
 export class EventStream {
   private _token: Token;
   private _scopeId?: string;
-  private _filters: EventStreamFilter[];
   private _transport: WebSocketTransport;
-
-  public subscribe: <T = any>(observer?: PartialObserver<T>) => Subscription;
 
   constructor(
     { endpoint, token }: EventStreamOptions,
-    {
-      groupId,
-      offset = OFFSET_MSG.NEWEST,
-      filters = [],
-      scopeId,
-    }: EventStreamRequest = {},
+    { groupId, offset = OFFSET_MSG.NEWEST, scopeId }: EventStreamRequest = {},
   ) {
     ensureWebSocketsAvailable();
     this._token = token;
@@ -87,47 +78,10 @@ export class EventStream {
       query.offset = offset;
     }
 
-    this._filters = filters.map((content) => ({
-      'filter-id': content,
-      'filter-type': 'jfilter',
-      'filter-content': content,
-    }));
-
     this._transport = new WebSocketTransport(endpoint, {
       api: 'events',
       query,
     });
-
-    const stream$ = new Observable<any>((subscriber) => {
-      of(this._token)
-        .pipe(
-          mergeMap((t) => t.get()),
-          map((t) => {
-            const connection$ = this._transport.connect(
-              t,
-              EVENTS_PROTOCOL,
-            ) as WebSocketSubject<{
-              type: 'register';
-              args: EventStreamFilter;
-            }>;
-
-            this._filters.map((f) =>
-              connection$.next({
-                type: 'register',
-                args: f,
-              }),
-            );
-
-            // @ts-ignore
-            timer(0, 5000).pipe(map(() => connection$.next({})));
-
-            return connection$;
-          }),
-        )
-        .subscribe(subscriber);
-    });
-
-    this.subscribe = stream$.subscribe.bind(stream$);
   }
 
   /**
@@ -143,8 +97,6 @@ export class EventStream {
       'filter-type': 'jfilter',
       'filter-content': filter.toString(),
     };
-
-    this._filters.push(filterObj);
 
     return new Observable((subscriber) => {
       of(this._token)
