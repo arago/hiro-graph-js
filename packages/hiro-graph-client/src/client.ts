@@ -90,20 +90,10 @@ export class Client {
   // NB this is not held anywhere in this instance, but returned
   // to the caller. It only connects when it's subscribe() method
   // is called.
-  eventStream(
-    filters: string | string[] = [],
-    { groupId, offset }: Omit<EventStreamRequest, 'filters'> = {},
-  ) {
-    const filtersArray = Array.isArray(filters) ? filters : [filters];
-
-    if (filtersArray.length === 0) {
-      // add a default one that catches everything
-      filtersArray.push('(element.ogit/_id = *)');
-    }
-
+  eventStream({ groupId, offset }: Omit<EventStreamRequest, 'filters'> = {}) {
     return new EventStream(
       { endpoint: this.endpoint, token: this.token },
-      { groupId, offset, filters: filtersArray },
+      { groupId, offset },
     );
   }
 
