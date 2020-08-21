@@ -98,9 +98,17 @@ export class EventStream {
             const connection$ = this._transport.connect(
               t,
               EVENTS_PROTOCOL,
-            ) as WebSocketSubject<EventStreamFilter>;
+            ) as WebSocketSubject<{
+              type: 'register';
+              args: EventStreamFilter;
+            }>;
 
-            this._filters.map((f) => connection$.next(f));
+            this._filters.map((f) =>
+              connection$.next({
+                type: 'register',
+                args: f,
+              }),
+            );
 
             // @ts-ignore
             timer(0, 5000).pipe(map(() => connection$.next({})));
