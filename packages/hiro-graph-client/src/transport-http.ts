@@ -28,7 +28,7 @@ interface Response<T> {
 
 export type FetchReturnType<T, O extends RequestOptions> = O['raw'] extends true
   ? Observable<globalThis.Response>
-  : Observable<T | T[]>;
+  : Observable<T>;
 
 const hasRaw = (options: RequestOptions): options is RequestOptionsRaw =>
   options.raw === true;
@@ -107,27 +107,29 @@ export class HttpTransport implements GraphTransport {
             error: Errors.create(err.code || 500, err.reason || err.message),
           }),
         ),
-        map((res: any): T | T[] => {
-          if (hasError<T>(res)) {
-            let msg = 'Unknown GraphIT Error';
-            let code = 500;
+        map(
+          (res: any): T => {
+            if (hasError<T>(res)) {
+              let msg = 'Unknown GraphIT Error';
+              let code = 500;
 
-            if (typeof res.error === 'string') {
-              msg = res.error;
-            } else if (typeof res.error === 'object') {
-              msg = res.error.message || msg;
-              code = res.error.code || code;
+              if (typeof res.error === 'string') {
+                msg = res.error;
+              } else if (typeof res.error === 'object') {
+                msg = res.error.message || msg;
+                code = res.error.code || code;
+              }
+
+              throw Errors.create(code, `[HTTP] Error: ${msg}`);
             }
 
-            throw Errors.create(code, `[HTTP] Error: ${msg}`);
-          }
+            if ('items' in res) {
+              return res.items;
+            }
 
-          if ('items' in res) {
-            return res.items;
-          }
-
-          return res || {};
-        }),
+            return res || {};
+          },
+        ),
       ) as FetchReturnType<T, O>;
   }
 
