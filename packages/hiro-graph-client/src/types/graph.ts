@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-
 export type GraphEndpoint =
   | 'connect'
   | 'create'
@@ -144,5 +142,5 @@ export interface GraphTransport {
   request: <T = any>(
     token: any,
     request: GraphRequestType,
-  ) => Observable<T | T[]>;
+  ) => import('rxjs').Observable<T | T[]>;
 }

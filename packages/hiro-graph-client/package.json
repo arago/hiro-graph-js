@@ -21,7 +21,6 @@
         "isomorphic-fetch": "^2.2.1",
         "isomorphic-ws": "^4.0.1",
         "nanoid": "^3.1.12",
-        "rxjs": "^6.6.2",
         "ws": "^7.3.1"
     },
     "devDependencies": {
@@ -38,9 +37,13 @@
         "@types/ws": "^7.2.6",
         "jest": "^26.4.1",
         "madge": "^3.9.2",
+        "rxjs": "^6.6.2",
         "ts-jest": "^26.2.0",
         "ts-node": "^8.10.2",
         "typescript": "^3.9.7"
+    },
+    "peerDependencies": {
+        "rxjs": "~6.6.0"
     },
     "@pika/pack": {
         "pipeline": [
