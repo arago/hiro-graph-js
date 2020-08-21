@@ -1,5 +1,5 @@
 import { Token, cannotGetToken } from './token';
-import { Client, ServletFactory } from './client';
+import { Client, ClientOptions, TransportOrOptions } from './client';
 import * as Errors from './errors';
 
 export default Client;
@@ -9,4 +9,4 @@ export * from './types/index';
 export * from './jfilter';
 export * from './endpoint';
 export * as Servlets from './servlets/index';
-export { cannotGetToken, Errors, ServletFactory, Token };
+export { cannotGetToken, ClientOptions, Errors, Token, TransportOrOptions };

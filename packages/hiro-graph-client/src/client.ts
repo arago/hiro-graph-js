@@ -469,26 +469,4 @@ export class Client {
       body: {},
     });
   }
-
-  addServlet<T extends ServletFactory>(factory: T) {
-    const { name, create } = factory;
-
-    // @ts-ignore
-    this[name] = create.call(this);
-
-    return this as this & GetServlet<T>;
-  }
-}
-
-type GetServlet<T extends ServletFactory> = {
-  [K in T['name']]: ReturnType<T['create']>;
-};
-
-export interface Servlet {
-  [index: string]: Function;
-}
-
-export interface ServletFactory {
-  name: string;
-  create: (this: Client) => Servlet;
 }
