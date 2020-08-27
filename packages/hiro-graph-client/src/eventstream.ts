@@ -120,18 +120,14 @@ export class EventStream {
                   'filter-id': filter,
                 },
               }),
-              (res: any) => {
-                console.log('RESPONSE', res);
-
-                return filter.test(JFilter.transform(res.data));
-              },
+              (res: any) => filter.test(JFilter.transform(res)),
             ),
           ),
         )
         .subscribe({
           next: (res) => {
-            if (res.data) {
-              subscriber.next(res.data);
+            if (res) {
+              subscriber.next(res);
             }
           },
           error: (err) => {
