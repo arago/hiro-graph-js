@@ -16,13 +16,14 @@ import {
 import { HttpTransport } from './transport-http';
 import * as Errors from './errors';
 import { fixedToken } from './token';
-import { EventStream, EventStreamRequest } from './eventstream';
+import { EventStream } from './eventstream';
 import {
   GraphTransport,
   GraphRequest,
   TimeseriesResponse,
   GraphRequestType,
   RequestOptions,
+  EventStreamRequest,
 } from './types';
 import {
   GremlinQueryFunction,
