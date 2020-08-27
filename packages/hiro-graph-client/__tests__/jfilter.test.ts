@@ -31,6 +31,18 @@ test('JFilter nested', () => {
 });
 
 test('JFilter transform', () => {
+  const filter = JFilter.and(
+    JFilter.equals('element.ogit/_type', 'ogit/Mobile/HealthInfo'),
+    JFilter.equals('action', '*'),
+  );
+
+  const res = {
+    body: { 'ogit/_type': 'ogit/Mobile/HealthInfo' },
+    type: 'UPDATE',
+  };
+
+  expect(filter.test(JFilter.transform(res))).toEqual(true);
+
   expect(
     JFilter.transform({ body: { 'ogit/_id': 'test' }, type: 'UPDATE' }),
   ).toEqual({
