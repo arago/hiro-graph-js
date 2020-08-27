@@ -17,7 +17,11 @@ import {
   ensureWebSocketsAvailable,
 } from './transport-websocket';
 import { JFilter, JFilterType } from './jfilter';
-import { OFFSET_MSG, EventStreamRequest, EventStreamResponse } from './types';
+import {
+  OFFSET_MSG,
+  EventStreamRequest,
+  EventStreamResponse,
+} from './types/index';
 
 import { Token } from '.';
 
