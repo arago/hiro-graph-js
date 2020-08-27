@@ -120,7 +120,11 @@ export class EventStream {
                   'filter-id': filter,
                 },
               }),
-              (res) => filter.test(JFilter.transform(res)),
+              (res: any) => {
+                console.log('RESPONSE', res);
+
+                return filter.test(JFilter.transform(res.data));
+              },
             ),
           ),
         )
