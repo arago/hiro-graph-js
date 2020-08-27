@@ -53,7 +53,7 @@ class JFilterEQ extends BaseFilter implements JFilterType {
   }
 }
 
-class JFilter {
+export class JFilter {
   static or(...filters: any): JFilterType {
     return new JFilterOR(filters);
   }
@@ -127,8 +127,3 @@ function matches(obj: any, prop: any, value: any) {
 
   return matcher(actual);
 }
-
-/*
-  Exports
- */
-export { JFilter };
