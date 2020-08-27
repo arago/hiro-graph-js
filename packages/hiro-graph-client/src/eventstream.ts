@@ -17,18 +17,14 @@ import {
   ensureWebSocketsAvailable,
 } from './transport-websocket';
 import { JFilter, JFilterType } from './jfilter';
+import { OFFSET_MSG, EventStreamRequest, EventStreamResponse } from './types';
 
 import { Token } from '.';
 
 const RECONNECT_TIMEOUT = 5e3;
 const EVENTS_PROTOCOL = 'events-1.0.0';
 
-enum OFFSET_MSG {
-  NEWEST = 'largest',
-  oldest = 'smallest',
-}
-
-interface EventStreamQuery {
+export interface EventStreamQuery {
   groupId?: string;
   offset?: OFFSET_MSG;
   [index: string]: string | undefined;
@@ -37,11 +33,6 @@ interface EventStreamQuery {
 export interface EventStreamOptions {
   endpoint: string;
   token: Token;
-}
-
-export interface EventStreamRequest {
-  groupId?: string;
-  offset?: OFFSET_MSG;
 }
 
 export interface EventStreamFilter {
@@ -84,14 +75,14 @@ export class EventStream {
    * @param filter - String
    */
 
-  register(filter: JFilterType) {
+  register<T extends object>(filter: JFilterType) {
     const filterObj: EventStreamFilter = {
       'filter-id': filter.toString(),
       'filter-type': 'jfilter',
       'filter-content': filter.toString(),
     };
 
-    return new Observable((subscriber) => {
+    return new Observable<EventStreamResponse<T>>((subscriber) => {
       of(this._token)
         .pipe(
           mergeMap((t) => t.get()),
