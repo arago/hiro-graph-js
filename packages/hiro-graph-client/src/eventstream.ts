@@ -9,7 +9,7 @@
  */
 
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { of, Observable, PartialObserver, Subscription, timer } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
 import {
