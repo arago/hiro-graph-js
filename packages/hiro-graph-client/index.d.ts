@@ -256,10 +256,12 @@ interface EventStreamOptions {
   offset?: number;
 }
 
-declare interface HiroEvent<T = any> {
+export type ActionType = 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'WRITETIMESERIES';
+
+export declare interface HiroEvent<T = any> {
   id: string;
   identity: string;
-  type: 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'WRITETIMESERIES';
+  type: ActionType;
   timestamp: number;
   nanotime: number;
   body: T;
@@ -620,13 +622,18 @@ export default class Client {
     type: string,
     data: any,
     reqOptions: ReqOptions,
-  ): Promise<OGIT.Node>;
+  ): Promise<T>;
 
   update<T extends OGIT.SafeNode = OGIT.Node>(
     id: string,
     data: any,
     reqOptions: ReqOptions,
-  ): Promise<OGIT.Node>;
+  ): Promise<T>;
+
+  delete<T extends OGIT.SafeNode = OGIT.Node>(
+    id: string,
+    reqOptions: ReqOptions,
+  ): Promise<T>;
 
   get<T extends OGIT.SafeNode = OGIT.Node>(
     id: string,
