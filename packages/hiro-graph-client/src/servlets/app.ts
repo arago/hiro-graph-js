@@ -19,6 +19,12 @@ export const Apps = {
         return this.fetch(url);
       },
 
+      getConfig: () => {
+        const url = endpoint.path('config');
+
+        return this.fetch(url);
+      },
+
       install: (appId: string) => {
         const url = endpoint.path(['install', appId]);
 
