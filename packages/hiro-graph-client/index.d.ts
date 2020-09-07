@@ -271,7 +271,7 @@ type EventUnsubscribe = () => void;
 
 type EventHandler = <T = any>(event: HiroEvent<T>) => void;
 
-declare class EventStream {
+export declare class EventStream {
   constructor(
     clientParams: ClientParams,
     options?: EventStreamOptions & { filters?: string[] },
@@ -531,6 +531,9 @@ export default class Client {
   auth: AuthServlet;
   api: ApiServlet;
 
+  variable?: VariablesServlet;
+  ki?: KiServlet;
+
   constructor(
     params: ClientParams,
     transportOptions?: object,
@@ -617,6 +620,10 @@ export default class Client {
     servletMethods: ServletMethods,
     proxy?: string,
   ): Client;
+
+  getServlet<T>(
+    prefix: string,
+  ): T;
 
   create<T extends OGIT.SafeNode = OGIT.Node>(
     type: string,

@@ -83,7 +83,7 @@ export default class Client {
         this._dedup = Object.create(null);
 
         //keep this so we can duplicate them
-        this._servlets = [];
+        this._servlets = []; // todo: change _servlets to PlainObject. move custom servlets from this to this._servlets. check getters and setters
 
         this._pubsub = subscriberFanout();
 
@@ -772,5 +772,9 @@ export default class Client {
 
         //chainable? might be useful.
         return this;
+    }
+
+    getServlet(prefix) {
+        return this[prefix];
     }
 }
