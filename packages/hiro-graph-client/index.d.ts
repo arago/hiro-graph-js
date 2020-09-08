@@ -432,17 +432,16 @@ interface DefineVariableOptions {
   [key: string]: any;
 }
 
-interface SuggestVariable {
+interface SuggestVariableOptions extends PlainObject {
   name: string;
   full?: boolean;
-  [key: string]: any;
 }
 
 export interface VariablesServlet {
   // TODO: define Variable interface
   add<T = any>(data: any): Promise<T>;
 
-  suggest<T = any>(data: SuggestVariable): Promise<T>;
+  suggest<T = any>(data: SuggestVariableOptions): Promise<T>;
 
   define<T = any>(options: DefineVariableOptions): Promise<T>;
 }
