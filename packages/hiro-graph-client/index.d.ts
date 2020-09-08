@@ -427,11 +427,17 @@ interface DefineVariableOptions {
   [key: string]: any;
 }
 
+interface SuggestVariable {
+  name: string;
+  full?: boolean;
+  [key: string]: any;
+}
+
 export interface VariablesServlet {
   // TODO: define Variable interface
   add<T = any>(data: any): Promise<T>;
 
-  suggest<T = any>(name: string, full: boolean, ...args: any[]): Promise<T>;
+  suggest<T = any>(data: SuggestVariable): Promise<T>;
 
   define<T = any>(options: DefineVariableOptions): Promise<T>;
 }
