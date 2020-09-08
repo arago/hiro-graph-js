@@ -256,7 +256,12 @@ interface EventStreamOptions {
   offset?: number;
 }
 
-export type ActionType = 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'WRITETIMESERIES';
+export type ActionType =
+  | 'CREATE'
+  | 'READ'
+  | 'UPDATE'
+  | 'DELETE'
+  | 'WRITETIMESERIES';
 
 export declare interface HiroEvent<T = any> {
   id: string;
@@ -627,9 +632,7 @@ export default class Client {
     proxy?: string,
   ): Client;
 
-  getServlet<T>(
-    prefix: string,
-  ): T;
+  getServlet<T>(prefix: string): T;
 
   create<T extends OGIT.SafeNode = OGIT.Node>(
     type: string,
