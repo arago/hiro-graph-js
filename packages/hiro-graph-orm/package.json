@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/orm",
-    "version": "7.3.8",
+    "version": "7.3.9",
     "description": "OGIT ontology to sane application mappings",
     "repository": "arago/hiro-graph-js",
     "main": "lib/index.js",
@@ -14,7 +14,7 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "^7.8.7",
-        "@hiro-graph/client": "^7.3.8",
+        "@hiro-graph/client": "^7.3.9",
         "js-yaml": "^3.13.1",
         "lodash.isplainobject": "^4.0.6"
     },
