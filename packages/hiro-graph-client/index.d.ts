@@ -94,11 +94,11 @@ export namespace OGIT {
     'ogit/_owner'?: string;
     'ogit/_v'?: number;
     'ogit/_v-id'?: string;
-    'ogit/name'?: string;
+    'ogit/name': string;
     'ogit/_organization'?: string;
     'ogit/_scope'?: string;
     'ogit/status'?: string;
-    'ogit/email'?: string;
+    'ogit/email': string;
   }
 
   export interface AccountProfile extends SafeNode {
@@ -256,10 +256,17 @@ interface EventStreamOptions {
   offset?: number;
 }
 
-declare interface HiroEvent<T = any> {
+export type ActionType =
+  | 'CREATE'
+  | 'READ'
+  | 'UPDATE'
+  | 'DELETE'
+  | 'WRITETIMESERIES';
+
+export declare interface HiroEvent<T = any> {
   id: string;
   identity: string;
-  type: 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'WRITETIMESERIES';
+  type: ActionType;
   timestamp: number;
   nanotime: number;
   body: T;
@@ -269,7 +276,7 @@ type EventUnsubscribe = () => void;
 
 type EventHandler = <T = any>(event: HiroEvent<T>) => void;
 
-declare class EventStream {
+export declare class EventStream {
   constructor(
     clientParams: ClientParams,
     options?: EventStreamOptions & { filters?: string[] },
@@ -425,11 +432,16 @@ interface DefineVariableOptions {
   [key: string]: any;
 }
 
+interface SuggestVariableOptions extends PlainObject {
+  name: string;
+  full?: boolean;
+}
+
 export interface VariablesServlet {
   // TODO: define Variable interface
   add<T = any>(data: any): Promise<T>;
 
-  suggest<T = any>(name: string, full: boolean, ...args: any[]): Promise<T>;
+  suggest<T = any>(data: SuggestVariableOptions): Promise<T>;
 
   define<T = any>(options: DefineVariableOptions): Promise<T>;
 }
@@ -529,6 +541,9 @@ export default class Client {
   auth: AuthServlet;
   api: ApiServlet;
 
+  variable?: VariablesServlet;
+  ki?: KiServlet;
+
   constructor(
     params: ClientParams,
     transportOptions?: object,
@@ -616,17 +631,24 @@ export default class Client {
     proxy?: string,
   ): Client;
 
+  getServlet<T>(prefix: string): T;
+
   create<T extends OGIT.SafeNode = OGIT.Node>(
     type: string,
     data: any,
     reqOptions: ReqOptions,
-  ): Promise<OGIT.Node>;
+  ): Promise<T>;
 
   update<T extends OGIT.SafeNode = OGIT.Node>(
     id: string,
     data: any,
     reqOptions: ReqOptions,
-  ): Promise<OGIT.Node>;
+  ): Promise<T>;
+
+  delete<T extends OGIT.SafeNode = OGIT.Node>(
+    id: string,
+    reqOptions: ReqOptions,
+  ): Promise<T>;
 
   get<T extends OGIT.SafeNode = OGIT.Node>(
     id: string,
