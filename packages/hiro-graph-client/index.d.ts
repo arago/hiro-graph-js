@@ -94,11 +94,11 @@ export namespace OGIT {
     'ogit/_owner'?: string;
     'ogit/_v'?: number;
     'ogit/_v-id'?: string;
-    'ogit/name'?: string;
+    'ogit/name': string;
     'ogit/_organization'?: string;
     'ogit/_scope'?: string;
     'ogit/status'?: string;
-    'ogit/email'?: string;
+    'ogit/email': string;
   }
 
   export interface AccountProfile extends SafeNode {
