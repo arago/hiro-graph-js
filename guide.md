@@ -157,3 +157,43 @@ Where:
 - OGIT_NODE_TYPE: example node type
 - limit: amount of items returned from query
 - offset: amount of items to offset the query by
+
+## Example of Server Side Login
+
+```JS
+async function getToken() {
+  const response = await fetch(`${GRAPH_ENDPOINT}/api/auth/6/app`, {
+    method: 'POST',
+    headers: {
+      contentType: 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: '<CLIENT_ID>',
+      client_secret: '<CLIENT_SECRET>',
+      username: '<USERNAME>',
+      password: '<PASSWORD>',
+    }),
+  });
+
+  if (response.status === 200) {
+    const { _TOKEN: token } = await response.json();
+
+    return token;
+  } else {
+    throw new Error('Cannot get token');
+  }
+}
+
+async function connect() {
+  let token = '';
+
+  try {
+    token = await getToken();
+  } catch {
+    // wait and retry connect
+    return;
+  }
+
+  return client = new Client({ endpoint: GRAPH_ENDPOINT, token });
+}
+```
