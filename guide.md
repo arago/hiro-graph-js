@@ -96,7 +96,9 @@ Where:
 - OGIT_NODE_TYPE: example node type
 - START_NODE_ID: is the starting node's ID
 
-#### Add a Limit
+#### Add a Range / Limit
+
+- http://gremlindocs.spmallette.documentup.com/#ij
 
 **This needs to be merged directly onto the last element of the query!**
 
@@ -113,8 +115,8 @@ client.gremlin(START_NODE_ID, query);
 
 Where:
 
-- start: index of where to start from
-- finish: index of where to end
+- start: index of where to start the range from
+- finish: index of where to end the range from
 
 ### Lucene
 
