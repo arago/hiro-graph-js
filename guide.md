@@ -145,10 +145,15 @@ const { querystring, placeholders } = lucene({
   'ogit/_type': OGIT_NODE_TYPE,
 });
 
-client.lucene(querystring, { limit: 1, ...placeholders });
+const limit = 10; //items per page;
+const offset = limit * (currentPage - 1);
+
+client.lucene(querystring, { limit: limit, offset: offset, ...placeholders });
 
 ```
 
 Where:
 
 - OGIT_NODE_TYPE: example node type
+- limit: amount of items returned from query
+- offset: amount of items to offset the query by
