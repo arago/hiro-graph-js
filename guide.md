@@ -15,6 +15,22 @@ const client = new Client({
 });
 ```
 
+Where:
+
+- tokenInstance: is a token string or Token instance.
+
+#### Token Object
+
+```JS
+const myToken = new Token({
+  onInvalidate: () => {
+    // Handle unauthorized Token
+    return Promise.resolve();
+  },
+  getToken: () => Promise.resolve(token),
+});
+```
+
 ## Creating, Deleting Nodes and Relationships
 
 ### Node Creation
