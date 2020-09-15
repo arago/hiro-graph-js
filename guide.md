@@ -158,7 +158,7 @@ Where:
 - limit: amount of items returned from query
 - offset: amount of items to offset the query by
 
-## Example of Client Side Login
+## Example of Server Side Login
 
 ```JS
 async function getToken() {
