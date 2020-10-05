@@ -504,7 +504,7 @@ export interface AuthServlet {
 
 export declare const appsServletFactory: () => AppsServlet;
 export declare const kiServletFactory: () => KiServlet;
-export declare const variablesSerlvetFactory: () => VariablesServlet;
+export declare const variablesServletFactory: () => VariablesServlet;
 
 // Client
 
