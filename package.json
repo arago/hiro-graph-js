@@ -28,8 +28,8 @@
         "build": "lerna run build",
         "test": "yarn install && yarn lint && lerna run build && lerna run test",
         "test:ci": "yarn install --frozen-lockfile && yarn lint && lerna run build && lerna run test:ci",
-        "format": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.ts' --write",
-        "lint-prettier": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.ts' --list-different",
+        "format": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib|pkg)/**/*.ts' --write",
+        "lint-prettier": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib|pkg)/**/*.ts' --list-different",
         "lint-eslint": "eslint packages/**/src/**/*",
         "lint": "yarn lint-prettier && yarn lint-eslint",
         "precommit": "yarn format"
@@ -37,7 +37,8 @@
     "eslintConfig": {
         "extends": "@hiro-ui",
         "rules": {
-            "no-sequences": "off"
+            "no-sequences": "off",
+            "import/no-extraneous-dependencies": "off"
         }
     },
     "prettier": "@hiro-ui/prettier-config",
