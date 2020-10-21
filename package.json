@@ -18,10 +18,10 @@
     "devDependencies": {
         "@hiro-ui/eslint-config": "1.5.2",
         "@hiro-ui/prettier-config": "1.1.2",
-        "husky": "^4.2.5",
-        "jest-junit": "^11.1.0",
+        "husky": "^4.3.0",
+        "jest-junit": "^12.0.0",
         "lerna": "^3.22.1",
-        "lint-staged": "^10.2.11"
+        "lint-staged": "^10.4.2"
     },
     "scripts": {
         "release": "lerna publish --dist-tag dev --contents pkg",
@@ -30,7 +30,7 @@
         "test:ci": "yarn install --frozen-lockfile && yarn lint && lerna run build && lerna run test:ci",
         "format": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.ts' --write",
         "lint-prettier": "prettier 'packages/*/*.{js,ts,tsx}' 'packages/*/!(node_modules|lib)/**/*.ts' --list-different",
-        "lint-eslint": "eslint packages/",
+        "lint-eslint": "eslint packages/**/src/**/*",
         "lint": "yarn lint-prettier && yarn lint-eslint",
         "precommit": "yarn format"
     },
