@@ -9,4 +9,5 @@ export * from './types/index';
 export * from './jfilter';
 export * from './endpoint';
 export * as Servlets from './servlets/index';
+export { toPromise } from './utils';
 export { cannotGetToken, ClientOptions, Errors, Token, TransportOrOptions };
