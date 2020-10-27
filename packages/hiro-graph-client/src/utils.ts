@@ -1,5 +1,5 @@
 import { iif, Observable, of } from 'rxjs';
-import { mergeMap, toArray } from 'rxjs/operators';
+import { mergeMap, scan } from 'rxjs/operators';
 
 export function extract(obj: Record<string, string> = {}, ...keys: string[]) {
   return keys.reduce((acc, k) => {
@@ -11,10 +11,17 @@ export function extract(obj: Record<string, string> = {}, ...keys: string[]) {
   }, {} as Record<string, string>);
 }
 
-export const toPromise = <T>(o: Observable<T>) =>
-  o
+export const toPromise = <T>(o: Observable<T>) => {
+  const items: T[] = [];
+
+  return o
     .pipe(
-      toArray(),
+      scan((acc, r) => {
+        acc.push(r);
+
+        return acc;
+      }, items),
       mergeMap((res) => iif(() => res.length === 1, of(res[0]), of(res))),
     )
     .toPromise();
+};
