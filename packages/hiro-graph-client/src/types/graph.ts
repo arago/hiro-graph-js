@@ -142,5 +142,5 @@ export interface GraphTransport {
   request: <T = any>(
     token: any,
     request: GraphRequestType,
-  ) => import('rxjs').Observable<T | T[]>;
+  ) => import('rxjs').Observable<T>;
 }
