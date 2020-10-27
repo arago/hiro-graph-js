@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 
 import { WebSocketTransport } from '../src/transport-websocket';
 import { Token } from '../src/token';
+import { toPromise } from '../src/utils';
 
 const onInvalidate = jest.fn();
 const fakeToken = new Token({
@@ -53,7 +54,8 @@ describe('transport-websocket', () => {
   };
   const getIdAndResPromise = async (req: any) => {
     const idp = getRequestId();
-    const res = transport.request(fakeToken, req).toPromise();
+    const res = toPromise(transport.request(fakeToken, req));
+
     const id = await idp;
 
     return { id, res };

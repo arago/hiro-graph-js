@@ -81,7 +81,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Convert to Typescript
-- Re-write Transports (and Eventstream) using RxJS - All functions now return `Observable<T[]>` these can be converted to Promises using `toPromise()`.
+- Re-write Transports (and Eventstream) using RxJS - All functions now return `Observable<T>` these can be converted to Promises using `toPromise()`. Note: `toPromise()` returns `T|T[]` as multiple results may be returned from websocket. 
+  ```ts
+  const res = await toPromise(client.lucene({ '/hello': 'world' }));
+  ```
 - Eventstream uses JFilter to filter out results. This means multiple filters can be used, without results being mixed together.
   
   ```ts

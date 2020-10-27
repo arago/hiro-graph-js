@@ -135,23 +135,7 @@ export class WebSocketTransport implements GraphTransport {
         });
     });
 
-    const items: T[] = [];
-
-    return response$.pipe(
-      mergeMap((res) =>
-        iif(
-          () => res.multi,
-          of(res).pipe(
-            scan((acc, r) => {
-              acc.push(r.body as T);
-
-              return acc;
-            }, items),
-          ),
-          of(res.body as T),
-        ),
-      ),
-    );
+    return response$.pipe(map((res) => res.body as T));
   }
 
   /**
