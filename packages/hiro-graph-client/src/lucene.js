@@ -105,6 +105,22 @@ const ensureArray = (value) => {
 //the "$" keys which do not recurse
 const noRecurseKeys = ['$search', '$range', '$missing'];
 
+// split value into ngrams min length 2, max length 10
+const ngramChunker = (value) => value.match(/.{2,10}/g) || [];
+
+const ngramArray = (values) => {
+    return values
+        .reduce((acc, val) => {
+            const vals = val
+                .toLowerCase()
+                .split(/[^a-z0-9]/)
+                .reduce((acc2, val2) => [...acc2, ...ngramChunker(val2)], []);
+
+            return [...acc, ...vals];
+        }, [])
+        .filter(Boolean);
+};
+
 //forces all properties to be arrays.
 //knows how to recurse and when not to.
 const normaliseQuery = (queryObject, isAnyOperator = false) => {
@@ -116,22 +132,15 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
             return { key, values: normaliseQuery(value, true) };
         }
 
+        let values = ensureArray(value);
+
         if (key.match(/\.ngram$/)) {
             // ngram search doesn't work with quoted phrases, like a "Single value", "Run machine".
-            // Because of that we need to split our value by whitespace
-            if (!Array.isArray(value)) {
-                return { key, values: value.split(' '), isAnyOperator };
-            } else {
-                const values = value.reduce(
-                    (acc, val) => acc.concat(val.split(' ')),
-                    [],
-                );
-
-                return { key, values, isAnyOperator };
-            }
+            // Because of that we need to split our value by non-alphanumeric characters
+            values = ngramArray(values);
         }
 
-        return { key, values: ensureArray(value), isAnyOperator };
+        return { key, values, isAnyOperator };
     });
 };
 
