@@ -108,18 +108,10 @@ const noRecurseKeys = ['$search', '$range', '$missing'];
 // split value into ngrams min length 2, max length 10
 const ngramChunker = (value) => value.match(/.{2,10}/g) || [];
 
-const ngramArray = (values) => {
-    return values
-        .reduce((acc, val) => {
-            const vals = val
-                .toLowerCase()
-                .split(/[^a-z0-9]/)
-                .reduce((acc2, val2) => [...acc2, ...ngramChunker(val2)], []);
-
-            return [...acc, ...vals];
-        }, [])
+const ngramArray = (values) =>
+    values
+        .reduce((acc, val) => [...acc, ...val.split(/[^a-zA-Z0-9]/)], [])
         .filter(Boolean);
-};
 
 //forces all properties to be arrays.
 //knows how to recurse and when not to.
@@ -138,6 +130,32 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
             // ngram search doesn't work with quoted phrases, like a "Single value", "Run machine".
             // Because of that we need to split our value by non-alphanumeric characters
             values = ngramArray(values);
+
+            let isMultiDebth = values.reduce(
+                (acc, val) => acc || val.length > 10,
+                false,
+            );
+
+            if (isMultiDebth) {
+                const subQuery = values.reduce((acc, val) => {
+                    const newValues = ngramChunker(val);
+
+                    if (newValues.length > 1) {
+                        acc.$and = { [key]: newValues };
+
+                        return { $or: acc };
+                    }
+
+                    if (newValues.length === 1) {
+                        acc.$or = acc.$or || { [key]: [] };
+                        acc.$or[key].push(newValues[0]);
+                    }
+
+                    return acc;
+                }, {});
+
+                return { key: '$or', values: normaliseQuery(subQuery, true) };
+            }
         }
 
         return { key, values, isAnyOperator };
