@@ -1,15 +1,15 @@
 export const APIs = {
   http: {
-    app: '/api/app/7',
-    auth: '/api/auth/6',
-    graph: '/api/graph/7',
-    iam: '/api/iam/6',
-    ki: '/api/ki/6',
-    variables: '/api/variables/6',
+    app: '/api/app/7/',
+    auth: '/api/auth/6/',
+    graph: '/api/graph/7/',
+    iam: '/api/iam/6/',
+    ki: '/api/ki/6/',
+    variables: '/api/variables/6/',
   },
   ws: {
-    events: '/api/events-ws/6',
-    graph: '/api/graph-ws/6',
+    events: '/api/events-ws/6/',
+    graph: '/api/graph-ws/6/',
   },
 };
 
@@ -70,7 +70,9 @@ export class Endpoint<
       } else {
         let p = _path.replace(/\/$/, '');
 
-        if (!p.startsWith('/')) {
+        if (url.endsWith('/') && p.startsWith('/')) {
+          p = p.slice(1);
+        } else if (!url.endsWith('/') && !p.startsWith('/')) {
           p = `/${p}`;
         }
 
