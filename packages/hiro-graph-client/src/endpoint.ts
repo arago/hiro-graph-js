@@ -1,15 +1,15 @@
 export const APIs = {
   http: {
-    app: '/api/app/7.0',
-    auth: '/api/auth/6.1',
-    graph: '/api/graph/7.1',
-    iam: '/api/iam/6.1',
+    app: '/api/app/7',
+    auth: '/api/auth/6',
+    graph: '/api/graph/7',
+    iam: '/api/iam/6',
     ki: '/api/ki/6',
     variables: '/api/variables/6',
   },
   ws: {
-    events: '/api/events-ws/6.1',
-    graph: '/api/graph-ws/6.1',
+    events: '/api/events-ws/6',
+    graph: '/api/graph-ws/6',
   },
 };
 

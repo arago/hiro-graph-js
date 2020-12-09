@@ -16,12 +16,12 @@
         ]
     },
     "devDependencies": {
-        "@hiro-ui/eslint-config": "1.5.2",
+        "@hiro-ui/eslint-config": "1.6.1-alpha.0",
         "@hiro-ui/prettier-config": "1.1.2",
-        "husky": "^4.3.0",
+        "husky": "^4.3.5",
         "jest-junit": "^12.0.0",
         "lerna": "^3.22.1",
-        "lint-staged": "^10.4.2"
+        "lint-staged": "^10.5.3"
     },
     "scripts": {
         "release": "lerna publish --dist-tag dev --contents pkg",
