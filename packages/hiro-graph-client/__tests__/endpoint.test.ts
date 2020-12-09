@@ -19,35 +19,35 @@ test('Get API', () => {
   const tests: Array<[string, string]> = [
     [
       new Endpoint('https://example.com').api('app'),
-      'https://example.com/api/app/7',
+      'https://example.com/api/app/7/',
     ],
     [
       new Endpoint('https://example.com').api('auth'),
-      'https://example.com/api/auth/6',
+      'https://example.com/api/auth/6/',
     ],
     [
       new Endpoint('https://example.com').api('graph'),
-      'https://example.com/api/graph/7',
+      'https://example.com/api/graph/7/',
     ],
     [
       new Endpoint('https://example.com').api('iam'),
-      'https://example.com/api/iam/6',
+      'https://example.com/api/iam/6/',
     ],
     [
       new Endpoint('https://example.com').api('ki'),
-      'https://example.com/api/ki/6',
+      'https://example.com/api/ki/6/',
     ],
     [
       new Endpoint('https://example.com').api('variables'),
-      'https://example.com/api/variables/6',
+      'https://example.com/api/variables/6/',
     ],
     [
       new Endpoint('https://example.com', true).api('events'),
-      'wss://example.com/api/events-ws/6',
+      'wss://example.com/api/events-ws/6/',
     ],
     [
       new Endpoint('https://example.com', true).api('graph'),
-      'wss://example.com/api/graph-ws/6',
+      'wss://example.com/api/graph-ws/6/',
     ],
   ];
 
