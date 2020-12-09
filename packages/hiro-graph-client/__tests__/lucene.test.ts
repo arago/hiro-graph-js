@@ -84,10 +84,10 @@ describe('Lucene Query Generator:', function () {
             key11: 'nor this',
           },
           $missing: 'key12',
-          $search: { type: 'ngram' as const, term: 'or search' },
+          $search: 'or search',
         },
         $missing: ['key13', 'key14'],
-        $search: { type: 'ngram' as const, term: 'test "quoted term"' },
+        $search: 'test "quoted term"',
       },
     },
     {
@@ -101,6 +101,40 @@ describe('Lucene Query Generator:', function () {
     {
       name: 'strings with exsiting slashed quotes',
       input: { prop: 'test \\" slashquoted' },
+    },
+    {
+      name: 'long ngram',
+      input: {
+        $search:
+          'this is a really long message, this wont split because of spaces',
+      },
+    },
+    {
+      name: 'ngram quoted',
+      input: {
+        $search: 'this is a quoted "message"',
+      },
+    },
+    {
+      name: 'ngram special',
+      input: {
+        $search:
+          'ZTE_vEMS_1_U31_OMMOID=jorand1b-c#@#%#611-308111-1_1_1_1_198094420_327680_1602716595130-1603329369065',
+      },
+    },
+    {
+      name: 'long ngram split',
+      input: {
+        $search:
+          'asdksdfidfhdffs423423dxisepfksdklgdlijpsdmgld456456fsdfsfesfdfsefsdfsefsdfsef1231435675ugljl',
+      },
+    },
+    {
+      name: 'long ngram split manual',
+      input: {
+        'ogit/_content.ngram':
+          'asdksdfidfhdffs423423dxisepfksdklgdlijpsdmgld456456fsdfsfesfdfsefsdfsefsdfsef1231435675ugljl',
+      },
     },
   ];
 
@@ -119,6 +153,7 @@ describe('Lucene Query Generator:', function () {
           const actual = parse(input);
 
           expect(actual.querystring).toMatchSnapshot();
+          expect(actual.placeholders).toMatchSnapshot();
           placeholders.forEach((p, i) => {
             expect(actual.placeholders[getPlaceholderKeyForIndex(i)]).toEqual(
               p,

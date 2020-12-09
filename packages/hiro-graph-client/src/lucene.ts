@@ -218,6 +218,17 @@ const ensureArray = (value: any | any[]) => {
 //the "$" keys which do not recurse
 const noRecurseKeys = ['$search', '$range', '$missing'];
 
+// split value into ngrams min length 2, max length 10
+const ngramChunker = (value: string) => value.match(/.{2,10}/g) || [];
+
+const ngramArray = (values: string[]) =>
+  values
+    .reduce(
+      (acc, val) => [...acc, ...val.split(/[^a-zA-Z0-9]/)],
+      [] as string[],
+    )
+    .filter(Boolean);
+
 const isQuery = <T extends string>(
   key: string,
   value: Lucene.QueryOption<T>,
@@ -243,22 +254,41 @@ const normaliseQuery = <T extends string>(
       return { key, values: normaliseQuery(value, true) };
     }
 
+    let values = ensureArray(value);
+
     if (isNgram(key, value)) {
       // ngram search doesn't work with quoted phrases, like a "Single value", "Run machine".
-      // Because of that we need to split our value by whitespace
-      if (!Array.isArray(value)) {
-        return { key, values: value.split(' '), isAnyOperator };
-      } else {
-        const values = value.reduce(
-          (acc, val) => acc.concat(val.split(' ')),
-          [],
-        );
+      // Because of that we need to split our value by non-alphanumeric characters
+      values = ngramArray(values);
 
-        return { key, values, isAnyOperator };
+      let isMultiDepth = values.reduce(
+        (acc, val) => acc || val.length > 10,
+        false,
+      );
+
+      if (isMultiDepth) {
+        const subQuery = values.reduce((acc, val) => {
+          const newValues = ngramChunker(val);
+
+          if (newValues.length > 1) {
+            acc.$and = { [key]: newValues };
+
+            return { $or: acc };
+          }
+
+          if (newValues.length === 1) {
+            acc.$or = acc.$or || { [key]: [] };
+            acc.$or[key].push(newValues[0]);
+          }
+
+          return acc;
+        }, {});
+
+        return { key: '$or', values: normaliseQuery(subQuery, true) };
       }
     }
 
-    return { key, values: ensureArray(value), isAnyOperator };
+    return { key, values, isAnyOperator };
   });
 };
 
@@ -358,38 +388,14 @@ const operators: Operators = {
   },
   /**
    *  Search.
-   *  { $search: { field = "_content.ngram", term = "" }, or { $search: "term" } (searches _content.ngram)
+   *  { $search: "term" } (searches ogit/_content.ngram)
    */
-  $search: (context, values) => {
-    return values
-      .reduce((acc, searchInput) => {
-        let search = searchInput;
-
-        if (typeof search === 'string') {
-          //default search type.
-          search = { type: 'ngram', term: search };
-        }
-
-        if (!search.field) {
-          search.field = '_content';
-        }
-
-        if (search.type === 'prefix') {
-          //this is terrible for multi-word searches.
-          return acc.concat(
-            lucenePrefixMatch(context, search.field, search.term),
-          );
-        }
-
-        //we always return an array
-        return acc.concat(
-          luceneSearch(context, search.field, search.term, {
-            ngram: search.type === 'ngram',
-          }),
-        );
-      }, [])
-      .join(' ');
-  },
+  $search: (context, values) =>
+    createQuerySegmentForMultiValues(
+      context,
+      'ogit/_content.ngram',
+      values as string[],
+    ),
 };
 
 const isNormalisedValue = (values: any): values is NormalisedQuery[] =>
