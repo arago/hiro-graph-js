@@ -19,19 +19,19 @@ test('Get API', () => {
   const tests: Array<[string, string]> = [
     [
       new Endpoint('https://example.com').api('app'),
-      'https://example.com/api/app/7.0',
+      'https://example.com/api/app/7',
     ],
     [
       new Endpoint('https://example.com').api('auth'),
-      'https://example.com/api/auth/6.1',
+      'https://example.com/api/auth/6',
     ],
     [
       new Endpoint('https://example.com').api('graph'),
-      'https://example.com/api/graph/7.1',
+      'https://example.com/api/graph/7',
     ],
     [
       new Endpoint('https://example.com').api('iam'),
-      'https://example.com/api/iam/6.1',
+      'https://example.com/api/iam/6',
     ],
     [
       new Endpoint('https://example.com').api('ki'),
@@ -43,11 +43,11 @@ test('Get API', () => {
     ],
     [
       new Endpoint('https://example.com', true).api('events'),
-      'wss://example.com/api/events-ws/6.1',
+      'wss://example.com/api/events-ws/6',
     ],
     [
       new Endpoint('https://example.com', true).api('graph'),
-      'wss://example.com/api/graph-ws/6.1',
+      'wss://example.com/api/graph-ws/6',
     ],
   ];
 
@@ -60,11 +60,11 @@ test('Get API with path', () => {
   const tests: Array<[string, string]> = [
     [
       new Endpoint('https://example.com').api('graph', '/test'),
-      'https://example.com/api/graph/7.1/test',
+      'https://example.com/api/graph/7/test',
     ],
     [
       new Endpoint('https://example.com').api('graph', 'test'),
-      'https://example.com/api/graph/7.1/test',
+      'https://example.com/api/graph/7/test',
     ],
   ];
 
@@ -77,8 +77,8 @@ test('Re-use API', () => {
   const endpoint = new Endpoint('https://example.com').use('graph');
 
   const tests: Array<[string, string]> = [
-    [endpoint.path('/test'), 'https://example.com/api/graph/7.1/test'],
-    [endpoint.path('test'), 'https://example.com/api/graph/7.1/test'],
+    [endpoint.path('/test'), 'https://example.com/api/graph/7/test'],
+    [endpoint.path('test'), 'https://example.com/api/graph/7/test'],
   ];
 
   tests.forEach(([res, expected]) => {
@@ -103,7 +103,7 @@ test('Get API with path array', () => {
   const endpoint = new Endpoint('https://example.com').use('graph');
 
   const tests: Array<[string, string]> = [
-    [endpoint.path(['a', 'b', 'c']), 'https://example.com/api/graph/7.1/a/b/c'],
+    [endpoint.path(['a', 'b', 'c']), 'https://example.com/api/graph/7/a/b/c'],
   ];
 
   tests.forEach(([res, expected]) => {
@@ -117,22 +117,22 @@ test('Get API with query', () => {
       new Endpoint('https://example.com').api('graph', '/test', {
         a: 'hello',
       }),
-      'https://example.com/api/graph/7.1/test?a=hello',
+      'https://example.com/api/graph/7/test?a=hello',
     ],
     [
       new Endpoint('https://example.com').api('graph', 'test', { a: 'hello' }),
-      'https://example.com/api/graph/7.1/test?a=hello',
+      'https://example.com/api/graph/7/test?a=hello',
     ],
     [
       new Endpoint('https://example.com').api('graph', 'test', {
         a: 'hello',
         b: 'world',
       }),
-      'https://example.com/api/graph/7.1/test?a=hello&b=world',
+      'https://example.com/api/graph/7/test?a=hello&b=world',
     ],
     [
       new Endpoint('https://example.com').api('graph', 'test', {}),
-      'https://example.com/api/graph/7.1/test',
+      'https://example.com/api/graph/7/test',
     ],
   ];
 
