@@ -54,7 +54,7 @@ describe('transport-websocket', () => {
   };
   const getIdAndResPromise = async (req: any) => {
     const idp = getRequestId();
-    const res = toPromise(transport.request(fakeToken, req));
+    const res = toPromise(transport.request<object>(fakeToken, req));
 
     const id = await idp;
 
