@@ -1,4 +1,4 @@
-import { iif, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { mergeMap, scan } from 'rxjs/operators';
 
 export function extract(obj: Record<string, string> = {}, ...keys: string[]) {
@@ -21,7 +21,7 @@ export const toPromise = <T>(o: Observable<T>) => {
 
         return acc;
       }, items),
-      mergeMap((res) => iif(() => res.length === 1, of(res[0]), of(res))),
+      mergeMap((res) => of(res)),
     )
     .toPromise();
 };
