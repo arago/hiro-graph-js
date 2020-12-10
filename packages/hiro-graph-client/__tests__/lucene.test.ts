@@ -64,6 +64,14 @@ describe('Lucene Query Generator:', function () {
       input: { $search: `test "quoted term"` },
     },
     {
+      name: '$or with $search',
+      input: { $or: { '/target': 'test', $search: 'test2' } },
+    },
+    {
+      name: 'wildcard',
+      input: { '/a': 'test*', '/b': '*test', '/c': '*test*' },
+    },
+    {
       name: 'extreme example',
       input: {
         key1: 'value',

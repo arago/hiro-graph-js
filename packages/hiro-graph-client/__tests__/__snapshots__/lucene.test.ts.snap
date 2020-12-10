@@ -28,23 +28,27 @@ exports[`Lucene Query Generator: $or (single value, trick question!) 1`] = `"+(+
 
 exports[`Lucene Query Generator: $or (single value, trick question!) 2`] = `Object {}`;
 
+exports[`Lucene Query Generator: $or with $search 1`] = `"+(\\\\/target:\\"test\\" ogit\\\\/_content.ngram:\\"test2\\")"`;
+
+exports[`Lucene Query Generator: $or with $search 2`] = `Object {}`;
+
 exports[`Lucene Query Generator: $range 1`] = `"+prop:[\\"1\\" TO \\"5\\"]"`;
 
 exports[`Lucene Query Generator: $range 2`] = `Object {}`;
 
-exports[`Lucene Query Generator: $search 1`] = `"+(ogit\\\\/_content.ngram:\\"test \\\\\\"quoted term\\\\\\"\\")"`;
+exports[`Lucene Query Generator: $search 1`] = `"+(ogit\\\\/_content.ngram:\\"test\\" ogit\\\\/_content.ngram:\\"quoted\\" ogit\\\\/_content.ngram:\\"term\\")"`;
 
 exports[`Lucene Query Generator: $search 2`] = `Object {}`;
 
-exports[`Lucene Query Generator: extreme example 1`] = `"+key1:\\"value\\" +(key2:\\"multi\\" key2:\\"value\\") +(-key4:\\"not\\" -key5:\\"not\\" -key5:\\"multi\\" -key6:[\\"notFrom\\" TO \\"notTo\\"] -key7:[\\"second\\" TO \\"range\\"] -(key8:\\"not\\" key8:\\"or\\" key8:\\"values\\")) +(key9:\\"or this\\" key10:\\"two\\" key10:\\"terms\\" (-key11:\\"nor this\\") _missing_:\\"key12\\" +(ogit\\\\/_content.ngram:\\"or search\\")) +_missing_:\\"key13\\" +_missing_:\\"key14\\" +(ogit\\\\/_content.ngram:\\"test \\\\\\"quoted term\\\\\\"\\")"`;
+exports[`Lucene Query Generator: extreme example 1`] = `"+key1:\\"value\\" +(key2:\\"multi\\" key2:\\"value\\") +(-key4:\\"not\\" -key5:\\"not\\" -key5:\\"multi\\" -key6:[\\"notFrom\\" TO \\"notTo\\"] -key7:[\\"second\\" TO \\"range\\"] -(key8:\\"not\\" key8:\\"or\\" key8:\\"values\\")) +(key9:\\"or this\\" key10:\\"two\\" key10:\\"terms\\" (-key11:\\"nor this\\") _missing_:\\"key12\\" ogit\\\\/_content.ngram:\\"or\\" ogit\\\\/_content.ngram:\\"search\\") +_missing_:\\"key13\\" +_missing_:\\"key14\\" +(ogit\\\\/_content.ngram:\\"test\\" ogit\\\\/_content.ngram:\\"quoted\\" ogit\\\\/_content.ngram:\\"term\\")"`;
 
 exports[`Lucene Query Generator: extreme example 2`] = `Object {}`;
 
-exports[`Lucene Query Generator: long ngram 1`] = `"+(ogit\\\\/_content.ngram:\\"this is a really long message, this wont split because of spaces\\")"`;
+exports[`Lucene Query Generator: long ngram 1`] = `"+(ogit\\\\/_content.ngram:\\"this\\" ogit\\\\/_content.ngram:\\"is\\" ogit\\\\/_content.ngram:\\"a\\" ogit\\\\/_content.ngram:\\"really\\" ogit\\\\/_content.ngram:\\"long\\" ogit\\\\/_content.ngram:\\"message\\" ogit\\\\/_content.ngram:\\"this\\" ogit\\\\/_content.ngram:\\"wont\\" ogit\\\\/_content.ngram:\\"split\\" ogit\\\\/_content.ngram:\\"because\\" ogit\\\\/_content.ngram:\\"of\\" ogit\\\\/_content.ngram:\\"spaces\\")"`;
 
 exports[`Lucene Query Generator: long ngram 2`] = `Object {}`;
 
-exports[`Lucene Query Generator: long ngram split 1`] = `"+(ogit\\\\/_content.ngram:\\"asdksdfidfhdffs423423dxisepfksdklgdlijpsdmgld456456fsdfsfesfdfsefsdfsefsdfsef1231435675ugljl\\")"`;
+exports[`Lucene Query Generator: long ngram split 1`] = `"+(+(+(+ogit\\\\/_content.ngram:\\"asdksdfidf\\" +ogit\\\\/_content.ngram:\\"hdffs42342\\" +ogit\\\\/_content.ngram:\\"3dxisepfks\\" +ogit\\\\/_content.ngram:\\"dklgdlijps\\" +ogit\\\\/_content.ngram:\\"dmgld45645\\" +ogit\\\\/_content.ngram:\\"6fsdfsfesf\\" +ogit\\\\/_content.ngram:\\"dfsefsdfse\\" +ogit\\\\/_content.ngram:\\"fsdfsef123\\" +ogit\\\\/_content.ngram:\\"1435675ugl\\" +ogit\\\\/_content.ngram:\\"jl\\")))"`;
 
 exports[`Lucene Query Generator: long ngram split 2`] = `Object {}`;
 
@@ -60,11 +64,11 @@ exports[`Lucene Query Generator: multiple values (as and) 1`] = `"+(field:\\"val
 
 exports[`Lucene Query Generator: multiple values (as and) 2`] = `Object {}`;
 
-exports[`Lucene Query Generator: ngram quoted 1`] = `"+(ogit\\\\/_content.ngram:\\"this is a quoted \\\\\\"message\\\\\\"\\")"`;
+exports[`Lucene Query Generator: ngram quoted 1`] = `"+(ogit\\\\/_content.ngram:\\"this\\" ogit\\\\/_content.ngram:\\"is\\" ogit\\\\/_content.ngram:\\"a\\" ogit\\\\/_content.ngram:\\"quoted\\" ogit\\\\/_content.ngram:\\"message\\")"`;
 
 exports[`Lucene Query Generator: ngram quoted 2`] = `Object {}`;
 
-exports[`Lucene Query Generator: ngram special 1`] = `"+(ogit\\\\/_content.ngram:\\"ZTE_vEMS_1_U31_OMMOID=jorand1b-c#@#%#611-308111-1_1_1_1_198094420_327680_1602716595130-1603329369065\\")"`;
+exports[`Lucene Query Generator: ngram special 1`] = `"+((((ogit\\\\/_content.ngram:\\"ZTE\\" ogit\\\\/_content.ngram:\\"vEMS\\" ogit\\\\/_content.ngram:\\"U31\\" ogit\\\\/_content.ngram:\\"OMMOID\\" ogit\\\\/_content.ngram:\\"jorand1b\\" ogit\\\\/_content.ngram:\\"611\\" ogit\\\\/_content.ngram:\\"308111\\" ogit\\\\/_content.ngram:\\"198094420\\" ogit\\\\/_content.ngram:\\"327680\\") (+ogit\\\\/_content.ngram:\\"1602716595\\" +ogit\\\\/_content.ngram:\\"130\\")) (+ogit\\\\/_content.ngram:\\"1603329369\\" +ogit\\\\/_content.ngram:\\"065\\")))"`;
 
 exports[`Lucene Query Generator: ngram special 2`] = `Object {}`;
 
@@ -83,3 +87,7 @@ exports[`Lucene Query Generator: strings with exsiting slashed quotes 2`] = `Obj
 exports[`Lucene Query Generator: strings with quotes 1`] = `"+prop:\\"test \\\\\\" quoted\\""`;
 
 exports[`Lucene Query Generator: strings with quotes 2`] = `Object {}`;
+
+exports[`Lucene Query Generator: wildcard 1`] = `"+\\\\/a:test* +\\\\/b:*test +\\\\/c:*test*"`;
+
+exports[`Lucene Query Generator: wildcard 2`] = `Object {}`;
