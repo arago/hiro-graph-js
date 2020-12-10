@@ -114,6 +114,10 @@ enum OP {
   CAN = '',
 }
 
+const KeyMap: Record<string, string> = {
+  $search: 'ogit/_content.ngram',
+};
+
 /**
  *  The lucene class takes a Schema and creates a query parser.
  *
@@ -216,7 +220,7 @@ const ensureArray = (value: any | any[]) => {
 };
 
 //the "$" keys which do not recurse
-const noRecurseKeys = ['$search', '$range', '$missing'];
+const noRecurseKeys = ['$range', '$missing'];
 
 // split value into ngrams min length 2, max length 10
 const ngramChunker = (value: string) => value.match(/.{2,10}/g) || [];
@@ -248,6 +252,11 @@ const normaliseQuery = <T extends string>(
 ): NormalisedQuery[] => {
   return Object.keys(queryObject).map((key) => {
     const value = queryObject[key];
+
+    // Map to internal key
+    if (KeyMap[key]) {
+      key = KeyMap[key];
+    }
 
     if (isQuery(key, value)) {
       //we should recurse
@@ -304,6 +313,11 @@ function createQuerySegment(
   // console.log("segment", query);
   return query
     .map(({ key, values, isAnyOperator }) => {
+      // Map to internal key
+      if (KeyMap[key]) {
+        key = KeyMap[key];
+      }
+
       //always make value an array
       if (key[0] === '$') {
         //special case!
@@ -386,16 +400,6 @@ const operators: Operators = {
       )
       .join(' ');
   },
-  /**
-   *  Search.
-   *  { $search: "term" } (searches ogit/_content.ngram)
-   */
-  $search: (context, values) =>
-    createQuerySegmentForMultiValues(
-      context,
-      'ogit/_content.ngram',
-      values as string[],
-    ),
 };
 
 const isNormalisedValue = (values: any): values is NormalisedQuery[] =>
@@ -434,77 +438,21 @@ const mapOperator = (
 // help \" -> "help \\\""
 // help \ -> "help \\"
 const quote = function (string: string) {
+  if (string.startsWith('*') || string.endsWith('*')) {
+    return string;
+  }
+
   return `"${slashString(string)}"`;
 };
 
 const SOLIDUS = '/';
 const SLASH = '\\'; // two because it has to be escaped.
-const QUOTE = `"`;
 
 const slashForward = (input: string) => input.replace(/[/]/g, SLASH + SOLIDUS);
 
 // this escapes quotes and slashes
 const slashString = (input: string) =>
   input.replace(/[\\"]/g, (char: string) => SLASH + char);
-
-//run through the term string and pull out terms.
-//if there are any quotes, this becomes complex...
-//so we use iteration and state rather than regexes
-//This function removes the quotes around the terms as well.
-/*
-    examples:
-
-    'test terms' => ["test", "terms"]
-    'test "two words"' => ["test", "two words"]
-    '"test unclosed' => ["\"test unclosed"]
-    '"test one" two "test three"' => ["test one", "two", "test three"]
-    'something"with a quote' => ["something\"with", "a", "quote"]
-    '"with \"embedded\" quotes"' => ["with \"embedded\" quotes"]
-*/
-const findQuotedTerms = function (str: string) {
-  const input = str.trim(); //ensure no trailing space.
-  const terms = [];
-  const l = input.length;
-  let i = 0;
-  let inQuoted = '';
-  let inTerm = false;
-  let term = '';
-  let char;
-
-  for (; i < l; i++) {
-    char = input[i];
-
-    if (inTerm) {
-      if ((!inQuoted && char === ' ') || (inQuoted && char === inQuoted)) {
-        terms.push(term);
-        term = '';
-        inTerm = false;
-      } else if (inQuoted && char === SLASH && input[i + 1] === inQuoted) {
-        //escaped quote
-        term += SLASH + inQuoted;
-        i++; //bump forwards
-      } else {
-        term += char;
-      }
-    } else if (char !== ' ') {
-      //ignore spaces between terms.
-      if (char === QUOTE || char === "'") {
-        inQuoted = char;
-      } else {
-        inQuoted = '';
-        term = char;
-      }
-
-      inTerm = true;
-    }
-  }
-
-  //flush remaining term
-  terms.push(term);
-
-  //remove empties from output;
-  return terms.filter(Boolean);
-};
 
 function checkTermForQuoting(term: string) {
   return typeof term === 'string' ? quote(term) : term;
@@ -514,7 +462,7 @@ function luceneTerm(
   context: Lucene.Context,
   field: string,
   values: NormalisedQueryValues,
-  isPlaceholdersNeeded: boolean,
+  isPlaceholdersNeeded?: boolean,
 ) {
   // TODO: remove force reassign after fixing BE issues according to escaping
   // eslint-disable-next-line no-param-reassign
@@ -562,51 +510,4 @@ function luceneMissing(context: Lucene.Context, field: string) {
   const prop = context.entity.prop(field);
 
   return `${context.op}_missing_:${quote(prop.src)}`;
-}
-
-//create a search query, this is a little different to a regular term
-//because we assume a phrase and we use placeholders for values.
-function luceneSearch(
-  context: Lucene.Context,
-  field: string,
-  term: string,
-  { ngram = false } = {},
-) {
-  const prop = context.entity.prop(field);
-  let terms;
-
-  if (term.indexOf(`"`) > -1 || term.indexOf("'") > -1) {
-    //much more complex, but keeps spaces in quotes, and quoted quotes.
-    terms = findQuotedTerms(term);
-  } else {
-    //simple split
-    terms = term.split(/\s+/);
-  }
-
-  const finalTerm = terms.filter(Boolean).join(' ');
-  //now make a placeholder for the term
-  const placeholder = createPlaceholder(
-    context.placeholders,
-    slashString(finalTerm),
-  );
-
-  return `${context.op}${slashForward(prop.src)}${
-    ngram ? '.ngram' : ''
-  }:${placeholder}`;
-}
-
-//lucene is not good at prefixes when spaces are encountered.
-//the least bad solution is to use "?" for the spaces.
-//first escape the string (but don't add quotes)
-//then replace space with question mark, then add the final asterisk
-function lucenePrefixMatch(
-  context: Lucene.Context,
-  field: string,
-  term: string,
-) {
-  const prop = context.entity.prop(field);
-  const finalTerm = slashString(term).replace(/ /g, '?') + '*';
-  const placeholder = createPlaceholder(context.placeholders, finalTerm);
-
-  return `${context.op}${slashForward(prop.src)}:${placeholder}`;
 }
