@@ -22,7 +22,7 @@ export interface EventStreamRequest {
 
 export interface EventStreamResponse<T> {
   body: T;
-  id: string;
+  id: string; // ogit/_id from body 
   metadata: {
     'ogit/_modified-by': string;
     'ogit/_modified-by-app': string;
