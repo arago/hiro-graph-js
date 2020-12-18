@@ -147,7 +147,8 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
                     }
 
                     if (newValues.length === 1) {
-                        acc.$or = acc.$or || { [key]: [] };
+                        acc.$or = acc.$or || {};
+                        acc.$or[key] = acc.$or[key] || [];
                         acc.$or[key].push(newValues[0]);
                     }
 
