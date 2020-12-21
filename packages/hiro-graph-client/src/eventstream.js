@@ -27,7 +27,12 @@ export default class EventStream {
 
     constructor(
         { endpoint, token },
-        { groupId, offset = EventStream.OFFSET_NEWEST_MSG, filters = [], scopeId } = {},
+        {
+            groupId,
+            offset = EventStream.OFFSET_NEWEST_MSG,
+            filters = [],
+            scopeId,
+        } = {},
         emit = noop, // this function is used to hook into all internal events.
     ) {
         ensureWebSocketsAvailable();
@@ -322,9 +327,14 @@ export default class EventStream {
                         }),
                     ),
                 );
+
                 if (this._scopeId) {
-                    console.log(this._scopeId)
-                    ws.send(JSON.stringify({type: 'subscribe', id: this._scopeId}))
+                    ws.send(
+                        JSON.stringify({
+                            type: 'subscribe',
+                            id: this._scopeId,
+                        }),
+                    );
                 }
 
                 setTimeout(() => {
