@@ -254,6 +254,8 @@ declare class WebSocketTransport {
 interface EventStreamOptions {
   groupId?: number;
   offset?: number;
+  filters?: string[];
+  scopeId?: string
 }
 
 export type ActionType =
