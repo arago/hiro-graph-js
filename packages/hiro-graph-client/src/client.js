@@ -109,7 +109,7 @@ export default class Client {
     // NB this is not held anywhere in this instance, but returned
     // to the caller. It only connects when it's subscribe() method
     // is called.
-    eventStream(filters = [], { groupId, offset } = {}) {
+    eventStream(filters = [], { groupId, offset, scopeId } = {}) {
         let filtersArray = filters;
 
         if (!Array.isArray(filters)) {
@@ -129,7 +129,7 @@ export default class Client {
 
         return new EventStream(
             { endpoint: this.endpoint, token: this.token },
-            { groupId, offset, filters: filtersArray },
+            { groupId, offset, scopeId, filters: filtersArray },
             this._pubsub.fanout,
         );
     }
