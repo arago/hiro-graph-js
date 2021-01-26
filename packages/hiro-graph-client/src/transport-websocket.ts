@@ -149,13 +149,13 @@ export class WebSocketTransport implements GraphTransport {
         protocol: [protocol || GRAPH_API_PROTOCOL, `token-${token}`],
         deserializer: ({ data }) => {
           if (typeof data !== 'string') {
-            return;
+            return {};
           }
 
           try {
             return JSON.parse(data);
           } catch {
-            return;
+            return {};
           }
         },
       });
