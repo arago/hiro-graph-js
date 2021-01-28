@@ -129,6 +129,21 @@ export class EventStream {
     });
   }
 
+  // connect can be used to connect ahead of time:
+  // * Required for parallel register calls to work - otherwise race-condition for connect()
+  // * Can be used as 'catch-all' for incoming events
+  connect() {
+    return of(this._token).pipe(
+      mergeMap((t) => t.get()),
+      map(
+        (t) =>
+          this._transport.connect(t, EVENTS_PROTOCOL) as WebSocketSubject<
+            EventStreamFilter
+          >,
+      ),
+    );
+  }
+
   close() {
     this._transport.close();
   }
