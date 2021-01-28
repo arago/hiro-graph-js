@@ -165,6 +165,8 @@ export class WebSocketTransport implements GraphTransport {
   }
 
   close() {
-    this.connection?.complete();
+    if (this.connection) {
+      this.connection.complete();
+    }
   }
 }
