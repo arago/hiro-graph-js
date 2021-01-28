@@ -134,4 +134,8 @@ export class EventStream {
         });
     });
   }
+
+  close() {
+    this._transport.close();
+  }
 }
