@@ -125,14 +125,13 @@ export class EventStream {
                   'filter-id': filter,
                 },
               }),
-              (res: any) => filter.test(JFilter.transform(res)),
+              (res: any) => res.body && filter.test(JFilter.transform(res)),
             ),
           ),
         )
         .subscribe({
           next: (res) => {
-            // If body, check not null
-            if (res && (res.body ? res.body !== null : true)) {
+            if (res) {
               subscriber.next(res);
             }
           },
