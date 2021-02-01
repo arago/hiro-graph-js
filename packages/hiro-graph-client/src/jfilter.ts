@@ -70,7 +70,10 @@ export class JFilter {
     return omit(
       {
         ...event,
-        element: event.body,
+        element: {
+          ...(event.meta || {}),
+          ...(event.body || {}),
+        },
         action: event.type,
       },
       ['body', 'type'],
