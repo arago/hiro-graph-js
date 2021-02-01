@@ -119,7 +119,8 @@ export class EventStream {
         )
         .subscribe({
           next: (res) => {
-            if (res) {
+            // If body, check not null
+            if (res && (res.body ? res.body !== null : true)) {
               subscriber.next(res);
             }
           },
