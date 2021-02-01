@@ -91,10 +91,10 @@ export class Client {
   // NB this is not held anywhere in this instance, but returned
   // to the caller. It only connects when it's subscribe() method
   // is called.
-  eventStream({ groupId, offset, scopeId }: Omit<EventStreamRequest, 'filters'> = {}) {
+  eventStream(options: Omit<EventStreamRequest, 'filters'> = {}) {
     return new EventStream(
       { endpoint: this.endpoint, token: this.token },
-      { groupId, offset, scopeId },
+      options,
     );
   }
 
