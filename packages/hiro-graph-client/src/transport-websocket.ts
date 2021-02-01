@@ -4,8 +4,8 @@
 import * as WebSocket from 'isomorphic-ws';
 import { nanoid } from 'nanoid';
 import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
-import { map, catchError, mergeMap, scan } from 'rxjs/operators';
-import { of, Observable, iif } from 'rxjs';
+import { map, catchError, mergeMap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
 
 import { GraphTransport, GraphRequestType } from './types';
 import { Endpoint, WS_API } from './endpoint';
