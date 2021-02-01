@@ -10,7 +10,6 @@ export type GraphEndpoint =
   | 'replace'
   | 'streamts'
   | 'update'
-  | 'token'
   | 'writets';
 
 export declare namespace GraphRequest {
@@ -108,17 +107,10 @@ export declare namespace GraphRequest {
       'ogit/_id': string;
     };
   }
-  export interface Token extends Base {
-    type: 'token';
-    args: {
-      _TOKEN: string;
-    };
-  }
 }
 
 export type GraphRequestType =
   | GraphRequest.Connect
-  | GraphRequest.Token
   | GraphRequest.Create
   | GraphRequest.Delete
   | GraphRequest.Get
