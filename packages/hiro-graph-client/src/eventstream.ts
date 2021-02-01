@@ -31,7 +31,8 @@ const EVENTS_PROTOCOL = 'events-1.0.0';
 export interface EventStreamQuery {
   groupId?: string;
   offset?: OFFSET_MSG;
-  [index: string]: string | undefined;
+  delta?: boolean;
+  [index: string]: string | boolean | undefined;
 }
 
 export interface EventStreamOptions {
@@ -51,7 +52,7 @@ export class EventStream {
 
   constructor(
     { endpoint, token }: EventStreamOptions,
-    { groupId, offset = OFFSET_MSG.NEWEST }: EventStreamRequest = {},
+    { groupId, delta, offset = OFFSET_MSG.NEWEST }: EventStreamRequest = {},
   ) {
     ensureWebSocketsAvailable();
     this._token = token;
@@ -64,6 +65,10 @@ export class EventStream {
 
     if (offset) {
       query.offset = offset;
+    }
+
+    if (delta) {
+      query.delta = delta;
     }
 
     this._transport = new WebSocketTransport(endpoint, {
@@ -127,21 +132,6 @@ export class EventStream {
           },
         });
     });
-  }
-
-  // connect can be used to connect ahead of time:
-  // * Required for parallel register calls to work - otherwise race-condition for connect()
-  // * Can be used as 'catch-all' for incoming events
-  connect() {
-    return of(this._token).pipe(
-      mergeMap((t) => t.get()),
-      map(
-        (t) =>
-          this._transport.connect(t, EVENTS_PROTOCOL) as WebSocketSubject<
-            EventStreamFilter
-          >,
-      ),
-    );
   }
 
   close() {
