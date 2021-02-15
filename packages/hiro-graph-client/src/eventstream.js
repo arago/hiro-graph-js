@@ -337,14 +337,16 @@ export default class EventStream {
                             }),
                         );
                     } else if (Array.isArray(this._scopeId)) {
-                        this._scopeId.forEach((id) =>
-                            ws.send(
-                                JSON.stringify({
-                                    type: 'subscribe',
-                                    id,
-                                }),
-                            ),
-                        );
+                        this._scopeId
+                            .filter((id) => Boolean(id))
+                            .forEach((id) =>
+                                ws.send(
+                                    JSON.stringify({
+                                        type: 'subscribe',
+                                        id,
+                                    }),
+                                ),
+                            );
                     }
                 }
 
