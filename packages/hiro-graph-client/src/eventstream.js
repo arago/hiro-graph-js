@@ -329,14 +329,7 @@ export default class EventStream {
                 );
 
                 if (this._scopeId) {
-                    if (typeof this._scopeId === 'string') {
-                        ws.send(
-                            JSON.stringify({
-                                type: 'subscribe',
-                                id: this._scopeId,
-                            }),
-                        );
-                    } else if (Array.isArray(this._scopeId)) {
+                    if (Array.isArray(this._scopeId)) {
                         this._scopeId.forEach((id) =>
                             ws.send(
                                 JSON.stringify({
@@ -344,6 +337,13 @@ export default class EventStream {
                                     id,
                                 }),
                             ),
+                        );
+                    } else {
+                        ws.send(
+                            JSON.stringify({
+                                type: 'subscribe',
+                                id: this._scopeId,
+                            }),
                         );
                     }
                 }
