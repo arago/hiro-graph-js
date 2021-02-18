@@ -329,12 +329,23 @@ export default class EventStream {
                 );
 
                 if (this._scopeId) {
-                    ws.send(
-                        JSON.stringify({
-                            type: 'subscribe',
-                            id: this._scopeId,
-                        }),
-                    );
+                    if (Array.isArray(this._scopeId)) {
+                        this._scopeId.forEach((id) =>
+                            ws.send(
+                                JSON.stringify({
+                                    type: 'subscribe',
+                                    id,
+                                }),
+                            ),
+                        );
+                    } else {
+                        ws.send(
+                            JSON.stringify({
+                                type: 'subscribe',
+                                id: this._scopeId,
+                            }),
+                        );
+                    }
                 }
 
                 setTimeout(() => {

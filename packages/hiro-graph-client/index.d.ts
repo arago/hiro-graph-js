@@ -255,7 +255,7 @@ interface EventStreamOptions {
   groupId?: number;
   offset?: number;
   filters?: string[];
-  scopeId?: string;
+  scopeId?: string | string[];
 }
 
 export type ActionType =
