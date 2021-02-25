@@ -533,6 +533,13 @@ interface BaseOptions {
   limit?: number;
 }
 
+interface Event {
+  name: string;
+  data: any;
+}
+
+type IntrospectFunction = (data: Event) => void;
+
 export default class Client {
   endpoint: string;
   token: Token;
@@ -563,6 +570,8 @@ export default class Client {
   getToken<T extends Token = Token>(): T;
 
   me(): Promise<AccountWithProfile>;
+
+  introspect(fn: IntrospectFunction): void;
 
   fetch: <T = Response>(
     url: string,
