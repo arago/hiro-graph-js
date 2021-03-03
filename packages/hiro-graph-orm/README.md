@@ -405,7 +405,7 @@ orm.findById(id).then((v) => v.delete());
 
 ### Serialisation
 
-Converting a `GraphVertex` to a plain object is useful for accessing the data in a view layer of your application. The `@hiro-graph/redux` library will do this by default using the `createVerticesSelector` and `createTask::selector()` helpers.
+Converting a `GraphVertex` to a plain object is useful for accessing the data in a view layer of your application.
 
 ```javascript
 const personObj = personVertex.plain(); // Plain object. like `{ _id: "...", _type: "Person", ...}`
