@@ -11,8 +11,6 @@ All the packages here are available on npm. Check the [packages](packages/) dire
 Each package maintains it's own documentation:
 
 - [`@hiro-graph/client`](/packages/hiro-graph-client/)
-- [`@hiro-graph/orm`](/packages/hiro-graph-orm/)
-- [`@hiro-graph/orm-mappings`](/packages/hiro-graph-orm-mappings/)
 
 ## Development
 
