@@ -90,6 +90,7 @@ export declare namespace GraphRequest {
       from?: number | false;
       to?: number | false;
       limit?: number | false;
+      order?: 'asc' | 'desc' | false;
       includeDeleted?: boolean;
       with?: string[];
     };
