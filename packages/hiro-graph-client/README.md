@@ -5,7 +5,7 @@ This is an isomorphic HIRO Graph Client library which exports, by default a `Cli
 ## installation
 
 ```bash
-$ npm install @hiro-graph/client
+$ yarn @hiro-graph/client
 ```
 
 ## Client
