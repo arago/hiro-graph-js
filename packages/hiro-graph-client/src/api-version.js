@@ -6,6 +6,7 @@ const GRAPH_WS_API_BASE = '/api/graph-ws/6.1';
 const IAM_API_BASE = '/api/iam/6.1';
 const KI_API_BASE = '/api/ki/6';
 const VARIABLES_API_BASE = '/api/variables/6';
+const AUDIT_API_BASE = '/audit/1.0';
 
 export {
     APP_API_BASE,
@@ -16,4 +17,5 @@ export {
     IAM_API_BASE,
     KI_API_BASE,
     VARIABLES_API_BASE,
+    AUDIT_API_BASE,
 };

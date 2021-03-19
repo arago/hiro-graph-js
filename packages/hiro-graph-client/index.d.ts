@@ -448,6 +448,60 @@ export interface VariablesServlet {
   define<T = any>(options: DefineVariableOptions): Promise<T>;
 }
 
+export type AuditAction =
+  | 'SearchKI'
+  | 'SearchTask'
+  | 'SearchTeachingSession'
+  | 'DeployKI'
+  | 'UndeployKI'
+  | 'WriteKI'
+  | 'ForkKI'
+  | 'OpenTeachingSession'
+  | 'OwnTeachingSession'
+  | 'StartTeachingSession'
+  | 'ContinueTeachingSession'
+  | 'StartConversionSession'
+  | 'ContinueConversionSession'
+  | 'AssignKI';
+
+export type AuditActionApp = 'KAT' | 'ATQ' | 'Dashboard' | 'KIM' | 'IV';
+
+export interface BaseEvent {
+  action: AuditAction;
+  desktopApp: AuditActionApp;
+}
+
+export interface SearchEvent extends BaseEvent {
+  searchString: string;
+}
+
+export interface KIEvent extends BaseEvent {
+  kiId: string;
+  kiName: string;
+}
+
+export interface TeachingSessionEvent extends BaseEvent {
+  sessionId: string;
+  sessionName: string;
+  issueId: string;
+  desktopRole: string;
+}
+
+export interface DeployKIEvent extends KIEvent {
+  knowledgePoolId: string;
+  knowledgePoolName: string;
+}
+
+export interface OwnTeachingSessionEvent extends TeachingSessionEvent {
+  prevOwnerId: string;
+}
+
+export type AuditEvent = SearchEvent | DeployKIEvent | KIEvent | TeachingSessionEvent | OwnTeachingSessionEvent;
+
+export interface AuditServlet {
+  logEvent<T = any>(event: AuditEvent): Promise<T>;
+}
+
 export interface ApiServlet {
   getMeProfile<T = any>(): Promise<T>;
 
@@ -552,6 +606,7 @@ export default class Client {
 
   variable?: VariablesServlet;
   ki?: KiServlet;
+  audit?: AuditServlet;
 
   constructor(
     params: ClientParams,
