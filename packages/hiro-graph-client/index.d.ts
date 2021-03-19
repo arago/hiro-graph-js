@@ -498,8 +498,34 @@ export interface OwnTeachingSessionEvent extends TeachingSessionEvent {
 
 export type AuditEvent = SearchEvent | DeployKIEvent | KIEvent | TeachingSessionEvent | OwnTeachingSessionEvent;
 
+export interface BaseQueryOptions {
+  limit?: number;
+  offset?: number;
+  order?: 'asc' | 'desc';
+}
+
+export interface BaseFilterOptions {
+  appId?: string;
+  ipAddress?: string;
+  instanceId?: string;
+  tsFrom?: number;
+  tsTo?: number;
+}
+
+export type OrganizationQueryOptions = BaseQueryOptions & {
+  filter: BaseFilterOptions & {
+    accountId?: string;
+  }
+}
+
+export type AccountQueryOptions = BaseQueryOptions & {
+  filter: BaseFilterOptions;
+}
+
 export interface AuditServlet {
   logEvent<T = any>(event: AuditEvent): Promise<T>;
+  getOrganizationEvents<T = any>(orgId: string, queryOptions?: OrganizationQueryOptions): Promise<T>;
+  getAccountEvents<T = any>(accountId: string, queryOptions?: AccountQueryOptions): Promise<T>;
 }
 
 export interface ApiServlet {
