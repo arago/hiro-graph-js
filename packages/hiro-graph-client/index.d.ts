@@ -496,7 +496,12 @@ export interface OwnTeachingSessionEvent extends TeachingSessionEvent {
   prevOwnerId: string;
 }
 
-export type ActionLogEvent = SearchEvent | DeployKIEvent | KIEvent | TeachingSessionEvent | OwnTeachingSessionEvent;
+export type ActionLogEvent =
+  | SearchEvent
+  | DeployKIEvent
+  | KIEvent
+  | TeachingSessionEvent
+  | OwnTeachingSessionEvent;
 
 export interface BaseQueryOptions {
   limit?: number;
@@ -512,16 +517,23 @@ export interface BaseFilterOptions {
   tsTo?: number;
 }
 
-export type OrganizationQueryOptions = BaseQueryOptions & BaseFilterOptions & {
+export type OrganizationQueryOptions = BaseQueryOptions &
+  BaseFilterOptions & {
     accountId?: string;
-}
+  };
 
 export type AccountQueryOptions = BaseQueryOptions & BaseFilterOptions;
 
 export interface ActionLogServlet {
   logEvent<T = any>(event: ActionLogEvent): Promise<T>;
-  getOrganizationEvents<T = any>(orgId: string, queryOptions?: OrganizationQueryOptions): Promise<T>;
-  getAccountEvents<T = any>(accountId: string, queryOptions?: AccountQueryOptions): Promise<T>;
+  getOrganizationEvents<T = any>(
+    orgId: string,
+    queryOptions?: OrganizationQueryOptions,
+  ): Promise<T>;
+  getAccountEvents<T = any>(
+    accountId: string,
+    queryOptions?: AccountQueryOptions,
+  ): Promise<T>;
 }
 
 export interface ApiServlet {
