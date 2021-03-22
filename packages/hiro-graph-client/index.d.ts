@@ -464,44 +464,45 @@ export type ActionLogType =
   | 'ContinueConversionSession'
   | 'AssignKI';
 
-export type ActionLogApp = 'KAT' | 'ATQ' | 'Dashboard' | 'KIM' | 'IV';
-
-export interface BaseEvent {
+export interface BaseEvent<T extends ActionLogMeta> {
   action: ActionLogType;
-  desktopApp: ActionLogApp;
+  instanceId: string;
+  meta: T;
 }
 
-export interface SearchEvent extends BaseEvent {
+export interface SearchEventMeta {
   searchString: string;
 }
 
-export interface KIEvent extends BaseEvent {
+export interface KIEventMeta {
   kiId: string;
   kiName: string;
 }
 
-export interface TeachingSessionEvent extends BaseEvent {
+export interface TeachingSessionEventMeta {
   sessionId: string;
   sessionName: string;
   issueId: string;
   desktopRole: string;
 }
 
-export interface DeployKIEvent extends KIEvent {
+export interface DeployKIEventMeta {
   knowledgePoolId: string;
   knowledgePoolName: string;
 }
 
-export interface OwnTeachingSessionEvent extends TeachingSessionEvent {
+export interface OwnTeachingSessionEventMeta {
   prevOwnerId: string;
 }
 
-export type ActionLogEvent =
-  | SearchEvent
-  | DeployKIEvent
-  | KIEvent
-  | TeachingSessionEvent
-  | OwnTeachingSessionEvent;
+export type ActionLogMeta =
+  | SearchEventMeta
+  | KIEventMeta
+  | TeachingSessionEventMeta
+  | DeployKIEventMeta
+  | OwnTeachingSessionEventMeta;
+
+export type ActionLogEvent<T extends ActionLogMeta> = BaseEvent<T>;
 
 export interface BaseQueryOptions {
   limit?: number;
@@ -525,7 +526,9 @@ export type OrganizationQueryOptions = BaseQueryOptions &
 export type AccountQueryOptions = BaseQueryOptions & BaseFilterOptions;
 
 export interface ActionLogServlet {
-  logEvent<T = any>(event: ActionLogEvent): Promise<T>;
+  logEvent<T extends ActionLogMeta, S = any>(
+    event: ActionLogEvent<T>,
+  ): Promise<S>;
   getOrganizationEvents<T = any>(
     orgId: string,
     queryOptions?: OrganizationQueryOptions,
