@@ -482,7 +482,7 @@ export interface KIEventMeta {
 export interface TeachingSessionEventMeta {
   sessionId: string;
   sessionName: string;
-  issueId: string;
+  taskId: string;
   desktopRole: string;
 }
 
