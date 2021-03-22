@@ -4,6 +4,7 @@ import * as Errors from './errors';
 import appsServletFactory from './servlets/app';
 import kiServletFactory from './servlets/ki';
 import variablesServletFactory from './servlets/variables';
+import actionLogServletFactory from './servlets/actionLog';
 import lucene, { getPlaceholderKeyForIndex } from './lucene';
 import gremlin, { GremlinQueryBuilder, T } from './gremlin';
 
@@ -16,6 +17,7 @@ export {
     appsServletFactory,
     kiServletFactory,
     variablesServletFactory,
+    actionLogServletFactory,
     // Lucene
     lucene,
     getPlaceholderKeyForIndex,

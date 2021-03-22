@@ -448,7 +448,7 @@ export interface VariablesServlet {
   define<T = any>(options: DefineVariableOptions): Promise<T>;
 }
 
-export type AuditAction =
+export type ActionLogType =
   | 'SearchKI'
   | 'SearchTask'
   | 'SearchTeachingSession'
@@ -464,11 +464,11 @@ export type AuditAction =
   | 'ContinueConversionSession'
   | 'AssignKI';
 
-export type AuditActionApp = 'KAT' | 'ATQ' | 'Dashboard' | 'KIM' | 'IV';
+export type ActionLogApp = 'KAT' | 'ATQ' | 'Dashboard' | 'KIM' | 'IV';
 
 export interface BaseEvent {
-  action: AuditAction;
-  desktopApp: AuditActionApp;
+  action: ActionLogType;
+  desktopApp: ActionLogApp;
 }
 
 export interface SearchEvent extends BaseEvent {
@@ -496,7 +496,7 @@ export interface OwnTeachingSessionEvent extends TeachingSessionEvent {
   prevOwnerId: string;
 }
 
-export type AuditEvent = SearchEvent | DeployKIEvent | KIEvent | TeachingSessionEvent | OwnTeachingSessionEvent;
+export type ActionLogEvent = SearchEvent | DeployKIEvent | KIEvent | TeachingSessionEvent | OwnTeachingSessionEvent;
 
 export interface BaseQueryOptions {
   limit?: number;
@@ -512,18 +512,14 @@ export interface BaseFilterOptions {
   tsTo?: number;
 }
 
-export type OrganizationQueryOptions = BaseQueryOptions & {
-  filter: BaseFilterOptions & {
+export type OrganizationQueryOptions = BaseQueryOptions & BaseFilterOptions & {
     accountId?: string;
-  }
 }
 
-export type AccountQueryOptions = BaseQueryOptions & {
-  filter: BaseFilterOptions;
-}
+export type AccountQueryOptions = BaseQueryOptions & BaseFilterOptions;
 
-export interface AuditServlet {
-  logEvent<T = any>(event: AuditEvent): Promise<T>;
+export interface ActionLogServlet {
+  logEvent<T = any>(event: ActionLogEvent): Promise<T>;
   getOrganizationEvents<T = any>(orgId: string, queryOptions?: OrganizationQueryOptions): Promise<T>;
   getAccountEvents<T = any>(accountId: string, queryOptions?: AccountQueryOptions): Promise<T>;
 }
@@ -587,6 +583,7 @@ export interface AuthServlet {
 export declare const appsServletFactory: () => AppsServlet;
 export declare const kiServletFactory: () => KiServlet;
 export declare const variablesServletFactory: () => VariablesServlet;
+export declare const actionLogServletFactory: () => ActionLogServlet;
 
 // Client
 
@@ -632,7 +629,7 @@ export default class Client {
 
   variable?: VariablesServlet;
   ki?: KiServlet;
-  audit?: AuditServlet;
+  actionLog?: ActionLogServlet;
 
   constructor(
     params: ClientParams,
