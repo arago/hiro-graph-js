@@ -491,7 +491,7 @@ export interface DeployKIEventMeta extends KIEventMeta {
   knowledgePoolName: string;
 }
 
-export interface OwnTeachingSessionEventMeta {
+export interface OwnTeachingSessionEventMeta extends TeachingSessionEventMeta {
   prevOwnerId: string;
 }
 
