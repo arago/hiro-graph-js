@@ -448,6 +448,97 @@ export interface VariablesServlet {
   define<T = any>(options: DefineVariableOptions): Promise<T>;
 }
 
+export type ActionLogType =
+  | 'SearchKI'
+  | 'SearchTask'
+  | 'SearchTeachingSession'
+  | 'DeployKI'
+  | 'UndeployKI'
+  | 'WriteKI'
+  | 'ForkKI'
+  | 'OpenTeachingSession'
+  | 'OwnTeachingSession'
+  | 'StartTeachingSession'
+  | 'ContinueTeachingSession'
+  | 'StartConversionSession'
+  | 'ContinueConversionSession'
+  | 'AssignKI';
+
+export interface BaseEvent<T extends ActionLogMeta> {
+  action: ActionLogType;
+  instanceId: string;
+  meta: T;
+}
+
+export interface SearchEventMeta {
+  searchString: string;
+}
+
+export interface KIEventMeta {
+  kiId: string;
+  kiName: string;
+}
+
+export interface TeachingSessionEventMeta {
+  sessionId: string;
+  sessionName: string;
+  taskId: string;
+  desktopRole: string;
+}
+
+export interface DeployKIEventMeta extends KIEventMeta {
+  knowledgePoolId: string;
+  knowledgePoolName: string;
+}
+
+export interface OwnTeachingSessionEventMeta {
+  prevOwnerId: string;
+}
+
+export type ActionLogMeta =
+  | SearchEventMeta
+  | KIEventMeta
+  | TeachingSessionEventMeta
+  | DeployKIEventMeta
+  | OwnTeachingSessionEventMeta;
+
+export type ActionLogEvent<T extends ActionLogMeta> = BaseEvent<T>;
+
+export interface BaseQueryOptions {
+  limit?: number;
+  offset?: number;
+  order?: 'asc' | 'desc';
+}
+
+export interface BaseFilterOptions {
+  appId?: string;
+  ipAddress?: string;
+  instanceId?: string;
+  tsFrom?: number;
+  tsTo?: number;
+}
+
+export type OrganizationQueryOptions = BaseQueryOptions &
+  BaseFilterOptions & {
+    accountId?: string;
+  };
+
+export type AccountQueryOptions = BaseQueryOptions & BaseFilterOptions;
+
+export interface ActionLogServlet {
+  logEvent<T extends ActionLogMeta, S = any>(
+    event: ActionLogEvent<T>,
+  ): Promise<S>;
+  getOrganizationEvents<T = any>(
+    orgId: string,
+    queryOptions?: OrganizationQueryOptions,
+  ): Promise<T>;
+  getAccountEvents<T = any>(
+    accountId: string,
+    queryOptions?: AccountQueryOptions,
+  ): Promise<T>;
+}
+
 export interface ApiServlet {
   getMeProfile<T = any>(): Promise<T>;
 
@@ -507,6 +598,7 @@ export interface AuthServlet {
 export declare const appsServletFactory: () => AppsServlet;
 export declare const kiServletFactory: () => KiServlet;
 export declare const variablesServletFactory: () => VariablesServlet;
+export declare const actionLogServletFactory: () => ActionLogServlet;
 
 // Client
 
@@ -552,6 +644,7 @@ export default class Client {
 
   variable?: VariablesServlet;
   ki?: KiServlet;
+  actionLog?: ActionLogServlet;
 
   constructor(
     params: ClientParams,
