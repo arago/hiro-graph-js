@@ -486,7 +486,7 @@ export interface TeachingSessionEventMeta {
   desktopRole: string;
 }
 
-export interface DeployKIEventMeta {
+export interface DeployKIEventMeta extends KIEventMeta {
   knowledgePoolId: string;
   knowledgePoolName: string;
 }
