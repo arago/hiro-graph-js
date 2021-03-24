@@ -462,7 +462,10 @@ export type ActionLogType =
   | 'ContinueTeachingSession'
   | 'StartConversionSession'
   | 'ContinueConversionSession'
-  | 'AssignKI';
+  | 'AssignKI'
+  | 'ArchiveTeachingSession';
+
+export type ActionLogDesktopApp = 'iv' | 'kim' | 'atq' | 'hd' | 'kat';
 
 export interface BaseEvent<T extends ActionLogMeta> {
   action: ActionLogType;
@@ -470,16 +473,20 @@ export interface BaseEvent<T extends ActionLogMeta> {
   meta: T;
 }
 
-export interface SearchEventMeta {
+export interface BaseEventMeta {
+  desktopApp: ActionLogDesktopApp;
+}
+
+export interface SearchEventMeta extends BaseEventMeta {
   searchString: string;
 }
 
-export interface KIEventMeta {
+export interface KIEventMeta extends BaseEventMeta {
   kiId: string;
   kiName: string;
 }
 
-export interface TeachingSessionEventMeta {
+export interface TeachingSessionEventMeta extends BaseEventMeta {
   sessionId: string;
   sessionName: string;
   taskId: string;
