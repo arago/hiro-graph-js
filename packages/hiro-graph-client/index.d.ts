@@ -463,7 +463,8 @@ export type ActionLogType =
   | 'StartConversionSession'
   | 'ContinueConversionSession'
   | 'AssignKI'
-  | 'ArchiveTeachingSession';
+  | 'ArchiveTeachingSession'
+  | 'RestoreTeachingSession';
 
 export type ActionLogDesktopApp = 'iv' | 'kim' | 'atq' | 'hd' | 'kat';
 
