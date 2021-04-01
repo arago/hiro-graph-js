@@ -522,9 +522,20 @@ export interface BaseFilterOptions {
   appId?: string;
   ipAddress?: string;
   instanceId?: string;
-  tsFrom?: number;
-  tsTo?: number;
+  from?: number;
+  to?: number;
+  limit?: number;
+  order?: 'asc' | 'desc';
 }
+
+export type OrganizationEventsResponse<T> = {
+  accountId: string;
+  action: ActionLogType;
+  appId: string;
+  instanceId: string;
+  ipAddress: string;
+  orgId: string;
+} & T;
 
 export type OrganizationQueryOptions = BaseQueryOptions &
   BaseFilterOptions & {
@@ -537,10 +548,10 @@ export interface ActionLogServlet {
   logEvent<T extends ActionLogMeta, S = any>(
     event: ActionLogEvent<T>,
   ): Promise<S>;
-  getOrganizationEvents<T = any>(
+  getOrganizationEvents<T = PlainObject>(
     orgId: string,
     queryOptions?: OrganizationQueryOptions,
-  ): Promise<T>;
+  ): Promise<OrganizationEventsResponse<T>>;
   getAccountEvents<T = any>(
     accountId: string,
     queryOptions?: AccountQueryOptions,
