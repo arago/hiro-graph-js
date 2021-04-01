@@ -525,7 +525,7 @@ export interface BaseFilterOptions {
   from?: number;
   to?: number;
   limit?: number;
-  order?: number;
+  order?: 'asc' | 'desc';
 }
 
 export type OrganizationEventsResponse<T> = {
