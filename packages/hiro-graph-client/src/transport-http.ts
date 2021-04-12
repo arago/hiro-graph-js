@@ -62,7 +62,7 @@ export class HttpTransport implements GraphTransport {
     const fetch$ = of(tp).pipe(
       mergeMap((t) => t),
       mergeMap(async (t) => {
-        const headers = {
+        const headers: any = {
           ...(options.headers || {}),
           Authorization: 'Bearer ' + t,
         };
@@ -76,6 +76,7 @@ export class HttpTransport implements GraphTransport {
 
         if (json) {
           req.body = JSON.stringify(filterUndef(json));
+          req.headers['content-type'] = 'application/json;charset=utf-8';
         }
 
         return fetch(url, req);

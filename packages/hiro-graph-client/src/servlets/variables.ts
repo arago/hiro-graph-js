@@ -31,7 +31,7 @@ export const Variables = {
 
         return this.fetch(url, {
           method: 'PUT',
-          body: JSON.stringify(data),
+          json: data,
         });
       },
 

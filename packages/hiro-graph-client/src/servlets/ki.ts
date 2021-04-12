@@ -51,10 +51,10 @@ export const KI = {
 
         return this.fetch(url, {
           method: 'POST',
-          body: JSON.stringify({
+          json: {
             ...rest,
             ki,
-          }),
+          },
           raw: true,
         }).pipe(
           mergeMap((res) => res.json()),
