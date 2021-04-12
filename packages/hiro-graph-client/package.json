@@ -1,7 +1,7 @@
 {
     "name": "@hiro-graph/client",
     "repository": "arago/hiro-graph-js",
-    "version": "7.4.0-rc.14",
+    "version": "7.4.0-rc.15",
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
