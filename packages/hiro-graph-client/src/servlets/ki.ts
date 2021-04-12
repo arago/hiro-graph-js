@@ -1,4 +1,4 @@
-import { mergeMap, catchError, merge } from 'rxjs/operators';
+import { mergeMap, catchError, map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
 import { Client } from '../client';
@@ -58,7 +58,7 @@ export const KI = {
           raw: true,
         }).pipe(
           mergeMap((res) => res.json()),
-          merge((res: CheckResponse) => {
+          map((res: CheckResponse) => {
             const valid = res.code === 200;
 
             return {
