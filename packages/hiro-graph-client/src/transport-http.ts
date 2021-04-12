@@ -76,7 +76,7 @@ export class HttpTransport implements GraphTransport {
 
         if (json) {
           req.body = JSON.stringify(filterUndef(json));
-          req.headers['content-type'] = 'application/json;charset=utf-8';
+          req.headers['content-type'] = 'application/json';
         }
 
         return fetch(url, req);
