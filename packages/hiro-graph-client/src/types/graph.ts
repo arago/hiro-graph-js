@@ -56,8 +56,8 @@ export declare namespace GraphRequest {
       limit?: number;
       from?: number;
       to?: number;
-      version?: number;
-      type?: string;
+      version?: string | number;
+      type?: 'element' | 'full' | 'diff';
       listMeta?: boolean;
       includeDeleted?: boolean;
       vid?: string;
