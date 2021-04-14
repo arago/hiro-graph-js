@@ -730,6 +730,7 @@ export default class Client {
       limit?: number;
       includeDeleted?: boolean;
       with?: string[];
+      order?: 'asc' | 'desc';
     },
   ) => Promise<TimeseriesResponse[]>;
 
