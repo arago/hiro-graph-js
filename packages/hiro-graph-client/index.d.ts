@@ -552,10 +552,6 @@ export interface ActionLogServlet {
     orgId: string,
     queryOptions?: OrganizationQueryOptions,
   ): Promise<OrganizationEventsResponse<T>>;
-  getAccountEvents<T = any>(
-    accountId: string,
-    queryOptions?: AccountQueryOptions,
-  ): Promise<T>;
 }
 
 export interface ApiServlet {

@@ -19,13 +19,5 @@ export default function actionLogServletFactory(fetch, options) {
                 options,
             );
         },
-        getAccountEvents(accountId, queryOptions = {}) {
-            const query = qs.stringify(queryOptions);
-
-            return fetch(
-                `${ACTION_LOG_API_BASE}/account/${accountId}/events?${query}`,
-                options,
-            );
-        },
     };
 }
