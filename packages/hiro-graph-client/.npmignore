@@ -1,5 +1,9 @@
 __mocks__
 __tests__
+.vscode
 node_modules
 src
+jest.config.js
 tsconfig.json
+rollup.config.js
+yarn-error.log

@@ -24,7 +24,7 @@
         "lint-staged": "^10.5.4"
     },
     "scripts": {
-        "release": "lerna publish --dist-tag dev --contents pkg",
+        "release": "lerna publish --dist-tag dev --contents lib",
         "build": "lerna run build",
         "test": "yarn install && yarn lint && lerna run build && lerna run test",
         "test:ci": "yarn install --frozen-lockfile && yarn lint && lerna run build && lerna run test:ci",
