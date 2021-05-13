@@ -9,11 +9,11 @@ import {
   catchError,
   map,
   retryWhen,
-  concatMap,
   delay,
   tap,
+  endWith,
 } from 'rxjs/operators';
-import { of, throwError, EMPTY, defer, merge, Observable } from 'rxjs';
+import { EMPTY, defer, merge, Observable } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -132,6 +132,7 @@ export class Client {
 
     const query$ = this.lucene<T>(_query, options).pipe(
       map((node) => ({ id: node['ogit/_id'], body: node })),
+      endWith(null), // End of lucene query
     );
 
     const filter = JFilter.and(
@@ -149,7 +150,10 @@ export class Client {
       })),
     );
 
-    const data$: Observable<GraphSubscription<T>> = merge(query$, stream$);
+    const data$: Observable<GraphSubscription<T> | null> = merge(
+      query$,
+      stream$,
+    );
 
     return data$;
   }
