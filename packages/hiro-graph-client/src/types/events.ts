@@ -33,3 +33,9 @@ export interface EventStreamResponse<T> {
   timestamp: number;
   type: GraphEventType;
 }
+
+export interface GraphSubscription<T> {
+  body: T;
+  id: string;
+  type?: GraphEventType;
+}

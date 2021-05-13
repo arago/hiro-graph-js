@@ -13,7 +13,7 @@ import {
   delay,
   tap,
 } from 'rxjs/operators';
-import { of, throwError, EMPTY, defer } from 'rxjs';
+import { of, throwError, EMPTY, defer, merge, Observable } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -31,6 +31,8 @@ import {
   GraphRequestType,
   RequestOptions,
   EventStreamRequest,
+  OGIT,
+  GraphSubscription,
 } from './types';
 import {
   GremlinQueryFunction,
@@ -38,6 +40,7 @@ import {
   gremlin as CreateGremlin,
 } from './gremlin';
 import { Lucene, LuceneQueryOptions, lucene as CreateLucene } from './lucene';
+import { JFilter } from './jfilter';
 
 import { Token } from '.';
 
@@ -93,6 +96,36 @@ export class Client {
     this.token = typeof token === 'string' ? fixedToken(token) : token;
 
     return this.token;
+  }
+
+  subscribe<T extends OGIT.Node | OGIT.SafeNode>(
+    query: Record<string, string>,
+    options?: LuceneQueryOptions,
+  ) {
+    const query$ = this.lucene<T>(query, options).pipe(
+      map((node) => ({ id: node['ogit/_id'], body: node })),
+    );
+
+    const filter = JFilter.and(
+      JFilter.equals('action', '*'),
+      Object.entries(query).map(([key, value]) =>
+        JFilter.equals(`element.${key}`, value),
+      ),
+    );
+
+    const stream$ = this.eventStream()
+      .register<T>(filter)
+      .pipe(
+        map((event) => ({
+          id: event.id,
+          body: event.body,
+          type: event.type,
+        })),
+      );
+
+    const data$: Observable<GraphSubscription<T>> = merge(query$, stream$);
+
+    return data$;
   }
 
   // NB this is not held anywhere in this instance, but returned
