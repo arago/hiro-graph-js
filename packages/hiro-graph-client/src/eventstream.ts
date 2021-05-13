@@ -118,7 +118,7 @@ export class EventStream {
           ),
         )
         .subscribe({
-          next: (res) => {
+          next: (res: any) => {
             if (res) {
               subscriber.next(res);
             }

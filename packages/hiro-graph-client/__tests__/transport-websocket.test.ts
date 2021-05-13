@@ -2,7 +2,6 @@
 
 import EventEmitter from 'events';
 
-// @ts-ignore
 import { Subject } from 'rxjs';
 
 import { WebSocketTransport } from '../src/transport-websocket';

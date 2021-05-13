@@ -5,8 +5,15 @@
  *  Event streams require WebSockets so those will not work witout websocket support.
  *  The connection requires a `Token`.
  */
-import { catchError, map, retryWhen, concatMap, delay } from 'rxjs/operators';
-import { of, throwError, EMPTY } from 'rxjs';
+import {
+  catchError,
+  map,
+  retryWhen,
+  concatMap,
+  delay,
+  tap,
+} from 'rxjs/operators';
+import { of, throwError, EMPTY, defer } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -130,39 +137,39 @@ export class Client {
   ) {
     let retries = 0;
 
-    return this.transport
-      .request<T>(this.token, { type, headers, body })
-      .pipe(
-        retryWhen((err$) =>
-          err$.pipe(
-            concatMap((res) => {
-              const closed = res === Errors.connectionClosedBeforeSend;
+    return defer(() =>
+      this.transport.request<T>(this.token, { type, headers, body }),
+    ).pipe(
+      retryWhen((err$) =>
+        err$.pipe(
+          tap((res) => {
+            const closed = res === Errors.connectionClosedBeforeSend;
 
-              // Always handle early close
-              if (closed) {
-                return of(res);
-              }
+            // Always handle early close
+            if (closed) {
+              return;
+            }
 
-              if (res.code === 401) {
-                this.token.invalidate();
-              }
+            if (res.code === 401) {
+              this.token.invalidate();
+            }
 
-              // Retry retryable error until max retries
-              if (
-                retries < maxRetries &&
-                (res.isRetryable || res.code === 888 || res.code === 401)
-              ) {
-                retries += 1;
+            // Retry retryable error until max retries
+            if (
+              retries < maxRetries &&
+              (res.isRetryable || res.code === 888 || res.code === 401)
+            ) {
+              retries += 1;
 
-                return of(res);
-              }
+              return;
+            }
 
-              return throwError(res);
-            }),
-            delay(1000),
-          ),
+            throw res;
+          }),
+          delay(1000),
         ),
-      );
+      ),
+    );
   }
 
   getToken() {

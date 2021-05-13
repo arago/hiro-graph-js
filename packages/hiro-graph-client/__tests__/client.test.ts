@@ -5,7 +5,7 @@ import { of, Observable } from 'rxjs';
 import { Token } from '../src/token';
 import * as errors from '../src/errors';
 import clientTestHelper from '../__mocks__/client-test-helper';
-import Client from '../src';
+import Client, { toPromise } from '../src';
 
 const getClient = () => {
   const mockRequest = jest.fn();
@@ -34,14 +34,10 @@ const enqueueMockResponse = (mock: jest.Mock, ...responses: any[]) => {
     }
   };
 
-  responses.forEach((res) => {
+  responses.flat().forEach((res) => {
     mock.mockReturnValueOnce(
       new Observable((subscriber) => {
-        if (Array.isArray(res)) {
-          res.forEach((r) => enqueue(subscriber, r));
-        } else {
-          enqueue(subscriber, res);
-        }
+        enqueue(subscriber, res);
 
         subscriber.complete();
       }),
@@ -71,11 +67,7 @@ describe('Client Requests', () => {
       // we just have to make sure it resolves period.
       // we will handle expected values for those functions that don't
       // pass the responses right through directly.
-      await expect(
-        fn()
-          .toPromise()
-          .then(() => true),
-      ).resolves.toEqual(true);
+      await expect(toPromise(fn()).then(() => true)).resolves.toEqual(true);
       expect(mockRequest.mock.calls[0][1]).toMatchSnapshot(); //i.e. correct options created
     });
   });
@@ -107,17 +99,20 @@ describe('Client Response handling', () => {
 
   retryableErrors.forEach(({ name, err }) => {
     it(`should retry once on '${name}'`, async () => {
-      enqueueMockResponse(mockRequest, [err, 'ok'], [err, err]);
+      enqueueMockResponse(mockRequest, err, 'ok', err, err);
 
-      await expect(client.me().toPromise()).resolves.toBe('ok');
+      const call = () => toPromise(client.me());
 
-      await expect(client.me().toPromise()).rejects.toBe(err);
+      await expect(call()).resolves.toBe('ok');
+
+      await expect(call()).rejects.toBe(err);
     });
   });
 
   it('should unconditionally retry for `connection closed before send`', async () => {
     const err = errors.connectionClosedBeforeSend;
 
+    jest.setTimeout(10000);
     // many connection closed, one other error in the middle, should still resolve "ok"
 
     enqueueMockResponse(mockRequest, [
@@ -135,7 +130,7 @@ describe('Client Response handling', () => {
 
     // @todo How should this be triggered in RxJS?
 
-    await expect(client.me().toPromise()).resolves.toBe('ok');
+    await expect(toPromise(client.me())).resolves.toBe('ok');
   });
 
   it('should handle `conflict` as OK for connect', async () => {
@@ -145,10 +140,10 @@ describe('Client Response handling', () => {
     enqueueMockResponse(mockRequest, conflict, forbidden);
 
     await expect(
-      client.connect('foo', 'bar', 'baz').toPromise(),
+      toPromise(client.connect('foo', 'bar', 'baz')),
     ).resolves.toBeUndefined(); // connect returns nothing on success
 
-    await expect(client.connect('foo', 'bar', 'baz').toPromise()).rejects.toBe(
+    await expect(toPromise(client.connect('foo', 'bar', 'baz'))).rejects.toBe(
       forbidden,
     );
   });
@@ -161,15 +156,15 @@ describe('Client Response handling', () => {
     enqueueMockResponse(mockRequest, conflict, forbidden, notFound);
 
     await expect(
-      client.disconnect('foo', 'bar', 'baz').toPromise(),
+      toPromise(client.disconnect('foo', 'bar', 'baz')),
     ).resolves.toBeUndefined(); // disconnect returns nothing on success
 
     await expect(
-      client.disconnect('foo', 'bar', 'baz').toPromise(),
+      toPromise(client.disconnect('foo', 'bar', 'baz')),
     ).rejects.toBe(forbidden);
 
     await expect(
-      client.disconnect('foo', 'bar', 'baz').toPromise(),
+      toPromise(client.disconnect('foo', 'bar', 'baz')),
     ).resolves.toBeUndefined(); // disconnect returns nothing on success
   });
 
@@ -218,21 +213,22 @@ describe('Client Response handling', () => {
       mockRequest,
       'OK',
       notFound,
-      [unauthorized, notFound],
+      unauthorized,
+      notFound,
       'OK',
     );
 
-    await expect(client.me().toPromise()).resolves.toBe('OK');
+    await expect(toPromise(client.me())).resolves.toBe('OK');
     expect(mockInvalidate).not.toHaveBeenCalled();
 
-    await expect(client.me().toPromise()).rejects.toBe(notFound);
+    await expect(toPromise(client.me())).rejects.toBe(notFound);
     expect(mockInvalidate).not.toHaveBeenCalled();
 
     //this one should invalidate
-    await expect(client.me().toPromise()).rejects.toBe(notFound);
+    await expect(toPromise(client.me())).rejects.toBe(notFound);
     expect(mockInvalidate).toHaveBeenCalledTimes(1);
 
-    await expect(client.me().toPromise()).resolves.toBe('OK');
+    await expect(toPromise(client.me())).resolves.toBe('OK');
     expect(mockInvalidate).toHaveBeenCalledTimes(1);
   });
 });

@@ -99,7 +99,7 @@ export class WebSocketTransport implements GraphTransport {
                         message: `Error creating websocket for ${this.url}`,
                         code: 500,
                       },
-                    });
+                    } as WebSocketResponse);
                   }
 
                   return of({
@@ -107,7 +107,7 @@ export class WebSocketTransport implements GraphTransport {
                       message: err.reason || err.message,
                       code: err.code || 500,
                     },
-                  });
+                  } as WebSocketResponse);
                 }),
                 map((res: WebSocketResponse<T>) => {
                   if (res.error) {
