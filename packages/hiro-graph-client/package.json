@@ -3,7 +3,8 @@
     "repository": "arago/hiro-graph-js",
     "version": "7.4.0-rc.20",
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
-    "main": "lib/index.js",
+    "main": "lib/index.cjs.js",
+    "module": "lib/index.esm.js",
     "types": "lib/index.d.ts",
     "sideEffects": false,
     "files": [

@@ -26,8 +26,13 @@ export default [
         input: 'src/index.ts',
         external,
         output: [
-            //  { file: pkg.main, format: 'cjs', exports: 'named' },
-            { file: pkg.main, format: 'es', sourcemap: true },
+            {
+                file: pkg.main,
+                format: 'cjs',
+                exports: 'named',
+                sourcemap: true,
+            },
+            { file: pkg.module, format: 'es', sourcemap: true },
         ],
         plugins: [del({ targets: 'lib/*' }), typescript(), commonjs()],
     },

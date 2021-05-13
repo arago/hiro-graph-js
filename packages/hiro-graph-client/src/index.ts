@@ -11,4 +11,11 @@ export * from './endpoint';
 export * from './eventstream';
 export * as Servlets from './servlets/index';
 export { toPromise } from './utils';
-export { cannotGetToken, ClientOptions, Errors, Token, TransportOrOptions };
+export {
+  cannotGetToken,
+  ClientOptions,
+  Errors,
+  Token,
+  TransportOrOptions,
+  Client,
+};
