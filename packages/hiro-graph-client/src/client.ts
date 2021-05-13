@@ -70,9 +70,9 @@ const filterEmpty = <T extends object>(value: T) => {
 
 export class Client {
   public readonly endpoint: string;
+  public eventStream: EventStream | undefined;
   private http: HttpTransport;
   private transport: GraphTransport;
-  private eventStream: EventStream | undefined;
   private token: Token;
 
   constructor(
