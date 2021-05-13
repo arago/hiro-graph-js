@@ -54,15 +54,31 @@ export type TransportOrOptions = WebSocketRequestOptions | GraphTransport;
 const isTransport = (t: TransportOrOptions): t is GraphTransport =>
   'request' in t && typeof t.request === 'function';
 
+const filterEmpty = <T extends object>(value: T) => {
+  const q: Partial<T> = {};
+
+  for (const key in value) {
+    const v = value[key];
+
+    if (v) {
+      q[key] = v;
+    }
+  }
+
+  return q;
+};
+
 export class Client {
   public readonly endpoint: string;
   private http: HttpTransport;
   private transport: GraphTransport;
+  private eventStream: EventStream | undefined;
   private token: Token;
 
   constructor(
     { endpoint, token }: ClientOptions,
     transportOrOptions: TransportOrOptions = {},
+    eventStreamOptions?: Omit<EventStreamRequest, 'filters'>,
   ) {
     this.endpoint = endpoint;
 
@@ -90,6 +106,10 @@ export class Client {
 
       this.transport = this.http;
     }
+
+    if (eventStreamOptions) {
+      this.eventStream = this.newEventStream(eventStreamOptions);
+    }
   }
 
   setToken(token: string | Token) {
@@ -102,26 +122,32 @@ export class Client {
     query: Record<string, string>,
     options?: LuceneQueryOptions,
   ) {
-    const query$ = this.lucene<T>(query, options).pipe(
+    if (!this.eventStream) {
+      console.warn('Eventstream not initialised for Hiro Client');
+
+      return;
+    }
+
+    const _query = filterEmpty(query);
+
+    const query$ = this.lucene<T>(_query, options).pipe(
       map((node) => ({ id: node['ogit/_id'], body: node })),
     );
 
     const filter = JFilter.and(
       JFilter.equals('action', '*'),
-      Object.entries(query).map(([key, value]) =>
+      Object.entries(_query).map(([key, value]) =>
         JFilter.equals(`element.${key}`, value),
       ),
     );
 
-    const stream$ = this.eventStream()
-      .register<T>(filter)
-      .pipe(
-        map((event) => ({
-          id: event.id,
-          body: event.body,
-          type: event.type,
-        })),
-      );
+    const stream$ = this.eventStream.register<T>(filter).pipe(
+      map((event) => ({
+        id: event.id,
+        body: event.body,
+        type: event.type,
+      })),
+    );
 
     const data$: Observable<GraphSubscription<T>> = merge(query$, stream$);
 
@@ -131,7 +157,7 @@ export class Client {
   // NB this is not held anywhere in this instance, but returned
   // to the caller. It only connects when it's subscribe() method
   // is called.
-  eventStream(options: Omit<EventStreamRequest, 'filters'> = {}) {
+  newEventStream(options: Omit<EventStreamRequest, 'filters'> = {}) {
     return new EventStream(
       { endpoint: this.endpoint, token: this.token },
       options,
