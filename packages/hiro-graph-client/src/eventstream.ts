@@ -9,8 +9,8 @@
  */
 
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { of, Observable } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { mergeMap, map, filter, catchError } from 'rxjs/operators';
 
 import {
   WebSocketTransport,
@@ -84,54 +84,46 @@ export class EventStream {
    * @param filter - String
    */
 
-  register<T extends object>(filter: JFilterType) {
+  register<T extends object>(jfilter: JFilterType) {
     const filterObj: EventStreamFilter = {
-      'filter-id': filter.toString(),
+      'filter-id': jfilter.toString(),
       'filter-type': 'jfilter',
-      'filter-content': filter.toString(),
+      'filter-content': jfilter.toString(),
     };
 
-    return new Observable<EventStreamResponse<T>>((subscriber) => {
-      of(this._token)
-        .pipe(
-          mergeMap((t) => t.get()),
-          map(
-            (t) =>
-              this._transport.connect(t, EVENTS_PROTOCOL) as WebSocketSubject<
-                EventStreamFilter
-              >,
-          ),
-          mergeMap((connection) =>
-            connection.multiplex(
-              () => ({
-                type: 'register',
-                args: filterObj,
-              }),
-              () => ({
-                type: 'unregister',
-                args: {
-                  'filter-id': filter,
-                },
-              }),
-              (res: any) => res.body && filter.test(JFilter.transform(res)),
-            ),
-          ),
-        )
-        .subscribe({
-          next: (res: any) => {
-            if (res) {
-              subscriber.next(res);
-            }
-          },
-          error: (err) => {
-            if (err.code === 401) {
-              this._token.invalidate();
-            }
+    return of(this._token).pipe(
+      mergeMap((t) => t.get()),
+      map(
+        (t) =>
+          this._transport.connect(t, EVENTS_PROTOCOL) as WebSocketSubject<
+            EventStreamFilter
+          >,
+      ),
+      mergeMap((connection) =>
+        connection.multiplex(
+          () => ({
+            type: 'register',
+            args: filterObj,
+          }),
+          () => ({
+            type: 'unregister',
+            args: {
+              'filter-id': jfilter,
+            },
+          }),
+          (res: any) => res.body && jfilter.test(JFilter.transform(res)),
+        ),
+      ),
+      filter(Boolean),
+      map((res: any) => res as EventStreamResponse<T>),
+      catchError((err) => {
+        if (err.code === 401) {
+          this._token.invalidate();
+        }
 
-            subscriber.error(err);
-          },
-        });
-    });
+        throw err;
+      }),
+    );
   }
 
   close() {
