@@ -148,7 +148,7 @@ export class Client {
 
     const filter = JFilter.and(
       JFilter.equals('action', '*'),
-      Object.entries(_query).map(([key, value]) =>
+      ...Object.entries(_query).map(([key, value]) =>
         JFilter.equals(`element.${key}`, value),
       ),
     );
