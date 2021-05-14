@@ -12,6 +12,7 @@ import {
   delay,
   tap,
   endWith,
+  pairwise,
 } from 'rxjs/operators';
 import { EMPTY, defer, merge, Observable } from 'rxjs';
 
@@ -123,16 +124,26 @@ export class Client {
     options?: LuceneQueryOptions,
   ) {
     if (!this.eventStream) {
-      console.warn('Eventstream not initialised for Hiro Client');
-
-      return;
+      throw new Error('Eventstream not initialised for Hiro Client');
     }
 
     const _query = filterEmpty(query);
 
     const query$ = this.lucene<T>(_query, options).pipe(
-      map((node) => ({ id: node['ogit/_id'], body: node })),
-      endWith(null), // End of lucene query
+      map(
+        (node) =>
+          ({ id: node['ogit/_id'], body: node } as GraphSubscription<T>),
+      ),
+      endWith(null),
+      pairwise(),
+      map(([a, b]) => {
+        // End with null  - here we check if we're at the end
+        if (a && b === null) {
+          a.isLast = true;
+        }
+
+        return a as GraphSubscription<T>;
+      }),
     );
 
     const filter = JFilter.and(
@@ -150,10 +161,7 @@ export class Client {
       })),
     );
 
-    const data$: Observable<GraphSubscription<T> | null> = merge(
-      query$,
-      stream$,
-    );
+    const data$: Observable<GraphSubscription<T>> = merge(query$, stream$);
 
     return data$;
   }
