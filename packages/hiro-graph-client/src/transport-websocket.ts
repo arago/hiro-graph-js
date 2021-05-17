@@ -62,7 +62,6 @@ export class WebSocketTransport implements GraphTransport {
     token: Token,
     { type, headers = {}, body = {} }: GraphRequestType,
   ) {
-    //the connect call ensures the websocket is connected before continuing.
     const id = nanoid();
 
     // @todo send requests to a pipe for deduping before triggering request?

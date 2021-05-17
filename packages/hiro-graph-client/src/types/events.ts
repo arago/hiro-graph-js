@@ -15,11 +15,50 @@ export type GraphEventType =
   | 'DELETE_BLOB'
   | 'WRITE_LOG';
 
+export interface EventStreamMessageToken {
+  type: 'token';
+  args: {
+    _TOKEN: string;
+  };
+}
+
+export interface EventStreamMessageSubscribe {
+  type: 'subscribe';
+  id: string;
+}
+
+export interface EventStreamMessageRegister {
+  type: 'register';
+  args: {
+    'filter-id': string;
+    'filter-type': string;
+    'filter-content': string;
+  };
+}
+
+export interface EventStreamMessageUnregister {
+  type: 'unregister';
+  args: {
+    'filter-id': string;
+  };
+}
+
+export interface EventStreamMessageClear {
+  type: 'clear';
+}
+
 export interface EventStreamRequest {
   groupId?: string;
   offset?: OFFSET_MSG;
   delta?: boolean;
 }
+
+export type EventStreamMessage =
+  | EventStreamMessageToken
+  | EventStreamMessageSubscribe
+  | EventStreamMessageRegister
+  | EventStreamMessageUnregister
+  | EventStreamMessageToken;
 
 export interface EventStreamResponse<T> {
   body: T;

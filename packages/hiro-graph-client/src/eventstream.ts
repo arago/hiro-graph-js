@@ -9,8 +9,15 @@
  */
 
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { of } from 'rxjs';
-import { mergeMap, map, filter, catchError } from 'rxjs/operators';
+import { interval, Observable, of, Subject } from 'rxjs';
+import {
+  mergeMap,
+  map,
+  filter,
+  catchError,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 
 import {
   WebSocketTransport,
@@ -21,6 +28,7 @@ import {
   OFFSET_MSG,
   EventStreamRequest,
   EventStreamResponse,
+  EventStreamMessage,
 } from './types/index';
 
 import { Token } from '.';
@@ -91,31 +99,24 @@ export class EventStream {
       'filter-content': jfilter.toString(),
     };
 
-    return of(this._token).pipe(
-      mergeMap((t) => t.get()),
-      map(
-        (t) =>
-          this._transport.connect(t, EVENTS_PROTOCOL) as WebSocketSubject<
-            EventStreamFilter
-          >,
-      ),
-      mergeMap((connection) =>
-        connection.multiplex(
-          () => ({
-            type: 'register',
-            args: filterObj,
-          }),
-          () => ({
-            type: 'unregister',
-            args: {
-              'filter-id': jfilter,
-            },
-          }),
-          (res: any) => res.body && jfilter.test(JFilter.transform(res)),
-        ),
+    return this.connect().pipe(
+      mergeMap(
+        (connection) =>
+          (connection.multiplex(
+            () => ({
+              type: 'register',
+              args: filterObj,
+            }),
+            () => ({
+              type: 'unregister',
+              args: {
+                'filter-id': jfilter,
+              },
+            }),
+            (res: any) => res.body && jfilter.test(JFilter.transform(res)),
+          ) as any) as Observable<EventStreamResponse<T>>,
       ),
       filter(Boolean),
-      map((res: any) => res as EventStreamResponse<T>),
       catchError((err) => {
         if (err.code === 401) {
           this._token.invalidate();
@@ -123,6 +124,44 @@ export class EventStream {
 
         throw err;
       }),
+    );
+  }
+
+  heartbeat() {
+    const beat$ = new Subject();
+
+    this.connect()
+      .pipe(
+        switchMap((connection) => {
+          interval(30_000).pipe(
+            switchMap(() => this._token.get()),
+            tap((token) =>
+              connection.next({
+                type: 'token',
+                args: {
+                  _TOKEN: token,
+                },
+              }),
+            ),
+          );
+
+          return connection;
+        }),
+      )
+      .subscribe(beat$);
+
+    return beat$;
+  }
+
+  connect() {
+    return of(this._token).pipe(
+      mergeMap((t) => t.get()),
+      map(
+        (t) =>
+          this._transport.connect(t, EVENTS_PROTOCOL) as WebSocketSubject<
+            EventStreamMessage
+          >,
+      ),
     );
   }
 
