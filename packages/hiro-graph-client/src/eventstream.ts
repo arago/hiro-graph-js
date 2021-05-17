@@ -9,15 +9,8 @@
  */
 
 import { WebSocketSubject } from 'rxjs/webSocket';
-import { interval, Observable, of, Subject } from 'rxjs';
-import {
-  mergeMap,
-  map,
-  filter,
-  catchError,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { mergeMap, map, filter, catchError } from 'rxjs/operators';
 
 import {
   WebSocketTransport,
@@ -110,7 +103,7 @@ export class EventStream {
             () => ({
               type: 'unregister',
               args: {
-                'filter-id': jfilter,
+                'filter-id': filterObj['filter-id'],
               },
             }),
             (res: any) => res.body && jfilter.test(JFilter.transform(res)),
@@ -125,32 +118,6 @@ export class EventStream {
         throw err;
       }),
     );
-  }
-
-  heartbeat() {
-    const beat$ = new Subject();
-
-    this.connect()
-      .pipe(
-        switchMap((connection) => {
-          interval(30_000).pipe(
-            switchMap(() => this._token.get()),
-            tap((token) =>
-              connection.next({
-                type: 'token',
-                args: {
-                  _TOKEN: token,
-                },
-              }),
-            ),
-          );
-
-          return connection;
-        }),
-      )
-      .subscribe(beat$);
-
-    return beat$;
   }
 
   connect() {
