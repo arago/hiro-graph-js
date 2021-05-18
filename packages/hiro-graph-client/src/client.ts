@@ -16,6 +16,7 @@ import {
   isEmpty,
   last,
   defaultIfEmpty,
+  share,
 } from 'rxjs/operators';
 import { EMPTY, defer, merge, combineLatest } from 'rxjs';
 
@@ -137,16 +138,7 @@ export class Client {
         (node) =>
           ({ id: node['ogit/_id'], body: node } as GraphSubscription<T>),
       ),
-      endWith(null),
-      pairwise(),
-      map(([a, b]) => {
-        // End with null  - here we check if we're at the end
-        if (a && b === null) {
-          a.isLast = true;
-        }
-
-        return a as GraphSubscription<T>;
-      }),
+      share(),
     );
 
     const filter = JFilter.and(
