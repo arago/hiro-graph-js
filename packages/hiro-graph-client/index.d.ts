@@ -147,6 +147,7 @@ export namespace OGIT {
   export interface DataScope extends SafeNode {
     'ogit/name': string;
     'ogit/description'?: string;
+    'ogit/licenseSubject'?: string;
   }
 }
 
