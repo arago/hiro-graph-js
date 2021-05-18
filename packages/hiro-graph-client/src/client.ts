@@ -154,11 +154,22 @@ export class Client {
     );
 
     const stream$ = this.eventStream.register<T>(filter).pipe(
-      map((event) => ({
-        id: event.id,
-        body: event.body,
-        type: event.type,
-      })),
+      map((event) => {
+        const data = {
+          id: event.id,
+          body: event.body,
+          type: event.type,
+        } as GraphSubscription<T>;
+
+        // Add meta to make it easier to merge data
+        if (data.type === 'CREATE') {
+          data.isNew = true;
+        } else if (data.type === 'UPDATE') {
+          data.isUpdated = true;
+        }
+
+        return data;
+      }),
     );
 
     const data$: Observable<GraphSubscription<T>> = merge(query$, stream$);

@@ -78,4 +78,6 @@ export interface GraphSubscription<T> {
   id: string;
   type?: GraphEventType;
   isLast?: boolean;
+  isNew?: boolean;
+  isUpdated?: boolean;
 }
