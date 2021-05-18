@@ -13,8 +13,11 @@ import {
   tap,
   endWith,
   pairwise,
+  isEmpty,
+  last,
+  defaultIfEmpty,
 } from 'rxjs/operators';
-import { EMPTY, defer, merge, Observable } from 'rxjs';
+import { EMPTY, defer, merge, combineLatest } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -172,7 +175,11 @@ export class Client {
       }),
     );
 
-    const data$: Observable<GraphSubscription<T>> = merge(query$, stream$);
+    const data$ = combineLatest({
+      data: merge(query$, stream$),
+      isLoaded: query$.pipe(last(), map(Boolean), defaultIfEmpty(true)),
+      isEmpty: query$.pipe(isEmpty()),
+    });
 
     return data$;
   }
