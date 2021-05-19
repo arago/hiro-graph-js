@@ -16,8 +16,12 @@ import {
   defaultIfEmpty,
   share,
   startWith,
+  combineLatestWith,
+  endWith,
+  shareReplay,
+  pairwise,
 } from 'rxjs/operators';
-import { EMPTY, defer, merge } from 'rxjs';
+import { EMPTY, defer, concat, zip } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -137,7 +141,18 @@ export class Client {
         (node) =>
           ({ id: node['ogit/_id'], body: node } as GraphSubscription<T>),
       ),
-      share(),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
+
+    const extra$ = query$.pipe(
+      defaultIfEmpty('empty'),
+      endWith('loaded'),
+      pairwise(),
+      map((res) => ({
+        isLoaded: res[1] === 'loaded',
+        isEmpty: res[0] === 'empty',
+      })),
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
     const filter = JFilter.and(
@@ -166,16 +181,10 @@ export class Client {
       }),
     );
 
-    return {
-      data: merge(query$, stream$),
-      isLoaded: query$.pipe(
-        last(),
-        map(() => true),
-        defaultIfEmpty(true),
-        startWith(false),
-      ),
-      isEmpty: query$.pipe(isEmpty(), startWith(true)),
-    };
+    return concat(
+      zip(query$, extra$),
+      stream$.pipe(combineLatestWith(extra$)),
+    ).pipe(map((res) => ({ data: res[0], ...res[1] })));
   }
 
   // NB this is not held anywhere in this instance, but returned
