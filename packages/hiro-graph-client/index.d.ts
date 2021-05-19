@@ -746,6 +746,7 @@ export default class Client {
     },
   ) => Promise<T[]>;
 
+  // timeseries value type is based on client.js implementation and usage in hiro-desktop-utils
   writets: (
     timeseriesId: string,
     value: { timestamp: number; value: string } | Array<{ timestamp: number; value: string }>,
