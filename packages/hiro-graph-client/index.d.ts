@@ -745,6 +745,11 @@ export default class Client {
     },
   ) => Promise<T[]>;
 
+  writets: (
+    timeseriesId: string,
+    value: { timestamp: number; value: string } | Array<{ timestamp: number; value: string }>,
+  ) => Promise<TimeseriesResponse[]>;
+
   addServlet(
     prefix: string,
     servletMethods: ServletMethods,
