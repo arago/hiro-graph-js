@@ -566,7 +566,7 @@ export default class Client {
     /**
      *  Write timeseries values (only ogit/Timeseries vertices)
      *
-     *  values are { timeseriesId: string, value: {timestamp: number; value: PlainObject | Array<PlainObject>}}
+     *  values are { timestamp: millisecond unix, value: string value }
      */
     writets(timeseriesId, values) {
         let items = values;
