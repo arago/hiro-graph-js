@@ -11,14 +11,13 @@ import {
   retryWhen,
   delay,
   tap,
-  endWith,
-  pairwise,
   isEmpty,
   last,
   defaultIfEmpty,
   share,
+  startWith,
 } from 'rxjs/operators';
-import { EMPTY, defer, merge, combineLatest } from 'rxjs';
+import { EMPTY, defer, merge } from 'rxjs';
 
 import {
   WebSocketTransport,
@@ -167,13 +166,16 @@ export class Client {
       }),
     );
 
-    const data$ = combineLatest({
+    return {
       data: merge(query$, stream$),
-      isLoaded: query$.pipe(last(), map(Boolean), defaultIfEmpty(true)),
-      isEmpty: query$.pipe(isEmpty()),
-    });
-
-    return data$;
+      isLoaded: query$.pipe(
+        last(),
+        map(() => true),
+        defaultIfEmpty(true),
+        startWith(false),
+      ),
+      isEmpty: query$.pipe(isEmpty(), startWith(true)),
+    };
   }
 
   // NB this is not held anywhere in this instance, but returned
