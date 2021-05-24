@@ -375,7 +375,7 @@ export interface TimeseriesResponse {
 
 export interface TimeseriesValue {
   timestamp: number;
-  value: PlainObject | number | string | Array<string | number | PlainObject[]>;
+  value: PlainObject | number | string | Array<string | number | PlainObject>;
 }
 
 // Servlets
@@ -754,7 +754,7 @@ export default class Client {
   // timeseries value type is based on client.js implementation and usage in hiro-desktop-utils
   writets: (
     timeseriesId: string,
-    value: TimeseriesValue,
+    value: TimeseriesValue | TimeseriesValue[],
   ) => Promise<TimeseriesResponse[]>;
 
   addServlet(
