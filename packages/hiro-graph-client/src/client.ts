@@ -141,6 +141,7 @@ export class Client {
         (node) =>
           ({ id: node['ogit/_id'], body: node } as GraphSubscription<T>),
       ),
+      defaultIfEmpty(null),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
@@ -150,7 +151,7 @@ export class Client {
       pairwise(),
       map((res) => ({
         isLoaded: res[1] === 'loaded',
-        isEmpty: res[0] === 'empty',
+        isEmpty: res[0] === 'empty' || res[0] === null,
       })),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
