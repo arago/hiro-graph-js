@@ -147,6 +147,7 @@ export namespace OGIT {
   export interface DataScope extends SafeNode {
     'ogit/name': string;
     'ogit/description'?: string;
+    'ogit/licenseSubject'?: string;
   }
 }
 
@@ -370,6 +371,11 @@ export interface TimeseriesObject {
 export interface TimeseriesResponse {
   timestamp: number;
   value: string;
+}
+
+export interface TimeseriesValue {
+  timestamp: number;
+  value: PlainObject | number | string | Array<string | number | PlainObject>;
 }
 
 // Servlets
@@ -745,9 +751,10 @@ export default class Client {
     },
   ) => Promise<T[]>;
 
+  // timeseries value type is based on client.js implementation and usage in hiro-desktop-utils
   writets: (
     timeseriesId: string,
-    value: { timestamp: number; value: PlainObject | Array<PlainObject> },
+    value: TimeseriesValue | TimeseriesValue[],
   ) => Promise<TimeseriesResponse[]>;
 
   addServlet(
