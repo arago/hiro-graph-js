@@ -835,7 +835,7 @@ export class GremlinQueryBuilder {
   dedup(prop: string): GremlinQueryBuilder;
   limit(start: number, finish: number): GremlinQueryBuilder;
   order(): GremlinQueryBuilder;
-  by(field: string): GremlinQueryBuilder;
+  by(field: string, dir?: string): GremlinQueryBuilder;
   range(from: number, to: number): GremlinQueryBuilder;
   values(target: string): GremlinQueryBuilder;
   filter(condition: string): GremlinQueryBuilder;
