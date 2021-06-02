@@ -236,7 +236,11 @@ export class GremlinQueryBuilder {
      *  @param field
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
-    by(field) {
+    by(field, dir) {
+        if (dir) {
+            return this.raw(`by("${field}", ${dir})`);
+        }
+
         return this.raw(`by("${field}")`);
     }
 
