@@ -18,7 +18,7 @@
         "jest-junit": "^10.0.0",
         "lerna": "^4.0.0",
         "lint-staged": "^10.0.7",
-        "typescript": "^3.4.5"
+        "typescript": "^4.3.4"
     },
     "scripts": {
         "test": "yarn && yarn lint && lerna run build && lerna run test",
