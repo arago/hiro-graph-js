@@ -1,6 +1,6 @@
 const date = 14e11; // 14e11 is about 5pm on 13th may 2014. it just easy to remember its a valid date and short.
 
-export default (client) => [
+const clientTestHelper = (client) => [
     {
         name: 'me',
         fn: () => client.me(),
@@ -166,3 +166,5 @@ export default (client) => [
         fn: () => client.history('some-id', { limit: 500, version: 123 }),
     },
 ];
+
+export default clientTestHelper;
