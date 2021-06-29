@@ -556,18 +556,20 @@ const ensureTemporaryPropNameOK = (name) => {
 };
 
 //creates a branched structure with subQueries
-const createBrancher = (prefix) => (value, key = false) => {
-    const subQuery = new GremlinQueryBuilder(prefix);
+const createBrancher =
+    (prefix) =>
+    (value, key = false) => {
+        const subQuery = new GremlinQueryBuilder(prefix);
 
-    //if a string, assume a fixed query
-    if (typeof value === 'string') {
-        subQuery.raw(value);
-    } else {
-        value(subQuery);
-    }
+        //if a string, assume a fixed query
+        if (typeof value === 'string') {
+            subQuery.raw(value);
+        } else {
+            value(subQuery);
+        }
 
-    return (key ? key + ':' : '') + subQuery;
-};
+        return (key ? key + ':' : '') + subQuery;
+    };
 
 //quote a value for use in a gremlin function argument.
 const quote = (value) =>
