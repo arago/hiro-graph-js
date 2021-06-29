@@ -4,7 +4,7 @@
  */
 import queryBuilder, { GremlinQueryBuilder, T } from '../src/gremlin';
 
-describe('Gremlin Query Builder', function() {
+describe('Gremlin Query Builder', function () {
     const argFormatTests = [
         {
             name: 'obj capable method single prop, single value',
@@ -270,7 +270,7 @@ describe('Gremlin Query Builder', function() {
 
     //now run them
     tests.forEach(({ name, build, output, throws = false }) => {
-        it(name, function() {
+        it(name, function () {
             const gremlin = queryBuilder();
 
             if (throws) {

@@ -77,8 +77,10 @@ export default class Client {
 
         // Bind our fetch for extension servlets.
         this.fetch = (...args) => this.http.fetch(this.token, ...args);
-        this.proxyFetch = (proxy) => (url, ...args) =>
-            this.fetch(`${proxy}${url}`, ...args);
+        this.proxyFetch =
+            (proxy) =>
+            (url, ...args) =>
+                this.fetch(`${proxy}${url}`, ...args);
 
         this._dedup = Object.create(null);
 

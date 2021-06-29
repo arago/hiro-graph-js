@@ -4,7 +4,7 @@
  */
 import parse, { getPlaceholderKeyForIndex } from '../src/lucene';
 
-describe('Lucene Query Generator:', function() {
+describe('Lucene Query Generator:', function () {
     const tests = [
         {
             name: 'single field',
@@ -101,7 +101,7 @@ describe('Lucene Query Generator:', function() {
     ];
 
     tests.forEach(({ name, input, placeholders = [] }) => {
-        it(name, function() {
+        it(name, function () {
             if (input) {
                 const actual = parse(input);
 

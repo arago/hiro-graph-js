@@ -311,7 +311,7 @@ const mapOperator = (context, op, values) => {
 // help" -> "help\""
 // help \" -> "help \\\""
 // help \ -> "help \\"
-const quote = function(string) {
+const quote = function (string) {
     return `"${slashString(string)}"`;
 };
 
@@ -338,7 +338,7 @@ const slashString = (input) => input.replace(/[\\"]/g, (char) => SLASH + char);
     'something"with a quote' => ["something\"with", "a", "quote"]
     '"with \"embedded\" quotes"' => ["with \"embedded\" quotes"]
 */
-const findQuotedTerms = function(str) {
+const findQuotedTerms = function (str) {
     const input = str.trim(); //ensure no trailing space.
     const terms = [];
     const l = input.length;
