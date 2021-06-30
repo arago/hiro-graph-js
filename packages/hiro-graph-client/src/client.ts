@@ -397,7 +397,6 @@ export class Client {
       limit?: number;
       offset?: number;
       order?: string;
-      fields?: string;
       count?: string;
       [index: string]: string | number | undefined;
     } = {
@@ -441,16 +440,23 @@ export class Client {
   gremlin<T>(
     root: string,
     queryOrBuilder: GremlinQuery | GremlinQueryFunction,
+    fields: string | string[] = [],
   ) {
     const query =
       typeof queryOrBuilder === 'function'
         ? queryOrBuilder(CreateGremlin(''))
         : queryOrBuilder;
 
+    const body: Record<string, string> = { root, query: query.toString() };
+
+    if (fields && fields.length > 0) {
+      body.fields = Array.isArray(fields) ? fields.join(',') : String(fields);
+    }
+
     return this.request<T>({
       type: 'query',
       headers: { type: 'gremlin' },
-      body: { root, query: query.toString() },
+      body,
     });
   }
 
