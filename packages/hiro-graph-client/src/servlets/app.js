@@ -3,7 +3,7 @@ import { APP_API_BASE } from '../api-version';
 export default function appsServletFactory(fetch, options) {
     return {
         getAll() {
-            return fetch(`${APP_API_BASE}/desktop`, options);
+            return fetch(`${APP_API_BASE}/desktop?limit=50`, options);
         },
 
         getMy() {
