@@ -972,10 +972,10 @@
     eslint-plugin-react-hooks "4.2.0"
     find-root "1.1.0"
 
-"@hiro-ui/prettier-config@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@hiro-ui/prettier-config/-/prettier-config-1.1.2.tgz#bc41dbea26387858a0fb95fcf687c18d0d5c4660"
-  integrity sha512-VZXFfktJ3GOUvqnwi3IloB90vc0DiX+5OXokuYbSMEH2pAD9Q0NYeU04mmXYa6iOzLcI5tZIuHl/D1bK58+Mxw==
+"@hiro-ui/prettier-config@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@hiro-ui/prettier-config/-/prettier-config-2.0.0.tgz#bdf89a501418772c7e14a6e4544071f0c8cebc25"
+  integrity sha512-KMbbMel4ubViRu8jUMXmQG89GGvnxk/Pqtcvoq15KP8JoV13u01imE+a1DDYhgS2E72vHipj/IDOxkZSCoDhwA==
   dependencies:
     prettier "^2.0.1"
 
