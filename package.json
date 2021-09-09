@@ -12,9 +12,9 @@
         ]
     },
     "devDependencies": {
-        "@hiro-ui/eslint-config": "1.6.1",
+        "@hiro-ui/eslint-config": "2.0.0",
         "@hiro-ui/prettier-config": "2.0.0",
-        "husky": "^4.2.1",
+        "husky": "^4.3.8",
         "jest-junit": "^10.0.0",
         "lerna": "^4.0.0",
         "lint-staged": "^10.0.7",

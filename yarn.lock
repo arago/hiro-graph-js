@@ -952,10 +952,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@hiro-ui/eslint-config@1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@hiro-ui/eslint-config/-/eslint-config-1.6.1.tgz#f78dcb1c402a7e450efee74ff17b3d002e716e05"
-  integrity sha512-iAEScPvXo7LinNtJ1/yOOEXzDQLqW+27J0C4rp0lRw90smtifwECmw+i/0gUO6ojYLJ4aodGQcSCkDN5+r0idg==
+"@hiro-ui/eslint-config@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@hiro-ui/eslint-config/-/eslint-config-2.0.0.tgz#4f5eb474e49c9ab10a9795b3afb338ca33e7196c"
+  integrity sha512-EgM5d7jaLKKi/1PKf5X9Rqg1/YYONagLPbXJhAqn8DKlewy7wMJIQwYYjj743Dkusjss1ngFQlJ7tkNKZNrWOg==
   dependencies:
     "@typescript-eslint/eslint-plugin" "4.8.1"
     "@typescript-eslint/parser" "4.8.1"
@@ -4707,7 +4707,7 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-husky@^4.2.1:
+husky@^4.3.8:
   version "4.3.8"
   resolved "https://registry.yarnpkg.com/husky/-/husky-4.3.8.tgz#31144060be963fd6850e5cc8f019a1dfe194296d"
   integrity sha512-LCqqsB0PzJQ/AlCgfrfzRe3e3+NvmefAdKQhRYpxS4u6clblBoDdzzvHi8fmxKRzvMxPY/1WZWzomPZww0Anow==
