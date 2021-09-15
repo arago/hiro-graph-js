@@ -857,7 +857,7 @@ export class GremlinQueryBuilder {
   both(...args: Array<string>): GremlinQueryBuilder;
   count(...args: Array<string>): GremlinQueryBuilder;
   as(...args: Array<string>): GremlinQueryBuilder;
-  back(...args: Array<string>): GremlinQueryBuilder;
+  select(...args: Array<string>): GremlinQueryBuilder;
   shuffle(...args: Array<string>): GremlinQueryBuilder;
   has(...args: Array<string>): GremlinQueryBuilder;
   hasNot(...args: Array<string>): GremlinQueryBuilder;

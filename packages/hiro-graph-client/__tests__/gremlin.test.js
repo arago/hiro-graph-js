@@ -83,7 +83,7 @@ describe('Gremlin Query Builder', function () {
         'getProperty',
         'count',
         'as',
-        'back',
+        'select',
         'shuffle',
     ].map((method) => ({
         name: `should have simple method: ${method}`,

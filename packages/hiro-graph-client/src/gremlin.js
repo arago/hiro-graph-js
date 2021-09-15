@@ -464,13 +464,13 @@ export class GremlinQueryBuilder {
     }
 
     /**
-     *  Back-filter to a named step or by a number of steps.
+     *  Select-filter to a named step or by a number of steps.
      *
-     *  @see http://gremlindocs.spmallette.documentup.com/#back
+     *  @see http://gremlindocs.spmallette.documentup.com/#select
      *  @return {GremlinQueryBuilder} - the same object (chainable)
      */
-    back(...args) {
-        return this.raw(methodCall('back', args));
+    select(...args) {
+        return this.raw(methodCall('select', args));
     }
 
     /**
