@@ -71,7 +71,7 @@ export class JFilter {
       {
         ...event,
         element: {
-          ...(event.meta || {}),
+          ...(event.metadata || {}),
           ...(event.body || {}),
         },
         action: event.type,
