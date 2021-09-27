@@ -16,7 +16,7 @@ import {
   WebSocketTransport,
   ensureWebSocketsAvailable,
 } from './transport-websocket';
-import { JFilter, JFilterType } from './jfilter';
+import { Filter } from './filter';
 import {
   OFFSET_MSG,
   EventStreamRequest,
@@ -85,11 +85,11 @@ export class EventStream {
    * @param filter - String
    */
 
-  register<T extends object>(jfilter: JFilterType) {
+  register<T extends object>(ldapFilter: Filter) {
     const filterObj: EventStreamFilter = {
-      'filter-id': jfilter.toString(),
+      'filter-id': ldapFilter.toString(),
       'filter-type': 'jfilter',
-      'filter-content': jfilter.toString(),
+      'filter-content': ldapFilter.toString(),
     };
 
     return this.connect().pipe(
@@ -106,7 +106,8 @@ export class EventStream {
                 'filter-id': filterObj['filter-id'],
               },
             }),
-            (res: any) => res.body && jfilter.test(JFilter.transform(res)),
+            (res: any) =>
+              res.body && ldapFilter.match(Filter.transformEvent(res)),
           ) as any) as Observable<EventStreamResponse<T>>,
       ),
       filter(Boolean),

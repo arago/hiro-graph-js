@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LDAP Filter Parse Snapshot 1`] = `
+Object {
+  "comp": "&",
+  "filters": Array [
+    Object {
+      "comp": "|",
+      "filters": Array [
+        Object {
+          "attrib": "action",
+          "comp": "=",
+          "type": "filter",
+          "value": "GET",
+        },
+        Object {
+          "attrib": "action",
+          "comp": "=",
+          "type": "filter",
+          "value": "UPDATE",
+        },
+        Object {
+          "attrib": "action",
+          "comp": "=",
+          "type": "filter",
+          "value": "CREATE",
+        },
+        Object {
+          "attrib": "action",
+          "comp": "=",
+          "type": "filter",
+          "value": "DELETE",
+        },
+      ],
+      "type": "group",
+    },
+    Object {
+      "attrib": "vertex.ogit/_type",
+      "comp": "=",
+      "type": "filter",
+      "value": "ogit/CustomApplicationData",
+    },
+    Object {
+      "attrib": "vertex./type",
+      "comp": "=",
+      "type": "filter",
+      "value": "InstanceSettings",
+    },
+  ],
+  "type": "group",
+}
+`;
+
+exports[`LDAP Filter Parse Snapshot 2`] = `
+Object {
+  "attrib": "element.ogit/_type",
+  "comp": "=",
+  "type": "filter",
+  "value": "ogit/Automation/AutomationIssue",
+}
+`;
+
+exports[`LDAPFilter snapshots 1`] = `"(&(a=b)(d=e))"`;
+
+exports[`LDAPFilter snapshots 2`] = `"(|(a=b)(d=e))"`;
+
+exports[`LDAPFilter snapshots 3`] = `"(&(a=b)(d=e))"`;
+
+exports[`LDAPFilter snapshots 4`] = `"(&(a=b)(|(e=f))(&(d=c)(g=f)))"`;

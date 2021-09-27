@@ -1,6 +1,9 @@
 import memoize from 'lodash/memoize';
 import omit from 'lodash/omit';
 
+/**
+ * @deprecated See Filter
+ */
 export interface JFilterType {
   toString: () => string;
   test: (obj: any) => boolean;
@@ -53,6 +56,9 @@ class JFilterEQ extends BaseFilter implements JFilterType {
   }
 }
 
+/**
+ * @deprecated See Filter
+ */
 export class JFilter {
   static or(...filters: any): JFilterType {
     return new JFilterOR(filters);
