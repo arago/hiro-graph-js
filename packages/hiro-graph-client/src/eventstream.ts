@@ -24,7 +24,7 @@ import {
   EventStreamMessage,
 } from './types/index';
 
-import { Token } from '.';
+import { LDAPFilter, Token } from '.';
 
 const RECONNECT_TIMEOUT = 5e3;
 const EVENTS_PROTOCOL = 'events-1.0.0';
@@ -85,7 +85,7 @@ export class EventStream {
    * @param filter - String
    */
 
-  register<T extends object>(ldapFilter: Filter) {
+  register<T extends object>(ldapFilter: LDAPFilter) {
     const filterObj: EventStreamFilter = {
       'filter-id': ldapFilter.toString(),
       'filter-type': 'jfilter',

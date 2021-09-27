@@ -48,9 +48,8 @@ import {
   gremlin as CreateGremlin,
 } from './gremlin';
 import { Lucene, LuceneQueryOptions, lucene as CreateLucene } from './lucene';
-import { JFilter } from './jfilter';
 
-import { Token } from '.';
+import { Filter, Token } from '.';
 
 export interface ClientOptions {
   endpoint: string;
@@ -156,12 +155,14 @@ export class Client {
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
-    const filter = JFilter.and(
-      JFilter.equals('action', '*'),
-      ...Object.entries(_query).map(([key, value]) =>
-        JFilter.equals(`element.${key}`, value),
-      ),
-    );
+    const filter = Filter.AND([
+      Filter.attribute('action').any(),
+      ...Object.entries(_query)
+        .filter(([_, value]) => typeof value !== 'undefined')
+        .map(([key, value]) =>
+          Filter.attribute(`element.${key}`).equalTo(value as string),
+        ),
+    ]);
 
     const stream$ = this.eventStream.register<T>(filter).pipe(
       map((event) => {

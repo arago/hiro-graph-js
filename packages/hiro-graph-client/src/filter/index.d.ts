@@ -42,4 +42,5 @@ export class Filter {
   toString: () => string;
 }
 
+export type LDAPFilter = Filter | Group;
 export function parseFilter(input: string): Filter;

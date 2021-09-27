@@ -63,21 +63,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   client.lucene({ '/hello': 'world' });
   ```
 
-- Added `JFilter` helpers for working with Eventstreams
+- Added `Filter` helpers for working with Eventstreams (Based on https://github.com/tapmodo/node-ldap-filters)
   
   ```ts
-  const filter = JFilter.and(
-    JFilter.equals('element.ogit/_type', 'ogit/Mobile/HealthInfo'),
-    JFilter.equals('action', '*'),
-  );
+  const filter = Filter.AND([
+    Filter.attribute('action').any(),
+    Filter.attribute('element.ogit/_type').equalTo('ogit/Mobile/HealthInfo')
+  ]);
   ```
 
   Response bodies can be transformed to filter format, and tested:
 
   ```ts
-  filter.test(JFilter.transform(res))
+  filter.match(Filter.transformEvent(res))
   ```
 
+  String filters can be parsed for use in matching or by Eventstream:
+  ```ts
+  const filter = parseFilter('(element.ogit/_type=ogit/Automation/AutomationIssue)')
+
+  filter.match(obj)
+  ```
 ### Changed
 
 - Convert to Typescript
