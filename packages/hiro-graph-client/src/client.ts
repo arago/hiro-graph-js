@@ -48,8 +48,8 @@ import {
   gremlin as CreateGremlin,
 } from './gremlin';
 import { Lucene, LuceneQueryOptions, lucene as CreateLucene } from './lucene';
-
-import { Filter, Token } from '.';
+import { Token } from './token';
+import { Filter } from './filter';
 
 export interface ClientOptions {
   endpoint: string;
