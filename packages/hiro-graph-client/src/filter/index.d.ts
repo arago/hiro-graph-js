@@ -1,4 +1,4 @@
-import { EventStreamResponse } from '..';
+import { EventStreamResponse } from '../types/events';
 
 export class Attribute {
   present(): Filter;

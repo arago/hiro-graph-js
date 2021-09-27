@@ -2,6 +2,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import del from 'rollup-plugin-delete';
+import copy from 'rollup-plugin-copy';
 
 import pkg from './package.json';
 
@@ -34,6 +35,21 @@ export default [
             },
             { file: pkg.module, format: 'es', sourcemap: true },
         ],
-        plugins: [del({ targets: 'lib/*' }), typescript(), commonjs()],
+        plugins: [
+            del({ targets: 'lib/*' }),
+            typescript(),
+            commonjs(),
+
+            // Copy types from JS code
+            copy({
+                targets: [
+                    {
+                        src: 'src/filter/index.d.ts',
+                        dest: 'lib/',
+                        rename: 'filter.d.ts',
+                    },
+                ],
+            }),
+        ],
     },
 ];
