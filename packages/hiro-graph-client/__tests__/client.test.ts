@@ -112,7 +112,6 @@ describe('Client Response handling', () => {
   it('should unconditionally retry for `connection closed before send`', async () => {
     const err = errors.connectionClosedBeforeSend;
 
-    jest.setTimeout(10000);
     // many connection closed, one other error in the middle, should still resolve "ok"
 
     enqueueMockResponse(mockRequest, [
@@ -131,7 +130,7 @@ describe('Client Response handling', () => {
     // @todo How should this be triggered in RxJS?
 
     await expect(toPromise(client.me())).resolves.toBe('ok');
-  });
+  }, 10000);
 
   it('should handle `conflict` as OK for connect', async () => {
     const conflict = errors.conflict();

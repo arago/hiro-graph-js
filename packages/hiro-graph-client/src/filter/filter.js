@@ -1,7 +1,8 @@
-const { get, omit } = require('lodash');
+// @ts-nocheck
+import { get, omit } from 'lodash';
 
 /** Base Filter Constructor **/
-const Filter = function (attrib, comp, value) {
+export const Filter = function (attrib, comp, value) {
     this.type = 'filter';
     this.attrib = attrib;
     this.comp = comp;
@@ -195,7 +196,7 @@ Filter.NOT = function (filter) {
 };
 
 /** Grouping Constructor **/
-var Group = function (comp, filters) {
+export const Group = function (comp, filters) {
     this.type = 'group';
     this.comp = comp;
     this.filters = filters;
@@ -277,7 +278,7 @@ GroupNot.prototype._match = function (data) {
 };
 
 /** Attribute Constructor **/
-var Attribute = function (name) {
+export const Attribute = function (name) {
     this.name = name;
 };
 
@@ -332,8 +333,4 @@ Attribute.prototype = {
 
 Filter.attribute = function (name) {
     return new Attribute(name);
-};
-
-module.exports = {
-    Filter,
 };

@@ -16,7 +16,7 @@ import {
   WebSocketTransport,
   ensureWebSocketsAvailable,
 } from './transport-websocket';
-import { Filter } from './filter';
+import { Filter, Group } from './filter';
 import {
   OFFSET_MSG,
   EventStreamRequest,
@@ -24,7 +24,7 @@ import {
   EventStreamMessage,
 } from './types/index';
 
-import { LDAPFilter, Token } from '.';
+import { Token } from './';
 
 const RECONNECT_TIMEOUT = 5e3;
 const EVENTS_PROTOCOL = 'events-1.0.0';
@@ -85,7 +85,7 @@ export class EventStream {
    * @param filter - String
    */
 
-  register<T extends object>(ldapFilter: LDAPFilter) {
+  register<T extends object>(ldapFilter: Filter | Group) {
     const filterObj: EventStreamFilter = {
       'filter-id': ldapFilter.toString(),
       'filter-type': 'jfilter',

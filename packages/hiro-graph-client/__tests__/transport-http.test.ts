@@ -1,13 +1,14 @@
 // @ts-ignore
 import { mockFn } from 'isomorphic-fetch';
 
+import { toPromise } from '../src';
 import { Client } from '../src/client';
 import { Token } from '../src/token';
 import clientTestHelper from '../__mocks__/client-test-helper';
 
 const onInvalidate = jest.fn();
 const fakeToken = new Token({
-  getToken: () => Promise.resolve('<token>'),
+  getToken: () => Promise.resolve('token'),
   onInvalidate,
 });
 
@@ -28,7 +29,7 @@ describe('transport-http', () => {
     it(`should create the right options for: ${name}`, async () => {
       // for now every request should recieve the same mock response.
       mockFn.mockReturnValueOnce([200, {}]);
-      await fn().toPromise();
+      await toPromise(fn());
       expect(mockFn).toHaveBeenCalledTimes(1);
       expect(mockFn.mock.calls[0]).toMatchSnapshot(); //i.e. correct options created
     });
@@ -47,9 +48,9 @@ describe('transport-http', () => {
       let error;
 
       try {
-        await client.me().toPromise();
+        await toPromise(client.me());
       } catch (e) {
-        error = { code: e.code, message: e.message };
+        error = { code: (e as any).code, message: (e as any).message };
       }
 
       expect(error).toBeDefined();

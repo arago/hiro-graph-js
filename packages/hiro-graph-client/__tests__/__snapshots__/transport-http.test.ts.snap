@@ -7,7 +7,7 @@ Array [
     "body": "{\\"in\\":\\"the-in-id\\",\\"out\\":\\"the-out-id\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -24,7 +24,7 @@ Array [
     "body": "{\\"some\\":\\"prop\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -41,7 +41,7 @@ Array [
     "body": "{\\"some\\":\\"prop\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -57,7 +57,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "DELETE",
@@ -72,7 +72,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "DELETE",
@@ -87,7 +87,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "DELETE",
@@ -102,7 +102,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -118,7 +118,7 @@ Array [
     "body": "{\\"root\\":\\"root-id\\",\\"query\\":\\"pow()\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -134,7 +134,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -149,7 +149,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -164,7 +164,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -179,7 +179,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -194,7 +194,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -209,7 +209,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -224,7 +224,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -239,7 +239,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -254,7 +254,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -270,7 +270,7 @@ Array [
     "body": "{\\"query\\":\\"a,b,c\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -287,7 +287,7 @@ Array [
     "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -304,7 +304,7 @@ Array [
     "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0,\\"count\\":\\"true\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -321,7 +321,7 @@ Array [
     "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0,\\"fields\\":\\"/field1,/field2\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -338,7 +338,7 @@ Array [
     "body": "{\\"query\\":\\"*:*\\",\\"limit\\":-1,\\"offset\\":1000}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -355,7 +355,7 @@ Array [
     "body": "{\\"query\\":\\"*:*\\",\\"limit\\":50,\\"offset\\":0,\\"order\\":\\"/field1 asc,/field2 desc\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -372,7 +372,7 @@ Array [
     "body": "{\\"query\\":\\"/foo:$bar\\",\\"limit\\":50,\\"offset\\":0,\\"bar\\":\\"123\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -388,7 +388,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -404,7 +404,7 @@ Array [
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -421,7 +421,7 @@ Array [
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -438,7 +438,7 @@ Array [
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -454,7 +454,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -469,7 +469,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -484,7 +484,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -499,7 +499,7 @@ Array [
   Object {
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
     },
     "method": "GET",
@@ -515,7 +515,7 @@ Array [
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -532,7 +532,7 @@ Array [
     "body": "{\\"/foo\\":\\"bar\\"}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },
@@ -549,7 +549,7 @@ Array [
     "body": "{\\"items\\":[{\\"timestamp\\":1400000000000,\\"value\\":\\"value1\\"}]}",
     "headers": Object {
       "Accept": "application/json",
-      "Authorization": "Bearer <token>",
+      "Authorization": "Bearer token",
       "Content-Type": "application/json",
       "content-type": "application/json",
     },

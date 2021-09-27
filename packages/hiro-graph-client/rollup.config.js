@@ -37,7 +37,11 @@ export default [
         ],
         plugins: [
             del({ targets: 'lib/*' }),
-            typescript(),
+            typescript({
+                tsconfigOverride: {
+                    compilerOptions: { allowJs: false },
+                },
+            }),
             commonjs(),
 
             // Copy types from JS code

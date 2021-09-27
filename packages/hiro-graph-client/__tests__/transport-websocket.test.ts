@@ -10,7 +10,7 @@ import { toPromise } from '../src/utils';
 
 const onInvalidate = jest.fn();
 const fakeToken = new Token({
-  getToken: () => Promise.resolve('<token>'),
+  getToken: () => Promise.resolve('token'),
   onInvalidate,
 });
 
@@ -175,7 +175,7 @@ describe('transport-websocket', () => {
 
     // now fail.
     sock.emit('error', { code: 500, reason: 'Mock Closed Connection' });
-    sock.emit('close', {});
+    sock.emit('close', 500, 'Mock Closed Connection');
     await expect(res).rejects.toBeDefined();
 
     // the key is also being able to reconnect.
