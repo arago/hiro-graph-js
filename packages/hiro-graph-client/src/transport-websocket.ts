@@ -43,7 +43,7 @@ export interface WebSocketRequestOptions {
 export class WebSocketTransport implements GraphTransport {
   private endpoint: Endpoint<true>;
   private url: string;
-  private connection: WebSocketSubject<any> | undefined;
+  public connection: WebSocketSubject<any> | undefined;
 
   constructor(
     endpoint: string,

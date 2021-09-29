@@ -121,6 +121,15 @@ export class EventStream {
     );
   }
 
+  token(newToken: string) {
+    this._transport.connection?.next({
+      type: 'token',
+      args: {
+        _TOKEN: newToken,
+      },
+    });
+  }
+
   connect() {
     return of(this._token).pipe(
       mergeMap((t) => t.get()),

@@ -1,6 +1,6 @@
 export enum OFFSET_MSG {
   NEWEST = 'largest',
-  oldest = 'smallest',
+  OLDEST = 'smallest',
 }
 
 export type GraphEventType =
