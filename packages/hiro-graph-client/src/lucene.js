@@ -108,10 +108,7 @@ const noRecurseKeys = ['$search', '$range', '$missing'];
 // split value into ngrams min length 2, max length 10
 const ngramChunker = (value) => value.match(/.{2,10}/g) || [];
 
-const ngramArray = (values) =>
-    values
-        .reduce((acc, val) => [...acc, ...val.split(/[^a-zA-Z0-9]/)], [])
-        .filter(Boolean);
+const ngramArray = (value) => value.split(/[^a-zA-Z0-9]/).filter(Boolean);
 
 //forces all properties to be arrays.
 //knows how to recurse and when not to.
@@ -126,37 +123,41 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
 
         let values = ensureArray(value);
 
-        if (key.match(/\.ngram$/)) {
-            // ngram search doesn't work with quoted phrases, like a "Single value", "Run machine".
-            // Because of that we need to split our value by non-alphanumeric characters
-            values = ngramArray(values);
+        if (key.match(/\.ngram$/) && isAnyOperator === false) {
+            const subQuery = values.reduce((acc, val) => {
+                const subValues = ngramArray(val);
 
-            let isMultiDebth = values.reduce(
-                (acc, val) => acc || val.length > 10,
-                false,
-            );
+                if (subValues.length > 1) {
+                    return {
+                        $or: {
+                            ...acc,
+                            $and: {
+                                [key]: subValues.reduce((a, v) => {
+                                    return [...a, ...ngramChunker(v)];
+                                }, []),
+                            },
+                        },
+                    };
+                }
 
-            if (isMultiDebth) {
-                const subQuery = values.reduce((acc, val) => {
-                    const newValues = ngramChunker(val);
+                const newValues = ngramChunker(subValues[0]);
 
-                    if (newValues.length > 1) {
-                        acc.$and = { [key]: newValues };
+                if (newValues.length > 1) {
+                    acc.$and = { [key]: newValues };
 
-                        return { $or: acc };
-                    }
+                    return { $or: acc };
+                }
 
-                    if (newValues.length === 1) {
-                        acc.$or = acc.$or || {};
-                        acc.$or[key] = acc.$or[key] || [];
-                        acc.$or[key].push(newValues[0]);
-                    }
+                if (newValues.length === 1) {
+                    acc.$or = acc.$or || {};
+                    acc.$or[key] = acc.$or[key] || [];
+                    acc.$or[key].push(newValues[0]);
+                }
 
-                    return acc;
-                }, {});
+                return acc;
+            }, {});
 
-                return { key: '$or', values: normaliseQuery(subQuery, true) };
-            }
+            return { key: '$or', values: normaliseQuery(subQuery, true) };
         }
 
         return { key, values, isAnyOperator };
