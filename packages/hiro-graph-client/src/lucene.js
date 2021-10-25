@@ -143,7 +143,7 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
                     if (newValues.length > 1) {
                         acc.$and = { [key]: newValues };
 
-                        return { $or: acc };
+                        return { $and: acc };
                     }
 
                     if (newValues.length === 1) {
