@@ -143,28 +143,11 @@ export class GremlinQueryBuilder {
         return this.raw(`transform{[${branches.join(',')}]}`);
     }
 
-    /**
-     *  Split the pipeline into multiple (and merge back)
-     *
-     *  @see http://gremlindocs.spmallette.documentup.com/#copysplit
-     *
-     *  @param {Array<GremlinBranch>} paths - the transformations to make
-     *  @param {string} [mergeType=fairMerge] - the method of merging the results.
-                            either `fairMerge` which is one of each branch in turn
-                            or `exhaustMerge` which exhausts each branch in turn
-     *  @return {GremlinQueryBuilder} - the same object (chainable)
-     */
-    copySplit(paths, mergeType = 'fairMerge') {
-        if (mergeType !== 'fairMerge' && mergeType !== 'exhaustMerge') {
-            throw new Error(
-                'invalid copySplit merge. should be `fairMerge` or `exhaustMerge`',
-            );
-        }
-
+    union(paths) {
         const brancher = createBrancher('_()');
         const branches = paths.map((value) => brancher(value));
 
-        return this.raw(`copySplit(${branches.join(',')}).${mergeType}`);
+        return this.raw(`union(${branches.join(',')})`);
     }
 
     /**
