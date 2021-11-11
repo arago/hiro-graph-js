@@ -117,27 +117,10 @@ describe('Gremlin Query Builder', function () {
             method: 'transform',
         },
         {
-            name: 'copySplit (default merge)',
-            build: (g) => g.copySplit([(_) => _, (_) => _.has('foo', 'bar')]),
-            output: `copySplit(_(),_().has("foo","bar")).fairMerge`,
-            method: 'copySplit',
-        },
-        {
-            name: 'copySplit (explicit merge)',
-            build: (g) =>
-                g.copySplit(
-                    [(_) => _, (_) => _.has('foo', 'bar')],
-                    'exhaustMerge',
-                ),
-            output: `copySplit(_(),_().has("foo","bar")).exhaustMerge`,
-            method: 'copySplit',
-        },
-        {
-            name: 'copySplit (invalid merge)',
-            build: (g) =>
-                g.copySplit([(_) => _, (_) => _.has('foo', 'bar')], 'fooMerge'),
-            throws: true,
-            method: 'copySplit',
+            name: 'union',
+            build: (g) => g.union([(_) => _, (_) => _.has('foo', 'bar')]),
+            output: `union(_(),_().has("foo","bar"))`,
+            method: 'union',
         },
         {
             name: 'or',

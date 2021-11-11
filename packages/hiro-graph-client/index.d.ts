@@ -816,7 +816,7 @@ export const lucene: <T extends string = string>(
 
 /** Gremlin */
 export class GremlinQueryBuilder {
-  constructor(initialQuery: string);
+  constructor(initialQuery?: string);
 
   toString(): string;
 
@@ -827,10 +827,7 @@ export class GremlinQueryBuilder {
       | Array<string | GremlinQueryBuilder>
       | { [key: string]: string | GremlinQueryBuilder },
   ): GremlinQueryBuilder;
-  copySplit(
-    paths: Array<GremlinQueryBuilder | string>,
-    mergeType: 'fairMerge' | 'exhaustMerge',
-  ): GremlinQueryBuilder;
+  union(paths: Array<GremlinQueryBuilder | string>): GremlinQueryBuilder;
   or(conditions: Array<GremlinQueryBuilder | string>): GremlinQueryBuilder;
   dedup(prop: string): GremlinQueryBuilder;
   limit(start: number, finish: number): GremlinQueryBuilder;
@@ -867,5 +864,5 @@ export class GremlinQueryBuilder {
 }
 
 export function gremlin(
-  initialQuery: string | GremlinQueryBuilder,
+  initialQuery?: string | GremlinQueryBuilder,
 ): GremlinQueryBuilder;
