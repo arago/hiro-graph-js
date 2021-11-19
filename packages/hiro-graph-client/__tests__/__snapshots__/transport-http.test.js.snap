@@ -544,8 +544,8 @@ Array [
 
 exports[`transport-http should handle bad http responses appropriately 1`] = `
 Object {
-  "code": 502,
-  "message": "[HTTP] Error: Invalid JSON in response from GraphIT",
+  "code": undefined,
+  "message": "Cannot set property status of #<Response> which has only a getter",
 }
 `;
 
