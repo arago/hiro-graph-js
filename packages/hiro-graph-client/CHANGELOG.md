@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   const client = new Client(...);
 
-  client.gremlin('12345', g => g.inE(12345).outV())
+  client.gremlin('12345', g => g.inE("ogit/contains").outV().has("/name","hello world"))
 
 
 
@@ -94,15 +94,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Eventstream uses JFilter to filter out results. This means multiple filters can be used, without results being mixed together.
   
   ```ts
-  const issueFilter = JFilter.and(
+  const issueFilter = JFilter.and([
     JFilter.equals('element.ogit/_type', 'ogit/Automation/AutomationIssue'),
     JFilter.equals('action', '*'),
-  );
+  ]);
 
-  const accountFilter = JFilter.and(
+  const accountFilter = JFilter.and([
     JFilter.equals('element.ogit/_type', 'ogit/Auth/Account'),
     JFilter.equals('action', '*'),
-  );
+  ]);
 
   const es = client.eventStream();
 
