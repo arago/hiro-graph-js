@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="@hiro-graph/client" tests="158" failures="0" errors="0" time="2.224">
+  <testsuite name="Gremlin Query Builder" errors="0" failures="0" skipped="0" timestamp="2021-10-13T11:35:55" time="0.874" tests="54">
+    <testcase classname="Gremlin Query Builder obj capable method single prop, single value" name="Gremlin Query Builder obj capable method single prop, single value" time="0.007">
+    </testcase>
+    <testcase classname="Gremlin Query Builder obj capable method, obj arg" name="Gremlin Query Builder obj capable method, obj arg" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method, simple value" name="Gremlin Query Builder regular method, simple value" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method `T.&lt;comparator&gt;` via export" name="Gremlin Query Builder regular method `T.&lt;comparator&gt;` via export" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method `T.&lt;comparator&gt;` arg" name="Gremlin Query Builder regular method `T.&lt;comparator&gt;` arg" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method number value" name="Gremlin Query Builder regular method number value" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method java long arg" name="Gremlin Query Builder regular method java long arg" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method java float arg" name="Gremlin Query Builder regular method java float arg" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method boolean arg" name="Gremlin Query Builder regular method boolean arg" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method, array value" name="Gremlin Query Builder regular method, array value" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder regular method quotes needed" name="Gremlin Query Builder regular method quotes needed" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: inE" name="Gremlin Query Builder should have simple method: inE" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: outE" name="Gremlin Query Builder should have simple method: outE" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: bothE" name="Gremlin Query Builder should have simple method: bothE" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: inV" name="Gremlin Query Builder should have simple method: inV" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: outV" name="Gremlin Query Builder should have simple method: outV" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: bothV" name="Gremlin Query Builder should have simple method: bothV" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: in" name="Gremlin Query Builder should have simple method: in" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: out" name="Gremlin Query Builder should have simple method: out" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: both" name="Gremlin Query Builder should have simple method: both" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: values" name="Gremlin Query Builder should have simple method: values" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: property" name="Gremlin Query Builder should have simple method: property" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: getProperty" name="Gremlin Query Builder should have simple method: getProperty" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: count" name="Gremlin Query Builder should have simple method: count" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: as" name="Gremlin Query Builder should have simple method: as" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: select" name="Gremlin Query Builder should have simple method: select" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have simple method: shuffle" name="Gremlin Query Builder should have simple method: shuffle" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have object capable method: has" name="Gremlin Query Builder should have object capable method: has" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should have object capable method: hasNot" name="Gremlin Query Builder should have object capable method: hasNot" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder transform (object)" name="Gremlin Query Builder transform (object)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder transform (array)" name="Gremlin Query Builder transform (array)" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder copySplit (default merge)" name="Gremlin Query Builder copySplit (default merge)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder copySplit (explicit merge)" name="Gremlin Query Builder copySplit (explicit merge)" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder copySplit (invalid merge)" name="Gremlin Query Builder copySplit (invalid merge)" time="0.035">
+    </testcase>
+    <testcase classname="Gremlin Query Builder or" name="Gremlin Query Builder or" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder by" name="Gremlin Query Builder by" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder range" name="Gremlin Query Builder range" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder dedup (default)" name="Gremlin Query Builder dedup (default)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder dedup (explicit prop)" name="Gremlin Query Builder dedup (explicit prop)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder limit" name="Gremlin Query Builder limit" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder order" name="Gremlin Query Builder order" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder filter" name="Gremlin Query Builder filter" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder addTempProp (invalid temp prop)" name="Gremlin Query Builder addTempProp (invalid temp prop)" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder addTempProp (valid temp prop)" name="Gremlin Query Builder addTempProp (valid temp prop)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder addComputedProp (invalid temp prop)" name="Gremlin Query Builder addComputedProp (invalid temp prop)" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder addComputedProp (valid temp prop, querybuilder)" name="Gremlin Query Builder addComputedProp (valid temp prop, querybuilder)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder addComputedProp (valid temp prop, query string)" name="Gremlin Query Builder addComputedProp (valid temp prop, query string)" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder groupBy (no result prop, group prop is `label` for edges)" name="Gremlin Query Builder groupBy (no result prop, group prop is `label` for edges)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder groupBy (no result prop)" name="Gremlin Query Builder groupBy (no result prop)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder groupBy (with result prop)" name="Gremlin Query Builder groupBy (with result prop)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder groupCount (label - for edges)" name="Gremlin Query Builder groupCount (label - for edges)" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder groupCount (regular prop)" name="Gremlin Query Builder groupCount (regular prop)" time="0">
+    </testcase>
+    <testcase classname="Gremlin Query Builder tree" name="Gremlin Query Builder tree" time="0.001">
+    </testcase>
+    <testcase classname="Gremlin Query Builder should test all queryBuilder() methods" name="Gremlin Query Builder should test all queryBuilder() methods" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Client Requests" errors="0" failures="0" skipped="0" timestamp="2021-10-13T11:35:55" time="1.036" tests="47">
+    <testcase classname="Client Requests should call me correctly" name="Client Requests should call me correctly" time="0.009">
+    </testcase>
+    <testcase classname="Client Requests should call get correctly" name="Client Requests should call get correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call create correctly" name="Client Requests should call create correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call create (waitForIndex) correctly" name="Client Requests should call create (waitForIndex) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call update correctly" name="Client Requests should call update correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call update (waitForIndex) correctly" name="Client Requests should call update (waitForIndex) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call replace correctly" name="Client Requests should call replace correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call replace (createIfNotExists) correctly" name="Client Requests should call replace (createIfNotExists) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call replace (waitForIndex) correctly" name="Client Requests should call replace (waitForIndex) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call delete correctly" name="Client Requests should call delete correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call delete (waitForIndex) correctly" name="Client Requests should call delete (waitForIndex) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call ids correctly" name="Client Requests should call ids correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call connect correctly" name="Client Requests should call connect correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call disconnect correctly" name="Client Requests should call disconnect correctly" time="0.021">
+    </testcase>
+    <testcase classname="Client Requests should call lucene (basic) correctly" name="Client Requests should call lucene (basic) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call lucene (limits) correctly" name="Client Requests should call lucene (limits) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call lucene (placeholders) correctly" name="Client Requests should call lucene (placeholders) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call lucene (count) correctly" name="Client Requests should call lucene (count) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call lucene (order) correctly" name="Client Requests should call lucene (order) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call lucene (fields) correctly" name="Client Requests should call lucene (fields) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call gremlin correctly" name="Client Requests should call gremlin correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call writets correctly" name="Client Requests should call writets correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call streamts correctly" name="Client Requests should call streamts correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call streamts (from only) correctly" name="Client Requests should call streamts (from only) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call streamts (to only) correctly" name="Client Requests should call streamts (to only) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call streamts (to + from) correctly" name="Client Requests should call streamts (to + from) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call history correctly" name="Client Requests should call history correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call history (with offset) correctly" name="Client Requests should call history (with offset) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call history (with limit) correctly" name="Client Requests should call history (with limit) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call history (with offset + limit) correctly" name="Client Requests should call history (with offset + limit) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call history (with from) correctly" name="Client Requests should call history (with from) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call history (with to) correctly" name="Client Requests should call history (with to) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call history (with from + to) correctly" name="Client Requests should call history (with from + to) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Requests should call history (with from + to + offset + limit) correctly" name="Client Requests should call history (with from + to + offset + limit) correctly" time="0">
+    </testcase>
+    <testcase classname="Client Requests should call history (with version) correctly" name="Client Requests should call history (with version) correctly" time="0.001">
+    </testcase>
+    <testcase classname="Client Response handling should retry once on &apos;transaction fail (888)&apos;" name="Client Response handling should retry once on &apos;transaction fail (888)&apos;" time="0.001">
+    </testcase>
+    <testcase classname="Client Response handling should retry once on &apos;unauthorized (401)&apos;" name="Client Response handling should retry once on &apos;unauthorized (401)&apos;" time="0.001">
+    </testcase>
+    <testcase classname="Client Response handling should retry once on &apos;generic retryable error&apos;" name="Client Response handling should retry once on &apos;generic retryable error&apos;" time="0">
+    </testcase>
+    <testcase classname="Client Response handling should unconditionally retry for `connection closed before send`" name="Client Response handling should unconditionally retry for `connection closed before send`" time="0.001">
+    </testcase>
+    <testcase classname="Client Response handling should handle `conflict` as OK for connect" name="Client Response handling should handle `conflict` as OK for connect" time="0">
+    </testcase>
+    <testcase classname="Client Response handling should handle `conflict` and `not found` as OK for disconnect" name="Client Response handling should handle `conflict` and `not found` as OK for disconnect" time="0.001">
+    </testcase>
+    <testcase classname="Client Response handling should correctly dedup the requests for method: me" name="Client Response handling should correctly dedup the requests for method: me" time="0.001">
+    </testcase>
+    <testcase classname="Client Response handling should correctly dedup the requests for method: get" name="Client Response handling should correctly dedup the requests for method: get" time="0">
+    </testcase>
+    <testcase classname="Client Response handling should correctly dedup the requests for method: lucene" name="Client Response handling should correctly dedup the requests for method: lucene" time="0">
+    </testcase>
+    <testcase classname="Client Response handling should correctly dedup the requests for method: ids" name="Client Response handling should correctly dedup the requests for method: ids" time="0.001">
+    </testcase>
+    <testcase classname="Client Response handling should correctly dedup the requests for method: gremlin" name="Client Response handling should correctly dedup the requests for method: gremlin" time="0">
+    </testcase>
+    <testcase classname="Client Response handling should invalidate the token on `unauthorized`" name="Client Response handling should invalidate the token on `unauthorized`" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="transport-websocket" errors="0" failures="0" skipped="0" timestamp="2021-10-13T11:35:55" time="1.127" tests="5">
+    <testcase classname="transport-websocket should connect on demand" name="transport-websocket should connect on demand" time="0.002">
+    </testcase>
+    <testcase classname="transport-websocket should handle inbound messages, even if there have been no outbound" name="transport-websocket should handle inbound messages, even if there have been no outbound" time="0.001">
+    </testcase>
+    <testcase classname="transport-websocket should handle inbound messages bound for a given request" name="transport-websocket should handle inbound messages bound for a given request" time="0.002">
+    </testcase>
+    <testcase classname="transport-websocket should handle intermingled results" name="transport-websocket should handle intermingled results" time="0.001">
+    </testcase>
+    <testcase classname="transport-websocket should handle connection failure" name="transport-websocket should handle connection failure" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="Lucene Query Generator:" errors="0" failures="0" skipped="0" timestamp="2021-10-13T11:35:55" time="1.201" tests="16">
+    <testcase classname="Lucene Query Generator: single field" name="Lucene Query Generator: single field" time="0.004">
+    </testcase>
+    <testcase classname="Lucene Query Generator: multiple field" name="Lucene Query Generator: multiple field" time="0.001">
+    </testcase>
+    <testcase classname="Lucene Query Generator: multiple values (as and)" name="Lucene Query Generator: multiple values (as and)" time="0">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $not" name="Lucene Query Generator: $not" time="0.001">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $not (multi value)" name="Lucene Query Generator: $not (multi value)" time="0">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $or (single value, trick question!)" name="Lucene Query Generator: $or (single value, trick question!)" time="0.001">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $or (multiple. same key)" name="Lucene Query Generator: $or (multiple. same key)" time="0">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $or (multiple. diff key)" name="Lucene Query Generator: $or (multiple. diff key)" time="0.001">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $missing (single)" name="Lucene Query Generator: $missing (single)" time="0">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $missing (multiple)" name="Lucene Query Generator: $missing (multiple)" time="0">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $range" name="Lucene Query Generator: $range" time="0.001">
+    </testcase>
+    <testcase classname="Lucene Query Generator: $search" name="Lucene Query Generator: $search" time="0.001">
+    </testcase>
+    <testcase classname="Lucene Query Generator: extreme example" name="Lucene Query Generator: extreme example" time="0">
+    </testcase>
+    <testcase classname="Lucene Query Generator: strings with quotes" name="Lucene Query Generator: strings with quotes" time="0.001">
+    </testcase>
+    <testcase classname="Lucene Query Generator: strings with existing slashes" name="Lucene Query Generator: strings with existing slashes" time="0">
+    </testcase>
+    <testcase classname="Lucene Query Generator: strings with exsiting slashed quotes" name="Lucene Query Generator: strings with exsiting slashed quotes" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="transport-http" errors="0" failures="0" skipped="0" timestamp="2021-10-13T11:35:56" time="0.75" tests="36">
+    <testcase classname="transport-http should create the right options for: me" name="transport-http should create the right options for: me" time="0.009">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: get" name="transport-http should create the right options for: get" time="0.002">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: create" name="transport-http should create the right options for: create" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: create (waitForIndex)" name="transport-http should create the right options for: create (waitForIndex)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: update" name="transport-http should create the right options for: update" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: update (waitForIndex)" name="transport-http should create the right options for: update (waitForIndex)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: replace" name="transport-http should create the right options for: replace" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: replace (createIfNotExists)" name="transport-http should create the right options for: replace (createIfNotExists)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: replace (waitForIndex)" name="transport-http should create the right options for: replace (waitForIndex)" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: delete" name="transport-http should create the right options for: delete" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: delete (waitForIndex)" name="transport-http should create the right options for: delete (waitForIndex)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: ids" name="transport-http should create the right options for: ids" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: connect" name="transport-http should create the right options for: connect" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: disconnect" name="transport-http should create the right options for: disconnect" time="0.005">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: lucene (basic)" name="transport-http should create the right options for: lucene (basic)" time="0.002">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: lucene (limits)" name="transport-http should create the right options for: lucene (limits)" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: lucene (placeholders)" name="transport-http should create the right options for: lucene (placeholders)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: lucene (count)" name="transport-http should create the right options for: lucene (count)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: lucene (order)" name="transport-http should create the right options for: lucene (order)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: lucene (fields)" name="transport-http should create the right options for: lucene (fields)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: gremlin" name="transport-http should create the right options for: gremlin" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: writets" name="transport-http should create the right options for: writets" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: streamts" name="transport-http should create the right options for: streamts" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: streamts (from only)" name="transport-http should create the right options for: streamts (from only)" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: streamts (to only)" name="transport-http should create the right options for: streamts (to only)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: streamts (to + from)" name="transport-http should create the right options for: streamts (to + from)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history" name="transport-http should create the right options for: history" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with offset)" name="transport-http should create the right options for: history (with offset)" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with limit)" name="transport-http should create the right options for: history (with limit)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with offset + limit)" name="transport-http should create the right options for: history (with offset + limit)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with from)" name="transport-http should create the right options for: history (with from)" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with to)" name="transport-http should create the right options for: history (with to)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with from + to)" name="transport-http should create the right options for: history (with from + to)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with from + to + offset + limit)" name="transport-http should create the right options for: history (with from + to + offset + limit)" time="0">
+    </testcase>
+    <testcase classname="transport-http should create the right options for: history (with version)" name="transport-http should create the right options for: history (with version)" time="0.001">
+    </testcase>
+    <testcase classname="transport-http should handle bad http responses appropriately" name="transport-http should handle bad http responses appropriately" time="0.003">
+    </testcase>
+  </testsuite>
+</testsuites>
