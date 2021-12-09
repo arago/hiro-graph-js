@@ -5,7 +5,7 @@
 
 // we need to require the real thing, as it mutates `global`, giving us access
 // to Response
-require.requireActual('isomorphic-fetch');
+jest.requireActual('isomorphic-fetch');
 
 const Response = global.Response;
 const mockFn = jest.fn();
