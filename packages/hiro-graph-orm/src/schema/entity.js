@@ -3,6 +3,8 @@
  *  convert database database results into application data and
  *  application queries into database format
  */
+import codec from '../codec';
+
 import stringCodec from '../codec/string';
 import listCodec from '../codec/list';
 import identity from '../codec/identity';
