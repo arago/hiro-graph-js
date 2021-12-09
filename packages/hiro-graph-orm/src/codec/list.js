@@ -3,7 +3,7 @@
  *  but an array locally. We also accept a raw string locally
  */
 
-const toStringAndTrim = (input) => {
+ const toStringAndTrim = (input) => {
     if (input === undefined || input === null) {
         return '';
     }

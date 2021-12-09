@@ -1,6 +1,3 @@
-# the babel preset
-packages/babel-preset-hiro
-
 # all built code
 packages/**/lib
 

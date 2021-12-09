@@ -1,7 +1,7 @@
 /**
  *  String ensure whatever is given is string.
  */
-const stringify = (s) => {
+ const stringify = (s) => {
     if (s === null || s === undefined) {
         return '';
     }

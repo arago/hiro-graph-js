@@ -1,7 +1,7 @@
 /**
  *  The best way to store timestamps.
  */
-const encode = (s) => {
+ const encode = (s) => {
     if (typeof s === 'object' && 'getUTCDate' in s) {
         return dateToISO8601(s);
     }
