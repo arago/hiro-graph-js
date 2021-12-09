@@ -1,6 +1,6 @@
 {
     "name": "@hiro-graph/gremlin",
-    "version": "6.0.4",
+    "version": "6.0.5",
     "description": "Gremlin Query builder for the HIRO Graph API",
     "main": "lib/gremlin.js",
     "typings": "./index.d.ts",
