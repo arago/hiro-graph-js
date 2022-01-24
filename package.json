@@ -31,7 +31,7 @@
         "@babel/plugin-transform-runtime": "^7.15.0",
         "@babel/plugin-transform-spread": "^7.14.6",
         "@babel/preset-env": "^7.15.6",
-        "@hiro-ui/eslint-config": "2.0.0",
+        "@hiro-ui/eslint-config": "2.0.1",
         "@hiro-ui/prettier-config": "2.0.0",
         "@types/websocket": "^1.0.4",
         "babel-jest": "^27.2.0",
