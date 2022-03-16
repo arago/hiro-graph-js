@@ -629,9 +629,9 @@ export class Token {
     getMeta,
     getToken,
   }: {
-    onInvalidate?: () => object;
+    onInvalidate?: () => void;
     getMeta?: () => object;
-    getToken: () => object;
+    getToken: () => string | Token;
   });
   get: () => Promise<string>;
 }
