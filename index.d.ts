@@ -99,6 +99,7 @@ export namespace OGIT {
     'ogit/_scope'?: string;
     'ogit/status'?: string;
     'ogit/email': string;
+    'ogit/Auth/Account/allowCookies'?: boolean;
   }
 
   export interface AccountProfile extends SafeNode {
