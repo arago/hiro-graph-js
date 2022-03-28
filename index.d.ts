@@ -632,7 +632,7 @@ export class Token {
   }: {
     onInvalidate?: () => void;
     getMeta?: () => object;
-    getToken: () => string | Token;
+    getToken: () => Promise<string | Token>;
   });
   get: () => Promise<string>;
 }
