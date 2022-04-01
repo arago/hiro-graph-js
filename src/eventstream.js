@@ -7,8 +7,7 @@
  *  if it is renewed by any other part of the app that shares the `Token` object, it will reconnect
  *  and continue to emit events.
  */
-import qs from 'querystring';
-
+import qs from 'qs';
 import { w3cwebsocket as WebSocket } from 'websocket';
 
 import { ensureWebSocketsAvailable } from './transport-websocket';

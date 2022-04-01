@@ -1,7 +1,7 @@
 /**
  *  Servlet extension for the "/variables/" endpoints.
  */
-import { stringify } from 'querystring';
+import { stringify } from 'qs';
 
 import { VARIABLES_API_BASE } from '../api-version';
 
