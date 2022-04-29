@@ -632,9 +632,10 @@ export class Token {
   }: {
     onInvalidate?: () => void;
     getMeta?: () => object;
-    getToken: () => Promise<string | Token>;
+    getToken: () => Promise<string>;
   });
   get: () => Promise<string>;
+  updateToken: ({ getToken }: { getToken: () => Promise<string> }) => void;
 }
 
 interface ClientParams {

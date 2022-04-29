@@ -21,6 +21,11 @@ export default class Token {
         this._getToken = getToken;
     }
 
+    updateToken({ getToken }) {
+        this._getToken = getToken;
+        this._tokenPromise = null;
+    }
+
     get() {
         if (!this._tokenPromise) {
             this._tokenPromise = Promise.resolve(this._getToken())
