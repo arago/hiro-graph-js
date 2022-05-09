@@ -786,7 +786,7 @@ export default class Client {
 
   get<T extends OGIT.SafeNode = OGIT.Node>(
     id: string,
-    opts?: { listMeta?: boolean },
+    opts?: { listMeta?: boolean; includeDeleted?: boolean },
   ): Promise<T>;
 }
 

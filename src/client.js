@@ -325,6 +325,10 @@ export default class Client {
             headers.listMeta = true;
         }
 
+        if (reqOptions.includeDeleted) {
+            headers.includeDeleted = true;
+        }
+
         return this.wrapTimedEvent(
             'get',
             { id },
