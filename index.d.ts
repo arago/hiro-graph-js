@@ -690,6 +690,7 @@ export default class Client {
 
   variable?: VariablesServlet;
   ki?: KiServlet;
+  knowledge?: KnowledgeServlet;
   actionLog?: ActionLogServlet;
 
   constructor(
