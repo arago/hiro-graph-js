@@ -436,6 +436,28 @@ export interface KiServlet {
   validate(options: KiValidateOptions): Promise<KiValidationResponse>;
 }
 
+export interface KnowledgeServlet {
+  pools<T>(scopeId: string): Promise<T>;
+  kis<T>(scopeId: string): Promise<T>;
+  search<T>(scopeId: string, searchTerms: string[]): Promise<T>;
+  poolsDeployed<T>(scopeId: string): Promise<T>;
+  kisDeployed<T>(scopeId: string): Promise<T>;
+  poolDeployed<T>(scopeId: string, poolId: string): Promise<T>;
+  kiDeployed<T>(scopeId: string, kiId: string): Promise<T>;
+  deployPool<T>(scopeId: string, poolId: string): Promise<T>;
+  undeployPool<T>(scopeId: string, poolId: string): Promise<T>;
+  newPool<T>(scopeId: string, data: PlainObject): Promise<T>;
+  newKi<T>(scopeId: string, data: PlainObject): Promise<T>;
+  pool<T>(poolId: string): Promise<T>;
+  deletePool<T>(poolId: string): Promise<T>;
+  poolKis<T>(poolId: string): Promise<T>;
+  poolKiDeployed<T>(poolId: string, kiId: string): Promise<T>;
+  deployKi<T>(poolId: string, kiId: string): Promise<T>;
+  undeployKi<T>(poolId: string, kiId: string): Promise<T>;
+  ki<T>(kiId: string): Promise<T>;
+  deleteKi<T>(kiId: string): Promise<T>;
+}
+
 interface DefineVariableOptions {
   name: string;
   [key: string]: any;
@@ -619,6 +641,7 @@ export interface AuthServlet {
 
 export declare const appsServletFactory: () => AppsServlet;
 export declare const kiServletFactory: () => KiServlet;
+export declare const knowledgeServletFactory: () => KnowledgeServlet;
 export declare const variablesServletFactory: () => VariablesServlet;
 export declare const actionLogServletFactory: () => ActionLogServlet;
 
@@ -667,6 +690,7 @@ export default class Client {
 
   variable?: VariablesServlet;
   ki?: KiServlet;
+  knowledge?: KnowledgeServlet;
   actionLog?: ActionLogServlet;
 
   constructor(
