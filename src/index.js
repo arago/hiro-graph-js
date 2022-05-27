@@ -3,6 +3,7 @@ import Client from './client';
 import * as Errors from './errors';
 import appsServletFactory from './servlets/app';
 import kiServletFactory from './servlets/ki';
+import knowledgeServletFactory from './servlets/knowledge';
 import variablesServletFactory from './servlets/variables';
 import actionLogServletFactory from './servlets/actionLog';
 import lucene, { getPlaceholderKeyForIndex } from './lucene';
@@ -16,6 +17,7 @@ export {
     Errors,
     appsServletFactory,
     kiServletFactory,
+    knowledgeServletFactory,
     variablesServletFactory,
     actionLogServletFactory,
     // Lucene
