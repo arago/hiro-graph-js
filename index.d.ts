@@ -439,7 +439,7 @@ export interface KiServlet {
 export interface KnowledgeServlet {
   pools<T>(scopeId: string): Promise<T>;
   kis<T>(scopeId: string): Promise<T>;
-  search<T>(scopeId: string, searchTerms: string): Promise<T>;
+  search<T>(scopeId: string, searchTerms: string[]): Promise<T>;
   poolsDeployed<T>(scopeId: string): Promise<T>;
   kisDeployed<T>(scopeId: string): Promise<T>;
   poolDeployed<T>(scopeId: string, poolId: string): Promise<T>;

@@ -28,7 +28,7 @@ export default function knowledgeServletFactory(fetch, options) {
         search: (scopeId, searchTerms) =>
             fetch(
                 toPath(URL_PATH_INSTANCE, scopeId, URL_PATH_KIS) +
-                    `?${stringify({ ...searchTerms })}`,
+                    `?${stringify({ search: [...searchTerms] })}`,
                 options,
             ),
 
