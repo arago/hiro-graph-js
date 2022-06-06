@@ -459,6 +459,7 @@ export interface KnowledgeServlet {
   kiHistory<T>(kiId: string): Promise<T>;
   updateKi<T>(kiId: string, data: PlainObject): Promise<T>;
   deleteKi<T>(kiId: string): Promise<T>;
+  kiDeployments<T>(kiId: string): Promise<T>;
 }
 
 interface DefineVariableOptions {

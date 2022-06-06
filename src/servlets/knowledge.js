@@ -180,5 +180,8 @@ export default function knowledgeServletFactory(fetch, options) {
                 ...options,
                 method: 'DELETE',
             }),
+
+        kiDeployments: (kiId) =>
+            fetch(toPath(URL_PATH_KI, kiId, 'deployments'), options),
     };
 }
