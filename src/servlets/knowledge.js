@@ -83,6 +83,18 @@ export default function knowledgeServletFactory(fetch, options) {
                 options,
             ),
 
+        kiDeployedStatuses: (scopeId, kiId) =>
+            fetch(
+                toPath(
+                    URL_PATH_INSTANCE,
+                    scopeId,
+                    'statuses',
+                    URL_PATH_KI,
+                    kiId,
+                ),
+                options,
+            ),
+
         // Deploy Pool to Instance / Engine
         deployPool: (scopeId, poolId) =>
             fetch(toPath(URL_PATH_INSTANCE, scopeId, URL_PATH_DEPLOY, poolId), {

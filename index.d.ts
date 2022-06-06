@@ -444,6 +444,7 @@ export interface KnowledgeServlet {
   kisDeployed<T>(scopeId: string): Promise<T>;
   poolDeployed<T>(scopeId: string, poolId: string): Promise<T>;
   kiDeployed<T>(scopeId: string, kiId: string): Promise<T>;
+  kiDeployedStatuses<T>(scopeId: string, kiId: string): Promise<T>;
   deployPool<T>(scopeId: string, poolId: string): Promise<T>;
   undeployPool<T>(scopeId: string, poolId: string): Promise<T>;
   newPool<T>(scopeId: string, data: PlainObject): Promise<T>;
