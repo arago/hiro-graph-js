@@ -11,6 +11,7 @@ const URL_PATH_POOLS = 'pools';
 const URL_PATH_KIS = 'kis';
 const URL_PATH_POOL = 'pool';
 const URL_PATH_KI = 'ki';
+const URL_PATH_HISTORY = 'history';
 
 const toPath = (...paths) => `${KNOWLEDGE_API_BASE}/${paths.join('/')}`;
 
@@ -149,6 +150,10 @@ export default function knowledgeServletFactory(fetch, options) {
 
         // Get Ki by Id
         ki: (kiId) => fetch(toPath(URL_PATH_KI, kiId), options),
+
+        // Get Ki History by Id
+        kiHistory: (kiId) =>
+            fetch(toPath(URL_PATH_KI, kiId, URL_PATH_HISTORY), options),
 
         // Delete Ki by Id
         deleteKi: (kiId) =>
