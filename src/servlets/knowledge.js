@@ -167,6 +167,13 @@ export default function knowledgeServletFactory(fetch, options) {
         kiHistory: (kiId) =>
             fetch(toPath(URL_PATH_KI, kiId, URL_PATH_HISTORY), options),
 
+        // Get Ki History by Id and Version
+        kiHistoryVersion: (kiId, version) =>
+            fetch(
+                toPath(URL_PATH_KI, kiId, URL_PATH_HISTORY, version),
+                options,
+            ),
+
         updateKi: (kiId, data) =>
             fetch(toPath(URL_PATH_KI, kiId), {
                 ...options,

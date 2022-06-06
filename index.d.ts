@@ -457,6 +457,7 @@ export interface KnowledgeServlet {
   undeployKi<T>(poolId: string, kiId: string): Promise<T>;
   ki<T>(kiId: string): Promise<T>;
   kiHistory<T>(kiId: string): Promise<T>;
+  kiHistoryVersion<T>(kiId: string, version: string): Promise<T>;
   updateKi<T>(kiId: string, data: PlainObject): Promise<T>;
   deleteKi<T>(kiId: string): Promise<T>;
   kiDeployments<T>(kiId: string): Promise<T>;
