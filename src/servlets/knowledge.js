@@ -155,6 +155,13 @@ export default function knowledgeServletFactory(fetch, options) {
         kiHistory: (kiId) =>
             fetch(toPath(URL_PATH_KI, kiId, URL_PATH_HISTORY), options),
 
+        updateKi: (kiId, data) =>
+            fetch(toPath(URL_PATH_KI, kiId), {
+                ...options,
+                method: 'POST',
+                body: JSON.stringify({ ...data }),
+            }),
+
         // Delete Ki by Id
         deleteKi: (kiId) =>
             fetch(toPath(URL_PATH_KI, kiId), {
