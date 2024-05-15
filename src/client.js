@@ -551,7 +551,7 @@ export default class Client {
                 reqOptions,
             ).then(
                 (response) => {
-                    // Return a meaningful value, assuming response contains relevant data
+                    // Return a meaningful value, assuming response contains relevant data.
                     return response;
                 },
                 (err) => {
