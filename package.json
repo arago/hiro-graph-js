@@ -1,12 +1,13 @@
 {
     "name": "@hiro-graph/client",
     "repository": "arago/hiro-graph-js",
-    "version": "7.5.23",
+    "version": "7.5.27",
     "types": "index.d.ts",
     "description": "Javascript client for HIRO Graph REST API. Works in both node and browser.",
     "main": "lib/index.js",
     "scripts": {
         "build": "rm -rf lib/* && BABEL_ENV=production babel src --out-dir lib --source-maps",
+        "build:win": "powershell -Command \"Remove-Item -Force -Recurse lib; if ($?) { $env:BABEL_ENV = 'production'; babel src --out-dir lib --source-maps }\"",
         "prepublish": "yarn test && yarn build",
         "test": "yarn lint && yarn build && jest --silent",
         "test:ci": "yarn install --frozen-lockfile && yarn lint && yarn build && jest --silent --ci --reporters=default --reporters=jest-junit",

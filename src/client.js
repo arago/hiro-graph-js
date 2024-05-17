@@ -50,21 +50,23 @@ export default class Client {
     constructor({ endpoint, token }, transportOptions = {}, proxies = []) {
         this.endpoint = endpoint;
 
-        //we update the token every 50min to avoid disconnections.
-        setInterval(() => {
-            const localApp = localStorage.getItem('app');
+        if (typeof window !== 'undefined') {
+            //we update the token every 50min to avoid disconnections.
+            setInterval(() => {
+                const localApp = localStorage.getItem('app');
 
-            if (localApp) {
-                const localToken = JSON.parse(localApp).token;
-                const parsedLocalToken = localToken.substring(
-                    1,
-                    localToken.length - 1,
-                );
+                if (localApp) {
+                    const localToken = JSON.parse(localApp).token;
+                    const parsedLocalToken = localToken.substring(
+                        1,
+                        localToken.length - 1,
+                    );
 
-                token = parsedLocalToken;
-                this.setToken(token);
-            }
-        }, TIME_INTERVAL['50_MIN']);
+                    token = parsedLocalToken;
+                    this.setToken(token);
+                }
+            }, TIME_INTERVAL['50_MIN']);
+        }
 
         //we hold on to the token for ease of access/manual invalidation
         this.setToken(token);
