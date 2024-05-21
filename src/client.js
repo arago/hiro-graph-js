@@ -552,7 +552,10 @@ export default class Client {
                 },
                 reqOptions,
             ).then(
-                () => {}, //return nothing.
+                (response) => {
+                    // Return a meaningful value, assuming response contains relevant data.
+                    return response;
+                },
                 (err) => {
                     //Conflict is OK here, just means that the edge was already connected.
                     if (isConflict(err)) {
