@@ -297,7 +297,7 @@ export declare class EventStream {
 export namespace TimeSeries {
   export interface Value<VariableNames extends string = string> {
     Entries: Entry[];
-    Type: 'start' | 'execute' | 'move' | 'finish';
+    Type: 'start' | 'execute' | 'move' | 'finish' | 'consider';
 
     Alternatives?: Alternatives;
     Changes?: Change<VariableNames>[];
