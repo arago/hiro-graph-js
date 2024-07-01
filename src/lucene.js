@@ -106,7 +106,7 @@ const ensureArray = (value) => {
 const noRecurseKeys = ['$search', '$range', '$missing'];
 
 // split value into ngrams min length 2, max length 10
-const ngramChunker = (value) => value.match(/.{2,10}/g) || [];
+const ngramChunker = (value) => value?.match(/.{2,10}/g) || [];
 
 const ngramArray = (value) => value.split(/[^a-zA-Z0-9]/).filter(Boolean);
 
