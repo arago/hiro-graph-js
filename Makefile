@@ -10,7 +10,7 @@ scan:
 	snyk test --severity-threshold=high --all-projects .
 
 build:
-	if [ ! -z "$(RELEASE_VERISION)" ]; then yarn version --new-version $(RELEASE_VERSION) ; fi
+	if [ ! -z $(RELEASE_VERISION) ]; then yarn version --new-version $(RELEASE_VERSION) ; fi
 	yarn build
 
 publish:
