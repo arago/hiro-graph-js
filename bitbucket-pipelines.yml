@@ -1,0 +1,85 @@
+image: atlassian/default-image:4
+
+clone:
+  # disable git completely, the first step will do the checkout and tar-gz it as an artifact for the other steps
+  enabled: false
+
+options:
+  max-time: 30
+  docker: true
+
+step_definitions:
+  - cachegit: &cachegit
+      name: Cache Git
+      # add special image here if you need it for fetching dependencies and such
+      image: node:20.16
+      clone:
+        # shallow clone for faster checkout. add script command 'git fetch --unshallow' if full history is needed somewhere
+        # warning: this breaks rebuilding older commits, create a dummy branch and build it if you need an older commit.
+        # using git archive to checkout a special commit does not work anymore (https://raw.githubusercontent.com/gitster/git/master/Documentation/RelNotes/1.7.8.1.txt)
+        # if this causes problems, we could disable the clone here, use a alpine/git container, simulate the bitbucket checkout with depth 1 and unshallow if the needed commit is not contained
+        enabled: true
+        depth: 1
+      script:
+        # if required, fetch deps as well here to have them for future steps (e.g. private repository dependencies)
+        - export RELEASE_VERSION="${BITBUCKET_TAG}"
+        - make deps
+        # exclude pattern only works on existing files, create if missing
+        - touch workspace.tar.gz
+        - tar -czf workspace.tar.gz --exclude=workspace.tar.gz .
+      artifacts:
+        - workspace.tar.gz
+  - snyk: &snyk
+      name: Snyk Container Scan
+      image: snyk/snyk:alpine
+      runs-on:
+        - "self.hosted"
+        - "linux"
+      script:
+        - tar -xzf workspace.tar.gz
+        - snyk test --severity-threshold=high --all-projects .
+  - build: &build
+      name: Build
+      image: node:20.16
+      runs-on:
+        - "self.hosted"
+        - "linux"
+      script:
+        - tar -xzf workspace.tar.gz
+        - export RELEASE_VERSION="${BITBUCKET_TAG}"
+        - make build
+  - publish: &publish
+      name: NPM Publish
+      # needs self.hosted to access the image registry
+      image: node:20.16
+      runs-on:
+        - "self.hosted"
+        - "linux"
+      script:
+        - tar -xzf workspace.tar.gz
+        - export RELEASE_VERSION="${BITBUCKET_TAG}"
+        - export NPM_TOKEN="${NPM_TOKEN}"
+        - make npmrc
+        - cat ~/.npmrc
+        - make build
+        - make publish
+pipelines:
+  pull-requests:
+    '**':
+      - step: *cachegit
+      - step: *snyk
+      - step: *build
+  tags:
+    "*":
+      - step: *cachegit
+      - step: *snyk
+      - step: *publish
+definitions:
+  services:
+    docker:
+      memory: 2048
+    clamav:
+      image: ajilaag/clamav-rest
+      memory: 4069
+      environment:
+        MAX_FILE_SIZE: 10M
