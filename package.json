@@ -22,7 +22,7 @@
         "@babel/runtime": "^7.15.4",
         "isomorphic-fetch": "^3.0.0",
         "qs": "^6.10.3",
-        "websocket": "^1.0.34"
+        "websocket": "^1.0.35"
     },
     "devDependencies": {
         "@babel/cli": "^7.15.4",
