@@ -556,7 +556,7 @@ const createBrancher =
 
 //quote a value for use in a gremlin function argument.
 const quote = (value) =>
-    `"${value.replace(/"/g, `\\"`).replace(/\$/g, `\\$`)}"`;
+    `"${value?.replace(/"/g, `\\"`)?.replace(/\$/g, `\\$`)}"`;
 
 const formatArgs = (args) =>
     args.map((value) => {
