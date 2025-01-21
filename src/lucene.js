@@ -57,6 +57,10 @@ const initialContext = (entity) => {
 const nativeEntity = {
     internal: true,
     prop: (name) => {
+        if (typeof name !== 'string') {
+            throw new TypeError('Property name must be a string.');
+        }
+
         const transform = /^ogit\/_/.test(name) ? (x) => x : (x) => '' + x;
 
         return {
@@ -99,7 +103,7 @@ function convertLuceneQuery(entity, query) {
 
 //turns a single value into an array if not already
 const ensureArray = (value) => {
-    return Array.isArray(value) ? value : [value];
+    return Array.isArray(value) ? value : [value ?? null];
 };
 
 //the "$" keys which do not recurse
@@ -108,11 +112,15 @@ const noRecurseKeys = ['$search', '$range', '$missing'];
 // split value into ngrams min length 2, max length 10
 const ngramChunker = (value) => value?.match(/.{2,10}/g) || [];
 
-const ngramArray = (value) => value.split(/[^a-zA-Z0-9]/).filter(Boolean);
+const ngramArray = (value) => value?.split(/[^a-zA-Z0-9]/).filter(Boolean);
 
 //forces all properties to be arrays.
 //knows how to recurse and when not to.
 const normaliseQuery = (queryObject, isAnyOperator = false) => {
+    if (!queryObject || typeof queryObject !== 'object') {
+        throw new TypeError('queryObject must be a valid object.');
+    }
+
     return Object.keys(queryObject).map((key) => {
         const value = queryObject[key];
 
@@ -121,7 +129,7 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
             return { key, values: normaliseQuery(value, true) };
         }
 
-        let values = ensureArray(value);
+        let values = ensureArray(value ?? []);
 
         if (key.match(/\.ngram$/) && isAnyOperator === false) {
             const subQuery = values.reduce((acc, val) => {
@@ -171,7 +179,7 @@ const normaliseQuery = (queryObject, isAnyOperator = false) => {
 function createQuerySegment(context, query, isPlaceholdersNeeded = false) {
     // console.log("segment", query);
     return query
-        .map(({ key, values, isAnyOperator }) => {
+        .map(({ key, values, isAnyOperator } = {}) => {
             //always make value an array
             if (key[0] === '$') {
                 //special case!
@@ -284,7 +292,7 @@ const mapOperator = (context, op, values) => {
     //we need to change the the op to MUST if they requested CAN but there is only one option.
     //So we need to recurse and count
     const nextOp =
-        values.length === 1 && values[0].values.length === 1 && op === OP_CAN
+        values.length === 1 && values[0]?.values?.length === 1 && op === OP_CAN
             ? OP_MUST
             : op;
 
@@ -427,7 +435,7 @@ function luceneTerm(context, field, values, isPlaceholdersNeeded) {
 //create a range query term
 function luceneRange(context, field, lower, higher) {
     const prop = context.entity.prop(field);
-    const [low, high] = [lower, higher]
+    const [low, high] = [lower ?? '', higher ?? '']
         .map(prop.encode)
         .map(checkTermForQuoting);
 
@@ -447,12 +455,12 @@ function luceneSearch(context, field, term, { ngram = false } = {}) {
     const prop = context.entity.prop(field);
     let terms;
 
-    if (term.indexOf(`"`) > -1 || term.indexOf("'") > -1) {
+    if (term?.indexOf(`"`) > -1 || term?.indexOf("'") > -1) {
         //much more complex, but keeps spaces in quotes, and quoted quotes.
         terms = findQuotedTerms(term);
     } else {
         //simple split
-        terms = term.split(/\s+/);
+        terms = term?.split(/\s+/);
     }
 
     const finalTerm = terms.filter(Boolean).join(' ');
@@ -473,7 +481,7 @@ function luceneSearch(context, field, term, { ngram = false } = {}) {
 //then replace space with question mark, then add the final asterisk
 function lucenePrefixMatch(context, field, term) {
     const prop = context.entity.prop(field);
-    const finalTerm = slashString(term).replace(/ /g, '?') + '*';
+    const finalTerm = slashString(term ?? '').replace(/ /g, '?') + '*';
     const placeholder = createPlaceholder(context.placeholders, finalTerm);
 
     return `${context.op}${slashForward(prop.src)}:${placeholder}`;
